@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/user/view/login_screen.dart';
+import 'package:howlook/user/view/splash_screen.dart';
 
 void main() {
   runApp(
     _App(),
   );
 }
-
 
 class _App extends StatelessWidget {
   const _App({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _App extends StatelessWidget {
         fontFamily: 'NotoSans',
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: Splash_Screen(),
     );
   }
 }
