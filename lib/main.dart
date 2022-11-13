@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:howlook/common/component/cust_textform_filed.dart';
+import 'package:howlook/user/view/login_screen.dart';
 
 void main() {
   runApp(
@@ -13,12 +15,11 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(
-
-        ),
+      theme: ThemeData(
+        fontFamily: 'NotoSans',
       ),
+      debugShowCheckedModeBanner: false,
+      home: LoginScreen(),
     );
   }
 }
