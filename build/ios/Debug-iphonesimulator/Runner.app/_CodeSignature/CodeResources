@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		1r9e2pg9sxyy6xeKz2iqmQA6Ous=
+		E7S2b2UqVGPsA28+roCW4a4MbZg=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,11 +54,11 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		zV5eXQU00ALwaCFa4o/2ZH0Rij4=
+		zd7aDbGPud26Fhi/s2baRxr2I0Q=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
-		yDUu16HV8qnifBJoXiE3zDZi4K8=
+		oFVMtrVuGqPCRj/ty7wfVKFR3BY=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		iitybdv6t20gCHc5/mbAGyOzuDU=
+		hcucxFq03yh18008JJMeVEAdroQ=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/asset/fonts/NotoSansKR-Black.otf</key>
 		<data>
@@ -96,6 +96,10 @@
 		<data>
 		2kYGkoA07nY5ZKcQD4gX10u8QrQ=
 		</data>
+		<key>Frameworks/App.framework/flutter_assets/asset/img/logo/kakao_login_large_wide.png</key>
+		<data>
+		v1Jl4SujC5ywdDHMMOMMNADbotI=
+		</data>
 		<key>Frameworks/App.framework/flutter_assets/asset/img/logo/logo.png</key>
 		<data>
 		2Kd8mNUbTMI2tz03BEO3RFYnYVU=
@@ -110,7 +114,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		rgd77G0YBogx4SP1sG1QL3JxLy0=
+		QVyTE9ArFu7CIj23Fx6eucp2OWk=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -220,6 +224,42 @@
 		<data>
 		JK+qEcDMV9wotYyBDsxQY2sf48E=
 		</data>
+		<key>Frameworks/kakao_flutter_sdk_common.framework/Info.plist</key>
+		<data>
+		e/vshsq/AgGzg08QCUZosoXxrH4=
+		</data>
+		<key>Frameworks/kakao_flutter_sdk_common.framework/_CodeSignature/CodeResources</key>
+		<data>
+		anYmYjw4zEOuP0qxxQUHecFRXmM=
+		</data>
+		<key>Frameworks/kakao_flutter_sdk_common.framework/kakao_flutter_sdk_common</key>
+		<data>
+		NKz+B7ft5DAGU8icoj70AZGFsK0=
+		</data>
+		<key>Frameworks/package_info_plus.framework/Info.plist</key>
+		<data>
+		MxPDNEpgNeQiCdea2dAoj1nyLes=
+		</data>
+		<key>Frameworks/package_info_plus.framework/_CodeSignature/CodeResources</key>
+		<data>
+		FL96zytbQ2lad2WE5gGr8Qs9rqc=
+		</data>
+		<key>Frameworks/package_info_plus.framework/package_info_plus</key>
+		<data>
+		6lsm9IjkgSNnyBlkk9Znn4PLLt8=
+		</data>
+		<key>Frameworks/shared_preferences_ios.framework/Info.plist</key>
+		<data>
+		0s7kxw7XzhWQufAaSQnqGZf3xfY=
+		</data>
+		<key>Frameworks/shared_preferences_ios.framework/_CodeSignature/CodeResources</key>
+		<data>
+		cN3GUMnnqEHJVkWalJE7o1otYpM=
+		</data>
+		<key>Frameworks/shared_preferences_ios.framework/shared_preferences_ios</key>
+		<data>
+		JM0mW4FJmolDAA0dqJQD2b3GqGc=
+		</data>
 		<key>Info.plist</key>
 		<data>
 		sgan4zb727AHmHoZJsk85FfTSnA=
@@ -305,7 +345,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			jYj4YiW5KuPMSJr1zAyEit9NtiUmORiqQb3y5OqwhJo=
+			+JhpqAOZUgfhxIyO/rhGZ3Gll9nGaMAsurymENE82N4=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -319,14 +359,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			TaFuWf15NGamTj9wkmFVuySxgYKh75g756lOZ7SSpuQ=
+			zLQJmv7IJiKpFTgPvOUN9y3PR1sOYm+ntDIm3dYaen0=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			GnO8G2eM/fE8aVMvv42lxSIkCY4mtDx+LZLPd+MiHU8=
+			oB3vQjqCEp9AluuU5PNH28WqE3IlJxmZBovesDl5kj8=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
@@ -340,7 +380,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RqKhY6Q9P1sr4TrsGBjZj1ilq0ERII97MVuDJfOLK2w=
+			7I+aLaWEF9tsDLe5TKSZOMGqsO8y2ecz4xwPbUvfYNo=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/asset/fonts/NotoSansKR-Black.otf</key>
@@ -392,6 +432,13 @@
 			xiw2T5iJgwlRX0rHgxzWrNnJfMReCVD+vpIKCueOxdI=
 			</data>
 		</dict>
+		<key>Frameworks/App.framework/flutter_assets/asset/img/logo/kakao_login_large_wide.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			j/PngI40oaCmKiIDQYA4C0/kwwMpHcaYCRSwic3vn0Y=
+			</data>
+		</dict>
 		<key>Frameworks/App.framework/flutter_assets/asset/img/logo/logo.png</key>
 		<dict>
 			<key>hash2</key>
@@ -417,7 +464,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			tbaSDR7oKbStQJKDXCh5I0rXsKvMxcD2ChC+/O0PrIE=
+			xMgWQqFuf+O+IwbKvMY+42b4I0XhiIAp07AI/2j0Yek=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -607,6 +654,69 @@
 			<key>hash2</key>
 			<data>
 			sbSu/D5t8LWZayfag9U7UxzorjxcLj5miPFME0033XE=
+			</data>
+		</dict>
+		<key>Frameworks/kakao_flutter_sdk_common.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			J/96IUJ6+2dEPQQOReoY9e+JhU92OHSzTeLxcNlnGUU=
+			</data>
+		</dict>
+		<key>Frameworks/kakao_flutter_sdk_common.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			6rU0snLBqP0WsGq5ouZzZR/yOFzp0agh0M4kBzI4ofA=
+			</data>
+		</dict>
+		<key>Frameworks/kakao_flutter_sdk_common.framework/kakao_flutter_sdk_common</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Rt/gkou43muIorBvWnTCa3E15WnNUPGQohmqeINupng=
+			</data>
+		</dict>
+		<key>Frameworks/package_info_plus.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			k52ec6HfwKHDu/W6/jiiXq4PXEN0f4OlGYGai7+zc38=
+			</data>
+		</dict>
+		<key>Frameworks/package_info_plus.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			21JtGbPXV/am2DPd2YJAadqxpQ+utAwE1rkiagfbmNg=
+			</data>
+		</dict>
+		<key>Frameworks/package_info_plus.framework/package_info_plus</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			q88pPR5deH25B5hSH8bBjyOAlEFx5CfwHtWr19QWqSU=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_ios.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bfJ+oZceEPq/ilcL20rYoYPEqTs9Wzw770BaJ/B+utM=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_ios.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			YA/hT7FB0gFJp9UFNA48hQKkaqrsvct3y7nFGEL7ktw=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_ios.framework/shared_preferences_ios</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			LpCx0ot8hf066DgissPfmKxtc/qSncq7sSh2N2QMzuw=
 			</data>
 		</dict>
 	</dict>

@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
+import 'package:howlook/user/view/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final dio = Dio();
 
     // localhost
@@ -50,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 16.0), // 공백 삽입
                 _SubTitle(),
 
-                const SizedBox(height: 100.0), // 공백 삽입
+                const SizedBox(height: 80.0), // 공백 삽입
                 _LoginText(),
                 const SizedBox(height: 30.0), // 공백 삽입
 
@@ -78,15 +77,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // ** 중요한 코드 ** -> convert to base 64
                       // Flutter에서 ID, PW를 Base64 인코딩을 정의하는 코드
-                      Codec<String, String> stringToBase64 = utf8.fuse(base64);
+                      // Codec<String, String> stringToBase64 = utf8.fuse(base64);
                       // Flutter에서 ID, PW를 실제로 Base64로 인코딩하는 코드
-                      String token = stringToBase64.encode(rawString);
+                      // String token = stringToBase64.encode(rawString);
 
+                      /*
                       final resp = await dio.post(
                         'http://$ip/auth/login',
                         options: Options(headers: {
                           'authorization': 'Basic $token',
                         }),
+                      );
+                       */
+
+                      // 일단 여기서는 간단하게 username과 password를
+                      // 다음과 같은 json 형태로 구현하기로 약속
+                      final resp = await dio.post(
+                        'http://$ip/auth/login',
+                        data: {
+                          'mid': username,
+                          'mpw': password,
+                        },
                       );
 
                       final refreshToken = resp.data['refreshToken'];
@@ -112,16 +123,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     )),
                 TextButton(
                     onPressed: () async {
-                      final refreshToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY2ODMyNjQxNCwiZXhwIjoxNjY4NDEyODE0fQ.yAQkEOZCesej9WUQKk_gwzkRuNmKSlYf4MDscA4FJmI';
-
-                      final resp = await dio.post(
-                        'http://$ip/auth/token',
-                        options: Options(headers: {
-                          'authorization': 'Bearer $refreshToken',
-                        }),
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => SignupScreen(),
+                        ),
                       );
-
-                      print(resp.data);
                     },
                     style: TextButton.styleFrom(
                       primary: Colors.black,
@@ -131,7 +137,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 12,
                       ),
-                    ))
+                    ),
+                ),
               ],
             ),
           ),

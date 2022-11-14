@@ -1,0 +1,11 @@
+framework module kakao_flutter_sdk_common {
+  umbrella header "kakao_flutter_sdk_common-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module kakao_flutter_sdk_common.Swift {
+  header "kakao_flutter_sdk_common-Swift.h"
+  requires objc
+}

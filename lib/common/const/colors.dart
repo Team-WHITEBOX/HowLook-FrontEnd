@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 const PRIMARY_COLOR = Color(0XFF6D9886);
 
 // 글자 색상
-const BODY_TEXT_COLOR = Color(0xFF868686);
+const BODY_TEXT_COLOR = Color(0xFF737373);
 
 // 텍스트 필드 배경 색상
 const INPUT_BG_COLOR = Color(0xFFFBFBFB);

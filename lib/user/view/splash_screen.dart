@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
+import 'package:howlook/user/view/login_main_screen.dart';
 import 'package:howlook/user/view/login_screen.dart';
 import '../../common/const/colors.dart';
 
@@ -13,10 +14,11 @@ class Splash_Screen extends StatefulWidget {
 }
 
 class _Splash_ScreenState extends State<Splash_Screen> {
+
   @override
   void initState() {
     super.initState();
-    deleteToken();
+    // deleteToken();
     checkToken();
   }
 
@@ -33,7 +35,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
 
     if (refreshToken == null || accessToken == null) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => LoginScreen()),
+        MaterialPageRoute(builder: (_) => LoginMainScreen()),
         (route) => false,
       );
     } else { // 원래는 토큰의 유효성 검사도 해야하지만 일단 11월 13일 기준으로는 생략하기
@@ -42,7 +44,6 @@ class _Splash_ScreenState extends State<Splash_Screen> {
             (route) => false,
       );
     }
-
   }
 
   @override
