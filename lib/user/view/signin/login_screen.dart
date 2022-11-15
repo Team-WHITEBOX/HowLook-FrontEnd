@@ -8,6 +8,7 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signup/first_signup_screen.dart';
+import 'package:howlook/user/view/signup/main_signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -94,15 +95,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       // 일단 여기서는 간단하게 username과 password를
                       // 다음과 같은 json 형태로 구현하기로 약속
                       final resp = await dio.post(
-                        'http://$ip/auth/login',
+                        'http://3.34.164.14:8080/account/generateToken',
                         data: {
                           'mid': username,
                           'mpw': password,
                         },
                       );
+                      print(resp.data);
 
                       final refreshToken = resp.data['refreshToken'];
                       final accessToken = resp.data['accessToken'];
+
+                      print(accessToken);
 
                       await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
                       await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
@@ -121,12 +125,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 12,
                       ),
-                    )),
+                    ),
+                ),
                 TextButton(
                     onPressed: () async {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (_) => SignupScreen(),
+                            builder: (_) => MainSignupScreen(),
                         ),
                       );
                     },

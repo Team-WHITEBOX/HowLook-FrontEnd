@@ -18,7 +18,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
   @override
   void initState() {
     super.initState();
-    // deleteToken();
+    //deleteToken();
     checkToken();
   }
 
@@ -33,14 +33,9 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => RootTab()),
-          (route) => false,
-    );
-    /*
     if (refreshToken == null || accessToken == null) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => LoginMainScreen()),
+        MaterialPageRoute(builder: (_) => MainLoginScreen()),
         (route) => false,
       );
     } else { // 원래는 토큰의 유효성 검사도 해야하지만 일단 11월 13일 기준으로는 생략하기
@@ -49,7 +44,6 @@ class _Splash_ScreenState extends State<Splash_Screen> {
             (route) => false,
       );
     }
-    */
   }
 
   @override

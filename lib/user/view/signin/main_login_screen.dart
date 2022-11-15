@@ -3,6 +3,7 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/first_signup_screen.dart';
+import 'package:howlook/user/view/signup/main_signup_screen.dart';
 
 class MainLoginScreen extends StatelessWidget {
   const MainLoginScreen({Key? key}) : super(key: key);
@@ -11,12 +12,14 @@ class MainLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '',
+      /*
       leading: IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
           Navigator.pop(context);
         },
       ),
+       */
       child: SafeArea(
         top: true,
         bottom: false,
@@ -58,14 +61,15 @@ class MainLoginScreen extends StatelessWidget {
                           fontSize: 12,
                           color: PRIMARY_COLOR,
                         ),
-                      )),
+                      ),
+                  ),
                   _board(),
                   // 회원가입 버튼
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => SignupScreen(),
+                            builder: (_) => MainSignupScreen(),
                           ),
                         );
                       },
