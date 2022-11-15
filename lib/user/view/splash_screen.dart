@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
-import 'package:howlook/user/view/login_main_screen.dart';
-import 'package:howlook/user/view/login_screen.dart';
+import 'package:howlook/user/view/signin/main_login_screen.dart';
+import 'package:howlook/user/view/signin/login_screen.dart';
 import '../../common/const/colors.dart';
 
 class Splash_Screen extends StatefulWidget {
@@ -33,6 +33,11 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => RootTab()),
+          (route) => false,
+    );
+    /*
     if (refreshToken == null || accessToken == null) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => LoginMainScreen()),
@@ -44,6 +49,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
             (route) => false,
       );
     }
+    */
   }
 
   @override

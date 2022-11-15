@@ -5,12 +5,14 @@ class DefaultLayout extends StatelessWidget {
   final Widget child;
   final String? title;
   final Widget? bottomNavigationBar;
+  final Widget? leading;
 
   const DefaultLayout({
     required this.child,
     this.backgroundColor,
     this.title,
     this.bottomNavigationBar,
+    this.leading,
     Key? key,
   }) : super(key: key);
 
@@ -18,30 +20,29 @@ class DefaultLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor ?? Colors.white,
-      appBar: renderAppBar(),
+      appBar: renderAppBar(leading),
       body: child,
       bottomNavigationBar: bottomNavigationBar,
     );
   }
 
-  AppBar? renderAppBar() {
+  AppBar? renderAppBar(Widget? leading) {
     if (title == null) {
       return null;
     } else {
       return AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Text(
-            title!,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          title!,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
+        ),
         foregroundColor: Colors.black,
+        leading: leading,
       );
     }
-
   }
-
 }
