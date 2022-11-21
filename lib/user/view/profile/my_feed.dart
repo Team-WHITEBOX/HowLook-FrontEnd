@@ -41,6 +41,7 @@ class _MyFeed extends State<MyFeed> {
             ],
           ),
           childrenDelegate:SliverChildBuilderDelegate(
+            childCount: 10,
             (context, index)
             => Container(
               color: Colors.grey,

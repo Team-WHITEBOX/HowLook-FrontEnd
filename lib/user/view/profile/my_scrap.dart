@@ -19,24 +19,21 @@ class _MyScrap extends State<MyScrap> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: 'ScrapLook',
-        actions: <Widget>[
-          CupertinoButton(
-            onPressed: () => _showActionSheet(context),
-            child: Icon(Icons.more_vert_sharp),
-          ),
-        ],
-      child: MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        child: GridView.builder(
-            //physics: const NeverScrollableScrollPhysics(),
+      actions: <Widget>[
+        CupertinoButton(
+          onPressed: () => _showActionSheet(context),
+          child: Icon(Icons.more_vert_sharp),
+        ),
+      ],
+      child: GridView.builder(
+          //physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 100,
+            itemCount: 10,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1,
-              mainAxisSpacing: 1,
-              crossAxisSpacing: 1
+                crossAxisCount: 3,
+                childAspectRatio: 1,
+                mainAxisSpacing: 1,
+                crossAxisSpacing: 1
             ),
             itemBuilder: (BuildContext context, int index) {
               return Container(
@@ -44,32 +41,31 @@ class _MyScrap extends State<MyScrap> {
               );
             }
         ),
-      ),
     );
   }
 
   void _showActionSheet(BuildContext context) {
     showCupertinoModalPopup<void>(
       context: context,
-      builder: (BuildContext context) => CupertinoActionSheet(
-        title: const Text('스크랩 선택하기'),
-        actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('선택'),
+      builder: (BuildContext context) =>
+          CupertinoActionSheet(
+            title: const Text('스크랩 선택하기'),
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('선택'),
+              ),
+              CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('cancle'),
+              ),
+            ],
           ),
-          CupertinoActionSheetAction(
-            isDestructiveAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('cancle'),
-          ),
-        ],
-      ),
     );
   }
-
 }
