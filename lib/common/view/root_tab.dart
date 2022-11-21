@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/main_feed_screen.dart';
-import 'package:howlook/user/view/profile_screen.dart';
+import 'package:howlook/user/view/profile/profile_screen.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({Key? key}) : super(key: key);
