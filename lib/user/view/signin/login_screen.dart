@@ -70,9 +70,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   obscureText: true,
                 ),
-                const SizedBox(height: 14.0), // 공백 삽입
+                const SizedBox(height: 30.0), // 공백 삽입
                 // 로그인 및 회원가입 버튼
-                ElevatedButton(
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.bottomRight,
+                      end: Alignment.topLeft,
+                      colors: [
+                        Color(0xFF1D002D),
+                        //Color(0xFFa17fe0),
+                        Color(0xFF603674),
+                        // #F9E79F
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: ElevatedButton(
                     onPressed: () async {
                       // ID:비밀번호 형태
                       final rawString = '$username:$password';
@@ -84,13 +98,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       // String token = stringToBase64.encode(rawString);
 
                       /*
-                      final resp = await dio.post(
-                        'http://$ip/auth/login',
-                        options: Options(headers: {
-                          'authorization': 'Basic $token',
-                        }),
-                      );
-                       */
+                        final resp = await dio.post(
+                          'http://$ip/auth/login',
+                          options: Options(headers: {
+                            'authorization': 'Basic $token',
+                          }),
+                        );
+                         */
 
                       // 일단 여기서는 간단하게 username과 password를
                       // 다음과 같은 json 형태로 구현하기로 약속
@@ -108,17 +122,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       print(accessToken);
 
-                      await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
-                      await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+                      await storage.write(
+                          key: REFRESH_TOKEN_KEY, value: refreshToken);
+                      await storage.write(
+                          key: ACCESS_TOKEN_KEY, value: accessToken);
 
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (_) => RootTab(),
+                          builder: (_) => RootTab(),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: PRIMARY_COLOR,
+                      primary: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      minimumSize: Size(100, 50),
                     ),
                     child: Text(
                       "로그인",
@@ -126,24 +147,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 12,
                       ),
                     ),
+                  ),
                 ),
+                const SizedBox(height: 10.0), // 공백 삽입
                 TextButton(
-                    onPressed: () async {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (_) => MainSignupScreen(),
-                        ),
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      primary: Colors.black,
-                    ),
-                    child: Text(
-                      "회원가입",
-                      style: TextStyle(
-                        fontSize: 12,
+                  onPressed: () async {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => MainSignupScreen(),
                       ),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    primary: Colors.black,
+                  ),
+                  child: Text(
+                    "회원가입",
+                    style: TextStyle(
+                      fontSize: 12,
                     ),
+                  ),
                 ),
               ],
             ),

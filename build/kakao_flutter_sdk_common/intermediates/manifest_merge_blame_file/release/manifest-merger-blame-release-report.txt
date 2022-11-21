@@ -1,0 +1,68 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.kakao.sdk.flutter" >
+4
+5    <uses-sdk
+6        android:minSdkVersion="19"
+6-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml
+7        android:targetSdkVersion="19" />
+7-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml
+8
+9    <queries>
+9-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:18:5-29:15
+10        <package android:name="com.kakao.talk" />
+10-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:19:9-50
+10-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:19:18-47
+11        <package android:name="com.kakao.onetalk" />
+11-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:20:9-53
+11-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:20:18-50
+12        <package android:name="com.locnall.KimGiSa" />
+12-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:21:9-55
+12-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:21:18-52
+13        <package android:name="com.lguplus.navi" />
+13-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:22:9-52
+13-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:22:18-49
+14
+15        <intent>
+15-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:24:9-28:18
+16            <action android:name="android.intent.action.VIEW" />
+16-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:25:13-65
+16-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:25:21-62
+17
+18            <category android:name="android.intent.category.BROWSABLE" />
+18-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:26:13-74
+18-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:26:23-71
+19
+20            <data android:scheme="https" />
+20-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:27:13-44
+20-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:27:19-41
+21        </intent>
+22    </queries>
+23
+24    <application>
+24-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:4:5-16:19
+25        <activity
+25-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:5:9-10:56
+26            android:name="com.kakao.sdk.flutter.TalkAuthCodeActivity"
+26-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:6:13-49
+27            android:configChanges="orientation|screenSize|keyboardHidden"
+27-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:7:13-74
+28            android:exported="false"
+28-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:8:13-37
+29            android:launchMode="singleTask"
+29-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:9:13-44
+30            android:theme="@style/TransparentCompat" />
+30-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:10:13-53
+31        <activity
+31-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:11:9-15:56
+32            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+32-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:12:13-55
+33            android:exported="true"
+33-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:13:13-36
+34            android:launchMode="singleTask"
+34-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:14:13-44
+35            android:theme="@style/TransparentCompat" />
+35-->/Users/jinbumkim/Documents/libraries/flutter/.pub-cache/hosted/pub.dartlang.org/kakao_flutter_sdk_common-1.2.2/android/src/main/AndroidManifest.xml:15:13-53
+36    </application>
+37
+38</manifest>

@@ -70,28 +70,43 @@ class MainSignupScreen extends StatelessWidget {
                 const SizedBox(
                   height: 250,
                 ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: PRIMARY_COLOR,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      minimumSize: Size(100, 50),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.bottomRight,
+                      end: Alignment.topLeft,
+                      colors: [
+                        Color(0xFF1D002D),
+                        //Color(0xFFa17fe0),
+                        Color(0xFF603674),
+                        // #F9E79F
+                      ],
                     ),
-                    onPressed: () {
-                      Navigator.of(context).push(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        minimumSize: Size(100, 50),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => FirstSignupScreen(),
                           ),
-                      );
-                    },
-                    child: Text(
-                      "계속하기",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    )
+                        );
+                      },
+                      child: Text(
+                        "계속하기",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      )),
                 )
               ],
             ),
@@ -164,10 +179,7 @@ class _LabelText extends StatelessWidget {
 class _minText extends StatelessWidget {
   final String? minText;
 
-  const _minText({
-    this.minText,
-    Key? key
-  }) : super(key: key);
+  const _minText({this.minText, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +197,3 @@ class _minText extends StatelessWidget {
     );
   }
 }
-
-
-

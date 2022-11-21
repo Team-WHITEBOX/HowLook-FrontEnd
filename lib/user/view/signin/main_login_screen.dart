@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
-import 'package:howlook/user/view/signup/first_signup_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 
 class MainLoginScreen extends StatelessWidget {
@@ -36,7 +36,14 @@ class MainLoginScreen extends StatelessWidget {
               const SizedBox(height: 50.0), // 공백 삽입
               // 카카오 로그인 버튼
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => RootTab(),
+                    ),
+                    (route) => false,
+                  );
+                },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
               ),
               const SizedBox(height: 32.0), // 공백 삽입
@@ -48,20 +55,20 @@ class MainLoginScreen extends StatelessWidget {
                 children: [
                   // 로그인 버튼
                   TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => LoginScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "로그인",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: PRIMARY_COLOR,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => LoginScreen(),
                         ),
+                      );
+                    },
+                    child: Text(
+                      "로그인",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: PRIMARY_COLOR,
                       ),
+                    ),
                   ),
                   _board(),
                   // 회원가입 버튼

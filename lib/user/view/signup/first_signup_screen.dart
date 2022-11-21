@@ -1,14 +1,9 @@
-import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signup/second_signup_screen.dart';
-import 'package:intl/intl.dart';
+
 
 class FirstSignupScreen extends StatefulWidget {
   const FirstSignupScreen({Key? key}) : super(key: key);
@@ -31,12 +26,6 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
         return;
       } else {
         formkey.currentState!.save();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("다음 단계로 넘어갈게요 :)"),
-            duration: Duration(seconds: 2),
-          ),
-        );
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => SecondSignupScreen(
@@ -68,7 +57,7 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                       ),
                       _SubTitle(),
                       const SizedBox(
-                        height: 60.0,
+                        height: 40.0,
                       ),
 
                       _LabelText(
@@ -77,6 +66,7 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                       const SizedBox(
                         height: 5,
                       ),
+
                       // 필요한 정보 받은 텍스트 폼 필드 나열
                       CustomTextFormField(
                         hintText: "아이디를 입력해주세요",
@@ -90,6 +80,7 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                           }
                         },
                       ),
+
                       const SizedBox(
                         height: 24.0,
                       ),
@@ -134,25 +125,41 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                       const SizedBox(
                         height: 48.0,
                       ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            _submit();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                            minimumSize: Size(100, 50),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topLeft,
+                            colors: [
+                              Color(0xFF1D002D),
+                              //Color(0xFFa17fe0),
+                              Color(0xFF603674),
+                              // #F9E79F
+                            ],
                           ),
-                          child: Text(
-                            "계속하기",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              _submit();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              minimumSize: Size(100, 50),
                             ),
-                            textAlign: TextAlign.center,
-                          ),
+                            child: Text(
+                              "계속하기",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                        ),
                       ),
                     ],
                   ),

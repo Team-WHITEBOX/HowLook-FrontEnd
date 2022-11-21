@@ -11,8 +11,8 @@ class RootTab extends StatefulWidget {
   State<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab>
-    with SingleTickerProviderStateMixin { // <- 애니메이션 관련된 것은 Single~를 선언해야 하는 것으로 우선 이해,
+class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
+  // <- 애니메이션 관련된 것은 Single~를 선언해야 하는 것으로 우선 이해,
   // null을 안 받게 선언하지만, 나중에 대입하겠다는 뜻
   late TabController controller;
 
@@ -45,8 +45,6 @@ class _RootTabState extends State<RootTab>
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: 'HowLook',
-
       // 양쪽으로 미는 제스처를 구현하는 코드,, 미는 제스처를 통해 탭을 전환
       child: TabBarView(
         // 탭바뷰 위에선 가로 스와이프 애니메이션 적용 x 하는 코드,
@@ -58,7 +56,7 @@ class _RootTabState extends State<RootTab>
           Center(child: Container(child: Text('?'))),
           Center(child: Container(child: Text('업로드'))),
           Center(child: Container(child: Text('토너먼트'))),
-          ProfileScreen(),
+          Center(child: Container(child: Text('프로필'))),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
