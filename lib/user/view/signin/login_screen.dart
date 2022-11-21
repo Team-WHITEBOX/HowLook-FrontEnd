@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
           bottom: false,
           child: Padding(
             // 컬럼 위에다가 패딩 넣어서
-            // 양쪽으로 16씩 땡기기 - 답 답함 줄어듬
+            // 양쪽으로 16씩 땡기기 - 답답함 줄어듬
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

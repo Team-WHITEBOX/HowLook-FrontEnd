@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/main_feed_screen.dart';
-import 'package:howlook/user/view/profile_screen.dart';
+import 'package:howlook/user/view/profile/profile_screen.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({Key? key}) : super(key: key);
@@ -11,8 +11,8 @@ class RootTab extends StatefulWidget {
   State<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
-  // <- 애니메이션 관련된 것은 Single~를 선언해야 하는 것으로 우선 이해,
+class _RootTabState extends State<RootTab>
+    with SingleTickerProviderStateMixin { // <- 애니메이션 관련된 것은 Single~를 선언해야 하는 것으로 우선 이해,
   // null을 안 받게 선언하지만, 나중에 대입하겠다는 뜻
   late TabController controller;
 
@@ -56,7 +56,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
           Center(child: Container(child: Text('?'))),
           Center(child: Container(child: Text('업로드'))),
           Center(child: Container(child: Text('토너먼트'))),
-          Center(child: Container(child: Text('프로필'))),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
