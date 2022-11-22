@@ -14,11 +14,10 @@ class MyScrap extends StatefulWidget {
 }
 
 class _MyScrap extends State<MyScrap> {
-
+  final List<String> images = <String>['asset/img/Profile/HL1.JPG', 'asset/img/Profile/HL2.JPG', 'asset/img/Profile/HL3.JPG', 'asset/img/Profile/HL4.JPG'];
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: 'ScrapLook',
       actions: <Widget>[
         CupertinoButton(
           onPressed: () => _showActionSheet(context),
@@ -28,7 +27,7 @@ class _MyScrap extends State<MyScrap> {
       child: GridView.builder(
           //physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: images.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 childAspectRatio: 1,
@@ -37,7 +36,7 @@ class _MyScrap extends State<MyScrap> {
             ),
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                color: Colors.grey,
+                child: Image.asset(images[index], fit: BoxFit.cover,),
               );
             }
         ),

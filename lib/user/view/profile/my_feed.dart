@@ -14,11 +14,11 @@ class MyFeed extends StatefulWidget {
 }
 
 class _MyFeed extends State<MyFeed> {
+  final List<String> images = <String>['asset/img/Profile/HL1.JPG', 'asset/img/Profile/HL2.JPG', 'asset/img/Profile/HL3.JPG', 'asset/img/Profile/HL4.JPG'];
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: 'MyLook',
       child: MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -41,11 +41,10 @@ class _MyFeed extends State<MyFeed> {
             ],
           ),
           childrenDelegate:SliverChildBuilderDelegate(
-            childCount: 10,
+            childCount: images.length,
             (context, index)
             => Container(
-              color: Colors.grey,
-              child: Text('index: $index'),
+              child: Image.asset(images[index], fit: BoxFit.cover,),
             ),
           ),
         )
