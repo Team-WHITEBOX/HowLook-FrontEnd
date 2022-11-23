@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/feed/component/main_feed_card.dart';
 import 'main_feed_category.dart';
 
 // 데이터 전달에 사용할 클래스
@@ -49,7 +50,6 @@ class MainFeedScreen extends StatefulWidget {
 }
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
-  double? Height;
   @override
   Widget build(BuildContext context) {
     final dio = Dio();
@@ -65,7 +65,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             top: true,
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
                 //mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -126,7 +126,25 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                       ),
                     ],
                   ),
-                  Text('$Height'),
+                  MainFeedCard(
+                    name: '김진범',
+                    nickname: '잘생김',
+                    profile_image: CircleAvatar(
+                      radius: 18,
+                      // 여기에 프로필 사진 없을 경우, 기본 이미지로 로드하는것도 있어야 할 듯,,,
+                      /*
+                      * backgroundImage: profile_image == null
+                      * ? AssetImage('asset/img/Profile/HL2.JPG')
+                      * : FileImage(File(profile.path)),
+                      * */
+                      backgroundImage: AssetImage('asset/img/Profile/HL2.JPG'),
+                    ),
+                    images: Image.asset(
+                      'asset/img/Profile/HL1.JPG',
+                      fit: BoxFit.cover,
+                    ),
+                    bodyinfo: [80, 178],
+                  ),
                 ],
               ),
             ),
