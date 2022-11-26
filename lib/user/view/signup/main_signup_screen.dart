@@ -10,105 +10,107 @@ class MainSignupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultLayout(
         title: '',
-        child: SafeArea(
-          top: true,
-          bottom: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(
-                  height: 16.0,
-                ),
-                _Title(),
-                const SizedBox(
-                  height: 30,
-                ),
-                _SubTitle(),
-                const SizedBox(
-                  height: 30,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _LabelText(
-                      labelText: '내 모습 그대로 당당하게 😄',
-                    ),
-                    _minText(
-                      minText: "나의 정보를 사실대로 올려 주세요.",
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    _LabelText(
-                      labelText: '얼굴은 꼭 제외해주세요! 🙅‍',
-                    ),
-                    _minText(
-                      minText: "HowLook의 정체성을 지켜 주세요",
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    _LabelText(
-                      labelText: '건전한 게시물 📋',
-                    ),
-                    _minText(
-                      minText: "건전한 게시글 위주로 올려 주세요",
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    _LabelText(
-                      labelText: '신고는 적극적으로 🚨',
-                    ),
-                    _minText(
-                      minText: "건전한 HowLook만의 문화를 같이 만들어가요.",
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 250,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.bottomRight,
-                      end: Alignment.topLeft,
-                      colors: [
-                        Color(0xFF1D002D),
-                        //Color(0xFFa17fe0),
-                        Color(0xFF603674),
-                        // #F9E79F
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(40),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            top: true,
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(
+                    height: 16.0,
                   ),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        minimumSize: Size(100, 50),
+                  _Title(),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  _SubTitle(),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _LabelText(
+                        labelText: '내 모습 그대로 당당하게 😄',
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => FirstSignupScreen(),
+                      _minText(
+                        minText: "나의 정보를 사실대로 올려 주세요.",
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      _LabelText(
+                        labelText: '얼굴은 꼭 제외해주세요! 🙅‍',
+                      ),
+                      _minText(
+                        minText: "HowLook의 정체성을 지켜 주세요",
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      _LabelText(
+                        labelText: '건전한 게시물 📋',
+                      ),
+                      _minText(
+                        minText: "건전한 게시글 위주로 올려 주세요",
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      _LabelText(
+                        labelText: '신고는 적극적으로 🚨',
+                      ),
+                      _minText(
+                        minText: "건전한 HowLook만의 문화를 같이 만들어가요.",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 75,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.bottomRight,
+                        end: Alignment.topLeft,
+                        colors: [
+                          Color(0xFF1D002D),
+                          //Color(0xFFa17fe0),
+                          Color(0xFF603674),
+                          // #F9E79F
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40),
                           ),
-                        );
-                      },
-                      child: Text(
-                        "계속하기",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
+                          minimumSize: Size(100, 50),
                         ),
-                      )),
-                )
-              ],
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => FirstSignupScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "계속하기",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        )),
+                  )
+                ],
+              ),
             ),
           ),
         ));
@@ -125,7 +127,7 @@ class _Title extends StatelessWidget {
       textAlign: TextAlign.center,
       style: TextStyle(
         fontFamily: 'NotoSans',
-        fontSize: 25,
+        fontSize: 22,
         fontWeight: FontWeight.w700,
         color: Colors.black,
       ),

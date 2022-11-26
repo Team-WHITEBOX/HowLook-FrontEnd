@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
@@ -14,7 +15,6 @@ class Splash_Screen extends StatefulWidget {
 }
 
 class _Splash_ScreenState extends State<Splash_Screen> {
-
   @override
   void initState() {
     super.initState();
@@ -29,19 +29,33 @@ class _Splash_ScreenState extends State<Splash_Screen> {
 
   // initState() 안에서는 async가 안되기 때문에 토큰 체크 함수를 따로 빼서 해야함
   void checkToken() async {
+    final dio = Dio();
     // 스토리지로부터 토큰 받아오기
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    if (refreshToken == null || accessToken == null) {
+    // refresh token 로직
+    try {
+      final resp =
+          await dio.post('http://3.34.164.14:8080/account/generateToken',
+              options: Options(headers: {
+                'authorization': 'Bearer $refreshToken',
+              }));
+      // 발급받은 토큰 저장하기
+      await storage.write(key: ACCESS_TOKEN_KEY, value: resp.data['accessToken']);
+      // 루트탭으로 이동
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => MainLoginScreen()),
+        MaterialPageRoute(
+          builder: (_) => RootTab(),
+        ),
         (route) => false,
       );
-    } else { // 원래는 토큰의 유효성 검사도 해야하지만 일단 11월 13일 기준으로는 생략하기
+    } catch (e) { //
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => RootTab( )),
-            (route) => false,
+        MaterialPageRoute(
+          builder: (_) => MainLoginScreen(),
+        ),
+        (route) => false,
       );
     }
   }

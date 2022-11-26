@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/component/main_feed_card.dart';
+import 'package:howlook/feed/model/main_feed_model.dart';
 import 'main_feed_category.dart';
 
 // 데이터 전달에 사용할 클래스
@@ -50,6 +52,26 @@ class MainFeedScreen extends StatefulWidget {
 }
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
+  // 페이지네이션 api 호출하여 메인피드 데이터 값 받아오기
+  Future<List> paginateMainFeed() async {
+    final dio = Dio();
+
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+
+    final resp = await dio.get(
+      // MainFeed 관련 api IP주소 추가하기
+      'http://$ip/',
+      options: Options(
+        headers: {
+          'authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+
+    // 응답 데이터 중 data 값만 반환하여 사용하기!!
+    return resp.data['data'];
+  }
+
   @override
   Widget build(BuildContext context) {
     final dio = Dio();
@@ -69,6 +91,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               child: Column(
                 //mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // 이웃, 모두, 카테고리 버튼 관련
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -126,24 +149,56 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                       ),
                     ],
                   ),
-                  MainFeedCard(
-                    name: '김진범',
-                    nickname: '잘생김',
-                    profile_image: CircleAvatar(
-                      radius: 18,
-                      // 여기에 프로필 사진 없을 경우, 기본 이미지로 로드하는것도 있어야 할 듯,,,
-                      /*
-                      * backgroundImage: profile_image == null
-                      * ? AssetImage('asset/img/Profile/HL2.JPG')
-                      * : FileImage(File(profile.path)),
-                      * */
-                      backgroundImage: AssetImage('asset/img/Profile/HL2.JPG'),
-                    ),
-                    images: Image.asset(
-                      'asset/img/Profile/HL1.JPG',
-                      fit: BoxFit.cover,
-                    ),
-                    bodyinfo: [80, 178],
+                  FutureBuilder<List>(
+                    future: paginateMainFeed(),
+                    builder: (context, AsyncSnapshot<List> snapshot) {
+                      // 에러처리
+                      if (!snapshot.hasData) {
+                        // 임시로 Container 반환하게 해둠
+                        return Container();
+                      }
+                      return ListView.separated(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (_, index) {
+                          // 받아온 데이터 JSON 매핑하기
+                          // 모델 사용
+                          final item = snapshot.data![index];
+                          final pItem = MainFeedModel(
+                              name: item['name'],
+                              nickname: item['nickname'],
+                              profile_image: 'http://$ip${item['profileUrl']}',
+                              images: 'http://$ip${item['imageUrl']}',
+                              bodyinfo: List<double>.from(item['bodyinfo']),
+                          );
+
+                          return MainFeedCard(
+                            images: Image.network(
+                              pItem.images,
+                              fit: BoxFit.cover,
+                            ),
+                            name: pItem.name,
+                            nickname: pItem.nickname,
+                            profile_image: CircleAvatar(
+                              radius: 18,
+                              // 여기에 프로필 사진 없을 경우, 기본 이미지로 로드하는것도 있어야 할 듯,,,
+                              /*
+                                * backgroundImage: profile_image == null
+                                * ? AssetImage('asset/img/Profile/HL2.JPG')
+                                * : FileImage(File(profile.path)),
+                                * */
+                              backgroundImage: Image.network(
+                                pItem.profile_image,
+                                fit: BoxFit.cover,
+                              ).image,
+                            ),
+                            bodyinfo: pItem.bodyinfo,
+                          );
+                        },
+                        separatorBuilder: (_, index) {
+                          return SizedBox(height: 16.0);
+                        },
+                      );
+                    },
                   ),
                 ],
               ),

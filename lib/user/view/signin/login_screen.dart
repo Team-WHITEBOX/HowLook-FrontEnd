@@ -25,11 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final dio = Dio();
 
-    // localhost
-    final emulatorIP = "10.0.2.2:3000";
-    final simulatorIP = "127.0.0.1:3000";
-    final ip = Platform.isIOS ? simulatorIP : emulatorIP;
-
     return DefaultLayout(
       title: '',
       child: SingleChildScrollView(
@@ -119,8 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       final refreshToken = resp.data['refreshToken'];
                       final accessToken = resp.data['accessToken'];
-
-                      print(accessToken);
 
                       await storage.write(
                           key: REFRESH_TOKEN_KEY, value: refreshToken);
