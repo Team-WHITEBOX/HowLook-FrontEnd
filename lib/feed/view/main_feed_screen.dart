@@ -5,6 +5,7 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/component/main_feed_card.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
+import 'package:howlook/feed/view/main_feed_detail_screen.dart';
 import 'main_feed_category.dart';
 
 // 데이터 전달에 사용할 클래스
@@ -55,9 +56,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   // 페이지네이션 api 호출하여 메인피드 데이터 값 받아오기
   Future<List> paginateMainFeed() async {
     final dio = Dio();
-
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
       'http://$ip/',
@@ -67,14 +66,12 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         },
       ),
     );
-
     // 응답 데이터 중 data 값만 반환하여 사용하기!!
     return resp.data['data'];
   }
 
   @override
   Widget build(BuildContext context) {
-    final dio = Dio();
     return DefaultLayout(
         title: 'HowLook',
         actions: <Widget>[
@@ -99,7 +96,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                         style: TextButton.styleFrom(
                           minimumSize: Size(50, 20),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          // 임시로 이웃버튼 누르면 각 피드 상세 페이지로 이동할 수 있게 우선 구현
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => MainFeedDetailScreen(),
+                              )
+                          );
+                        },
                         child: Text(
                           "이웃",
                           style: TextStyle(
@@ -138,7 +141,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                               ),
                             ),
                           );
-
                           // result.returnValue에 카테고리 설정 값 날라옴
                           if (result != null) {
                             print("${result.returnValue.isMenChecked}");
@@ -163,36 +165,15 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                           // 받아온 데이터 JSON 매핑하기
                           // 모델 사용
                           final item = snapshot.data![index];
-                          final pItem = MainFeedModel(
-                              name: item['name'],
-                              nickname: item['nickname'],
-                              profile_image: 'http://$ip${item['profileUrl']}',
-                              images: 'http://$ip${item['imageUrl']}',
-                              bodyinfo: List<double>.from(item['bodyinfo']),
-                          );
-
-                          return MainFeedCard(
-                            images: Image.network(
-                              pItem.images,
-                              fit: BoxFit.cover,
-                            ),
-                            name: pItem.name,
-                            nickname: pItem.nickname,
-                            profile_image: CircleAvatar(
-                              radius: 18,
-                              // 여기에 프로필 사진 없을 경우, 기본 이미지로 로드하는것도 있어야 할 듯,,,
-                              /*
-                                * backgroundImage: profile_image == null
-                                * ? AssetImage('asset/img/Profile/HL2.JPG')
-                                * : FileImage(File(profile.path)),
-                                * */
-                              backgroundImage: Image.network(
-                                pItem.profile_image,
-                                fit: BoxFit.cover,
-                              ).image,
-                            ),
-                            bodyinfo: pItem.bodyinfo,
-                          );
+                          final pItem = MainFeedModel.fromJson(json: item);
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => MainFeedDetailScreen(),
+                                )
+                              );
+                            },
+                              child: MainFeedCard.fromModel(model: pItem));
                         },
                         separatorBuilder: (_, index) {
                           return SizedBox(height: 16.0);

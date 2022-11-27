@@ -1,6 +1,6 @@
 import 'package:howlook/common/const/data.dart';
 
-class MainFeedModel {
+class MainFeedDetailModel {
   // 포스트 아이디
   final int NPostId;
   // 이름
@@ -15,8 +15,14 @@ class MainFeedModel {
   final int PhotoCnt;
   // 몸무게, 키
   final List<double> bodyinfo;
+  // 좋아요
+  final int LikeCount;
+  // 댓글
+  final int CommentCount;
+  // 내용
+  final String Content;
 
-  MainFeedModel({
+  MainFeedDetailModel({
     required this.NPostId,
     required this.name,
     required this.nickname,
@@ -24,12 +30,15 @@ class MainFeedModel {
     required this.images,
     required this.PhotoCnt,
     required this.bodyinfo,
+    required this.LikeCount,
+    required this.CommentCount,
+    required this.Content,
   });
 
-  factory MainFeedModel.fromJson({
+  factory MainFeedDetailModel.fromJson({
     required Map<String, dynamic> json,
   }) {
-    return MainFeedModel(
+    return MainFeedDetailModel(
       NPostId: json['NPostId'],
       name: json['name'],
       nickname: json['nickname'],
@@ -37,6 +46,9 @@ class MainFeedModel {
       images: List<String>.from(json['phototPaths']),
       PhotoCnt: json['PhotoCnt'],
       bodyinfo: List<double>.from(json['bodyinfo']),
+      LikeCount: json['LickCount'],
+      CommentCount: json['CommentCount'],
+      Content: json['Content'],
     );
   }
 }

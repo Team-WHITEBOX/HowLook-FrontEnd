@@ -58,8 +58,6 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
       print(resp.data);
     }
 
-    ;
-
     // validate
     final formkey = GlobalKey<FormState>();
     Future<void> _submit() async {
