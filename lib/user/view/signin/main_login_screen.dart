@@ -4,10 +4,10 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
 
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class MainLoginScreen extends StatelessWidget {
   // const MainLoginScreen({Key? key}) : super(key: key);

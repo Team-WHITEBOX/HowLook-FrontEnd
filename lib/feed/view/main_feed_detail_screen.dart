@@ -5,9 +5,7 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/feed/component/main_feed_detail_card.dart';
-import 'package:howlook/feed/model/main_feed_detail_model.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class MainFeedDetailScreen extends StatelessWidget {
   final int npostId; // 포스트 아이디로 특정 게시글 조회
