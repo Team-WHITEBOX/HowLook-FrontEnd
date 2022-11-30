@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -57,9 +58,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   Future<List> paginateMainFeed() async {
     final dio = Dio();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    int page = 0;
+    print('http://$API_SERVICE_URI/feed/recent?page=$page');
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
-      'http://$ip/',
+      'http://$API_SERVICE_URI/feed/recent?page=$page',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',
@@ -98,10 +101,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                         ),
                         onPressed: () {
                           // 임시로 이웃버튼 누르면 각 피드 상세 페이지로 이동할 수 있게 우선 구현
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => MainFeedDetailScreen(),
-                              )
-                          );
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => MainFeedDetailScreen(
+                              npostId: 1,
+                            ),
+                          ));
                         },
                         child: Text(
                           "이웃",
@@ -156,10 +160,14 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     builder: (context, AsyncSnapshot<List> snapshot) {
                       // 에러처리
                       if (!snapshot.hasData) {
-                        // 임시로 Container 반환하게 해둠
-                        return Container();
+                        print('error');
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
                       }
                       return ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (_, index) {
                           // 받아온 데이터 JSON 매핑하기
@@ -167,12 +175,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                           final item = snapshot.data![index];
                           final pItem = MainFeedModel.fromJson(json: item);
                           return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => MainFeedDetailScreen(),
-                                )
-                              );
-                            },
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => MainFeedDetailScreen(
+                                    npostId: pItem.npostId,
+                                  ),
+                                ));
+                              },
                               child: MainFeedCard.fromModel(model: pItem));
                         },
                         separatorBuilder: (_, index) {

@@ -77,10 +77,8 @@ class MainSignupScreen extends StatelessWidget {
                         begin: Alignment.bottomRight,
                         end: Alignment.topLeft,
                         colors: [
-                          Color(0xFF1D002D),
-                          //Color(0xFFa17fe0),
-                          Color(0xFF603674),
-                          // #F9E79F
+                          Color(0xFFD07AFF),
+                          Color(0xFFa6ceff),
                         ],
                       ),
                       borderRadius: BorderRadius.circular(40),
@@ -106,6 +104,7 @@ class MainSignupScreen extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
+                            color: Colors.white
                           ),
                         )),
                   )

@@ -37,7 +37,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     // refresh token 로직
     try {
       final resp =
-          await dio.post('http://3.34.164.14:8080/account/generateToken',
+          await dio.post('http://$API_SERVICE_URI/account/generateToken',
               options: Options(headers: {
                 'authorization': 'Bearer $refreshToken',
               }));

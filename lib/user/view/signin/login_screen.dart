@@ -73,10 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       begin: Alignment.bottomRight,
                       end: Alignment.topLeft,
                       colors: [
-                        Color(0xFF1D002D),
-                        //Color(0xFFa17fe0),
-                        Color(0xFF603674),
-                        // #F9E79F
+                        Color(0xFFD07AFF),
+                        Color(0xFFa6ceff),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(40),
@@ -120,10 +118,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       await storage.write(
                           key: ACCESS_TOKEN_KEY, value: accessToken);
 
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (_) => RootTab(),
                         ),
+                        (route) => false,
                       );
                     },
                     style: ElevatedButton.styleFrom(

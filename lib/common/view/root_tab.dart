@@ -5,26 +5,25 @@ import 'package:howlook/feed/view/main_feed_screen.dart';
 import 'package:howlook/user/view/profile/profile_screen.dart';
 
 class RootTab extends StatefulWidget {
-  const RootTab({Key? key}) : super(key: key);
+  final int? indexId;
+  const RootTab({this.indexId, Key? key}) : super(key: key);
 
   @override
   State<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab>
-    with SingleTickerProviderStateMixin { // <- 애니메이션 관련된 것은 Single~를 선언해야 하는 것으로 우선 이해,
+class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
+  // <- 애니메이션 관련된 것은 Single~를 선언해야 하는 것으로 우선 이해,
   // null을 안 받게 선언하지만, 나중에 대입하겠다는 뜻
   late TabController controller;
-
   int index = 0;
+  bool check = false;
 
   @override
   void initState() {
     super.initState();
-
     // length는 TabBarView 밑의 children 개수, vsync는 위의 Single~ 이것과 관련된 것
     controller = TabController(length: 5, vsync: this);
-
     // controller에 Listener를 추가
     controller.addListener(tabListener);
   }
@@ -33,6 +32,16 @@ class _RootTabState extends State<RootTab>
     setState(() {
       index = controller.index;
     });
+  }
+
+  void reloadTab() {
+    if (widget.indexId != null && !check) {
+      setState(() {
+        index = widget.indexId!;
+      });
+      check = true;
+      print('finish');
+    }
   }
 
   @override
@@ -44,8 +53,8 @@ class _RootTabState extends State<RootTab>
 
   @override
   Widget build(BuildContext context) {
+    reloadTab();
     return DefaultLayout(
-      // 양쪽으로 미는 제스처를 구현하는 코드,, 미는 제스처를 통해 탭을 전환
       child: TabBarView(
         // 탭바뷰 위에선 가로 스와이프 애니메이션 적용 x 하는 코드,
         // 만약 가로 스와이프 적용한다면 이 코드 제외
@@ -67,11 +76,11 @@ class _RootTabState extends State<RootTab>
         // BottomNavigationBarType <- 밑에 아이콘 변화하는 애니메이션 지정
         type: BottomNavigationBarType.shifting,
         // 현재 탭 가리키는 코드, controller의 index를 애니메이션 적용
-        onTap: (int index) {
-          controller.animateTo(index);
+        onTap: (int index1) {
+          print(index);
+          controller.animateTo(index1);
         },
         currentIndex: index,
-
         // 여기 안에는 밑의 네비게이션 바의 내용을 가리키는 곳
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: '홈'),

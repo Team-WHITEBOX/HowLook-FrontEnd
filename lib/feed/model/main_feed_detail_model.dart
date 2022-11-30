@@ -1,54 +1,34 @@
-import 'package:howlook/common/const/data.dart';
+import 'package:howlook/feed/model/main_feed_model.dart';
 
-class MainFeedDetailModel {
-  // 포스트 아이디
-  final int NPostId;
-  // 이름
-  final String name;
-  // 별명
-  final String nickname;
-  // 프로필 사진
-  final String profile_image;
-  // 이미지
-  final List<String> images;
-  // 이미지 갯수
-  final int PhotoCnt;
-  // 몸무게, 키
-  final List<double> bodyinfo;
+class MainFeedDetailModel extends MainFeedModel{
   // 좋아요
-  final int LikeCount;
+  final int likeCount;
   // 댓글
-  final int CommentCount;
+  final int commentCount;
   // 내용
-  final String Content;
+  final String content;
 
   MainFeedDetailModel({
-    required this.NPostId,
-    required this.name,
-    required this.nickname,
-    required this.profile_image,
-    required this.images,
-    required this.PhotoCnt,
-    required this.bodyinfo,
-    required this.LikeCount,
-    required this.CommentCount,
-    required this.Content,
-  });
+    required super.userPostInfo,
+    required super.npostId,
+    required super.photoPaths,
+    required super.photoCnt,
+    required this.likeCount,
+    required this.commentCount,
+    required this.content,
+});
 
   factory MainFeedDetailModel.fromJson({
     required Map<String, dynamic> json,
   }) {
     return MainFeedDetailModel(
-      NPostId: json['NPostId'],
-      name: json['name'],
-      nickname: json['nickname'],
-      profile_image: 'http://$ip${json['profileUrl']}',
-      images: List<String>.from(json['phototPaths']),
-      PhotoCnt: json['PhotoCnt'],
-      bodyinfo: List<double>.from(json['bodyinfo']),
-      LikeCount: json['LickCount'],
-      CommentCount: json['CommentCount'],
-      Content: json['Content'],
+      userPostInfo: UserInfoModel.fromJson(json: Map<String, dynamic>.from(json['userPostInfo'])),
+      npostId: json['npostId'],
+      photoPaths: List<String>.from(json['photoPaths']),
+      photoCnt: json['photoCnt'],
+      likeCount: json['npostId'], // 임시
+      commentCount: json['npostId'], // 임시
+      content: json['content'],
     );
   }
 }

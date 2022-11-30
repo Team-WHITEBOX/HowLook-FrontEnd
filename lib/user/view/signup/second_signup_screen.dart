@@ -7,6 +7,7 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
+import 'package:howlook/user/view/signin/main_login_screen.dart';
 import 'package:intl/intl.dart';
 
 class SecondSignupScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
     // post 함수
     void _postData() async {
       final resp = await dio.post(
-        'http://3.34.164.14:8080/account/join',
+        'http://$API_SERVICE_URI/account/join',
         data: {
           'mid': widget.mid,
           'mpw': widget.mpw,
@@ -67,12 +68,13 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
         formkey.currentState!.save();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("다음 단계로 넘어갈게요 :)"),
+            content: Text("가입이 완료되었어요 :)"),
             duration: Duration(seconds: 1),
           ),
         );
       }
       _postData();
+
     }
 
     return DefaultLayout(
@@ -227,10 +229,8 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
                         begin: Alignment.bottomRight,
                         end: Alignment.topLeft,
                         colors: [
-                          Color(0xFF1D002D),
-                          //Color(0xFFa17fe0),
-                          Color(0xFF603674),
-                          // #F9E79F
+                          Color(0xFFD07AFF),
+                          Color(0xFFa6ceff),
                         ],
                       ),
                       borderRadius: BorderRadius.circular(40),
@@ -238,6 +238,12 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
                     child: ElevatedButton(
                       onPressed: () async {
                         _submit();
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => MainLoginScreen(),
+                          ),
+                              (route) => false,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,

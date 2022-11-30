@@ -131,10 +131,8 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                             begin: Alignment.bottomRight,
                             end: Alignment.topLeft,
                             colors: [
-                              Color(0xFF1D002D),
-                              //Color(0xFFa17fe0),
-                              Color(0xFF603674),
-                              // #F9E79F
+                              Color(0xFFD07AFF),
+                              Color(0xFFa6ceff),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(40),

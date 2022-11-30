@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/common/component/cust_textform_filed.dart';
-import 'package:howlook/user/view/signin/login_screen.dart';
+import 'package:howlook/common/const/data.dart';
 import 'package:howlook/user/view/splash_screen.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() {
+  KakaoSdk.init(
+    nativeAppKey: '$YOUR_NATIVE_APP_KEY',
+  );
   runApp(
     _App(),
   );

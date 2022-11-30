@@ -4,22 +4,27 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
 
 class MainLoginScreen extends StatelessWidget {
   const MainLoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    void KakaoLogin() async {
+      if (await isKakaoTalkInstalled() == false) {
+        try {
+          await AuthCodeClient.instance.authorize(
+            redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
+          );
+        } catch (error) {
+          print('카카오계정으로 로그인 실패 $error');
+        }
+      }
+    }
+
     return DefaultLayout(
       title: '',
-      /*
-      leading: IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-       */
       child: SafeArea(
         top: true,
         bottom: false,
@@ -31,7 +36,12 @@ class MainLoginScreen extends StatelessWidget {
               _Title(),
               const SizedBox(height: 16.0), // 공백 삽입
               _SubTitle(),
-              const SizedBox(height: 80.0), // 공백 삽입
+              const SizedBox(height: 10.0), // 공백 삽입
+              Image.asset(
+                'asset/img/logo/hihi.png',
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.width / 2,
+              ),
               _LoginText(),
               const SizedBox(height: 50.0), // 공백 삽입
               // 카카오 로그인 버튼
