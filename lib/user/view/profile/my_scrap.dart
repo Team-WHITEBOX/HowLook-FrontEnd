@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/user/view/signin/main_login_screen.dart';
-import 'package:howlook/user/view/signup/second_signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 class MyScrap extends StatefulWidget {
@@ -14,11 +10,14 @@ class MyScrap extends StatefulWidget {
 }
 
 class _MyScrap extends State<MyScrap> {
+  final List<String> images = <String>['asset/img/Profile/HL1.JPG', 'asset/img/Profile/HL2.JPG', 'asset/img/Profile/HL3.JPG', 'asset/img/Profile/HL4.JPG'];
+  //static const int _count = images.length;
+  //final List<bool> _checks = List.generate(_count, (_) => false);
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: 'ScrapLook',
+      title: 'Scrap Look',
       actions: <Widget>[
         CupertinoButton(
           onPressed: () => _showActionSheet(context),
@@ -28,7 +27,7 @@ class _MyScrap extends State<MyScrap> {
       child: GridView.builder(
           //physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: images.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 childAspectRatio: 1,
@@ -37,8 +36,24 @@ class _MyScrap extends State<MyScrap> {
             ),
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                color: Colors.grey,
+                child: Image.asset(images[index], fit: BoxFit.cover,),
               );
+              //return Stack(
+                //children: [
+                  //Container(child: Image.asset(images[index], fit: BoxFit.cover,)),
+                  // Align(
+                  //   alignment: Alignment.topCenter,
+                  //   child: Checkbox(
+                  //     value: _checks[index],
+                  //     onChanged: (newValue) {
+                  //       setState(() {
+                  //         _checks[index] = newValue;
+                  //       },);
+                  //     },
+                  //   ),
+                  // ),
+                //],
+              //);
             }
         ),
     );
