@@ -3,6 +3,7 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/main_feed_screen.dart';
 import 'package:howlook/user/view/profile/profile_screen.dart';
+import 'package:howlook/review/main_review_screen.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ class _RootTabState extends State<RootTab>
         controller: controller,
         children: [
           MainFeedScreen(),
-          Center(child: Container(child: Text('?'))),
+          MainReviewScreen(),
           Center(child: Container(child: Text('업로드'))),
           Center(child: Container(child: Text('토너먼트'))),
           ProfileScreen(),

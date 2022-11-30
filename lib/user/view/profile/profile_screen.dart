@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/user/view/profile/my_feed.dart';
 import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
-import 'package:howlook/user/view/signin/main_login_screen.dart';
-import 'package:howlook/user/view/signup/second_signup_screen.dart';
 import 'package:howlook/user/view/profile/my_scrap.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,14 +12,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
+  final List<String> images 
+  = <String>[
+    'asset/img/Profile/HL1.JPG', 
+    'asset/img/Profile/HL2.JPG', 
+    'asset/img/Profile/HL3.JPG', 
+    'asset/img/Profile/HL4.JPG'];
+  
   String nickName = '';
   int height = 0;
   int weight = 0;
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultLayout(
       title: 'My Look',
         child: SingleChildScrollView(
@@ -53,13 +55,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       )
                                   ),
                                 ),
-                                PageView(
-                                  children: [
-                                    Image.asset('asset/img/Profile/HL1.JPG', fit: BoxFit.cover,),
-                                    Image.asset('asset/img/Profile/HL2.JPG', fit: BoxFit.cover,),
-                                    Image.asset('asset/img/Profile/HL3.JPG', fit: BoxFit.cover,),
-                                    Image.asset('asset/img/Profile/HL4.JPG', fit: BoxFit.cover,),
-                                  ],
+                                PageView.builder(
+                                  itemBuilder: (BuildContext context, int index){
+                                    return Container(
+                                      child: Image.asset(
+                                        images[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                },
                                 ),
                               ],
                             ),
@@ -67,6 +71,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => MyScrap(),
+                                    ),
+                                  );
+                                }, //설정 화면 이동
+                                icon: Icon(Icons.bookmark_border_outlined),
+                                iconSize: 30,
+                                color: Colors.white,
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => MyFeed(),
+                                    ),
+                                  );
+                                }, //설정 화면 이동
+                                icon: Icon(Icons.auto_awesome_motion_outlined),
+                                iconSize: 30,
+                                color: Colors.white,
+                              ),
                               IconButton(
                                 onPressed: () {
                                   Navigator.of(context).push(
@@ -136,43 +164,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 24.0,
               ),
-              Container(
-                child: DefaultTabController(
-                  length: 2, // length of tabs
-                  initialIndex: 0,
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-                    Container(
-                      child: TabBar(
-                        labelColor: Colors.purple,
-                        unselectedLabelColor: Colors.grey,
-                        tabs: [
-                          Tab(text: 'My Feed'),
-                          Tab(text: 'Scrap'),
-                          SizedBox(),
-                          SizedBox(),
-                        ],
-                        indicatorColor: Colors.purple,
-                        indicatorWeight: 2,
-                      ),
-                    ),
-                    Container(
-                        height: 400, //height of TabBarView
-                        decoration: BoxDecoration(
-                            border: Border(top: BorderSide(color: Colors.white, width: 0.5))
-                        ),
-                        child: TabBarView(children: <Widget>[
-                          TabBarView(
-                            children: [
-                              Tab(child: MyFeed()),
-                              Tab(child: MyScrap()),
-                            ],
-                          )
-                        ])
-                    )
-                  ],
-                  ),
-                ),
-              )
+              // Container(
+              //   child: DefaultTabController(
+              //     length: 2, // length of tabs
+              //     initialIndex: 0,
+              //     child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+              //       Container(
+              //         child: TabBar(
+              //           labelColor: Colors.purple,
+              //           unselectedLabelColor: Colors.grey,
+              //           tabs: [
+              //             Tab(text: 'My Feed'),
+              //             Tab(text: 'Scrap'),
+              //             SizedBox(),
+              //             SizedBox(),
+              //           ],
+              //           indicatorColor: Colors.purple,
+              //           indicatorWeight: 2,
+              //         ),
+              //       ),
+              //       Container(
+              //           height: 400, //height of TabBarView
+              //           decoration: BoxDecoration(
+              //               border: Border(top: BorderSide(color: Colors.white, width: 0.5))
+              //           ),
+              //           child: TabBarView(children: <Widget>[
+              //             TabBarView(
+              //               children: [
+              //                 Tab(child: MyFeed()),
+              //                 Tab(child: MyScrap()),
+              //               ],
+              //             )
+              //           ])
+              //       )
+              //     ],
+              //     ),
+              //   ),
+              // )
             ],)
           ),
         ),

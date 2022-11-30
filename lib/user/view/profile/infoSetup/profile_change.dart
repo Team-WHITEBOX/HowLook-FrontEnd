@@ -3,11 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/user/view/signin/main_login_screen.dart';
-import 'package:howlook/user/view/signup/first_signup_screen.dart';
-import 'package:howlook/user/view/signup/second_signup_screen.dart';
 import 'package:howlook/common/component/cust_textform_filed.dart';
 
 class ProfileChanging extends StatefulWidget {

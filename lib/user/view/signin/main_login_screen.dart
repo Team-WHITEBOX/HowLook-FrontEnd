@@ -5,9 +5,13 @@ import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 
-class MainLoginScreen extends StatelessWidget {
-  const MainLoginScreen({Key? key}) : super(key: key);
+import 'dart:io';
+import 'package:dio/dio.dart';
 
+class MainLoginScreen extends StatelessWidget {
+  // const MainLoginScreen({Key? key}) : super(key: key);
+
+  final dio = Dio();
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -36,12 +40,16 @@ class MainLoginScreen extends StatelessWidget {
               const SizedBox(height: 50.0), // 공백 삽입
               // 카카오 로그인 버튼
               TextButton(
+                // onPressed: () async {
+                //   final resp = await dio.get(
+                //     'http://3.34.164.14:8080/oauth2/authorization/kakao',
+                //   );
+                // },
                 onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => RootTab(),
-                    ),
-                    (route) => false,
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => RootTab(),
+                      ),
                   );
                 },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
