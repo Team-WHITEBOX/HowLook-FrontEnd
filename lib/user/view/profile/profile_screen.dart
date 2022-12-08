@@ -140,15 +140,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     right: 20,
                     child: (
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                                 begin: Alignment.bottomRight,
                                 end: Alignment.topLeft,
                                 colors: [
-                                  Color(0xFF1D002D),
-                                  Color(0xFF603674),
-                                  Color(0xFFa17fe0)
+                                  Color(0xFFD07AFF),
+                                  Color(0xFFa6ceff),
                                 ]),
                             borderRadius: BorderRadius.circular(500),
                           ),

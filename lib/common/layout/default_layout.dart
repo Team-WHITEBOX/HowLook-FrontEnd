@@ -7,6 +7,7 @@ class DefaultLayout extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final Widget? leading;
   final List<Widget>? actions;
+  final FlexibleSpaceBar? flexibleSpace;
 
   const DefaultLayout({
     required this.child,
@@ -15,6 +16,7 @@ class DefaultLayout extends StatelessWidget {
     this.bottomNavigationBar,
     this.leading,
     this.actions,
+    this.flexibleSpace,
     Key? key,
   }) : super(key: key);
 
