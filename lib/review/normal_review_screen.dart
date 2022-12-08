@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:flutter_animated_button/flutter_animated_button.dart';
 
 class NormalReview extends StatefulWidget {
   const NormalReview({Key? key}) : super(key: key);
@@ -16,13 +17,14 @@ class SliderController {
 
 class _NormalReviewState extends State<NormalReview> {
   SliderController _scoreCountController = SliderController(0.0);
-  bool? buttonPower;
+  bool? buttonPower = false;
 
   @override
   void initState() {
     buttonPower = false;
     super.initState();
   }
+
   final List<String> images
   = <String>[
     'asset/img/Profile/HL1.JPG',
@@ -41,12 +43,7 @@ class _NormalReviewState extends State<NormalReview> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          TextButton(
-            onPressed: () {
-              buttonPower = true;
-            },
-            child: Text('제가 보기엔 ${controller.sliderValue}점 이에요!',style: TextStyle(color: Colors.black),),
-          ),
+          Text('제가 보기엔 ${controller.sliderValue}점 이에요!',style: TextStyle( color: Colors.black),),
           SizedBox(height: 10),
           SliderTheme(
             data: SliderThemeData(
@@ -74,6 +71,7 @@ class _NormalReviewState extends State<NormalReview> {
               onChanged: (newValue) {
                 setState(() {
                   controller.sliderValue = newValue;
+                  buttonPower = true;
                 },);
               },
             ),
@@ -110,7 +108,7 @@ class _NormalReviewState extends State<NormalReview> {
                         ),
                         Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20.0),),
-                        buttonPower==true? _ReviewTabBar(true): _ReviewTabBar(false)
+                        buttonPower == true? _ReviewTabBar(true): _ReviewTabBar(false)
                       ]
                   )
                 ),
@@ -128,12 +126,20 @@ class _NormalReviewState extends State<NormalReview> {
         if( buttonPower == true) {
           return ButtonBar(
             children: [
-              TextButton(
-                onPressed: () {
-
-                },
-                child: Text("다음 평가하기", style: TextStyle(color: Colors.deepPurple),),
+              AnimatedButton(
+                height: 35,
+                width: 90,
+                text: 'SUBMIT',
+                selectedTextColor: Colors.grey,
+                transitionType: TransitionType.LEFT_TO_RIGHT,
+                textStyle: TextStyle(color: Colors.white),
+                backgroundColor: PRIMARY_COLOR,
+                borderColor: Colors.white,
+                borderRadius: 50,
+                borderWidth: 2,
+                onPress: (){},
               ),
+
             ],
           );
         } else {

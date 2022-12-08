@@ -19,6 +19,8 @@ class _FeedbackResultState extends State<FeedbackResult> {
     'asset/img/Profile/HL4.JPG'
   ];
 
+  final List<double> score = <double>[7.1, 6.8, 7.4];
+
   Widget customCard(String text) {
     return Card(
         child: Container(
@@ -40,8 +42,8 @@ class _FeedbackResultState extends State<FeedbackResult> {
             SliverAppBar( // 헤더 영역
               expandedHeight: MediaQuery.of(context).size.width * 1.0,  // 헤더의 최대 높이
               pinned: true, // 축소시 상단에 AppBar가 고정되는지 설정
-              flexibleSpace: FlexibleSpaceBar(  // 늘어나는 영역의 UI 정의
-                title: Text('Sliver Example'),
+              flexibleSpace: FlexibleSpaceBar(// 늘어나는 영역의 UI 정의
+                title: tabTitle(),
                 background: //Image.asset(images[0], fit: BoxFit.cover,),
                 Stack(
                     alignment: Alignment.center,
@@ -58,9 +60,54 @@ class _FeedbackResultState extends State<FeedbackResult> {
               backgroundColor: Colors.black45,
             ),
             SliverFillRemaining(                // 내용 영역
-              child: ChartPage(),
+              child: Column(
+                children: [
+                  Text('성별 점수 그래프',style: TextStyle(fontSize: 15, color: Colors.grey),),
+                  ChartPage(),
+                ],
+            )
             ),
           ],)
+    );
+  }
+  
+  Widget tabTitle(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('종합 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('${score[0]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+          ],
+        ),
+        Container(
+          width: 1,
+          height: 50,
+          color: Colors.white,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('여자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('${score[1]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+          ],
+        ),
+        Container(
+          width: 1,
+          height: 50,
+          color: Colors.white,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('남자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('${score[2]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+          ],
+        )
+      ],
     );
   }
 }

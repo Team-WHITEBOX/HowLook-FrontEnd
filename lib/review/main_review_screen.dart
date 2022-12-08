@@ -167,18 +167,18 @@ class _MainReviewScreenState extends State<MainReviewScreen> {
       child: Column(
         children: [
           Container(
-            alignment: Alignment.topLeft,
-            child: TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
+            alignment: Alignment.topLeft, //탭바 메뉴를 왼쪽으로 정렬
+            child: TabBar(  //위젯을 통해 상단 탭바 메뉴가 보여진다
+              labelColor: Colors.black, //선택된 Tab의 label 색상
+              unselectedLabelColor: Colors.grey,  //선택되지 않은 Tab의 label 색상
               labelStyle: TextStyle(fontSize: 15),
-              indicator: UnderlineTabIndicator(
-                  borderSide: BorderSide(
+              indicator: UnderlineTabIndicator( //선택된 Tab에 스타일 적용 시 사용
+                  borderSide: BorderSide( //선택된 탭바 스타일 적용
                     width: 3,
                     color: Colors.deepPurple,
                   ),
                   insets: EdgeInsets.only(left: 10, right: 14, bottom: 4)),
-              isScrollable: true,
+              isScrollable: true, //탭의 크기가 label의 크기만큼 할당되며 스크롤이 가능
               labelPadding: EdgeInsets.only(left: 14, right: 2),
               tabs: <Widget>[
                 Padding(
@@ -190,8 +190,6 @@ class _MainReviewScreenState extends State<MainReviewScreen> {
                   child: Tab(text: '크리에이터'),
                 )
               ],
-              indicatorColor: Colors.purple,
-              indicatorWeight: 2,
             ),
           ),
           Container(
@@ -199,13 +197,13 @@ class _MainReviewScreenState extends State<MainReviewScreen> {
             decoration: BoxDecoration(
                 border:
                     Border(top: BorderSide(color: Colors.white, width: 10))),
-            child: TabBarView(
+            child: TabBarView(  //위젯을 통해 하단 탭별 화면을 보여줌
               children: <Widget>[
                 Container(
-                  child: NormalFeedback(),
+                  child: NormalFeedback(),  //탭1 화면
                 ),
                 Container(
-                  child: CreaterFeedback(),
+                  child: CreaterFeedback(), //탭2 화면
                 ),
               ],
             ),

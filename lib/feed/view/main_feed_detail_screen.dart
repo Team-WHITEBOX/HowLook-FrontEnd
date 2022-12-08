@@ -6,6 +6,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/feed/component/main_feed_detail_card.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
+import 'package:howlook/common/layout/bottom_navy_bar.dart';
 
 class MainFeedDetailScreen extends StatelessWidget {
   final int npostId; // 포스트 아이디로 특정 게시글 조회
@@ -91,15 +92,84 @@ class MainFeedDetailScreen extends StatelessWidget {
       //     );
       //   },
       // ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: BODY_TEXT_COLOR,
-        unselectedItemColor: BODY_TEXT_COLOR,
-        selectedFontSize: 0,
-        unselectedFontSize: 0,
-        // BottomNavigationBarType <- 밑에 아이콘 변화하는 애니메이션 지정
-        type: BottomNavigationBarType.fixed,
-        // 현재 탭 가리키는 코드, controller의 index를 애니메이션 적용
-        onTap: (int index) {
+      // bottomNavigationBar: BottomNavigationBar(
+      //   selectedItemColor: BODY_TEXT_COLOR,
+      //   unselectedItemColor: BODY_TEXT_COLOR,
+      //   selectedFontSize: 0,
+      //   unselectedFontSize: 0,
+      //   // BottomNavigationBarType <- 밑에 아이콘 변화하는 애니메이션 지정
+      //   type: BottomNavigationBarType.fixed,
+      //   // 현재 탭 가리키는 코드, controller의 index를 애니메이션 적용
+      //   onTap: (int index) {
+      //     switch (index) {
+      //       case 0:
+      //         Navigator.of(context).pushAndRemoveUntil(
+      //           MaterialPageRoute(
+      //             builder: (_) => RootTab(
+      //               indexId: 0,
+      //             ),
+      //           ),
+      //           (route) => false,
+      //         );
+      //         break;
+      //       case 1:
+      //         Navigator.of(context).pushAndRemoveUntil(
+      //           MaterialPageRoute(
+      //             builder: (_) => RootTab(
+      //               indexId: 1,
+      //             ),
+      //           ),
+      //           (route) => false,
+      //         );
+      //         break;
+      //       case 2:
+      //         Navigator.of(context).pushAndRemoveUntil(
+      //           MaterialPageRoute(
+      //             builder: (_) => RootTab(
+      //               indexId: 2,
+      //             ),
+      //           ),
+      //           (route) => false,
+      //         );
+      //         break;
+      //       case 3:
+      //         Navigator.of(context).pushAndRemoveUntil(
+      //           MaterialPageRoute(
+      //             builder: (_) => RootTab(
+      //               indexId: 3,
+      //             ),
+      //           ),
+      //           (route) => false,
+      //         );
+      //         break;
+      //       case 4:
+      //         Navigator.of(context).pushAndRemoveUntil(
+      //           MaterialPageRoute(
+      //             builder: (_) => RootTab(
+      //               indexId: 4,
+      //             ),
+      //           ),
+      //           (route) => false,
+      //         );
+      //         break;
+      //     }
+      //   },
+      //   // 여기 안에는 밑의 네비게이션 바의 내용을 가리키는 곳
+      //   items: [
+      //     BottomNavigationBarItem(label: '홈', icon: Icon(Icons.home_outlined)),
+      //     BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: '?'),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.add_circle_outline_outlined), label: '업로드'),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.theater_comedy_outlined), label: '토너먼트'),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.person_outlined), label: '프로필'),
+      //   ],
+      // ),
+      bottomNavigationBar: BottomNavyBar(
+        // selectedIndex: index,
+        showElevation: true, // use this to remove appBar's elevation
+        onItemSelected: (int index) {
           switch (index) {
             case 0:
               Navigator.of(context).pushAndRemoveUntil(
@@ -108,7 +178,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 0,
                   ),
                 ),
-                (route) => false,
+                    (route) => false,
               );
               break;
             case 1:
@@ -118,7 +188,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 1,
                   ),
                 ),
-                (route) => false,
+                    (route) => false,
               );
               break;
             case 2:
@@ -128,7 +198,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 2,
                   ),
                 ),
-                (route) => false,
+                    (route) => false,
               );
               break;
             case 3:
@@ -138,7 +208,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 3,
                   ),
                 ),
-                (route) => false,
+                    (route) => false,
               );
               break;
             case 4:
@@ -148,21 +218,43 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 4,
                   ),
                 ),
-                (route) => false,
+                    (route) => false,
               );
               break;
           }
         },
         // 여기 안에는 밑의 네비게이션 바의 내용을 가리키는 곳
         items: [
-          BottomNavigationBarItem(label: '홈', icon: Icon(Icons.home_outlined)),
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: '?'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline_outlined), label: '업로드'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.theater_comedy_outlined), label: '토너먼트'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined), label: '프로필'),
+          BottomNavyBarItem(
+            textAlign: TextAlign.center,
+            icon: Icon(Icons.home_outlined),
+            title: Text('Home'),
+            activeColor: PRIMARY_COLOR,
+          ),
+          BottomNavyBarItem(
+            textAlign: TextAlign.center,
+            icon: Icon(Icons.message),
+            title: Text('Review'),
+            activeColor: PRIMARY_COLOR,
+          ),
+          BottomNavyBarItem(
+            textAlign: TextAlign.center,
+            icon: Icon(Icons.add_circle_outline_outlined),
+            title: Text('Upload'),
+            activeColor: PRIMARY_COLOR,
+          ),
+          BottomNavyBarItem(
+            textAlign: TextAlign.center,
+            icon: Icon(Icons.theater_comedy_outlined),
+            title: Text('Tournament'),
+            activeColor: PRIMARY_COLOR,
+          ),
+          BottomNavyBarItem(
+            textAlign: TextAlign.center,
+            icon: Icon(Icons.person_outlined),
+            title: Text('Profile'),
+            activeColor: PRIMARY_COLOR,
+          ),
         ],
       ),
     );
