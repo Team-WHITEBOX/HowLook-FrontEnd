@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
+import 'package:howlook/common/const/data.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -7,16 +8,16 @@ class MainFeedCard extends StatelessWidget {
   final UserInfoModel userPostInfo;
   // 포스트 아이디
   final int npostId;
-  // 이미지
-  final List<String> photoPaths;
+  // 이미지 경로
+  final List<PhotoDTOs> photoDTOs;
   // 이미지 갯수
   final int photoCnt;
 
   const MainFeedCard(
       {required this.userPostInfo,
-      required this.npostId,
-      required this.photoPaths,
-      required this.photoCnt,
+        required this.npostId,
+        required this.photoDTOs,
+        required this.photoCnt,
       Key? key})
       : super(key: key);
 
@@ -26,7 +27,7 @@ class MainFeedCard extends StatelessWidget {
     return MainFeedCard(
       userPostInfo: model.userPostInfo, //List<UserInfoModel>.from(model.userPostInfo),
       npostId: model.npostId,
-      photoPaths: List<String>.from(model.photoPaths),
+      photoDTOs: model.photoDTOs,
       photoCnt: model.photoCnt,
     );
   }
@@ -34,6 +35,7 @@ class MainFeedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PageController _controller = PageController();
+
     List<String> list = [
       'asset/img/Profile/HL1.JPG',
       'asset/img/Profile/HL2.JPG',
@@ -56,7 +58,8 @@ class MainFeedCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 18.0,
                   backgroundImage: Image.asset(
-                    list[0],
+                    //'http://$API_SERVICE_URI/photo/${userPostInfo.profilePhoto}',
+                    'asset/img/Profile/HL1.JPG',
                     fit: BoxFit.cover,
                   ).image,
                 ),
@@ -102,13 +105,15 @@ class MainFeedCard extends StatelessWidget {
                   return Container(
                     //child: Image.network(images[index], fit: BoxFit.cover,),
                     child: Image.asset(
-                      list[index],
+                      //'http://${API_SERVICE_URI}/photo/${photoDTOs[index].path}',
+                      'asset/img/Profile/HL1.JPG',
+                      // 'http://211.199.81.165:8080/photo/view/9e40dce2-3c2e-48d0-b693-71e1d00335a0_Sprite-0001.png',
                       fit: BoxFit.cover,
                     ),
                     // -> 네트워크로 수정하기
                   );
                 },
-                itemCount: 3, // -> PhotoCnt로 수정
+                itemCount: photoCnt, // -> PhotoCnt로 수정
               ),
             ),
             Positioned(
@@ -116,7 +121,7 @@ class MainFeedCard extends StatelessWidget {
               right: 18,
               child: SmoothPageIndicator(
                 controller: _controller,
-                count: 3,
+                count: photoCnt,
                 effect: ExpandingDotsEffect(
                     spacing: 5.0,
                     radius: 14.0,

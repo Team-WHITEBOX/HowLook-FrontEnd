@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // 일단 여기서는 간단하게 username과 password를
                       // 다음과 같은 json 형태로 구현하기로 약속
                       final resp = await dio.post(
-                        'http://3.34.164.14:8080/account/generateToken',
+                        'http://$API_SERVICE_URI/account/generateToken',
                         data: {
                           'mid': username,
                           'mpw': password,

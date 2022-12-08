@@ -28,9 +28,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>kakaofee362483928c6b3bbbb934a9996d8cb</string>
-			</array>
+			<array/>
 		</dict>
 		<dict/>
 	</array>
@@ -43,6 +41,16 @@
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+        <array>
+          <dict>
+          <key>CFBundleURLSchemes</key>
+          <array>
+            <!-- kakao login -->
+            <string>kakaofee362483928c6b3bbbb934a9996d8cb</string>
+          </array>
+          </dict>
+        </array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

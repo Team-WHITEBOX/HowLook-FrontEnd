@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:howlook/common/const/colors.dart';
+import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
+
 
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -19,11 +22,38 @@ class MainLoginScreen extends StatelessWidget {
       if (await isKakaoTalkInstalled() == false) {
         try {
           await AuthCodeClient.instance.authorize(
-            redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
+            redirectUri: 'http://3.34.164.14:8080/account/oauth2/code/kakao',
           );
         } catch (error) {
           print('카카오계정으로 로그인 실패 $error');
         }
+      }
+    }
+
+    const kAppUrlScheme = 'http://3.34.164.14:8080/login/oauth2/code/kakao';
+    String api =  'https://3.34.164.14:8080/oauth2/authorization/kakao';
+    Future<void> signIn(String api) async {
+      try {
+        // open login page & redirect auth code to back-end
+        final url = Uri.parse('$api?redirect_uri=$kAppUrlScheme');
+
+        // get callback data from back-end
+        final result = await FlutterWebAuth.authenticate(
+            url: url.toString(), callbackUrlScheme: kAppUrlScheme);
+
+        // parsing accessToken & refreshToken from callback data
+        final accessToken = Uri
+            .parse(result)
+            .queryParameters['access-token'];
+        final refreshToken = Uri
+            .parse(result)
+            .queryParameters['refresh-token'];
+
+        // save tokens on secure storage
+        await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
+        await storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
+      } catch (e) {
+        // showLoginFailDialog(e.toString());
       }
     }
 
@@ -50,12 +80,9 @@ class MainLoginScreen extends StatelessWidget {
               const SizedBox(height: 50.0), // 공백 삽입
               // 카카오 로그인 버튼
               TextButton(
-                // onPressed: () async {
-                //   final resp = await dio.get(
-                //     'http://3.34.164.14:8080/oauth2/authorization/kakao',
-                //   );
-                // },
                 onPressed: () {
+                  //KakaoLogin();
+                  //signIn('https://3.34.164.14:8080/oauth2/authorization/kakao');
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (_) => RootTab(),

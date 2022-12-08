@@ -2,15 +2,15 @@ class MainFeedModel {
   final UserInfoModel userPostInfo;
   // 포스트 아이디
   final int npostId;
-  // 이미지
-  final List<String> photoPaths;
+  // 이미지 경로
+  final List<PhotoDTOs> photoDTOs;
   // 이미지 갯수
   final int photoCnt;
 
   MainFeedModel({
     required this.userPostInfo,
     required this.npostId,
-    required this.photoPaths,
+    required this.photoDTOs,
     required this.photoCnt,
   });
 
@@ -18,10 +18,35 @@ class MainFeedModel {
     required Map<String, dynamic> json,
   }) {
     return MainFeedModel(
-      userPostInfo: UserInfoModel.fromJson(json: Map<String, dynamic>.from(json['userPostInfo'])),
+      userPostInfo: UserInfoModel.fromJson(
+          json: Map<String, dynamic>.from(json['userPostInfo'])),
       npostId: json['npostId'],
-      photoPaths: List<String>.from(json['photoPaths']),
+      photoDTOs: json['photoDTOs'].map<PhotoDTOs>(
+        (x) => PhotoDTOs(
+          path: x['path'],
+          photoId: x['photoId'],
+        ),
+      ).toList(),
       photoCnt: json['photoCnt'],
+    );
+  }
+}
+
+class PhotoDTOs {
+  final String path;
+  final int photoId;
+
+  PhotoDTOs({
+    required this.path,
+    required this.photoId,
+  });
+
+  factory PhotoDTOs.fromJson({
+    required Map<String, dynamic> json,
+  }) {
+    return PhotoDTOs(
+      path: json['path'],
+      photoId: json['photoId'],
     );
   }
 }
@@ -36,14 +61,14 @@ class UserInfoModel {
   // 몸무게
   final int memberWeight;
   // 포토아이디
-  final int profilePhotoId;
+  final String profilePhoto;
 
   UserInfoModel({
     required this.memberId,
     required this.memberNickName,
     required this.memberHeight,
     required this.memberWeight,
-    required this.profilePhotoId,
+    required this.profilePhoto,
   });
 
   factory UserInfoModel.fromJson({
@@ -54,7 +79,7 @@ class UserInfoModel {
       memberNickName: json['memberNickName'],
       memberHeight: json['memberHeight'],
       memberWeight: json['memberWeight'],
-      profilePhotoId: json['profilePhotoId'],
+      profilePhoto: json['profilePhoto'],
     );
   }
 }

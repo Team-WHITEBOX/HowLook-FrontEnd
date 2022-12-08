@@ -5,6 +5,7 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/feed/component/main_feed_detail_card.dart';
+import 'package:howlook/feed/model/main_feed_detail_model.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
 
 class MainFeedDetailScreen extends StatelessWidget {
@@ -19,8 +20,12 @@ class MainFeedDetailScreen extends StatelessWidget {
       memberNickName: 'df',
       memberHeight: 200,
       memberWeight: 100,
-      profilePhotoId: 0,
+      profilePhoto: '0',
     );
+
+    List<PhotoDTOs> photo = [
+      PhotoDTOs(path: 'asset/img/HL1.JPG', photoId: 1,),
+    ];
 
     List<String> list = [
       'asset/img/HL1.JPG',
@@ -45,52 +50,31 @@ class MainFeedDetailScreen extends StatelessWidget {
 
     return DefaultLayout(
       title: '게시글',
-      child: SingleChildScrollView(
-        child: SafeArea(
-          top: true,
-          bottom: false,
-          child: Column(
-            children: [
-              MainFeedDetailCard(
-                npostId: 1,
-                userPostInfo: userInfoModel,
-                photoPaths: list,
-                photoCnt: 1,
-                likeCount: 1,
-                content: "1",
-                commentCount: 1,
+      child: FutureBuilder<Map<String, dynamic>>(
+        future: getMainFeedDetail(),
+        builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final item = MainFeedDetailModel.fromJson(
+            json: snapshot.data!,
+          );
+
+          return SingleChildScrollView(
+            child: SafeArea(
+              top: true,
+              bottom: false,
+              child: Column(
+                children: [
+                  MainFeedDetailCard.fromModel(model: item),
+                ],
               ),
-              //밑에 사진 인디케이터
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
-      // child: FutureBuilder<Map<String, dynamic>>(
-      //   future: getMainFeedDetail(),
-      //   builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-      //     if (!snapshot.hasData) {
-      //       return Center(
-      //         child: CircularProgressIndicator(),
-      //       );
-      //     }
-      //     print(snapshot.data!);
-      //     final item = MainFeedDetailModel.fromJson(
-      //       json: snapshot.data!,
-      //     );
-      //
-      //     return SingleChildScrollView(
-      //       child: SafeArea(
-      //         top: true,
-      //         bottom: false,
-      //         child: Column(
-      //           children: [
-      //             MainFeedDetailCard.fromModel(model: item),
-      //           ],
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: BODY_TEXT_COLOR,
         unselectedItemColor: BODY_TEXT_COLOR,

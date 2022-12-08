@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/feed/component/main_feed_detail_comment.dart';
+import 'package:howlook/common/const/data.dart';
+import 'package:howlook/feed/component/main_feed_comment_card.dart';
 import 'package:howlook/feed/model/main_feed_detail_model.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -10,7 +11,7 @@ class MainFeedDetailCard extends StatelessWidget {
   // 포스트 아이디
   final int npostId;
   // 이미지
-  final List<String> photoPaths;
+  final List<PhotoDTOs> photoDTOs;
   // 이미지 갯수
   final int photoCnt;
   // 좋아요
@@ -19,15 +20,18 @@ class MainFeedDetailCard extends StatelessWidget {
   final int commentCount;
   // 내용
   final String content;
+  // 날짜
+  final List<dynamic> regDate;
 
   const MainFeedDetailCard(
       {required this.userPostInfo,
       required this.npostId,
-      required this.photoPaths,
+      required this.photoDTOs,
       required this.photoCnt,
       required this.likeCount,
       required this.commentCount,
       required this.content,
+      required this.regDate,
       Key? key})
       : super(key: key);
 
@@ -35,13 +39,15 @@ class MainFeedDetailCard extends StatelessWidget {
     required MainFeedDetailModel model,
   }) {
     return MainFeedDetailCard(
-      userPostInfo: model.userPostInfo, //List<UserInfoModel>.from(model.userPostInfo),
+      userPostInfo:
+          model.userPostInfo, //List<UserInfoModel>.from(model.userPostInfo),
       npostId: model.npostId,
-      photoPaths: List<String>.from(model.photoPaths),
+      photoDTOs: model.photoDTOs,
       photoCnt: model.photoCnt,
       likeCount: model.likeCount,
       commentCount: model.commentCount,
       content: model.content,
+      regDate: model.regDate,
     );
   }
 
@@ -54,11 +60,10 @@ class MainFeedDetailCard extends StatelessWidget {
       'asset/img/Profile/HL2.JPG',
       'asset/img/Profile/HL3.JPG',
     ];
+    // 게시글 날짜 등록
+    String Date = '${regDate[0]}.${regDate[1]}.${regDate[2]}';
 
-    List<int> bodyinfo = [
-      userPostInfo.memberHeight,
-      userPostInfo.memberWeight
-    ];
+    List<int> bodyinfo = [userPostInfo.memberHeight, userPostInfo.memberWeight];
 
     return Column(
       children: [
@@ -71,7 +76,8 @@ class MainFeedDetailCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 18.0,
                   backgroundImage: Image.asset(
-                    list[0],
+                    //'http://$API_SERVICE_URI/photo/${userPostInfo.profilePhoto}',
+                    'asset/img/Profile/HL1.JPG',
                     fit: BoxFit.cover,
                   ).image,
                 ),
@@ -117,13 +123,14 @@ class MainFeedDetailCard extends StatelessWidget {
                   return Container(
                     //child: Image.network(images[index], fit: BoxFit.cover,),
                     child: Image.asset(
-                      list[index],
+                      //'http://${API_SERVICE_URI}/photo/${photoDTOs[index].path}',
+                      'asset/img/Profile/HL1.JPG',
                       fit: BoxFit.cover,
                     ),
                     // -> 네트워크로 수정하기
                   );
                 },
-                itemCount: 3, // -> PhotoCnt로 수정
+                itemCount: photoCnt,
               ),
             ),
             Positioned(
@@ -131,7 +138,7 @@ class MainFeedDetailCard extends StatelessWidget {
               right: 18,
               child: SmoothPageIndicator(
                 controller: _controller,
-                count: 3,
+                count: photoCnt,
                 effect: ExpandingDotsEffect(
                     spacing: 5.0,
                     radius: 14.0,
@@ -146,7 +153,9 @@ class MainFeedDetailCard extends StatelessWidget {
         ),
         Column(
           children: [
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Stack(
               children: [
                 Row(
@@ -156,7 +165,7 @@ class MainFeedDetailCard extends StatelessWidget {
                       children: [
                         const SizedBox(width: 30),
                         Text(
-                          '2022.11.17',
+                          Date,
                           style: TextStyle(
                             fontSize: 14,
                             fontFamily: 'NotoSans',
@@ -172,7 +181,9 @@ class MainFeedDetailCard extends StatelessWidget {
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return MainFeedDetailComment();
+                            return MainFeedDetailComment(
+                              npostId: npostId,
+                            );
                           },
                           backgroundColor: Colors.transparent,
                         );

@@ -191,7 +191,7 @@ class _minText extends StatelessWidget {
           fontFamily: 'NotoSans',
           fontSize: 15,
           fontWeight: FontWeight.w400,
-          color: PRIMARY_COLOR,
+          color: BODY_TEXT_COLOR,
         ),
         //textAlign: TextAlign.left,
       ),

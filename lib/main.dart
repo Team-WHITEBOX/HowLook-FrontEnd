@@ -5,7 +5,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 void main() {
   KakaoSdk.init(
-    nativeAppKey: '$YOUR_NATIVE_APP_KEY',
+    nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb'
   );
   runApp(
     _App(),
