@@ -4,6 +4,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:howlook/upload/inputFormatter.dart';
 
 class ReviewUpload extends StatefulWidget {
   const ReviewUpload({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class ReviewUpload extends StatefulWidget {
 }
 
 class _ReviewUploadState extends State<ReviewUpload> {
-  final TextEditingController _myController = TextEditingController();
 
   final baseBorder = UnderlineInputBorder(
     borderSide: BorderSide(
@@ -22,13 +22,31 @@ class _ReviewUploadState extends State<ReviewUpload> {
     ),
   );
 
-  final maxLength = 30;
   bool toggleValue = false;
+  bool isSelected = false;
+
+  final _myController = TextEditingController();
+  int maxLength = 30;
+
+  @override
+  void initState() {
+    super.initState();
+    _myController.addListener(_printLatestValue);
+  }
+
+  void _printLatestValue() {
+    print("hi: ${_myController.text}");
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: 'Review Upload',
+      actions: <Widget>[
+        IconButton(onPressed: () {
+          //업로드 기능 구현
+        }, icon: Icon(MdiIcons.progressUpload, size: 30,)),
+      ],
       child: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -76,7 +94,9 @@ class _ReviewUploadState extends State<ReviewUpload> {
                       ),
                     ),
                   ]),
-                  onTap: () {}, //사진 업로드
+                  onTap: () {
+                    //사진업로드 기능 구현
+                  }, //사진 업로드
                 ),
                 const SizedBox(
                   height: 5,
@@ -93,10 +113,12 @@ class _ReviewUploadState extends State<ReviewUpload> {
                     child: Padding(
                       padding: EdgeInsets.all(10.0),
                       child: TextField(
+                        maxLength: this.maxLength,
                         keyboardType: TextInputType.text,
                         controller: _myController,
                         cursorColor: PRIMARY_COLOR,
                         style: TextStyle(decorationColor: Colors.grey),
+                        inputFormatters: [Utf8LengthLimitingTextInputFormatter(maxLength)],
                         decoration: InputDecoration(
                             border: baseBorder,
                             enabledBorder: baseBorder,
@@ -109,22 +131,8 @@ class _ReviewUploadState extends State<ReviewUpload> {
                             labelText: '한줄쓰기',
                             labelStyle: TextStyle(color: Colors.grey),
                             hintText: '간단한 글을 남겨보세요:)',
-                            counterText: '', // counter text를 비움으로 설정
                             counterStyle: TextStyle(color: Colors.grey)
                         ),
-                        onChanged: (nextText) {
-                          setState(() {
-                            if(_myController.text.trim() != ""){
-                              // isSelected = true;
-                            }else{
-                              // isSelected = false;
-                            }
-                            _myController.text = nextText.substring(0,maxLength);
-                            _myController.selection = TextSelection.fromPosition(TextPosition(offset: maxLength));
-
-                          });
-                        },
-                        inputFormatters: [LengthLimitingTextInputFormatter(maxLength)],
                       ),
                     )
                 ),

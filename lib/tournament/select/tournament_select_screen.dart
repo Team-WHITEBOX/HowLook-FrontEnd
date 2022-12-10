@@ -4,6 +4,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/tournament/select/rect_clipper.dart';
 import 'package:howlook/tournament/select/BeforeAfterScreen.dart';
 import 'package:slidable_button/slidable_button.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class TournamentIng extends StatefulWidget {
   const TournamentIng({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _TournamentIngState extends State<TournamentIng> {
   ];
 
   String result = "";
-  int _value = 1;
+  int _value = 0;
 
   @override
   Widget build(BuildContext context) {

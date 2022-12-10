@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/user/view/splash_screen.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
     nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb'
   );

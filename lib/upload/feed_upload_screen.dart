@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:glass_kit/glass_kit.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:howlook/upload/inputFormatter.dart';
 
 class FeedUpload extends StatefulWidget {
   const FeedUpload({Key? key}) : super(key: key);
@@ -27,10 +29,28 @@ class _FeedUploadState extends State<FeedUpload> {
     ),
   );
 
+  final _myController = TextEditingController();
+  int maxLength = 30;
+
+  @override
+  void initState() {
+    super.initState();
+    _myController.addListener(_printLatestValue);
+  }
+
+  void _printLatestValue() {
+    print("hi: ${_myController.text}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: 'Feed Upload',
+      actions: <Widget>[
+        IconButton(onPressed: () {
+          //업로드 기능 구현
+        }, icon: Icon(MdiIcons.progressUpload, size: 30,)),
+      ],
       child: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -90,11 +110,12 @@ class _FeedUploadState extends State<FeedUpload> {
                     child: Padding(
                       padding: EdgeInsets.all(10.0),
                       child: TextField(
-                        maxLength: 30, // 문자길이 제한
+                        maxLength: this.maxLength,
                         keyboardType: TextInputType.text,
-                        controller: myController,
+                        controller: _myController,
                         cursorColor: PRIMARY_COLOR,
                         style: TextStyle(decorationColor: Colors.grey),
+                        inputFormatters: [Utf8LengthLimitingTextInputFormatter(maxLength)],
                         decoration: InputDecoration(
                             border: baseBorder,
                             enabledBorder: baseBorder,
@@ -104,21 +125,34 @@ class _FeedUploadState extends State<FeedUpload> {
                                   color: PRIMARY_COLOR,
                                 )
                             ),
-                          labelText: '한줄쓰기',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          hintText: '간단한 글을 남겨보세요:)',
-                          counterText: '', // counter text를 비움으로 설정
-                          counterStyle: TextStyle(color: Colors.grey)
+                            labelText: '한줄쓰기',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            hintText: '간단한 글을 남겨보세요:)',
+                            counterStyle: TextStyle(color: Colors.grey)
                         ),
-                        onChanged: (value) {},
                       ),
-                    )),
+                    )
+                ),
                 const SizedBox(
                   height: 5,
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(left: 25.0, top: 0.0,right: 0.0,bottom: 0.0),
+                      child: Text(
+                      "STYLE",
+                      style: TextStyle(
+                        fontFamily: 'NotoSans',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: BODY_TEXT_COLOR,
+                      ),
+                    ),),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       children: <Widget>[
                         const SizedBox(width: 40),

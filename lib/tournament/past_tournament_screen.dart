@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:howlook/common/const/colors.dart';
+import 'package:intl/intl.dart';
 
 class pastTournament extends StatefulWidget {
   const pastTournament({Key? key}) : super(key: key);
@@ -26,6 +29,7 @@ class _pastTournamentState extends State<pastTournament> {
   ];
 
   List<String> topRanks = ["🥇", "🥈", "🥉"];
+  String tournamentday = '';
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +49,32 @@ class _pastTournamentState extends State<pastTournament> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Center(
-                        child: Container(
-                            child: Text(
-                          'OO주차 토너먼트 결과',
-                          style: TextStyle(color: Colors.grey, fontSize: 20),
-                        )),
+                        child: TextButton(
+                          onPressed: () {
+                            DatePicker.showDatePicker(
+                              context,
+                              showTitleActions: true,
+                              minTime: DateTime(1900, 1, 1),
+                              maxTime: DateTime(2022, 12, 31),
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.ko,
+                              onConfirm: (date) {
+                                 tournamentday = DateFormat('yyyy-MM-dd').format(date);
+                                 Text( //랜킹날짜 안내글 어떻게하지...
+                                     '${tournamentday} 랭킹 결과',
+                                     style: TextStyle(
+                                       color: Colors.grey,)
+                                 );
+                              },
+                            );
+                          },
+                          child: Text(
+                            "보고싶은 순위의 날짜를 선택하세요",
+                            style: TextStyle(
+                              color: PRIMARY_COLOR,
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 10.0),
                       Center(

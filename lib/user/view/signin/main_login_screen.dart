@@ -19,10 +19,10 @@ class MainLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void KakaoLogin() async {
-      if (await isKakaoTalkInstalled() == false) {
+      if (await isKakaoTalkInstalled()) {
         try {
           await AuthCodeClient.instance.authorize(
-            redirectUri: 'http://3.34.164.14:8080/account/oauth2/code/kakao',
+            redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
           );
         } catch (error) {
           print('카카오계정으로 로그인 실패 $error');
@@ -81,13 +81,13 @@ class MainLoginScreen extends StatelessWidget {
               // 카카오 로그인 버튼
               TextButton(
                 onPressed: () {
-                  //KakaoLogin();
-                  //signIn('https://3.34.164.14:8080/oauth2/authorization/kakao');
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => RootTab(),
-                      ),
-                  );
+                  KakaoLogin();
+                  signIn('https://3.34.164.14:8080/oauth2/authorization/kakao');
+                  // Navigator.of(context).pushReplacement(
+                  //     MaterialPageRoute(
+                  //       builder: (_) => RootTab(),
+                  //     ),
+                  // );
                 },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
               ),

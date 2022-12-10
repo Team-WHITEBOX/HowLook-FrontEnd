@@ -57,9 +57,9 @@ class MainFeedCard extends StatelessWidget {
                 const SizedBox(width: 10.0),
                 CircleAvatar(
                   radius: 18.0,
-                  backgroundImage: Image.asset(
-                    //'http://$API_SERVICE_URI/photo/${userPostInfo.profilePhoto}',
-                    'asset/img/Profile/HL1.JPG',
+                  backgroundImage: Image.network(
+                    'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/00e97e2b-16f3-424a-85f6-66700f3c4506_check.JPG',
+                    //'asset/img/Profile/HL1.JPG',
                     fit: BoxFit.cover,
                   ).image,
                 ),
