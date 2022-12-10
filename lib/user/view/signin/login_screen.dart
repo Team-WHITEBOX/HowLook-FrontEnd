@@ -45,7 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 _Title(),
                 const SizedBox(height: 16.0), // 공백 삽입
                 _SubTitle(),
-
                 const SizedBox(height: 80.0), // 공백 삽입
                 _LoginText(),
                 const SizedBox(height: 30.0), // 공백 삽입
@@ -108,15 +107,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           'mpw': password,
                         },
                       );
-                      print(resp.data);
 
                       final refreshToken = resp.data['refreshToken'];
                       final accessToken = resp.data['accessToken'];
+                      final mid = resp.data['mid'];
 
                       await storage.write(
                           key: REFRESH_TOKEN_KEY, value: refreshToken);
                       await storage.write(
                           key: ACCESS_TOKEN_KEY, value: accessToken);
+                      await storage.write(key: USERMID_KEY, value: mid);
 
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(

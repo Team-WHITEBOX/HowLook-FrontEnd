@@ -1,186 +1,160 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/feed/model/main_feed_comment_model.dart';
+import 'package:like_button/like_button.dart';
 
-class MainFeedDetailComment extends StatefulWidget {
+class FeedCommentCard extends StatefulWidget {
+  // 댓글 아이디
+  final int replyId;
+  // 댓글 부모 아이디
+  final int parentId;
+  // 댓글 좋아요 수
+  final int likeCount;
+  // 댓글 작성자 닉네임
+  final String nickName;
+  // 댓글 작성자 프로필 사진
+  final String profilePhoto;
+  // 댓글 내가 체크 여부
+  final bool like_chk;
+  // 댓글 내용
+  final String contents;
+  // 포스트 아이디
   final int npostId;
-  const MainFeedDetailComment({
-    required this.npostId,
-    Key? key,
-  }) : super(key: key);
+
+  const FeedCommentCard(
+      {required this.parentId,
+      required this.profilePhoto,
+      required this.contents,
+      required this.npostId,
+      required this.replyId,
+      required this.nickName,
+      required this.likeCount,
+      required this.like_chk,
+      Key? key})
+      : super(key: key);
+
+  factory FeedCommentCard.fromModel({
+    required MainFeedCommentModel model,
+  }) {
+    return FeedCommentCard(
+      parentId: model.parentId,
+      profilePhoto: model.profilePhoto,
+      contents: model.contents,
+      npostId: model.npostId,
+      replyId: model.replyId,
+      nickName: model.nickName,
+      likeCount: model.likeCount,
+      like_chk: model.like_chk,
+    );
+  }
 
   @override
-  State<MainFeedDetailComment> createState() => _MainFeedDetailCommentState();
+  State<FeedCommentCard> createState() => _FeedCommentCardState();
 }
 
-class _MainFeedDetailCommentState extends State<MainFeedDetailComment> {
-  Future<List> paginateComment() async {
+class _FeedCommentCardState extends State<FeedCommentCard> {
+  Future<bool> onLikeButtonTapped(bool like_chk, int replyId) async {
     final dio = Dio();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    int npostId = widget.npostId;
-    final resp = await dio.get(
-      // MainFeed 관련 api IP주소 추가하기
-      'http://$API_SERVICE_URI/replies/list/1', //$npostId',
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
-    // 응답 데이터 중 data 값만 반환하여 사용하기!!
-    return resp.data;
+    if (like_chk == true) {
+      final resp = await dio.delete(
+        'http://$API_SERVICE_URI/replies/like?ReplyId=$replyId',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
+      return Future.value(!like_chk);
+    } else {
+      final resp = await dio.post(
+        'http://$API_SERVICE_URI/replies/like?ReplyId=$replyId',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
+      return Future.value(!like_chk);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Container(
-        height: 800,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Container(
+        height: 60,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(
+            children: [
+              const SizedBox(
+                width: 4,
+              ),
+              CircleAvatar(
+                radius: 20.0,
+                backgroundImage: Image.asset(
+                  //'http://$API_SERVICE_URI/photo/${pItem.profilePhoto}',
+                  'asset/img/Profile/HL1.JPG',
+                  fit: BoxFit.cover,
+                ).image,
+                // Image.network()로 추가하기
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.nickName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Text(widget.contents),
+                ],
+              ),
+            ],
           ),
-        ),
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 56.0,
-                  child: Center(
-                    child: Text(
-                      "댓글",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 15,
-                  top: 7,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      size: 30,
-                      color: Colors.black,
-                    ), // Your desired icon
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                )
-              ],
-            ),
-            FutureBuilder<List>(
-              future: paginateComment(),
-              builder: (context, AsyncSnapshot<List> snapshot) {
+          LikeButton(
+            isLiked: widget.like_chk,
+            likeCount: widget.likeCount,
+            countPostion: CountPostion.bottom,
+            onTap: (isLiked) {
+              return onLikeButtonTapped(isLiked, widget.replyId);
+            },
+            likeBuilder: (isLiked) {
+              // isLiked = widget.like_chk;
+              // print('isLiked = $isLiked');
+              return Icon(
+                Icons.favorite,
+                color: isLiked ? Colors.red : Colors.grey,
+                size: 18,
+              );
+            },
+            countBuilder: (likeCount, isLiked, String text) {
+              var color = isLiked ? Colors.red : Colors.grey;
+              Widget result;
 
-                // 에러처리
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: Container(
-                      child: CircularProgressIndicator(
-                        color: PRIMARY_COLOR,
-                      ),
-                    ),
-                  );
-                }
-                if (snapshot.data.toString().length == 2) {
-                  return Center(
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 400,
-                      height: 350,
-                      child: Text(
-                        '댓글이 존재하지 않습니다.',
-                      ),
-                    ),
-                  );
-                }
-                return ListView.separated(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (_, index) {
-                    final item = snapshot.data![index];
-                    final pItem = MainFeedCommentModel.fromJson(json: item);
-
-                    return SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 8,
-                        ),
-                        child: Container(
-                          height: 60,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  CircleAvatar(
-                                    radius: 20.0,
-                                    backgroundImage: Image.asset(
-                                      //'http://$API_SERVICE_URI/photo/${pItem.profilePhoto}',
-                                      'asset/img/Profile/HL1.JPG',
-                                      fit: BoxFit.cover,
-                                    ).image,
-                                    // Image.network()로 추가하기
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${pItem.nickname}',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 3,),
-                                      Text(pItem.contents),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              TextButton.icon(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.favorite_border,
-                                  size: 18,
-                                ),
-                                label: Text(''),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (_, index) {
-                    return SizedBox(height: 16.0);
-                  },
+              if (likeCount != 0) {
+                result = Text(text, style: TextStyle(color: color));
+              } else
+                result = Text(
+                  "",
+                  style: TextStyle(color: color),
                 );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+              return result;
+            },
+          ),
+        ]),
+      );
+    });
   }
 }

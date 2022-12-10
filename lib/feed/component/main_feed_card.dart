@@ -103,11 +103,9 @@ class MainFeedCard extends StatelessWidget {
                 controller: _controller,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    //child: Image.network(images[index], fit: BoxFit.cover,),
                     child: Image.asset(
                       //'http://${API_SERVICE_URI}/photo/${photoDTOs[index].path}',
                       'asset/img/Profile/HL1.JPG',
-                      // 'http://211.199.81.165:8080/photo/view/9e40dce2-3c2e-48d0-b693-71e1d00335a0_Sprite-0001.png',
                       fit: BoxFit.cover,
                     ),
                     // -> 네트워크로 수정하기

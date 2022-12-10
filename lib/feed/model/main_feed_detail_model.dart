@@ -1,8 +1,10 @@
 import 'package:howlook/feed/model/main_feed_model.dart';
 
 class MainFeedDetailModel extends MainFeedModel {
-  // 좋아요
+  // 좋아요 수
   final int likeCount;
+  // 본인의 좋아요 체크 여부
+  final bool like_chk;
   // 댓글
   final int commentCount;
   // 내용
@@ -16,6 +18,7 @@ class MainFeedDetailModel extends MainFeedModel {
     required super.photoDTOs,
     required super.photoCnt,
     required this.likeCount,
+    required this.like_chk,
     required this.commentCount,
     required this.content,
     required this.regDate,
@@ -37,8 +40,9 @@ class MainFeedDetailModel extends MainFeedModel {
           )
           .toList(),
       photoCnt: json['photoCnt'],
-      likeCount: json['npostId'], // 임시
-      commentCount: json['npostId'], // 임시
+      likeCount: json['likeCount'], // 임시
+      like_chk: json['like_chk'],
+      commentCount: json['commentCount'], // 임시
       content: json['content'],
       regDate: json['regDate'],
     );

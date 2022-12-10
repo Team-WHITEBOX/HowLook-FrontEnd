@@ -1,10 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
-import 'package:howlook/feed/component/main_feed_comment_card.dart';
+import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/model/main_feed_detail_model.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
+import 'package:howlook/feed/view/main_feed_more_vert_screen.dart';
+import 'package:like_button/like_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../view/comment_screen.dart';
 
 class MainFeedDetailCard extends StatelessWidget {
   final UserInfoModel userPostInfo;
@@ -14,8 +19,10 @@ class MainFeedDetailCard extends StatelessWidget {
   final List<PhotoDTOs> photoDTOs;
   // 이미지 갯수
   final int photoCnt;
-  // 좋아요
+  // 좋아요 갯수
   final int likeCount;
+  // 본인 좋아요 체크 여부
+  final bool like_chk;
   // 댓글
   final int commentCount;
   // 내용
@@ -29,6 +36,7 @@ class MainFeedDetailCard extends StatelessWidget {
       required this.photoDTOs,
       required this.photoCnt,
       required this.likeCount,
+      required this.like_chk,
       required this.commentCount,
       required this.content,
       required this.regDate,
@@ -45,6 +53,7 @@ class MainFeedDetailCard extends StatelessWidget {
       photoDTOs: model.photoDTOs,
       photoCnt: model.photoCnt,
       likeCount: model.likeCount,
+      like_chk: model.like_chk,
       commentCount: model.commentCount,
       content: model.content,
       regDate: model.regDate,
@@ -60,9 +69,35 @@ class MainFeedDetailCard extends StatelessWidget {
       'asset/img/Profile/HL2.JPG',
       'asset/img/Profile/HL3.JPG',
     ];
+    // 게시글 좋아요
+    Future<bool> onLikeButtonTapped(bool like_chk, int npostId) async {
+      final dio = Dio();
+      final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+      if (like_chk == true) {
+        final resp = await dio.delete(
+          'http://$API_SERVICE_URI/feed/like?NPostId=$npostId',
+          options: Options(
+            headers: {
+              'authorization': 'Bearer $accessToken',
+            },
+          ),
+        );
+        return Future.value(!like_chk);
+      } else {
+        final resp = await dio.post(
+          'http://$API_SERVICE_URI/feed/like?NPostId=$npostId',
+          options: Options(
+            headers: {
+              'authorization': 'Bearer $accessToken',
+            },
+          ),
+        );
+        return Future.value(!like_chk);
+      }
+    }
     // 게시글 날짜 등록
     String Date = '${regDate[0]}.${regDate[1]}.${regDate[2]}';
-
+    // 바디 정보 리스트 화
     List<int> bodyinfo = [userPostInfo.memberHeight, userPostInfo.memberWeight];
 
     return Column(
@@ -105,7 +140,17 @@ class MainFeedDetailCard extends StatelessWidget {
               ],
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return MainFeedMoreVertScreen(
+                      npostId: npostId,
+                    );
+                  },
+                  backgroundColor: Colors.transparent,
+                );
+              },
               icon: Icon(
                 Icons.more_vert,
               ),
@@ -156,93 +201,114 @@ class MainFeedDetailCard extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Stack(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        const SizedBox(width: 30),
-                        Text(
-                          Date,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'NotoSans',
-                            fontWeight: FontWeight.w200,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TextButton.icon(
-                      label: Text(''),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return MainFeedDetailComment(
-                              npostId: npostId,
-                            );
-                          },
-                          backgroundColor: Colors.transparent,
-                        );
-                      },
-                      icon: Icon(
-                        Icons.comment,
-                        size: 25.0,
-                        color: Colors.black,
-                      ),
-                      style: TextButton.styleFrom(
-                        minimumSize: Size(10, 10),
+                    const SizedBox(width: 30),
+                    Text(
+                      Date,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'NotoSans',
+                        fontWeight: FontWeight.w200,
+                        color: Colors.grey,
                       ),
                     ),
                   ],
                 ),
-                Positioned(
-                  top: 25,
-                  bottom: 10,
-                  right: 0,
-                  left: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                TextButton.icon(
+                  label: Text(''),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FeedCommentScreen(
+                          npostId: npostId,
+                        );
+                      },
+                      backgroundColor: Colors.transparent,
+                    );
+                  },
+                  icon: Icon(
+                    Icons.comment,
+                    size: 25.0,
+                    color: Colors.black,
+                  ),
+                  style: TextButton.styleFrom(
+                    minimumSize: Size(10, 10),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Container(
+                  height: 70,
+                  width: (MediaQuery.of(context).size.width),
+                  // color: Colors.black,
+                  child: Stack(
                     children: [
-                      Row(
-                        children: [
-                          const SizedBox(width: 30),
-                          Text(
-                            userPostInfo.memberId,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                      Positioned(
+                        top: -5,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 30),
+                            Text(
+                              userPostInfo.memberId,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            content,
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          )
-                        ],
-                      ),
-                      TextButton.icon(
-                        label: Text(''),
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.favorite_border,
-                          size: 25.0,
-                          color: Colors.black,
+                            const SizedBox(width: 10),
+                            Text(
+                              content,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            )
+                          ],
                         ),
-                        style: TextButton.styleFrom(minimumSize: Size(10, 10)),
+                      ),
+                      Positioned(
+                        right: 13,
+                        child: LikeButton(
+                          isLiked: like_chk,
+                          likeCount: likeCount,
+                          countPostion: CountPostion.bottom,
+                          onTap: (isLiked) {
+                            return onLikeButtonTapped(isLiked, npostId);
+                          },
+                          likeBuilder: (isLiked) {
+                            return Icon(
+                              Icons.favorite,
+                              color: isLiked ? Colors.red : Colors.grey,
+                              size: 24,
+                            );
+                          },
+                          countBuilder: (likeCount, isLiked, String text) {
+                            var color = isLiked ? Colors.red : Colors.grey;
+                            Widget result;
+                            if (likeCount != 0) {
+                              result = Text(text, style: TextStyle(color: color));
+                            } else
+                              result = Text(
+                                "",
+                                style: TextStyle(color: color),
+                              );
+                            return result;
+                          },
+                        ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 100),
               ],
             ),
+            SizedBox(height: 100),
           ],
         )
       ],

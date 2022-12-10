@@ -4,6 +4,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 const YOUR_NATIVE_APP_KEY = 'fee362483928c6b3bbbb934a9996d8cb';
+const USERMID_KEY = 'USERMID';
+
+// <- 아이디 불러오는 방법 ->
+// final usermid = await storage.read(key: USERMID_KEY);
+// print(usermid);
 
 
 // localhost
