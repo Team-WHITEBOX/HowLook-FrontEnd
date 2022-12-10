@@ -4,6 +4,8 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/user/view/profile/my_feed.dart';
 import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
 import 'package:howlook/user/view/profile/my_scrap.dart';
+import 'package:dio/dio.dart';
+import 'package:howlook/common/const/data.dart';
 
 class ProfileScreen extends StatefulWidget {
 
@@ -22,6 +24,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String nickName = '';
   int height = 0;
   int weight = 0;
+
+  // Future<List> paginateProfile() async {
+  //   final dio = Dio();
+  //   final accessToken = await storage.read(key: ACCESS_TOKEN_KEY)
+  //
+  //   final resp = await dio.get(
+  //     // MainFeed 관련 api IP주소 추가하기
+  //     'http://$API_SERVICE_URI/member/${usermid}',
+  //     options: Options(
+  //       headers: {
+  //         'authorization': 'Bearer $accessToken',
+  //       },
+  //     ),
+  //   );
+  //   // 응답 데이터 중 data 값만 반환하여 사용하기!!
+  //   return resp.data['data'];
+  // }
 
   @override
   Widget build(BuildContext context) {

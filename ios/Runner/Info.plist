@@ -25,15 +25,16 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
-			<array/>
+			<array>
+				<string>kakaofee362483928c6b3bbbb934a9996d8cb</string>
+			</array>
 		</dict>
-		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>KAKAO_APP_KEY</key>
+	<string>fee362483928c6b3bbbb934a9996d8cb</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -41,16 +42,6 @@
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
 	</array>
-	<key>CFBundleURLTypes</key>
-        <array>
-          <dict>
-          <key>CFBundleURLSchemes</key>
-          <array>
-            <!-- kakao login -->
-            <string>kakaofee362483928c6b3bbbb934a9996d8cb</string>
-          </array>
-          </dict>
-        </array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
