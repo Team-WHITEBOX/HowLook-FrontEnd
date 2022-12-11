@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/dio/dio.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/feed/component/main_feed_detail_card.dart';
@@ -10,42 +11,41 @@ import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/common/layout/bottom_navy_bar.dart';
 import 'package:howlook/feed/model/photo_dto.dart';
 import 'package:howlook/feed/model/userinfomodel.dart';
+import 'package:howlook/feed/repository/main_feed_repository.dart';
 
 class MainFeedDetailScreen extends StatelessWidget {
   final int npostId; // 포스트 아이디로 특정 게시글 조회
-  const MainFeedDetailScreen({required this.npostId, Key? key})
-      : super(key: key);
+
+  const MainFeedDetailScreen({
+    required this.npostId,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Future<Map<String, dynamic>> getMainFeedDetail() async {
+    Future<MainFeedDetailModel> getMainFeedDetail() async {
       final dio = Dio();
-      final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-      final resp = await dio.get(
-        'http://$API_SERVICE_URI/feed/readbypid?NPostId=$npostId',
-        // 특정 API 뒤에 id 값 넘어서 가져가기
-        options: Options(
-          headers: {
-            'authorization': 'Bearer $accessToken',
-          },
-        ),
+
+      dio.interceptors.add(
+        CustomInteceptor(storage: storage),
       );
-      return resp.data['data'];
+
+      final repository =
+          MainFeedRepository(dio, baseurl: 'http://$API_SERVICE_URI');
+
+      return repository.getMainFeedDetail(NPostId: npostId);
     }
 
     return DefaultLayout(
       title: '게시글',
-      child: FutureBuilder<Map<String, dynamic>>(
+      child: FutureBuilder<MainFeedDetailModel>(
         future: getMainFeedDetail(),
-        builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        builder: (_, AsyncSnapshot<MainFeedDetailModel> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          final item = MainFeedDetailModel.fromJson(
-            snapshot.data!,
-          );
 
           return SingleChildScrollView(
             child: SafeArea(
@@ -53,7 +53,7 @@ class MainFeedDetailScreen extends StatelessWidget {
               bottom: false,
               child: Column(
                 children: [
-                  MainFeedDetailCard.fromModel(model: item),
+                  MainFeedDetailCard.fromModel(model: snapshot.data!),
                 ],
               ),
             ),

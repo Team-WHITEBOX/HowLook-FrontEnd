@@ -83,7 +83,6 @@ class MainLoginScreen extends StatelessWidget {
                       builder: (context) => KakaoLoginScreen(),
                     ),
                   );
-                  print(result);
                   List<String> tokens = result.split(' ');
                   final refreshToken = tokens[1].substring(0, tokens[1].length - 1);
                   final accessToken = tokens[3].substring(0, tokens[3].length - 1);
