@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:glass_kit/glass_kit.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:howlook/upload/inputFormatter.dart';
 
@@ -13,6 +14,9 @@ class FeedUpload extends StatefulWidget {
 }
 
 class _FeedUploadState extends State<FeedUpload> {
+  // 이미지 담아오기
+  final ImagePicker _picker = ImagePicker();
+
   bool isMinimalChecked = false;
   bool isCasualChecked = false;
   bool isStreetChecked = false;
@@ -47,9 +51,15 @@ class _FeedUploadState extends State<FeedUpload> {
     return DefaultLayout(
       title: 'Feed Upload',
       actions: <Widget>[
-        IconButton(onPressed: () {
-          //업로드 기능 구현
-        }, icon: Icon(MdiIcons.progressUpload, size: 30,)),
+        IconButton(
+          onPressed: () {
+            구현
+          },
+          icon: Icon(
+            MdiIcons.progressUpload,
+            size: 30,
+          ),
+        ),
       ],
       child: SingleChildScrollView(
         child: SafeArea(
@@ -115,24 +125,23 @@ class _FeedUploadState extends State<FeedUpload> {
                         controller: _myController,
                         cursorColor: PRIMARY_COLOR,
                         style: TextStyle(decorationColor: Colors.grey),
-                        inputFormatters: [Utf8LengthLimitingTextInputFormatter(maxLength)],
+                        inputFormatters: [
+                          Utf8LengthLimitingTextInputFormatter(maxLength)
+                        ],
                         decoration: InputDecoration(
                             border: baseBorder,
                             enabledBorder: baseBorder,
                             // 선택된 Input 상태의 기본 스타일
                             focusedBorder: baseBorder.copyWith(
                                 borderSide: baseBorder.borderSide.copyWith(
-                                  color: PRIMARY_COLOR,
-                                )
-                            ),
+                              color: PRIMARY_COLOR,
+                            )),
                             labelText: '한줄쓰기',
                             labelStyle: TextStyle(color: Colors.grey),
                             hintText: '간단한 글을 남겨보세요:)',
-                            counterStyle: TextStyle(color: Colors.grey)
-                        ),
+                            counterStyle: TextStyle(color: Colors.grey)),
                       ),
-                    )
-                ),
+                    )),
                 const SizedBox(
                   height: 5,
                 ),
@@ -140,16 +149,18 @@ class _FeedUploadState extends State<FeedUpload> {
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.only(left: 25.0, top: 0.0,right: 0.0,bottom: 0.0),
+                      margin: EdgeInsets.only(
+                          left: 25.0, top: 0.0, right: 0.0, bottom: 0.0),
                       child: Text(
-                      "STYLE",
-                      style: TextStyle(
-                        fontFamily: 'NotoSans',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: BODY_TEXT_COLOR,
+                        "STYLE",
+                        style: TextStyle(
+                          fontFamily: 'NotoSans',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: BODY_TEXT_COLOR,
+                        ),
                       ),
-                    ),),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),

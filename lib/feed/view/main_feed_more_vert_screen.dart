@@ -1,10 +1,17 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/data.dart';
 
 class MainFeedMoreVertScreen extends StatelessWidget {
+  final String? userId;
+  final String memberId;
   final int npostId;
+
   const MainFeedMoreVertScreen({
+    required this.userId,
+    required this.memberId,
     required this.npostId,
     Key? key,
   }) : super(key: key);
@@ -110,81 +117,126 @@ class MainFeedMoreVertScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                TextButton(
-                  onPressed: () async {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          title: new Text(
-                            '게시글 삭제',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
-                          content: SizedBox(
-                            height: 50,
-                            child: Center(
-                                child: SizedBox(
-                              child: new Text("정말 게시글을 삭제하시겠습니까?"),
-                            )),
-                          ),
-                          actions: <Widget>[
-                            new TextButton(
-                              child: new Text(
-                                "삭제",
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              onPressed: () async {
-                                final accessToken =
-                                    await storage.read(key: ACCESS_TOKEN_KEY);
-                                final resp = await dio.post(
-                                  'http://$API_SERVICE_URI/feed/delete?npost_id=$npostId',
-                                  options: Options(
-                                    headers: {
-                                      'authorization': 'Bearer $accessToken',
+                (userId == memberId)
+                    ? TextButton(
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                title: new Text(
+                                  '게시글 삭제',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                content: SizedBox(
+                                  height: 50,
+                                  child: Center(
+                                    child: SizedBox(
+                                      child: new Text("정말 게시글을 삭제하시겠습니까?"),
+                                    ),
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  new TextButton(
+                                    child: new Text(
+                                      "삭제",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () async {
+                                      final usermid = await storage.read(
+                                        key: USERMID_KEY);
+                                      print(usermid);
+                                      print(npostId);
+                                      final accessToken = await storage.read(
+                                          key: ACCESS_TOKEN_KEY);
+                                      final resp = await dio.delete(
+                                        'http://$API_SERVICE_URI/feed/delete?npost_id=$npostId',
+                                        options: Options(
+                                          headers: {
+                                            'authorization':
+                                                'Bearer $accessToken',
+                                          },
+                                        ),
+                                      );
+                                      if (resp.statusCode == 200) {
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context1) {
+                                            return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0)),
+                                              title: new Text(
+                                                '게시글 삭제',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                              content: SizedBox(
+                                                height: 50,
+                                                child: Center(
+                                                  child: SizedBox(
+                                                    child: new Text("게시글을 삭제하였습니다."),
+                                                  ),
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                new TextButton(
+                                                  child: new Text("확인"),
+                                                  onPressed: () {
+                                                    Navigator.pop(context1);
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
                                     },
                                   ),
-                                );
-                              },
+                                  new TextButton(
+                                    child: new Text(
+                                      "취소",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 15,
                             ),
-                            new TextButton(
-                              child: new Text(
-                                "취소",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                            Icon(
+                              Icons.delete_outline_rounded,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '게시글 삭제',
+                              style: TextStyle(color: Colors.red, fontSize: 20),
                             ),
                           ],
-                        );
-                      },
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Icon(
-                        Icons.delete_outline_rounded,
-                        color: Colors.red,
-                        size: 30,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        '게시글 삭제',
-                        style: TextStyle(color: Colors.red, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                )
+                        ),
+                      )
+                    : Text(''),
               ],
             )),
       ),

@@ -21,12 +21,14 @@ class MainFeedModel {
       userPostInfo: UserInfoModel.fromJson(
           json: Map<String, dynamic>.from(json['userPostInfo'])),
       npostId: json['npostId'],
+
       photoDTOs: json['photoDTOs'].map<PhotoDTOs>(
         (x) => PhotoDTOs(
           path: x['path'],
           photoId: x['photoId'],
         ),
       ).toList(),
+
       photoCnt: json['photoCnt'],
     );
   }

@@ -110,9 +110,9 @@ class MainFeedDetailCard extends StatelessWidget {
                 const SizedBox(width: 10.0),
                 CircleAvatar(
                   radius: 18.0,
-                  backgroundImage: Image.asset(
-                    //'http://$API_SERVICE_URI/photo/${userPostInfo.profilePhoto}',
-                    'asset/img/Profile/HL1.JPG',
+                  backgroundImage: Image.network(
+                    'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${userPostInfo.profilePhoto}',
+                    //'asset/img/Profile/HL1.JPG',
                     fit: BoxFit.cover,
                   ).image,
                 ),
@@ -140,11 +140,14 @@ class MainFeedDetailCard extends StatelessWidget {
               ],
             ),
             IconButton(
-              onPressed: () {
+              onPressed: () async {
+                String? userid = await storage.read(key: USERMID_KEY);
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
                     return MainFeedMoreVertScreen(
+                      userId: userid,
+                      memberId: userPostInfo.memberId,
                       npostId: npostId,
                     );
                   },
@@ -166,10 +169,9 @@ class MainFeedDetailCard extends StatelessWidget {
                 controller: _controller,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    //child: Image.network(images[index], fit: BoxFit.cover,),
-                    child: Image.asset(
-                      //'http://${API_SERVICE_URI}/photo/${photoDTOs[index].path}',
-                      'asset/img/Profile/HL1.JPG',
+                    child: Image.network(
+                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${photoDTOs[index].path}',
+                      //'asset/img/Profile/HL1.JPG',
                       fit: BoxFit.cover,
                     ),
                     // -> 네트워크로 수정하기

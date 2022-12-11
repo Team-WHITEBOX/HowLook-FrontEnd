@@ -1,81 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-
-// 반환에 사용할 클래스
-class ReturnValue {
-  bool? isMenChecked;
-  bool? isWomenChecked;
-  // 스타일
-  bool? isMinimalChecked;
-  bool? isCasualChecked;
-  bool? isStreetChecked;
-  bool? isAmericanCasualChecked;
-  bool? isSportyChecked;
-  bool? isEtcChecked;
-  // 키
-  double? minHeight;
-  double? maxHeight;
-  // 몸무게
-  double? minWeight;
-  double? maxWeight;
-
-  ReturnValue({
-    this.isMenChecked,
-    this.isWomenChecked,
-    this.isMinimalChecked,
-    this.isCasualChecked,
-    this.isStreetChecked,
-    this.isAmericanCasualChecked,
-    this.isSportyChecked,
-    this.isEtcChecked,
-    this.minWeight,
-    this.maxWeight,
-    this.minHeight,
-    this.maxHeight,
-  });
-}
+import 'package:howlook/feed/view/category_feed_screen.dart';
 
 // 데이터 전달에 사용할 클래스
 class Arguments {
-  bool? isMenChecked;
-  bool? isWomenChecked;
+  bool isMenChecked;
+  bool isWomenChecked;
   // 스타일
-  bool? isMinimalChecked;
-  bool? isCasualChecked;
-  bool? isStreetChecked;
-  bool? isAmericanCasualChecked;
-  bool? isSportyChecked;
-  bool? isEtcChecked;
+  bool isMinimalChecked;
+  bool isCasualChecked;
+  bool isStreetChecked;
+  bool isAmericanCasualChecked;
+  bool isSportyChecked;
+  bool isEtcChecked;
   // 키
-  double? minHeight;
-  double? maxHeight;
+  int minHeight;
+  int maxHeight;
   // 몸무게
-  double? minWeight;
-  double? maxWeight;
+  int minWeight;
+  int maxWeight;
   //반환때 사용할 클래스
-  ReturnValue? returnValue;
+  //ReturnValue returnValue;
 
   Arguments({
-    this.isMenChecked,
-    this.isWomenChecked,
-    this.isMinimalChecked,
-    this.isCasualChecked,
-    this.isStreetChecked,
-    this.isAmericanCasualChecked,
-    this.isSportyChecked,
-    this.isEtcChecked,
-    this.minWeight,
-    this.maxWeight,
-    this.minHeight,
-    this.maxHeight,
-    this.returnValue,
+    required this.isMenChecked,
+    required this.isWomenChecked,
+    required this.isMinimalChecked,
+    required this.isCasualChecked,
+    required this.isStreetChecked,
+    required this.isAmericanCasualChecked,
+    required this.isSportyChecked,
+    required this.isEtcChecked,
+    required this.minWeight,
+    required this.maxWeight,
+    required this.minHeight,
+    required this.maxHeight,
+    //required this.returnValue,
   });
 }
 
 class CategoryScreen extends StatefulWidget {
-  final argument;
-  const CategoryScreen({Key? key, this.argument}) : super(key: key);
+  const CategoryScreen({Key? key}) : super(key: key);
 
   @override
   State<CategoryScreen> createState() => _CategoryScreen();
@@ -351,7 +317,6 @@ class _CategoryScreen extends State<CategoryScreen> {
                   ),
                 ),
 
-
                 // ******** 스타일 ********
                 // ** 스타일 텍스트 **
                 Row(
@@ -377,160 +342,160 @@ class _CategoryScreen extends State<CategoryScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                      Row(
-                        children: <Widget>[
-                          const SizedBox(width: 40),
-                          Text(
-                            "미니멀",
-                            style: TextStyle(
-                              fontFamily: 'NotoSans',
-                              fontSize: 18,
-                            ),
+                    Row(
+                      children: <Widget>[
+                        const SizedBox(width: 40),
+                        Text(
+                          "미니멀",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 18,
                           ),
-                          const SizedBox(
-                            width: 30,
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Checkbox(
+                          value: this.isMinimalChecked,
+                          activeColor: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                          onChanged: (value) {
+                            setState(() {
+                              this.isMinimalChecked = value!;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 8,
+                        ),
+                        Text(
+                          "캐주얼",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 18,
                           ),
-                          Checkbox(
-                            value: this.isMinimalChecked,
-                            activeColor: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                            onChanged: (value) {
-                              setState(() {
-                                this.isMinimalChecked = value!;
-                              });
-                            },
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Checkbox(
+                          value: this.isCasualChecked,
+                          activeColor: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                          onChanged: (value) {
+                            setState(() {
+                              this.isCasualChecked = value!;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        const SizedBox(
+                          width: 40,
+                        ),
+                        Text(
+                          "스트릿",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 18,
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 8,
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Checkbox(
+                          value: this.isStreetChecked,
+                          activeColor: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                          onChanged: (value) {
+                            setState(() {
+                              this.isStreetChecked = value!;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 9 + 4,
+                        ),
+                        Text(
+                          "아메카지",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 18,
                           ),
-                          Text(
-                            "캐주얼",
-                            style: TextStyle(
-                              fontFamily: 'NotoSans',
-                              fontSize: 18,
-                            ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Checkbox(
+                          value: this.isAmericanCasualChecked,
+                          activeColor: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                          onChanged: (value) {
+                            setState(() {
+                              this.isAmericanCasualChecked = value!;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        const SizedBox(
+                          width: 40,
+                        ),
+                        Text(
+                          "스포티",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 18,
                           ),
-                          const SizedBox(
-                            width: 30,
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Checkbox(
+                          value: this.isSportyChecked,
+                          activeColor: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                          onChanged: (value) {
+                            setState(() {
+                              this.isSportyChecked = value!;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 9 + 4,
+                        ),
+                        Text(
+                          "기타     ",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 18,
                           ),
-                          Checkbox(
-                            value: this.isCasualChecked,
-                            activeColor: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                            onChanged: (value) {
-                              setState(() {
-                                this.isCasualChecked = value!;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          Text(
-                            "스트릿",
-                            style: TextStyle(
-                              fontFamily: 'NotoSans',
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Checkbox(
-                            value: this.isStreetChecked,
-                            activeColor: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                            onChanged: (value) {
-                              setState(() {
-                                this.isStreetChecked = value!;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 9 + 4,
-                          ),
-                          Text(
-                            "아메카지",
-                            style: TextStyle(
-                              fontFamily: 'NotoSans',
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Checkbox(
-                            value: this.isAmericanCasualChecked,
-                            activeColor: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                            onChanged: (value) {
-                              setState(() {
-                                this.isAmericanCasualChecked = value!;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          Text(
-                            "스포티",
-                            style: TextStyle(
-                              fontFamily: 'NotoSans',
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Checkbox(
-                            value: this.isSportyChecked,
-                            activeColor: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                            onChanged: (value) {
-                              setState(() {
-                                this.isSportyChecked = value!;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 9 + 4,
-                          ),
-                          Text(
-                            "기타     ",
-                            style: TextStyle(
-                              fontFamily: 'NotoSans',
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 28,
-                          ),
-                          Checkbox(
-                            value: this.isEtcChecked,
-                            activeColor: PRIMARY_COLOR,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                            onChanged: (value) {
-                              setState(() {
-                                this.isEtcChecked = value!;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          width: 28,
+                        ),
+                        Checkbox(
+                          value: this.isEtcChecked,
+                          activeColor: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                          onChanged: (value) {
+                            setState(() {
+                              this.isEtcChecked = value!;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -563,24 +528,24 @@ class _CategoryScreen extends State<CategoryScreen> {
                             minimumSize: Size(300, 50),
                           ),
                           onPressed: () {
-                            print(MediaQuery.of(context).size.width);
-                            Navigator.pop(
-                              context,
-                              Arguments(
-                                returnValue: ReturnValue(
-                                  isMenChecked: isMenChecked,
-                                  isWomenChecked: isWomenChecked,
-                                  isMinimalChecked: isMinimalChecked,
-                                  isCasualChecked: isCasualChecked,
-                                  isStreetChecked: isStreetChecked,
-                                  isAmericanCasualChecked:
-                                      isAmericanCasualChecked,
-                                  isSportyChecked: isSportyChecked,
-                                  isEtcChecked: isEtcChecked,
-                                  minHeight: minHeight,
-                                  maxHeight: maxHeight,
-                                  minWeight: minWeight,
-                                  maxWeight: maxWeight,
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => CategoryFeedScreen(
+                                  arguments: Arguments(
+                                    isMenChecked: isMenChecked,
+                                    isWomenChecked: isWomenChecked,
+                                    isMinimalChecked: isMinimalChecked,
+                                    isCasualChecked: isCasualChecked,
+                                    isStreetChecked: isStreetChecked,
+                                    isAmericanCasualChecked:
+                                        isAmericanCasualChecked,
+                                    isSportyChecked: isSportyChecked,
+                                    isEtcChecked: isEtcChecked,
+                                    minHeight: minHeight.toInt(),
+                                    maxHeight: maxHeight.toInt(),
+                                    minWeight: minWeight.toInt(),
+                                    maxWeight: maxWeight.toInt(),
+                                  ),
                                 ),
                               ),
                             );
@@ -595,7 +560,6 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   ],
                 ),
-
               ],
             ),
           ),

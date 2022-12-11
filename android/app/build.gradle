@@ -48,7 +48,7 @@ android {
         minSdkVersion 19
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        compileSdkVersion 29
+        compileSdkVersion 31
         buildToolsVersion '29.0.0'
         compileSdkVersion 33
         targetSdkVersion flutter.targetSdkVersion

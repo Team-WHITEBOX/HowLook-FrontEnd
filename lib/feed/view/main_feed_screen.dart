@@ -7,44 +7,8 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/component/main_feed_card.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:howlook/feed/view/near_feed_screen.dart';
 import 'main_feed_category.dart';
-
-// 데이터 전달에 사용할 클래스
-class Arguments {
-  bool? isMenChecked;
-  bool? isWomenChecked;
-  // 스타일
-  bool? isMinimalChecked;
-  bool? isCasualChecked;
-  bool? isStreetChecked;
-  bool? isAmericanCasualChecked;
-  bool? isSportyChecked;
-  bool? isEtcChecked;
-  // 키
-  double? minHeight;
-  double? maxHeight;
-  // 몸무게
-  double? minWeight;
-  double? maxWeight;
-  //반환때 사용할 클래스
-  ReturnValue? returnValue;
-
-  Arguments({
-    this.isMenChecked,
-    this.isWomenChecked,
-    this.isMinimalChecked,
-    this.isCasualChecked,
-    this.isStreetChecked,
-    this.isAmericanCasualChecked,
-    this.isSportyChecked,
-    this.isEtcChecked,
-    this.minWeight,
-    this.maxWeight,
-    this.minHeight,
-    this.maxHeight,
-    this.returnValue,
-  });
-}
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -101,27 +65,14 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                         ),
                         onPressed: () {
                           // 임시로 이웃버튼 누르면 각 피드 상세 페이지로 이동할 수 있게 우선 구현
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => MainFeedDetailScreen(
-                              npostId: 1,
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => NearFeedScreen(),
                             ),
-                          ));
+                          );
                         },
                         child: Text(
                           "이웃",
-                          style: TextStyle(
-                            fontFamily: 'NotoSans',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(minimumSize: Size(50, 20)),
-                        onPressed: () {},
-                        child: Text(
-                          "모두",
                           style: TextStyle(
                             fontFamily: 'NotoSans',
                             fontSize: 15,
@@ -140,15 +91,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                         onPressed: () async {
                           final result = await Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => CategoryScreen(
-                                argument: Arguments(),
-                              ),
+                              builder: (_) => CategoryScreen(),
                             ),
                           );
                           // result.returnValue에 카테고리 설정 값 날라옴
-                          if (result != null) {
-                            print("${result.returnValue.isMenChecked}");
-                          }
+                          // if (result != null) {
+                          //   print("${result.returnValue.isMenChecked}");
+                          // }
                         },
                         style: TextButton.styleFrom(
                             primary: Colors.black, minimumSize: Size(50, 20)),

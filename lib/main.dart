@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/user/view/splash_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 
@@ -27,3 +26,4 @@ class _App extends StatelessWidget {
     );
   }
 }
+

@@ -81,13 +81,13 @@ class MainLoginScreen extends StatelessWidget {
               // 카카오 로그인 버튼
               TextButton(
                 onPressed: () {
-                  KakaoLogin();
-                  signIn('https://3.34.164.14:8080/oauth2/authorization/kakao');
-                  // Navigator.of(context).pushReplacement(
-                  //     MaterialPageRoute(
-                  //       builder: (_) => RootTab(),
-                  //     ),
-                  // );
+                  // KakaoLogin();
+                  // signIn('https://3.34.164.14:8080/oauth2/authorization/kakao');
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => RootTab(),
+                      ),
+                  );
                 },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
               ),

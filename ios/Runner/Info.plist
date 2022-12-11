@@ -42,6 +42,19 @@
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
 	</array>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to location when in the background.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string></string>
+    <key>NSCameraUsageDescription</key>
+    <string></string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string></string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

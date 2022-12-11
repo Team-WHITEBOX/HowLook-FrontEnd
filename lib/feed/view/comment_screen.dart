@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/feed/component/main_feed_comment_card.dart';
 import 'package:howlook/feed/model/main_feed_comment_model.dart';
-
 
 class FeedCommentScreen extends StatefulWidget {
   final int npostId;
@@ -19,6 +19,7 @@ class FeedCommentScreen extends StatefulWidget {
 
 class _FeedCommentScreenState extends State<FeedCommentScreen> {
   bool? isLiked;
+  String replyContent = '';
 
   Future<List> paginateComment() async {
     final dio = Dio();
@@ -41,7 +42,9 @@ class _FeedCommentScreenState extends State<FeedCommentScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: SafeArea(
+        bottom: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: StatefulBuilder(
@@ -99,8 +102,43 @@ class _FeedCommentScreenState extends State<FeedCommentScreen> {
                               Navigator.of(context).pop();
                             },
                           ),
-                        )
+                        ),
                       ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25,
+                      ),
+                      child: CustomTextFormField(
+                        hintText: "댓글을 입력해주세요",
+                        icon: IconButton(
+                          icon: Icon(Icons.send_outlined),
+                          color: PRIMARY_COLOR,
+                          onPressed: () async {
+                            if (replyContent.length > 1) {
+                              final dio = Dio();
+                              final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+                              final resp = await dio.post(
+                                'http://$API_SERVICE_URI/replies/',
+                                options: Options(
+                                  headers: {
+                                    'authorization': 'Bearer $accessToken',
+                                  },
+                                ),
+                                data: {
+                                  'contents': replyContent,
+                                  'npostId': widget.npostId,
+                                },
+                              );
+                            } else {
+                             return;
+                            }
+                          },
+                        ),
+                        onChanged: (String value) {
+                          replyContent = value;
+                        },
+                      ),
                     ),
                     FutureBuilder<List>(
                       future: paginateComment(),
@@ -128,25 +166,32 @@ class _FeedCommentScreenState extends State<FeedCommentScreen> {
                             ),
                           );
                         }
-                        return ListView.separated(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (_, index) {
-                            // 받아온 데이터 JSON 매핑하기
-                            // 모델 사용
-                            final item = snapshot.data![index];
-                            final pItem = MainFeedCommentModel.fromJson(json: item);
-                            return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 15,
-                                  vertical: 8,
-                                ),
-                                child: FeedCommentCard.fromModel(model: pItem));
-                          },
-                          separatorBuilder: (_, index) {
-                            return SizedBox(height: 16.0);
-                          },
+                        return Column(
+                          children: [
+                            ListView.separated(
+                              //scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (_, index) {
+                                // 받아온 데이터 JSON 매핑하기
+                                // 모델 사용
+                                final item = snapshot.data![index];
+                                final pItem =
+                                    MainFeedCommentModel.fromJson(json: item);
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                    vertical: 8,
+                                  ),
+                                  child:
+                                      FeedCommentCard.fromModel(model: pItem),
+                                );
+                              },
+                              separatorBuilder: (_, index) {
+                                return SizedBox(height: 16.0);
+                              },
+                            ),
+                          ],
                         );
                       },
                     )

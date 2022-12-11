@@ -1,8 +1,10 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_secure_storage (3.3.1):
+  - flutter_secure_storage (6.0.0):
     - Flutter
   - flutter_web_auth (0.5.0):
+    - Flutter
+  - geolocator_apple (1.2.0):
     - Flutter
   - kakao_flutter_sdk_common (1.3.0-beta.4):
     - Flutter
@@ -15,6 +17,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - kakao_flutter_sdk_common (from `.symlinks/plugins/kakao_flutter_sdk_common/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
@@ -26,6 +29,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_web_auth:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
   kakao_flutter_sdk_common:
     :path: ".symlinks/plugins/kakao_flutter_sdk_common/ios"
   package_info_plus:
@@ -35,12 +40,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
+  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   flutter_web_auth: c25208760459cec375a3c39f6a8759165ca0fa4d
+  geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   kakao_flutter_sdk_common: 99744198582dc78bd1153713bdf444eaaf5fc107
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
 
-PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
 COCOAPODS: 1.11.3

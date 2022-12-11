@@ -82,79 +82,81 @@ class _FeedCommentCardState extends State<FeedCommentCard> {
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-      return Container(
-        height: 60,
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 4,
-              ),
-              CircleAvatar(
-                radius: 20.0,
-                backgroundImage: Image.asset(
-                  //'http://$API_SERVICE_URI/photo/${pItem.profilePhoto}',
-                  'asset/img/Profile/HL1.JPG',
-                  fit: BoxFit.cover,
-                ).image,
-                // Image.network()로 추가하기
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.nickName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13,
+    return SingleChildScrollView(
+      child: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+        return Container(
+          height: 60,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(
+              children: [
+                const SizedBox(
+                  width: 4,
+                ),
+                CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: Image.asset(
+                    //'http://$API_SERVICE_URI/photo/${pItem.profilePhoto}',
+                    'asset/img/Profile/HL1.JPG',
+                    fit: BoxFit.cover,
+                  ).image,
+                  // Image.network()로 추가하기
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.nickName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  Text(widget.contents),
-                ],
-              ),
-            ],
-          ),
-          LikeButton(
-            isLiked: widget.like_chk,
-            likeCount: widget.likeCount,
-            countPostion: CountPostion.bottom,
-            onTap: (isLiked) {
-              return onLikeButtonTapped(isLiked, widget.replyId);
-            },
-            likeBuilder: (isLiked) {
-              // isLiked = widget.like_chk;
-              // print('isLiked = $isLiked');
-              return Icon(
-                Icons.favorite,
-                color: isLiked ? Colors.red : Colors.grey,
-                size: 18,
-              );
-            },
-            countBuilder: (likeCount, isLiked, String text) {
-              var color = isLiked ? Colors.red : Colors.grey;
-              Widget result;
-
-              if (likeCount != 0) {
-                result = Text(text, style: TextStyle(color: color));
-              } else
-                result = Text(
-                  "",
-                  style: TextStyle(color: color),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Text(widget.contents),
+                  ],
+                ),
+              ],
+            ),
+            LikeButton(
+              isLiked: widget.like_chk,
+              likeCount: widget.likeCount,
+              countPostion: CountPostion.bottom,
+              onTap: (isLiked) {
+                return onLikeButtonTapped(isLiked, widget.replyId);
+              },
+              likeBuilder: (isLiked) {
+                // isLiked = widget.like_chk;
+                // print('isLiked = $isLiked');
+                return Icon(
+                  Icons.favorite,
+                  color: isLiked ? Colors.red : Colors.grey,
+                  size: 18,
                 );
-              return result;
-            },
-          ),
-        ]),
-      );
-    });
+              },
+              countBuilder: (likeCount, isLiked, String text) {
+                var color = isLiked ? Colors.red : Colors.grey;
+                Widget result;
+
+                if (likeCount != 0) {
+                  result = Text(text, style: TextStyle(color: color));
+                } else
+                  result = Text(
+                    "",
+                    style: TextStyle(color: color),
+                  );
+                return result;
+              },
+            ),
+          ]),
+        );
+      }),
+    );
   }
 }

@@ -11,9 +11,11 @@ class CustomTextFormField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final FormFieldValidator? validator;
   final TextInputAction? textInputAction;
+  final IconButton? icon;
 
   const CustomTextFormField({
     required this.onChanged,
+    this.icon,
     this.textInputAction,
     this.obscureText = false,
     this.autofocus = false,
@@ -74,6 +76,8 @@ class CustomTextFormField extends StatelessWidget {
             color: PRIMARY_COLOR,
           )
         ),
+
+        suffixIcon: icon,
       ),
     );
   }
