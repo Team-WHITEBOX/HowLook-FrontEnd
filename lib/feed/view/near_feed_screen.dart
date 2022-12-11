@@ -70,7 +70,7 @@ class _NearFeedScreenState extends State<NearFeedScreen> {
                     // 받아온 데이터 JSON 매핑하기
                     // 모델 사용
                     final item = snapshot.data![index];
-                    final pItem = MainFeedModel.fromJson(json: item);
+                    final pItem = MainFeedModel.fromJson(item);
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(

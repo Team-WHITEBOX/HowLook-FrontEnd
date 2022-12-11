@@ -177,7 +177,7 @@ class _FeedCommentScreenState extends State<FeedCommentScreen> {
                                 // 모델 사용
                                 final item = snapshot.data![index];
                                 final pItem =
-                                    MainFeedCommentModel.fromJson(json: item);
+                                    MainFeedCommentModel.fromJson(item);
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 15,

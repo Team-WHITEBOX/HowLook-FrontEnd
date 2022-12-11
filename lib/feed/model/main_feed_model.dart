@@ -2,7 +2,7 @@ import 'package:howlook/feed/model/photo_dto.dart';
 import 'package:howlook/feed/model/userinfomodel.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-// part 'main_feed_model.g.dart';
+part 'main_feed_model.g.dart';
 
 @JsonSerializable()
 class MainFeedModel {
@@ -21,22 +21,9 @@ class MainFeedModel {
     required this.photoCnt,
   });
 
-  factory MainFeedModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return MainFeedModel(
-      userPostInfo: UserInfoModel.fromJson(
-          json: Map<String, dynamic>.from(json['userPostInfo'])),
-      npostId: json['npostId'],
+  factory MainFeedModel.fromJson(Map<String, dynamic> json)
+  => _$MainFeedModelFromJson(json);
 
-      photoDTOs: json['photoDTOs'].map<PhotoDTOs>(
-        (x) => PhotoDTOs(
-          path: x['path'],
-          photoId: x['photoId'],
-        ),
-      ).toList(),
+  Map<String, dynamic> toJson() => _$MainFeedModelToJson(this);
 
-      photoCnt: json['photoCnt'],
-    );
-  }
 }

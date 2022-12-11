@@ -18,24 +18,6 @@ class MainFeedDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserInfoModel userInfoModel = UserInfoModel(
-      memberId: '김진범',
-      memberNickName: 'df',
-      memberHeight: 200,
-      memberWeight: 100,
-      profilePhoto: '0',
-    );
-
-    List<PhotoDTOs> photo = [
-      PhotoDTOs(path: 'asset/img/HL1.JPG', photoId: 1,),
-    ];
-
-    List<String> list = [
-      'asset/img/HL1.JPG',
-      'asset/img/HL2.JPG',
-      'asset/img/HL3.JPG',
-    ];
-
     Future<Map<String, dynamic>> getMainFeedDetail() async {
       final dio = Dio();
       final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
@@ -62,7 +44,7 @@ class MainFeedDetailScreen extends StatelessWidget {
             );
           }
           final item = MainFeedDetailModel.fromJson(
-            json: snapshot.data!,
+            snapshot.data!,
           );
 
           return SingleChildScrollView(
@@ -90,7 +72,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 0,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 1:
@@ -100,7 +82,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 1,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 2:
@@ -110,7 +92,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 2,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 3:
@@ -120,7 +102,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 3,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 4:
@@ -130,7 +112,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 4,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
           }
