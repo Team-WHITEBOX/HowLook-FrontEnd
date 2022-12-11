@@ -38,6 +38,7 @@ class _FeedUploadState extends State<FeedUpload> {
   dynamic sendData;
 
   void selectImages() async {
+    var gps = await getCurrentLocation();
     final List<XFile>? selectedImages = await imagePicker.pickMultiImage(
       maxHeight: 3000,
       maxWidth: 3000,
@@ -48,12 +49,20 @@ class _FeedUploadState extends State<FeedUpload> {
 
       for (int i = 0; i < selectedImages.length; i++) {
         sendData = selectedImages[i].path;
-        print('안녕하세요 경로는${sendData}');
       }
 
-      formData = FormData.fromMap({'uploadFileDTO.files': await MultipartFile.fromFile(sendData)});
-
-
+      formData = FormData.fromMap({
+        "content": contents,
+        "hashtagDTO.amekaji": isAmericanCasualChecked,
+        "hashtagDTO.casual": isCasualChecked,
+        "hashtagDTO.guitar": isEtcChecked,
+        "hashtagDTO.minimal": isMinimalChecked,
+        "hashtagDTO.sporty": isSportyChecked,
+        "hashtagDTO.street": isStreetChecked,
+        "latitude": gps.latitude,
+        "longitude": gps.longitude,
+        'uploadFileDTO.files': await MultipartFile.fromFile(sendData),
+      });
     }
     setState(() {
       imageFileList = selectedImages;
@@ -62,43 +71,22 @@ class _FeedUploadState extends State<FeedUpload> {
 
   // 이미지 서버 업로드
   Future<dynamic> patchUserProfileImage() async {
-    var gps = await getCurrentLocation();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    print(contents);
-    print(isAmericanCasualChecked);
-    print(isCasualChecked);
-    print(isEtcChecked);
-    print(isMinimalChecked);
-    print(isSportyChecked);
-    print(isStreetChecked);
-    print(gps.latitude);
-    print(gps.longitude);
-    print(formData);
     try {
       dio.options.contentType = 'multipart/form-data';
       dio.options.maxRedirects.isFinite;
       final resp = await dio.post(
-          // MainFeed 관련 api IP주소 추가하기
-          'http://$API_SERVICE_URI/feed/register',
-          options: Options(
-            headers: {
-              'authorization': 'Bearer $accessToken',
-            },
-          ),
-          data: {
-            "content": contents,
-            "hashtagDTO.amekaji": isAmericanCasualChecked,
-            "hashtagDTO.casual": isCasualChecked,
-            "hashtagDTO.guitar": isEtcChecked,
-            "hashtagDTO.minimal": isMinimalChecked,
-            "hashtagDTO.sporty": isSportyChecked,
-            "hashtagDTO.street": isStreetChecked,
-            "latitude": gps.latitude,
-            "longitude": gps.longitude,
-            "uploadFileDTO.files": formData,
-          });
+        // MainFeed 관련 api IP주소 추가하기
+        'http://$API_SERVICE_URI/feed/register',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $accessToken',
+          },
+        ),
+        data: formData,
+      );
       print('성공적으로 업로드했습니다');
-      return resp.data;
+      return resp.statusCode;
     } catch (e) {
       print(e);
     }
@@ -141,7 +129,10 @@ class _FeedUploadState extends State<FeedUpload> {
       actions: <Widget>[
         IconButton(
           onPressed: () async {
-            patchUserProfileImage();
+            final statuscode = await patchUserProfileImage();
+            if (statuscode == 200) {
+              Navigator.pop(context);
+            }
           },
           icon: Icon(
             MdiIcons.progressUpload,
