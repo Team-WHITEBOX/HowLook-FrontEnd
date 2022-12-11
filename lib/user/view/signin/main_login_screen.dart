@@ -76,12 +76,29 @@ class MainLoginScreen extends StatelessWidget {
               const SizedBox(height: 50.0), // 공백 삽입
               // 카카오 로그인 버튼
               TextButton(
-                onPressed: () {
-                  // KakaoLogin();
-                  Navigator.of(context).pushReplacement(
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KakaoLoginScreen(),
+                    ),
+                  );
+                  List<String> tokens = result.split(' ');
+                  final refreshToken = tokens[1].substring(0, tokens[1].length - 1);
+                  final accessToken = tokens[3].substring(0, tokens[3].length - 1);
+
+                  print(accessToken);
+
+                  await storage.write(
+                      key: REFRESH_TOKEN_KEY, value: refreshToken);
+                  await storage.write(
+                      key: ACCESS_TOKEN_KEY, value: accessToken);
+
+                  Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (_) => RootTab(),
                     ),
+                        (route) => false,
                   );
                 },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),

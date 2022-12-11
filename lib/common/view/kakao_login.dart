@@ -1,3 +1,4 @@
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/data.dart';
@@ -19,6 +20,16 @@ class KakaoLoginScreen extends StatelessWidget {
           _controller = webviewController;
         },
         javascriptMode: JavascriptMode.unrestricted,
+        javascriptChannels: Set.from([
+          JavascriptChannel(
+            name: 'JavaScriptChannel',
+            onMessageReceived: (JavascriptMessage message) {
+              if ((message.message).contains('accessToken')) {
+                Navigator.pop(context, message.message);
+              }
+            },
+          )
+        ]),
       ),
     );
   }
