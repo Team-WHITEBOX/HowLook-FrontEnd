@@ -8,6 +8,8 @@ import 'package:howlook/feed/component/main_feed_detail_card.dart';
 import 'package:howlook/feed/model/main_feed_detail_model.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/common/layout/bottom_navy_bar.dart';
+import 'package:howlook/feed/model/photo_dto.dart';
+import 'package:howlook/feed/model/userinfomodel.dart';
 
 class MainFeedDetailScreen extends StatelessWidget {
   final int npostId; // 포스트 아이디로 특정 게시글 조회

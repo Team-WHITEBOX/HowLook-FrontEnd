@@ -36,13 +36,17 @@ class _Splash_ScreenState extends State<Splash_Screen> {
 
     // refresh token 로직
     try {
-      final resp =
-          await dio.post('http://$API_SERVICE_URI/account/generateToken',
-              options: Options(headers: {
-                'authorization': 'Bearer $refreshToken',
-              }));
+      final resp = await dio.post(
+        'http://$API_SERVICE_URI/account/generateToken',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $refreshToken',
+          },
+        ),
+      );
       // 발급받은 토큰 저장하기
-      await storage.write(key: ACCESS_TOKEN_KEY, value: resp.data['accessToken']);
+      await storage.write(
+          key: ACCESS_TOKEN_KEY, value: resp.data['accessToken']);
       // 루트탭으로 이동
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
@@ -50,7 +54,8 @@ class _Splash_ScreenState extends State<Splash_Screen> {
         ),
         (route) => false,
       );
-    } catch (e) { //
+    } catch (e) {
+      print(e);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => MainLoginScreen(),

@@ -148,10 +148,8 @@ class MainFeedMoreVertScreen extends StatelessWidget {
                                       style: TextStyle(color: Colors.red),
                                     ),
                                     onPressed: () async {
-                                      final usermid = await storage.read(
-                                        key: USERMID_KEY);
-                                      print(usermid);
-                                      print(npostId);
+                                      final usermid =
+                                          await storage.read(key: USERMID_KEY);
                                       final accessToken = await storage.read(
                                           key: ACCESS_TOKEN_KEY);
                                       final resp = await dio.delete(
@@ -183,7 +181,8 @@ class MainFeedMoreVertScreen extends StatelessWidget {
                                                 height: 50,
                                                 child: Center(
                                                   child: SizedBox(
-                                                    child: new Text("게시글을 삭제하였습니다."),
+                                                    child: new Text(
+                                                        "게시글을 삭제하였습니다."),
                                                   ),
                                                 ),
                                               ),
