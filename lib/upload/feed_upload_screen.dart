@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/utils.dart';
 import 'package:howlook/common/const/colors.dart';
+import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,9 +21,90 @@ class FeedUpload extends StatefulWidget {
 }
 
 class _FeedUploadState extends State<FeedUpload> {
-  // 이미지 담아오기
-  final ImagePicker _picker = ImagePicker();
+  var dio = new Dio();
 
+  // 위치 정보 불러오기
+  Future<Position> getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    return position;
+  }
+
+  // 이미지 담아오기
+  final ImagePicker imagePicker = ImagePicker();
+  List<XFile>? imageFileList = [];
+
+  var formData;
+  dynamic sendData;
+
+  void selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage(
+      maxHeight: 3000,
+      maxWidth: 3000,
+      imageQuality: 100, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
+    );
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
+
+      for (int i = 0; i < selectedImages.length; i++) {
+        sendData = selectedImages[i].path;
+        print('안녕하세요 경로는${sendData}');
+      }
+
+      formData = FormData.fromMap({'uploadFileDTO.files': await MultipartFile.fromFile(sendData)});
+
+
+    }
+    setState(() {
+      imageFileList = selectedImages;
+    });
+  }
+
+  // 이미지 서버 업로드
+  Future<dynamic> patchUserProfileImage() async {
+    var gps = await getCurrentLocation();
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    print(contents);
+    print(isAmericanCasualChecked);
+    print(isCasualChecked);
+    print(isEtcChecked);
+    print(isMinimalChecked);
+    print(isSportyChecked);
+    print(isStreetChecked);
+    print(gps.latitude);
+    print(gps.longitude);
+    print(formData);
+    try {
+      dio.options.contentType = 'multipart/form-data';
+      dio.options.maxRedirects.isFinite;
+      final resp = await dio.post(
+          // MainFeed 관련 api IP주소 추가하기
+          'http://$API_SERVICE_URI/feed/register',
+          options: Options(
+            headers: {
+              'authorization': 'Bearer $accessToken',
+            },
+          ),
+          data: {
+            "content": contents,
+            "hashtagDTO.amekaji": isAmericanCasualChecked,
+            "hashtagDTO.casual": isCasualChecked,
+            "hashtagDTO.guitar": isEtcChecked,
+            "hashtagDTO.minimal": isMinimalChecked,
+            "hashtagDTO.sporty": isSportyChecked,
+            "hashtagDTO.street": isStreetChecked,
+            "latitude": gps.latitude,
+            "longitude": gps.longitude,
+            "uploadFileDTO.files": formData,
+          });
+      print('성공적으로 업로드했습니다');
+      return resp.data;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  String contents = '';
   bool isMinimalChecked = false;
   bool isCasualChecked = false;
   bool isStreetChecked = false;
@@ -52,8 +140,8 @@ class _FeedUploadState extends State<FeedUpload> {
       title: 'Feed Upload',
       actions: <Widget>[
         IconButton(
-          onPressed: () {
-            구현
+          onPressed: () async {
+            patchUserProfileImage();
           },
           icon: Icon(
             MdiIcons.progressUpload,
@@ -70,78 +158,95 @@ class _FeedUploadState extends State<FeedUpload> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(
-                  child: Stack(children: [
-                    GlassContainer(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      gradient: LinearGradient(
-                        colors: [
-                          PRIMARY_COLOR.withOpacity(0.70),
-                          Color(0xFFa6ceff).withOpacity(0.40)
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      borderGradient: LinearGradient(
-                        colors: [
-                          Colors.white.withOpacity(0.60),
-                          Colors.white.withOpacity(0.10),
-                          Color(0xFFa6ceff).withOpacity(0.05),
-                          Color(0xFFa6ceff).withOpacity(0.6)
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        stops: [0.0, 0.39, 0.40, 1.0],
-                      ),
-                      blur: 30.0,
-                      borderWidth: 2,
-                      elevation: 3.0,
-                      isFrostedGlass: true,
-                      shadowColor: Colors.black.withOpacity(0.20),
-                      alignment: Alignment.center,
-                      frostedOpacity: 0.12,
-                      margin: EdgeInsets.all(16.0),
-                      child: Center(
-                        child: Icon(
-                          Icons.add_photo_alternate_rounded,
-                          color: Colors.white,
-                          size: 50,
+                  child: Stack(
+                    children: [
+                      GlassContainer(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        gradient: LinearGradient(
+                          colors: [
+                            PRIMARY_COLOR.withOpacity(0.70),
+                            Color(0xFFa6ceff).withOpacity(0.40)
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderGradient: LinearGradient(
+                          colors: [
+                            Colors.white.withOpacity(0.60),
+                            Colors.white.withOpacity(0.10),
+                            Color(0xFFa6ceff).withOpacity(0.05),
+                            Color(0xFFa6ceff).withOpacity(0.6)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          stops: [0.0, 0.39, 0.40, 1.0],
+                        ),
+                        blur: 30.0,
+                        borderWidth: 2,
+                        elevation: 3.0,
+                        isFrostedGlass: true,
+                        shadowColor: Colors.black.withOpacity(0.20),
+                        alignment: Alignment.center,
+                        frostedOpacity: 0.12,
+                        margin: EdgeInsets.all(16.0),
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PageView.builder(
+                              itemCount: imageFileList!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  child: Image.file(
+                                    File(imageFileList![index].path),
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ]),
-                  onTap: () {}, //사진 업로드
+                    ],
+                  ),
+                  onTap: () async {
+                    selectImages();
+                  }, //사진 업로드
                 ),
                 const SizedBox(
                   height: 5,
                 ),
                 Container(
-                    margin: EdgeInsets.all(8),
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: TextField(
-                        maxLength: this.maxLength,
-                        keyboardType: TextInputType.text,
-                        controller: _myController,
-                        cursorColor: PRIMARY_COLOR,
-                        style: TextStyle(decorationColor: Colors.grey),
-                        inputFormatters: [
-                          Utf8LengthLimitingTextInputFormatter(maxLength)
-                        ],
-                        decoration: InputDecoration(
-                            border: baseBorder,
-                            enabledBorder: baseBorder,
-                            // 선택된 Input 상태의 기본 스타일
-                            focusedBorder: baseBorder.copyWith(
-                                borderSide: baseBorder.borderSide.copyWith(
-                              color: PRIMARY_COLOR,
-                            )),
-                            labelText: '한줄쓰기',
-                            labelStyle: TextStyle(color: Colors.grey),
-                            hintText: '간단한 글을 남겨보세요:)',
-                            counterStyle: TextStyle(color: Colors.grey)),
-                      ),
-                    )),
+                  margin: EdgeInsets.all(8),
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: TextField(
+                      onChanged: (value) {
+                        contents = value;
+                      },
+                      maxLength: this.maxLength,
+                      keyboardType: TextInputType.text,
+                      controller: _myController,
+                      cursorColor: PRIMARY_COLOR,
+                      style: TextStyle(decorationColor: Colors.grey),
+                      inputFormatters: [
+                        Utf8LengthLimitingTextInputFormatter(maxLength)
+                      ],
+                      decoration: InputDecoration(
+                          border: baseBorder,
+                          enabledBorder: baseBorder,
+                          // 선택된 Input 상태의 기본 스타일
+                          focusedBorder: baseBorder.copyWith(
+                              borderSide: baseBorder.borderSide.copyWith(
+                            color: PRIMARY_COLOR,
+                          )),
+                          labelText: '한줄쓰기',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          hintText: '간단한 글을 남겨보세요:)',
+                          counterStyle: TextStyle(color: Colors.grey)),
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 5,
                 ),
