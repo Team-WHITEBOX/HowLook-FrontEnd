@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/review/normal_review_screen.dart';
-import 'package:howlook/review/creater_review_screen.dart';
-import 'package:howlook/review/feedback/normal_feedback_screen.dart';
+import 'package:howlook/review/view/normal_review_screen.dart';
+import 'package:howlook/review/view/creater_review_screen.dart';
+import 'package:howlook/review/feedback/view/normal_feedback_screen.dart';
 
 class MainReviewScreen extends StatefulWidget {
   const MainReviewScreen({Key? key}) : super(key: key);
@@ -13,6 +13,7 @@ class MainReviewScreen extends StatefulWidget {
 }
 
 class _MainReviewScreenState extends State<MainReviewScreen> {
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
