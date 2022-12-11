@@ -36,11 +36,6 @@ class MainFeedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     PageController _controller = PageController();
 
-    List<String> list = [
-      'asset/img/Profile/HL1.JPG',
-      'asset/img/Profile/HL2.JPG',
-      'asset/img/Profile/HL3.JPG',
-    ];
 
     List<int> bodyinfo = [
       userPostInfo.memberHeight,
