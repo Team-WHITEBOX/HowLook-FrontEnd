@@ -1,4 +1,6 @@
 import 'package:howlook/feed/model/main_feed_model.dart';
+import 'package:howlook/feed/model/photo_dto.dart';
+import 'package:howlook/feed/model/userinfomodel.dart';
 
 class MainFeedDetailModel extends MainFeedModel {
   // 좋아요 수

@@ -5,6 +5,8 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/model/main_feed_detail_model.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
+import 'package:howlook/feed/model/photo_dto.dart';
+import 'package:howlook/feed/model/userinfomodel.dart';
 import 'package:howlook/feed/view/main_feed_more_vert_screen.dart';
 import 'package:like_button/like_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

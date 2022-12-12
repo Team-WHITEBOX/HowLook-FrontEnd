@@ -181,7 +181,8 @@ class MainFeedMoreVertScreen extends StatelessWidget {
                                                 height: 50,
                                                 child: Center(
                                                   child: SizedBox(
-                                                    child: new Text("게시글을 삭제하였습니다."),
+                                                    child: new Text(
+                                                        "게시글을 삭제하였습니다."),
                                                   ),
                                                 ),
                                               ),

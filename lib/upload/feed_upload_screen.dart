@@ -1,10 +1,7 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/utils.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
@@ -32,24 +29,37 @@ class _FeedUploadState extends State<FeedUpload> {
 
   // 이미지 담아오기
   final ImagePicker imagePicker = ImagePicker();
-  List<XFile>? imageFileList = [];
-
+  List<XFile>? _selectedImages = [];
   var formData;
   dynamic sendData;
 
   void selectImages() async {
-    var gps = await getCurrentLocation();
     final List<XFile>? selectedImages = await imagePicker.pickMultiImage(
       maxHeight: 3000,
       maxWidth: 3000,
       imageQuality: 100, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
     );
-    if (selectedImages!.isNotEmpty) {
-      imageFileList!.addAll(selectedImages);
 
-      for (int i = 0; i < selectedImages.length; i++) {
-        sendData = selectedImages[i].path;
+    setState(() {
+      if (selectedImages!.isNotEmpty) {
+        _selectedImages!.addAll(selectedImages);
+      } else {
+        print('no image');
       }
+    });
+  }
+
+  // 이미지 서버 업로드
+  Future<dynamic> patchUserProfileImage() async {
+    var gps = await getCurrentLocation();
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    try {
+      dio.options.contentType = 'multipart/form-data';
+      dio.options.maxRedirects.isFinite;
+
+      final List<MultipartFile> files = _selectedImages!
+          .map((img) => MultipartFile.fromFileSync(img.path))
+          .toList();
 
       formData = FormData.fromMap({
         "content": contents,
@@ -61,20 +71,10 @@ class _FeedUploadState extends State<FeedUpload> {
         "hashtagDTO.street": isStreetChecked,
         "latitude": gps.latitude,
         "longitude": gps.longitude,
-        'uploadFileDTO.files': await MultipartFile.fromFile(sendData),
+        "uploadFileDTO.files": files,
+        //'uploadFileDTO.files': await MultipartFile.fromFile(sendData),
       });
-    }
-    setState(() {
-      imageFileList = selectedImages;
-    });
-  }
 
-  // 이미지 서버 업로드
-  Future<dynamic> patchUserProfileImage() async {
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    try {
-      dio.options.contentType = 'multipart/form-data';
-      dio.options.maxRedirects.isFinite;
       final resp = await dio.post(
         // MainFeed 관련 api IP주소 추가하기
         'http://$API_SERVICE_URI/feed/register',
@@ -185,11 +185,11 @@ class _FeedUploadState extends State<FeedUpload> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: PageView.builder(
-                              itemCount: imageFileList!.length,
+                              itemCount: _selectedImages!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Container(
                                   child: Image.file(
-                                    File(imageFileList![index].path),
+                                    File(_selectedImages![index].path),
                                     fit: BoxFit.cover,
                                   ),
                                 );

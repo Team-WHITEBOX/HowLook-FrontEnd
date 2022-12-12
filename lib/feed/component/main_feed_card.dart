@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
+import 'package:howlook/feed/model/photo_dto.dart';
+import 'package:howlook/feed/model/userinfomodel.dart';
 import 'package:howlook/feed/view/main_feed_more_vert_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
