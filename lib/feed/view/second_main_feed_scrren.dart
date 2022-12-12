@@ -38,45 +38,43 @@ class _SecondMainFeedScreenState extends State<SecondMainFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: scrollController,
-      child: FutureBuilder<List>(
-        future: paginateMainFeed(),
-        builder: (context, AsyncSnapshot<List> snapshot) {
-          // 에러처리
-          if (!snapshot.hasData) {
-            print('error');
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return ListView.separated(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (_, index) {
-              // 받아온 데이터 JSON 매핑하기
-              // 모델 사용
-              final item = snapshot.data![index];
-              final pItem = MainFeedModel.fromJson(json: item);
-              return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => MainFeedDetailScreen(
-                          npostId: pItem.npostId,
-                        ),
-                      ),
-                    );
-                  },
-                  child: MainFeedCard.fromModel(model: pItem));
-            },
-            separatorBuilder: (_, index) {
-              return SizedBox(height: 16.0);
-            },
+    return FutureBuilder<List>(
+      future: paginateMainFeed(),
+      builder: (context, AsyncSnapshot<List> snapshot) {
+        // 에러처리
+        if (!snapshot.hasData) {
+          print('error');
+          return Center(
+            child: CircularProgressIndicator(),
           );
-        },
-      ),
+        }
+        return ListView.separated(
+          controller: scrollController,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: snapshot.data!.length,
+          itemBuilder: (_, index) {
+            // 받아온 데이터 JSON 매핑하기
+            // 모델 사용
+            final item = snapshot.data![index];
+            final pItem = MainFeedModel.fromJson(json: item);
+            return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MainFeedDetailScreen(
+                        npostId: pItem.npostId,
+                      ),
+                    ),
+                  );
+                },
+                child: MainFeedCard.fromModel(model: pItem));
+          },
+          separatorBuilder: (_, index) {
+            return SizedBox(height: 16.0);
+          },
+        );
+      },
     );
   }
 }

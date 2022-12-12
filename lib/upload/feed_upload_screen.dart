@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/const/colors.dart';
@@ -32,7 +30,6 @@ class _FeedUploadState extends State<FeedUpload> {
   // 이미지 담아오기
   final ImagePicker imagePicker = ImagePicker();
   List<XFile>? _selectedImages = [];
-
   var formData;
   dynamic sendData;
 
@@ -44,14 +41,8 @@ class _FeedUploadState extends State<FeedUpload> {
     );
 
     setState(() {
-      // _selectedImages = selectedImages;
       if (selectedImages!.isNotEmpty) {
         _selectedImages!.addAll(selectedImages);
-
-        // for (int i = 0; i < selectedImages.length; i++) {
-        //   sendData = selectedImages[i].path;
-        // }
-
       } else {
         print('no image');
       }

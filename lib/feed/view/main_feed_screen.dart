@@ -46,61 +46,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
           bottom: false,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // 이웃, 모두, 카테고리 버튼 관련
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: Size(50, 20),
-                      ),
-                      onPressed: () {
-                        // 임시로 이웃버튼 누르면 각 피드 상세 페이지로 이동할 수 있게 우선 구현
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => NearFeedScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "이웃",
-                        style: TextStyle(
-                          fontFamily: 'NotoSans',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    TextButton.icon(
-                      label: Text(''),
-                      icon: Icon(
-                        Icons.filter_alt,
-                        size: 20.0,
-                      ),
-                      // 버튼 누르면 필터 설정 값 불러오기
-                      onPressed: () async {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => CategoryScreen(),
-                          ),
-                        );
-                        // result.returnValue에 카테고리 설정 값 날라옴
-                        // if (result != null) {
-                        //   print("${result.returnValue.isMenChecked}");
-                        // }
-                      },
-                      style: TextButton.styleFrom(
-                          primary: Colors.black, minimumSize: Size(50, 20)),
-                    ),
-                  ],
-                ),
-                SecondMainFeedScreen(),
-              ],
-            ),
+            child: SecondMainFeedScreen(),
           ),
         ));
   }
@@ -255,3 +201,53 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 //         ));
 //   }
 // }
+
+
+// Row(
+// mainAxisAlignment: MainAxisAlignment.start,
+// children: [
+// TextButton(
+// style: TextButton.styleFrom(
+// minimumSize: Size(50, 20),
+// ),
+// onPressed: () {
+// // 임시로 이웃버튼 누르면 각 피드 상세 페이지로 이동할 수 있게 우선 구현
+// Navigator.of(context).push(
+// MaterialPageRoute(
+// builder: (_) => NearFeedScreen(),
+// ),
+// );
+// },
+// child: Text(
+// "이웃",
+// style: TextStyle(
+// fontFamily: 'NotoSans',
+// fontSize: 15,
+// fontWeight: FontWeight.w500,
+// color: Colors.black,
+// ),
+// ),
+// ),
+// TextButton.icon(
+// label: Text(''),
+// icon: Icon(
+// Icons.filter_alt,
+// size: 20.0,
+// ),
+// // 버튼 누르면 필터 설정 값 불러오기
+// onPressed: () async {
+// Navigator.of(context).push(
+// MaterialPageRoute(
+// builder: (_) => CategoryScreen(),
+// ),
+// );
+// // result.returnValue에 카테고리 설정 값 날라옴
+// // if (result != null) {
+// //   print("${result.returnValue.isMenChecked}");
+// // }
+// },
+// style: TextButton.styleFrom(
+// primary: Colors.black, minimumSize: Size(50, 20)),
+// ),
+// ],
+// ),
