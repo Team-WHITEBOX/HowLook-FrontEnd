@@ -25,5 +25,4 @@ class MainFeedModel {
   => _$MainFeedModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$MainFeedModelToJson(this);
-
 }

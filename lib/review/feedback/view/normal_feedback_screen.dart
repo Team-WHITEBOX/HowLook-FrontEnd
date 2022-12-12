@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/review/feedback/view/feedback_result_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/review/feedback/model/normal_feedback_model.dart';
 import 'package:howlook/review/feedback/component/normal_feedback_card.dart';
 
-class NormalFeedback extends StatefulWidget {
+class NormalFeedback extends ConsumerStatefulWidget {
   const NormalFeedback({Key? key}) : super(key: key);
 
   @override
-  State<NormalFeedback> createState() => _NormalFeedbackState();
+  ConsumerState<NormalFeedback> createState() => _NormalFeedbackState();
 }
 
-class _NormalFeedbackState extends State<NormalFeedback> {
+class _NormalFeedbackState extends ConsumerState<NormalFeedback> {
   // final List<String> images = <String>[
   //   'asset/img/Profile/HL1.JPG',
   //   'asset/img/Profile/HL2.JPG',
@@ -23,8 +25,9 @@ class _NormalFeedbackState extends State<NormalFeedback> {
   //   'asset/img/Profile/HL4.JPG'
   // ];
 
-  Future<List> paginateNormalReview() async {
+  Future<List> paginateNormalReview(WidgetRef ref) async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final usermid = await storage.read(key: USERMID_KEY);
     final resp = await dio.get(
@@ -50,7 +53,7 @@ class _NormalFeedbackState extends State<NormalFeedback> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
             FutureBuilder<List>(
-                future: paginateNormalReview(),
+                future: paginateNormalReview(ref),
                 builder: (_, AsyncSnapshot<List> snapshot) {
                   // 에러처리
                   if (!snapshot.hasData) {

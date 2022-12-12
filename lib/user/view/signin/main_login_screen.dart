@@ -1,58 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/common/view/kakao_login.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
-
-import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
-class MainLoginScreen extends StatelessWidget {
-  //const MainLoginScreen({Key? key}) : super(key: key);
+class MainLoginScreen extends ConsumerWidget {
+  // const MainLoginScreen({Key? key}) : super(key: key);
 
   final dio = Dio();
   @override
-  Widget build(BuildContext context) {
-    void KakaoLogin() async {
-      if (await isKakaoTalkInstalled()) {
-        try {
-          await AuthCodeClient.instance.authorize(
-            redirectUri: 'http:/$API_SERVICE_URI/login/oauth2/code/kakao',
-          );
-        } catch (error) {
-          print('카카오계정으로 로그인 실패 $error');
-        }
-      }
-    }
-
-    const kAppUrlScheme = 'http://3.34.164.14:8080/login/oauth2/code/kakao';
-    String api = 'https://3.34.164.14:8080/oauth2/authorization/kakao';
-    Future<void> signIn(String api) async {
-      try {
-        // open login page & redirect auth code to back-end
-        final url = Uri.parse('$api?redirect_uri=$kAppUrlScheme');
-
-        // get callback data from back-end
-        final result = await FlutterWebAuth.authenticate(
-            url: url.toString(), callbackUrlScheme: kAppUrlScheme);
-
-        // parsing accessToken & refreshToken from callback data
-        final accessToken = Uri.parse(result).queryParameters['access-token'];
-        final refreshToken = Uri.parse(result).queryParameters['refresh-token'];
-
-        // save tokens on secure storage
-        await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
-        await storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
-      } catch (e) {
-        // showLoginFailDialog(e.toString());
-      }
-    }
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '',
       child: SafeArea(
@@ -84,8 +47,15 @@ class MainLoginScreen extends StatelessWidget {
                     ),
                   );
                   List<String> tokens = result.split(' ');
-                  final refreshToken = tokens[1].substring(0, tokens[1].length - 1);
-                  final accessToken = tokens[3].substring(0, tokens[3].length - 1);
+
+                  final refreshToken =
+                      tokens[1].substring(0, tokens[1].length - 1);
+                  final accessToken =
+                      tokens[3].substring(0, tokens[3].length - 1);
+
+                  print(accessToken);
+
+                  final storage = ref.read(secureStorageProvider);
 
                   await storage.write(
                       key: REFRESH_TOKEN_KEY, value: refreshToken);
@@ -96,7 +66,7 @@ class MainLoginScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (_) => RootTab(),
                     ),
-                        (route) => false,
+                    (route) => false,
                   );
                 },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),

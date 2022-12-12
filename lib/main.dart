@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/user/view/splash_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoSdk.init(
-    nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb'
-  );
+  KakaoSdk.init(nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb');
   runApp(
-    _App(),
+    ProviderScope(
+      child: _App(),
+    ),
   );
 }
 
@@ -26,4 +27,3 @@ class _App extends StatelessWidget {
     );
   }
 }
-

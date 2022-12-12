@@ -1,19 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/feed/component/main_feed_detail_card.dart';
 import 'package:howlook/feed/model/main_feed_detail_model.dart';
-import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/common/layout/bottom_navy_bar.dart';
-import 'package:howlook/feed/model/photo_dto.dart';
-import 'package:howlook/feed/model/userinfomodel.dart';
-import 'package:howlook/feed/repository/main_feed_repository.dart';
+import 'package:howlook/feed/model/temp/temp_main_feed_detail_model.dart';
+import 'package:howlook/feed/repository/mainfeed_repository.dart';
 
-class MainFeedDetailScreen extends StatelessWidget {
+class MainFeedDetailScreen extends ConsumerWidget {
   final int npostId; // 포스트 아이디로 특정 게시글 조회
 
   const MainFeedDetailScreen({
@@ -22,38 +21,43 @@ class MainFeedDetailScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Future<MainFeedDetailModel> getMainFeedDetail() async {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Future<Map<String, dynamic>> getMainFeedDetail() async {
       final dio = Dio();
-
-      dio.interceptors.add(
-        CustomInteceptor(storage: storage),
+      final storage = ref.read(secureStorageProvider);
+      final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+      final resp = await dio.get(
+        'http://$API_SERVICE_URI/feed/readbypid?NPostId=$npostId',
+        // 특정 API 뒤에 id 값 넘어서 가져가기
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $accessToken',
+          },
+        ),
       );
-
-      final repository =
-          MainFeedRepository(dio, baseurl: 'http://$API_SERVICE_URI');
-
-      return repository.getMainFeedDetail(NPostId: npostId);
+      return resp.data['data'];
     }
 
     return DefaultLayout(
       title: '게시글',
-      child: FutureBuilder<MainFeedDetailModel>(
+      child: FutureBuilder<Map<String, dynamic>>(
         future: getMainFeedDetail(),
-        builder: (_, AsyncSnapshot<MainFeedDetailModel> snapshot) {
+        builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-
+          final item = TempMainFeedDetailModel.fromJson(
+            json: snapshot.data!,
+          );
           return SingleChildScrollView(
             child: SafeArea(
               top: true,
               bottom: false,
               child: Column(
                 children: [
-                  MainFeedDetailCard.fromModel(model: snapshot.data!),
+                  MainFeedDetailCard.fromModel(model: item),
                 ],
               ),
             ),

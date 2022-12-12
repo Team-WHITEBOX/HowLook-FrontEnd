@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/profile/component/feed_card.dart';
 import 'package:howlook/user/view/profile/model/feed_model.dart';
 
-class MyFeed extends StatefulWidget {
+class MyFeed extends ConsumerStatefulWidget {
   const MyFeed({Key? key}) : super(key: key);
 
   @override
-  State<MyFeed> createState() => _MyFeed();
+  ConsumerState<MyFeed> createState() => _MyFeed();
 }
 
-class _MyFeed extends State<MyFeed> {
+class _MyFeed extends ConsumerState<MyFeed> {
   //final List<String> images = <String>['asset/img/Profile/HL1.JPG', 'asset/img/Profile/HL2.JPG', 'asset/img/Profile/HL3.JPG', 'asset/img/Profile/HL4.JPG'];
 
   Future<Map<String, dynamic>> paginateMyFeed() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final usermid = await storage.read(key: USERMID_KEY);
     final resp = await dio.get(

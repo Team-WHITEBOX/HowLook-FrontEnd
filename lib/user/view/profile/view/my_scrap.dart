@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/profile/component/scrap_card.dart';
 import 'package:howlook/user/view/profile/model/scrap_model.dart';
 
-class MyScrap extends StatefulWidget {
+class MyScrap extends ConsumerStatefulWidget {
   const MyScrap({Key? key}) : super(key: key);
 
   @override
-  State<MyScrap> createState() => _MyScrap();
+  ConsumerState<MyScrap> createState() => _MyScrap();
 }
 
-class _MyScrap extends State<MyScrap> {
+class _MyScrap extends ConsumerState<MyScrap> {
   //final List<String> images = <String>['asset/img/Profile/HL1.JPG', 'asset/img/Profile/HL2.JPG', 'asset/img/Profile/HL3.JPG', 'asset/img/Profile/HL4.JPG'];
 
   Future<List> paginateScrap() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final usermid = await storage.read(key: USERMID_KEY);
     final resp = await dio.get(

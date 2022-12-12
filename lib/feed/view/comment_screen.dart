@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/component/main_feed_comment_card.dart';
 import 'package:howlook/feed/model/main_feed_comment_model.dart';
 
-class FeedCommentScreen extends StatefulWidget {
+class FeedCommentScreen extends ConsumerStatefulWidget {
   final int npostId;
   const FeedCommentScreen({
     required this.npostId,
@@ -14,15 +16,16 @@ class FeedCommentScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<FeedCommentScreen> createState() => _FeedCommentScreenState();
+  ConsumerState<FeedCommentScreen> createState() => _FeedCommentScreenState();
 }
 
-class _FeedCommentScreenState extends State<FeedCommentScreen> {
+class _FeedCommentScreenState extends ConsumerState<FeedCommentScreen> {
   bool? isLiked;
   String replyContent = '';
 
   Future<List> paginateComment() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     int npostId = widget.npostId;
     final resp = await dio.get(
@@ -117,6 +120,7 @@ class _FeedCommentScreenState extends State<FeedCommentScreen> {
                           onPressed: () async {
                             if (replyContent.length > 1) {
                               final dio = Dio();
+                              final storage = ref.read(secureStorageProvider);
                               final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
                               final resp = await dio.post(
                                 'http://$API_SERVICE_URI/replies/',

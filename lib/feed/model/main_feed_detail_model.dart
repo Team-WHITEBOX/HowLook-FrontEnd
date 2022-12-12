@@ -32,7 +32,4 @@ class MainFeedDetailModel extends MainFeedModel {
 
   factory MainFeedDetailModel.fromJson(Map<String, dynamic> json)
   => _$MainFeedDetailModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MainFeedDetailModelToJson(this);
-
 }

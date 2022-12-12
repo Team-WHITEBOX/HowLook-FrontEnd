@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/feed/model/photo_dto.dart';
 import 'package:howlook/feed/model/userinfomodel.dart';
 import 'package:howlook/feed/view/main_feed_more_vert_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class MainFeedCard extends StatelessWidget {
+class MainFeedCard extends ConsumerWidget {
   final UserInfoModel userPostInfo;
   // 포스트 아이디
   final int npostId;
@@ -36,15 +38,12 @@ class MainFeedCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     PageController _controller = PageController();
-
-
     List<int> bodyinfo = [
       userPostInfo.memberHeight,
       userPostInfo.memberWeight
     ];
-
     return Column(
       children: [
         Row(
@@ -56,7 +55,7 @@ class MainFeedCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 18.0,
                   backgroundImage: Image.network(
-                    'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${userPostInfo.profilePhoto}',
+                    '${userPostInfo.profilePhoto}',
                     //'asset/img/Profile/HL1.JPG',
                     fit: BoxFit.cover,
                   ).image,
@@ -86,6 +85,7 @@ class MainFeedCard extends StatelessWidget {
             ),
             IconButton(
               onPressed: () async {
+                final storage = ref.read(secureStorageProvider);
                 String? userid = await storage.read(key: USERMID_KEY);
                 showModalBottomSheet(
                   context: context,
@@ -115,7 +115,7 @@ class MainFeedCard extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     child: Image.network(
-                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${photoDTOs[index].path}',
+                      '${photoDTOs[index].path}',
                       //'asset/img/Profile/HL1.JPG',
                       fit: BoxFit.cover,
                     ),
