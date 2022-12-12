@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/profile/view/my_feed.dart';
 import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
 import 'package:howlook/user/view/profile/view/my_scrap.dart';
@@ -20,6 +22,7 @@ class OtherProfileScreen extends StatefulWidget {
 class _OtherProfileScreenState extends State<OtherProfileScreen> {
   Future<Map<String, dynamic>> paginateProfile() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기

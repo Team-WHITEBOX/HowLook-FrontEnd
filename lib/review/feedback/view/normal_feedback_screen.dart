@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/review/feedback/view/feedback_result_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/review/feedback/model/normal_feedback_model.dart';
 import 'package:howlook/review/feedback/component/normal_feedback_card.dart';
 
-class NormalFeedback extends StatefulWidget {
+class NormalFeedback extends ConsumerStatefulWidget {
   const NormalFeedback({Key? key}) : super(key: key);
 
   @override
-  State<NormalFeedback> createState() => _NormalFeedbackState();
+  ConsumerState<NormalFeedback> createState() => _NormalFeedbackState();
 }
 
-class _NormalFeedbackState extends State<NormalFeedback> {
+class _NormalFeedbackState extends ConsumerState<NormalFeedback> {
   // final List<String> images = <String>[
   //   'asset/img/Profile/HL1.JPG',
   //   'asset/img/Profile/HL2.JPG',
@@ -43,7 +45,9 @@ class _NormalFeedbackState extends State<NormalFeedback> {
 
   Future<List> paginateNormalReview() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    final usermid = await storage.read(key: USERMID_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
       'http://$API_SERVICE_URI/eval/readbyuid?UserID=$userid',

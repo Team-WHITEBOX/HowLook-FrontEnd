@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/model/main_feed_comment_model.dart';
 import 'package:like_button/like_button.dart';
 
-class FeedCommentCard extends StatefulWidget {
+class FeedCommentCard extends ConsumerStatefulWidget {
   // 댓글 아이디
   final int replyId;
   // 댓글 부모 아이디
@@ -50,12 +52,13 @@ class FeedCommentCard extends StatefulWidget {
   }
 
   @override
-  State<FeedCommentCard> createState() => _FeedCommentCardState();
+  ConsumerState<FeedCommentCard> createState() => _FeedCommentCardState();
 }
 
-class _FeedCommentCardState extends State<FeedCommentCard> {
+class _FeedCommentCardState extends ConsumerState<FeedCommentCard> {
   Future<bool> onLikeButtonTapped(bool like_chk, int replyId) async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     if (like_chk == true) {
       final resp = await dio.delete(

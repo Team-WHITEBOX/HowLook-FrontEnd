@@ -18,5 +18,3 @@ final API_SERVICE_URI = "3.34.164.14:8080";
 final REDIRECT_URI = "http://3.34.164.14:8080/login/oauth2/code/kakao";
 
 final ip = Platform.isIOS ? simulatorIP : emulatorIP;
-
-final storage = FlutterSecureStorage();

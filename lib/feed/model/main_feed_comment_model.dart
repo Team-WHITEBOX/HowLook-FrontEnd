@@ -1,3 +1,9 @@
+import 'package:howlook/common/utils/data_utils.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'main_feed_comment_model.g.dart';
+
+@JsonSerializable()
 class MainFeedCommentModel {
   // 댓글 아이디
   final int replyId;
@@ -8,6 +14,9 @@ class MainFeedCommentModel {
   // 댓글 작성자 닉네임
   final String nickName;
   // 댓글 작성자 프로필 사진
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String profilePhoto;
   // 댓글 내가 체크 여부
   final bool like_chk;
@@ -27,18 +36,8 @@ class MainFeedCommentModel {
     required this.npostId,
   });
 
-  factory MainFeedCommentModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return MainFeedCommentModel(
-      parentId: json['parentId'],
-      profilePhoto: json['profilePhoto'],
-      contents: json['contents'],
-      npostId: json['npostId'],
-      replyId: json['replyId'],
-      nickName: json['nickName'],
-      likeCount: json['likeCount'],
-      like_chk: json['like_chk'],
-    );
-  }
+  factory MainFeedCommentModel.fromJson(Map<String, dynamic> json) =>
+      _$MainFeedCommentModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MainFeedCommentModelToJson(this);
 }

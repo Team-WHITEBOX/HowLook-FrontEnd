@@ -17,24 +17,6 @@ class MainFeedScreen extends StatefulWidget {
 }
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-  //새로고침
-  void _onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000)); //1초를 기다린 후 새로고침한다.
-    //이 부분에 새로고침 시 불러올 기능을 구현한다.
-    _refreshController.refreshCompleted();
-  }
-
-  //무한 스크롤
-  void _onLoading() async {
-    await Future.delayed(
-        Duration(milliseconds: 1000)); //1초를 기다린 후 새로운 데이터를 불러온다.
-    //이부분에 데이터를 계속 불러오는 기능을 구현한다.
-    //리스트뷰를 사용한다면 간단한 예로 list.add를 이용하여 데이터를 추가시켜준다.
-    _refreshController.loadComplete();
-  }
-
   @override
   Widget build(BuildContext context) {
     bool _canProcess = true;

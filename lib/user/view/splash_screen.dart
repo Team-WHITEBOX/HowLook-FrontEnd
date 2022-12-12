@@ -1,20 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/main_login_screen.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import '../../common/const/colors.dart';
 
-class Splash_Screen extends StatefulWidget {
+class Splash_Screen extends ConsumerStatefulWidget {
   const Splash_Screen({Key? key}) : super(key: key);
 
   @override
-  State<Splash_Screen> createState() => _Splash_ScreenState();
+  ConsumerState<Splash_Screen> createState() => _Splash_ScreenState();
 }
 
-class _Splash_ScreenState extends State<Splash_Screen> {
+class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
   @override
   void initState() {
     super.initState();
@@ -22,15 +24,17 @@ class _Splash_ScreenState extends State<Splash_Screen> {
     checkToken();
   }
 
-  // 토큰 삭제하는 함수
-  void deleteToken() async {
-    await storage.deleteAll();
-  }
+  // // 토큰 삭제하는 함수
+  // void deleteToken() async {
+  //   await storage.deleteAll();
+  // }
 
   // initState() 안에서는 async가 안되기 때문에 토큰 체크 함수를 따로 빼서 해야함
   void checkToken() async {
     final dio = Dio();
     // 스토리지로부터 토큰 받아오기
+    final storage = ref.read(secureStorageProvider);
+
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 

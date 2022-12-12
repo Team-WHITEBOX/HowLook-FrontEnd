@@ -25,6 +25,7 @@ class KakaoLoginScreen extends StatelessWidget {
             name: 'JavaScriptChannel',
             onMessageReceived: (JavascriptMessage message) {
               if ((message.message).contains('accessToken')) {
+                print(message.message);
                 Navigator.pop(context, message.message);
               }
             },

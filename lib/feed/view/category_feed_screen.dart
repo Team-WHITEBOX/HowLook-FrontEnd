@@ -1,13 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/component/main_feed_card.dart';
 import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/feed/view/main_feed_category.dart';
 import 'package:howlook/feed/view/main_feed_detail_screen.dart';
 
-class CategoryFeedScreen extends StatelessWidget {
+class CategoryFeedScreen extends ConsumerWidget {
   Arguments arguments;
 
   CategoryFeedScreen({
@@ -16,8 +18,9 @@ class CategoryFeedScreen extends StatelessWidget {
   }) : super(key: key);
 
   // 페이지네이션 api 호출하여 메인피드 데이터 값 받아오기
-  Future<List> paginateMainFeed() async {
+  Future<List> paginateMainFeed(WidgetRef ref) async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     int page = 0;
     String gender;
@@ -26,8 +29,6 @@ class CategoryFeedScreen extends StatelessWidget {
       gender = "M";
     else
       gender = "F";
-
-    print('http://3.34.164.14:8080/feed/search?amekaji=${arguments.isAmericanCasualChecked}&casual=${arguments.isCasualChecked}&guitar=${arguments.isEtcChecked}&minimal=${arguments.isMinimalChecked}&sporty=${arguments.isSportyChecked}&street=${arguments.isStreetChecked}&heightHigh=${arguments.maxHeight}&heightLow=${arguments.minHeight}&weightHigh=${arguments.maxWeight}&weightLow=${arguments.minWeight}&gender=${gender}&page=${page}');
 
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
@@ -43,7 +44,7 @@ class CategoryFeedScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '검색 기반 게시글',
       child: SingleChildScrollView(
@@ -53,7 +54,7 @@ class CategoryFeedScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: FutureBuilder<List>(
-              future: paginateMainFeed(),
+              future: paginateMainFeed(ref),
               builder: (context, AsyncSnapshot<List> snapshot) {
                 // 에러처리
                 if (!snapshot.hasData) {
@@ -69,7 +70,7 @@ class CategoryFeedScreen extends StatelessWidget {
                     // 받아온 데이터 JSON 매핑하기
                     // 모델 사용
                     final item = snapshot.data![index];
-                    final pItem = MainFeedModel.fromJson(json: item);
+                    final pItem = MainFeedModel.fromJson(item);
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(

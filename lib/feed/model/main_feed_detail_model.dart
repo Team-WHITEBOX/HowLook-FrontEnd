@@ -1,7 +1,11 @@
 import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/feed/model/photo_dto.dart';
 import 'package:howlook/feed/model/userinfomodel.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'main_feed_detail_model.g.dart';
+
+@JsonSerializable()
 class MainFeedDetailModel extends MainFeedModel {
   // 좋아요 수
   final int likeCount;
@@ -26,27 +30,6 @@ class MainFeedDetailModel extends MainFeedModel {
     required this.regDate,
   });
 
-  factory MainFeedDetailModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return MainFeedDetailModel(
-      userPostInfo: UserInfoModel.fromJson(
-          json: Map<String, dynamic>.from(json['userPostInfo'])),
-      npostId: json['npostId'],
-      photoDTOs: json['photoDTOs']
-          .map<PhotoDTOs>(
-            (x) => PhotoDTOs(
-              path: x['path'],
-              photoId: x['photoId'],
-            ),
-          )
-          .toList(),
-      photoCnt: json['photoCnt'],
-      likeCount: json['likeCount'], // 임시
-      like_chk: json['like_chk'],
-      commentCount: json['commentCount'], // 임시
-      content: json['content'],
-      regDate: json['regDate'],
-    );
-  }
+  factory MainFeedDetailModel.fromJson(Map<String, dynamic> json)
+  => _$MainFeedDetailModelFromJson(json);
 }

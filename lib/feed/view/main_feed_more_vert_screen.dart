@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 
-class MainFeedMoreVertScreen extends StatelessWidget {
+class MainFeedMoreVertScreen extends ConsumerWidget {
   final String? userId;
   final String memberId;
   final int npostId;
@@ -17,7 +19,7 @@ class MainFeedMoreVertScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dio = Dio();
     return SafeArea(
       bottom: false,
@@ -39,6 +41,7 @@ class MainFeedMoreVertScreen extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () async {
+                    final storage = ref.read(secureStorageProvider);
                     final accessToken =
                         await storage.read(key: ACCESS_TOKEN_KEY);
                     try {
@@ -148,8 +151,7 @@ class MainFeedMoreVertScreen extends StatelessWidget {
                                       style: TextStyle(color: Colors.red),
                                     ),
                                     onPressed: () async {
-                                      final usermid = await storage.read(
-                                        key: USERMID_KEY);
+                                      final storage = ref.read(secureStorageProvider);
                                       final accessToken = await storage.read(
                                           key: ACCESS_TOKEN_KEY);
                                       final resp = await dio.delete(

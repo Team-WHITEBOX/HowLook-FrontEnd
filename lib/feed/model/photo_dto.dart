@@ -1,4 +1,13 @@
+import 'package:howlook/common/utils/data_utils.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'photo_dto.g.dart';
+
+@JsonSerializable()
 class PhotoDTOs {
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String path;
   final int photoId;
 
@@ -7,12 +16,10 @@ class PhotoDTOs {
     required this.photoId,
   });
 
-  factory PhotoDTOs.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return PhotoDTOs(
-      path: json['path'],
-      photoId: json['photoId'],
-    );
-  }
+  factory PhotoDTOs.fromJson(Map<String, dynamic> json) =>
+      _$PhotoDTOsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PhotoDTOsToJson(this);
+
+
 }

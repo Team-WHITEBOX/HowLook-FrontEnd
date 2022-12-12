@@ -2,22 +2,24 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signup/first_signup_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   String username = '';
   String password = '';
 
@@ -110,13 +112,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       final refreshToken = resp.data['refreshToken'];
                       final accessToken = resp.data['accessToken'];
-                      final mid = resp.data['mid'];
+
+                      final storage = ref.read(secureStorageProvider);
 
                       await storage.write(
                           key: REFRESH_TOKEN_KEY, value: refreshToken);
                       await storage.write(
                           key: ACCESS_TOKEN_KEY, value: accessToken);
-                      await storage.write(key: USERMID_KEY, value: mid);
 
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(

@@ -1,43 +1,30 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/dio/dio.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/feed/component/main_feed_detail_card.dart';
 import 'package:howlook/feed/model/main_feed_detail_model.dart';
-import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/common/layout/bottom_navy_bar.dart';
-import 'package:howlook/feed/model/photo_dto.dart';
-import 'package:howlook/feed/model/userinfomodel.dart';
+import 'package:howlook/feed/model/temp/temp_main_feed_detail_model.dart';
+import 'package:howlook/feed/repository/mainfeed_repository.dart';
 
-class MainFeedDetailScreen extends StatelessWidget {
+class MainFeedDetailScreen extends ConsumerWidget {
   final int npostId; // 포스트 아이디로 특정 게시글 조회
-  const MainFeedDetailScreen({required this.npostId, Key? key})
-      : super(key: key);
+
+  const MainFeedDetailScreen({
+    required this.npostId,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    UserInfoModel userInfoModel = UserInfoModel(
-      memberId: '김진범',
-      memberNickName: 'df',
-      memberHeight: 200,
-      memberWeight: 100,
-      profilePhoto: '0',
-    );
-
-    List<PhotoDTOs> photo = [
-      PhotoDTOs(path: 'asset/img/HL1.JPG', photoId: 1,),
-    ];
-
-    List<String> list = [
-      'asset/img/HL1.JPG',
-      'asset/img/HL2.JPG',
-      'asset/img/HL3.JPG',
-    ];
-
+  Widget build(BuildContext context, WidgetRef ref) {
     Future<Map<String, dynamic>> getMainFeedDetail() async {
       final dio = Dio();
+      final storage = ref.read(secureStorageProvider);
       final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
       final resp = await dio.get(
         'http://$API_SERVICE_URI/feed/readbypid?NPostId=$npostId',
@@ -61,10 +48,9 @@ class MainFeedDetailScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          final item = MainFeedDetailModel.fromJson(
+          final item = TempMainFeedDetailModel.fromJson(
             json: snapshot.data!,
           );
-
           return SingleChildScrollView(
             child: SafeArea(
               top: true,
@@ -90,7 +76,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 0,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 1:
@@ -100,7 +86,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 1,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 2:
@@ -110,7 +96,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 2,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 3:
@@ -120,7 +106,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 3,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
             case 4:
@@ -130,7 +116,7 @@ class MainFeedDetailScreen extends StatelessWidget {
                     indexId: 4,
                   ),
                 ),
-                    (route) => false,
+                (route) => false,
               );
               break;
           }

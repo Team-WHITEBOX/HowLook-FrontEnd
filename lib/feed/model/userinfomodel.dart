@@ -1,3 +1,10 @@
+import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/utils/data_utils.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'userinfomodel.g.dart';
+
+@JsonSerializable()
 class UserInfoModel {
   // 아이디
   final String memberId;
@@ -8,6 +15,9 @@ class UserInfoModel {
   // 몸무게
   final int memberWeight;
   // 포토아이디
+  @JsonKey(
+    fromJson: DataUtils.pathToUrl,
+  )
   final String profilePhoto;
 
   UserInfoModel({
@@ -18,15 +28,8 @@ class UserInfoModel {
     required this.profilePhoto,
   });
 
-  factory UserInfoModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return UserInfoModel(
-      memberId: json['memberId'],
-      memberNickName: json['memberNickName'],
-      memberHeight: json['memberHeight'],
-      memberWeight: json['memberWeight'],
-      profilePhoto: json['profilePhoto'],
-    );
-  }
+  factory UserInfoModel.fromJson(Map<String, dynamic> json)
+  => _$UserInfoModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserInfoModelToJson(this);
 }
