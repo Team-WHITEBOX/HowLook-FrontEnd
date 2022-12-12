@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/near_feed_screen.dart';
 import 'package:howlook/feed/view/second_main_feed_scrren.dart';
+import 'package:howlook/upload/face_detector/camera_view.dart';
+import 'package:howlook/upload/face_detector/face_detector_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'main_feed_category.dart';
 
@@ -35,10 +37,23 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool _canProcess = true;
+    bool _isBusy = false;
+    CustomPaint? _customPaint;
+    String? _text;
+
     return DefaultLayout(
         title: 'HowLook',
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble)),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => FaceDetectorView()
+                  ),
+                );
+              },
+              icon: Icon(Icons.chat_bubble)),
           IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
         ],
         child: SafeArea(
@@ -201,7 +216,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 //         ));
 //   }
 // }
-
 
 // Row(
 // mainAxisAlignment: MainAxisAlignment.start,
