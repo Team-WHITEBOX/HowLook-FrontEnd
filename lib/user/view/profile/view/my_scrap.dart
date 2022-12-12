@@ -7,7 +7,8 @@ import 'package:howlook/user/view/profile/component/scrap_card.dart';
 import 'package:howlook/user/view/profile/model/scrap_model.dart';
 
 class MyScrap extends StatefulWidget {
-  const MyScrap({Key? key}) : super(key: key);
+  final String usermid; // 포스트 아이디로 특정 게시글 조회
+  const MyScrap({required this.usermid, Key? key}) : super(key: key);
 
   @override
   State<MyScrap> createState() => _MyScrap();
@@ -16,13 +17,30 @@ class MyScrap extends StatefulWidget {
 class _MyScrap extends State<MyScrap> {
   //final List<String> images = <String>['asset/img/Profile/HL1.JPG', 'asset/img/Profile/HL2.JPG', 'asset/img/Profile/HL3.JPG', 'asset/img/Profile/HL4.JPG'];
 
+  // Future<String> JWTcheck() async {
+  //
+  //   final dio = Dio();
+  //   final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+  //   final resp = await dio.get(
+  //     // MainFeed 관련 api IP주소 추가하기
+  //     'http://$API_SERVICE_URI/member/check',
+  //     options: Options(
+  //       headers: {
+  //         'authorization': 'Bearer $accessToken',
+  //       },
+  //     ),
+  //   );
+  //   print(resp.data['data']);
+  //   userid = resp.data['data'];
+  //   return userid;
+  // }
+
   Future<List> paginateScrap() async {
     final dio = Dio();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    final usermid = await storage.read(key: USERMID_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
-      'http://$API_SERVICE_URI/member/${usermid}/scrap',
+      'http://$API_SERVICE_URI/member/${widget.usermid}/scrap',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',
@@ -63,7 +81,7 @@ class _MyScrap extends State<MyScrap> {
             builder: (_, AsyncSnapshot<List> snapshot) {
               // 에러처리
               if (!snapshot.hasData) {
-                print('error');
+                print('error2');
                 return Center(
                   child: CircularProgressIndicator(),
                 );

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -7,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/tournament/model/past_tournament_model.dart';
 import 'package:howlook/tournament/component/past_tournament_card.dart';
+import 'package:howlook/tournament/component/lanking_card.dart';
 
 class pastTournament extends StatefulWidget {
   const pastTournament({Key? key}) : super(key: key);
@@ -17,10 +20,9 @@ class pastTournament extends StatefulWidget {
 
 class _pastTournamentState extends State<pastTournament> {
   ScrollController scrollController = ScrollController();
-  String tournamentday = '';
   String postid = '';
 
-  Future<Map<String, dynamic>> paginateLankTourna() async {
+  Future<Map<String, dynamic>> paginateLankTourna(String tournamentday) async {
     final dio = Dio();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
@@ -32,7 +34,13 @@ class _pastTournamentState extends State<pastTournament> {
         },
       ),
     );
+
+    final item = resp.data['data'];
+    final pItem = PastTModel.fromJson(json: item);
+    print("h$item");
     // 응답 데이터 중 data 값만 반환하여 사용하기!!
+    // print(int.parse(resp.data['data']['lank_1']).toString());
+    //print(list[0]['lank_1']);
     return resp.data['data'];
   }
 
@@ -52,6 +60,26 @@ class _pastTournamentState extends State<pastTournament> {
     return resp.data['data'];
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return DefaultLayout(
+  //       title: '지난 랭킹 순위',
+  //       child: FutureBuilder<Map<String, dynamic>>(
+  //         future: paginateLankTourna(),
+  //         builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+  //           // 에러처리
+  //           if (!snapshot.hasData) {
+  //             print('error');
+  //             return Center(
+  //               child: CircularProgressIndicator(),
+  //             );
+  //           }
+  //           final item = snapshot.data!;
+  //           final pItem = PastTModel.fromJson(json: item);
+  //           return pastTournamentCard.fromModel(model: pItem);
+  //         },
+  //       ));
+  // }
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -87,26 +115,9 @@ class _pastTournamentState extends State<pastTournament> {
                                   currentTime: DateTime.now(),
                                   locale: LocaleType.ko,
                                   onConfirm: (date) {
-                                    tournamentday =
-                                        DateFormat('yyyy-MM-dd').format(date);
-                                    FutureBuilder<Map<String, dynamic>>(
-                                      future: paginateLankTourna(),
-                                      builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                                        // 에러처리
-                                        if (!snapshot.hasData) {
-                                          print('error');
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        }
-                                        return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                        // final item = snapshot.data!;
-                                        // final pItem = PastTModel.fromJson(json: item);
-                                        // return pastTournamentCard.fromModel(model: pItem);
-                                      },
-                                    );
+                                    String tournamentday = DateFormat(
+                                        'yyyy-MM-dd').format(date);
+                                    paginateLankTourna(tournamentday);
                                   },
                                 );
                               },
@@ -119,13 +130,14 @@ class _pastTournamentState extends State<pastTournament> {
                             ),
                           ),
                           const SizedBox(height: 10.0),
-                          // Center(
-                          //   child: Container(
-                          //       child: Text(
-                          //         '총 n명이 참여했습니다.',
-                          //         style: TextStyle(color: Colors.grey, fontSize: 15),
-                          //       )),
-                          // ),
+                          Center(
+                            child: Container(
+                                child: Text(
+                                  '총 n명이 참여했습니다.',
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 15),
+                                )),
+                          ),
                         ],
                       ),
                       background: const SizedBox(
@@ -152,8 +164,7 @@ class _pastTournamentState extends State<pastTournament> {
                   // final pItem = PastTModel.fromJson(json: item);
                   // return pastTournamentCard.fromModel(model: pItem);
                 },
-              ), //ScoreScreen(),
+              ),
             )));
   }
-
 }
