@@ -13,10 +13,13 @@ class ChartPageCard extends StatefulWidget {
   // 여자 차트
   final List<dynamic> femaleCounts;
 
+  final double replyCount;
+
   ChartPageCard({
     Key? key,
     required this.maleCounts,
     required this.femaleCounts,
+    required this.replyCount,
   }): super(key: key);
 
   factory ChartPageCard.fromModel({
@@ -25,6 +28,7 @@ class ChartPageCard extends StatefulWidget {
     return ChartPageCard(
       maleCounts: model.maleCounts,
       femaleCounts: model.femaleCounts,
+      replyCount: model.replyCount
     );
   }
 
@@ -50,7 +54,7 @@ class _ChartPageCardState extends State<ChartPageCard> {
         child: SfCartesianChart(
             primaryXAxis: CategoryAxis(),
             primaryYAxis: NumericAxis(
-                minimum: 0, maximum: 10, interval: 10),
+                minimum: 0 , maximum: widget.replyCount, interval: widget.replyCount),
             series: <CartesianSeries>[
               BarSeries<ReviewScore, String>(
                   gradient: const LinearGradient(

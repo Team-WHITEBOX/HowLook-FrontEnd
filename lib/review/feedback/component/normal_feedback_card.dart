@@ -73,8 +73,28 @@ class NormalReviewCard extends StatelessWidget {
     //     ),
     //   ),
     // );
-    return InkWell(
+
+    return Container(
+      child: averageScore==0.0?
+      InkWell(
+        onTap: () {},
+        child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.network('https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${mainPhotoPath}'),
+              // Image.asset('asset/img/Profile/HL1.JPG'),
+              Container(
+                color: Colors.black.withOpacity(0.5),
+              ),
+              Container(
+                  alignment: Alignment.center,
+                  child: Text('Score: ${averageScore}', style: TextStyle(color: Colors.white),)
+              )
+            ]),
+      )
+    : InkWell(
       onTap: () {
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FeedbackResult(
@@ -95,6 +115,6 @@ class NormalReviewCard extends StatelessWidget {
                 child: Text('Score: ${averageScore}', style: TextStyle(color: Colors.white),)
             )
           ]),
-    );
+      ));
   }
 }

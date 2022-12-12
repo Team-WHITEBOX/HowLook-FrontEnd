@@ -16,6 +16,7 @@ class MainProfileModel {
 
   final List<MemberFeeds> memberFeeds;
 
+
   MainProfileModel({
     required this.memberId,
     required this.memberNickName,

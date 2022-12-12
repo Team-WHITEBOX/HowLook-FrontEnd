@@ -150,8 +150,6 @@ class MainFeedMoreVertScreen extends StatelessWidget {
                                     onPressed: () async {
                                       final usermid = await storage.read(
                                         key: USERMID_KEY);
-                                      print(usermid);
-                                      print(npostId);
                                       final accessToken = await storage.read(
                                           key: ACCESS_TOKEN_KEY);
                                       final resp = await dio.delete(

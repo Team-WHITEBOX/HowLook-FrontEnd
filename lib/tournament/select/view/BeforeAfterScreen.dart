@@ -1,4 +1,4 @@
-import 'package:howlook/tournament/select/rect_clipper.dart';
+import 'package:howlook/tournament/select/view/rect_clipper.dart';
 import 'package:flutter/material.dart';
 
 class BeforeAfter extends StatefulWidget {

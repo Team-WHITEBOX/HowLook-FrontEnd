@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:howlook/tournament/select/tournament_select_screen.dart';
-import 'package:howlook/tournament/past_tournament_screen.dart';
+import 'package:howlook/tournament/select/view/tournament_select_screen.dart';
+import 'package:howlook/tournament/view/past_tournament_screen.dart';
+import 'package:dio/dio.dart';
+import 'package:howlook/common/const/data.dart';
+import 'package:howlook/tournament/model/main_tournament_model.dart';
+import 'package:howlook/tournament/component/main_tournament_card.dart';
 
 class tournamentScreen extends StatefulWidget {
   const tournamentScreen({Key? key}) : super(key: key);
@@ -13,12 +17,21 @@ class tournamentScreen extends StatefulWidget {
 }
 
 class _tournamentScreenState extends State<tournamentScreen> {
-  final List<String> images = <String>[
-    'asset/img/Profile/HL1.JPG',
-    'asset/img/Profile/HL2.JPG',
-    'asset/img/Profile/HL3.JPG',
-    'asset/img/Profile/HL4.JPG'
-  ];
+  Future<List> paginateTourna() async {
+    final dio = Dio();
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    final resp = await dio.get(
+      // MainFeed 관련 api IP주소 추가하기
+      'http://$API_SERVICE_URI/tournament/post/2022-12-11',
+      options: Options(
+        headers: {
+          'authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+    // 응답 데이터 중 data 값만 반환하여 사용하기!!
+    return resp.data['data'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +114,8 @@ class _tournamentScreenState extends State<tournamentScreen> {
                   ),
                 ];
               },
-              body: SingleChildScrollView(child: Column(
+              body: SingleChildScrollView(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10.0),
@@ -173,11 +187,13 @@ class _tournamentScreenState extends State<tournamentScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 15.0, top: 0.0, right: 0.0, bottom: 0.0),
+                    padding: EdgeInsets.only(
+                        left: 15.0, top: 0.0, right: 0.0, bottom: 0.0),
                     child: Text('현재 진행중'),
                   ),
                   Padding(
-                      padding: EdgeInsets.only(left: 0.0, top: 0.0, right: 15.0, bottom: 0.0),
+                      padding: EdgeInsets.only(
+                          left: 0.0, top: 0.0, right: 15.0, bottom: 0.0),
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).push(
@@ -186,7 +202,10 @@ class _tournamentScreenState extends State<tournamentScreen> {
                               ),
                             );
                           },
-                          child: Text('과거 랭킹 결과', style: TextStyle(color: PRIMARY_COLOR),)))
+                          child: Text(
+                            '과거 랭킹 결과',
+                            style: TextStyle(color: PRIMARY_COLOR),
+                          )))
                 ],
               ),
               TournamentFeed(),
@@ -197,29 +216,46 @@ class _tournamentScreenState extends State<tournamentScreen> {
 
   Widget TournamentFeed() {
     return Container(
-      height: 400,
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Swiper(
-          autoplay: true,
-          scale: 0.9,
-          viewportFraction: 0.8,
-          itemCount: images.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => TournamentIng(),
-                  ),
-                );
-                },
-              child: Image.asset(images[index]),
-            );
-          },
-        ),
-      ),
-    );
+        height: 400,
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: FutureBuilder<List>(
+                future: paginateTourna(),
+                builder: (_, AsyncSnapshot<List> snapshot) {
+                  // 에러처리
+                  if (!snapshot.hasData) {
+                    print('error');
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Swiper(
+                      autoplay: true,
+                      scale: 0.9,
+                      viewportFraction: 0.8,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final item = snapshot.data![index];
+                        final pItem = MainTournaModel.fromJson(json: item);
+                        return Container(
+                            child:
+                                tournamentScreenCard.fromModel(model: pItem));
+                      });
+                })));
+    // return FutureBuilder<Map<String, dynamic>>(
+    //   future: paginateTourna(),
+    //   builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+    //     // 에러처리
+    //     if (!snapshot.hasData) {
+    //       print('error');
+    //       return Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     }
+    //     final item = snapshot.data!;
+    //     final pItem = MainTournaModel.fromJson(json: item);
+    //     return tournamentScreenCard.fromModel(model: pItem);
+    //   },
+    // );
   }
-
 }

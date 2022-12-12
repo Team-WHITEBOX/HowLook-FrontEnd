@@ -23,13 +23,30 @@ class _NormalFeedbackState extends State<NormalFeedback> {
   //   'asset/img/Profile/HL4.JPG'
   // ];
 
+  String userid = '';
+
+  Future<String> JWTcheck() async {
+    final dio = Dio();
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    final resp = await dio.get(
+      // MainFeed 관련 api IP주소 추가하기
+      'http://$API_SERVICE_URI/member/check',
+      options: Options(
+        headers: {
+          'authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
+    userid = resp.data['data'];
+    return userid;
+  }
+
   Future<List> paginateNormalReview() async {
     final dio = Dio();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    final usermid = await storage.read(key: USERMID_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
-      'http://$API_SERVICE_URI/eval/readbyuid?UserID=${usermid}',
+      'http://$API_SERVICE_URI/eval/readbyuid?UserID=$userid',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',
@@ -49,37 +66,49 @@ class _NormalFeedbackState extends State<NormalFeedback> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-            FutureBuilder<List>(
-                future: paginateNormalReview(),
-                builder: (_, AsyncSnapshot<List> snapshot) {
+            FutureBuilder<String>(
+                future: JWTcheck(),
+                builder: (_, AsyncSnapshot<String> snapshot) {
                   // 에러처리
                   if (!snapshot.hasData) {
-                    print('error');
+                    print('error1'); //에러 안남
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-                  return Container(
-                    height: 400,
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Swiper(
-                        autoplay: false,
-                        scale: 0.9,
-                        viewportFraction: 0.8,
-                        // pagination: SwiperPagination(
-                        //   alignment: Alignment.bottomCenter
-                        // ),
-                        // control: SwiperControl(color: Colors.white),
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final item = snapshot.data![index];
-                          final pItem = NormalReviewModel.fromJson(json: item);
-                          return NormalReviewCard.fromModel(model: pItem);
-                        },
-                      ),
-                    ),
-                  );
+                  return FutureBuilder<List>(
+                      future: paginateNormalReview(),
+                      builder: (_, AsyncSnapshot<List> snapshot) {
+                        // 에러처리
+                        if (!snapshot.hasData) {
+                          print('error');
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return Container(
+                          height: 400,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Swiper(
+                              autoplay: false,
+                              scale: 0.9,
+                              viewportFraction: 0.8,
+                              // pagination: SwiperPagination(
+                              //   alignment: Alignment.bottomCenter
+                              // ),
+                              // control: SwiperControl(color: Colors.white),
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final item = snapshot.data![index];
+                                final pItem =
+                                    NormalReviewModel.fromJson(json: item);
+                                return NormalReviewCard.fromModel(model: pItem);
+                              },
+                            ),
+                          ),
+                        );
+                      });
                 })
           ]))),
     ));

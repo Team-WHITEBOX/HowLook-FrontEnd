@@ -58,7 +58,8 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
               ),
               backgroundColor: Colors.black45,
             ),
-            SliverFillRemaining(                // 내용 영역
+            SliverFillRemaining(
+              // 내용 영역
                 child: Column(
                   children: [
                     Text('성별 점수 그래프',style: TextStyle(fontSize: 15, color: Colors.grey),),

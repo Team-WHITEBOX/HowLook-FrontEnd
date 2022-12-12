@@ -6,7 +6,8 @@ import 'package:howlook/user/view/profile/component/feed_card.dart';
 import 'package:howlook/user/view/profile/model/feed_model.dart';
 
 class MyFeed extends StatefulWidget {
-  const MyFeed({Key? key}) : super(key: key);
+  final String usermid; // 포스트 아이디로 특정 게시글 조회
+  const MyFeed({required this.usermid, Key? key}) : super(key: key);
 
   @override
   State<MyFeed> createState() => _MyFeed();
@@ -18,10 +19,9 @@ class _MyFeed extends State<MyFeed> {
   Future<Map<String, dynamic>> paginateMyFeed() async {
     final dio = Dio();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    final usermid = await storage.read(key: USERMID_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
-      'http://$API_SERVICE_URI/member/${usermid}',
+      'http://$API_SERVICE_URI/member/${widget.usermid}',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',

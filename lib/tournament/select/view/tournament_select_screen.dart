@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/tournament/select/rect_clipper.dart';
-import 'package:howlook/tournament/select/BeforeAfterScreen.dart';
+import 'package:howlook/tournament/select/view/rect_clipper.dart';
+import 'package:howlook/tournament/select/view/BeforeAfterScreen.dart';
 import 'package:slidable_button/slidable_button.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 

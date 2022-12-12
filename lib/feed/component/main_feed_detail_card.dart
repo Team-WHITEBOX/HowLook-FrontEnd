@@ -8,6 +8,8 @@ import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/feed/view/main_feed_more_vert_screen.dart';
 import 'package:like_button/like_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:howlook/user/view/profile/view/my_profile_screen.dart';
+import 'package:howlook/user/view/profile/view/profile_screen.dart';
 
 import '../view/comment_screen.dart';
 
@@ -95,6 +97,25 @@ class MainFeedDetailCard extends StatelessWidget {
         return Future.value(!like_chk);
       }
     }
+
+
+    Future<String> JWTcheck() async {
+      final dio = Dio();
+      final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+      final resp = await dio.get(
+        // MainFeed 관련 api IP주소 추가하기
+        'http://$API_SERVICE_URI/member/check',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
+      // 응답 데이터 중 data 값만 반환하여 사용하기!!
+      return resp.data['data'];
+    }
+    final userid = JWTcheck();
+
     // 게시글 날짜 등록
     String Date = '${regDate[0]}.${regDate[1]}.${regDate[2]}';
     // 바디 정보 리스트 화
@@ -108,13 +129,30 @@ class MainFeedDetailCard extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: 10.0),
-                CircleAvatar(
+                InkWell(
+                  onTap: ()  {
+                    (userid == userPostInfo.memberId)?
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => MyProfileScreen(),
+                      ),
+                    )
+                        : Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => OtherProfileScreen(
+                          usermid : userPostInfo.memberId
+                        ),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
                   radius: 18.0,
                   backgroundImage: Image.network(
                     'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${userPostInfo.profilePhoto}',
                     //'asset/img/Profile/HL1.JPG',
                     fit: BoxFit.cover,
                   ).image,
+                ),
                 ),
                 const SizedBox(width: 16.0),
                 Column(
