@@ -28,8 +28,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         },
       ),
     );
-    print(resp.data['data']);
     userid = resp.data['data'];
+    await storage.write(key: USERMID_KEY, value: userid);
     return userid;
   }
 

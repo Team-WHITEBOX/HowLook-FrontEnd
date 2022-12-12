@@ -46,15 +46,20 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         title: 'HowLook',
         actions: <Widget>[
           IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => NearFeedScreen()),
+              );
+            },
+            icon: Icon(Icons.gps_fixed_rounded),
+          ),
+          IconButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => FaceDetectorView()
-                  ),
+                  MaterialPageRoute(builder: (_) => CategoryScreen()),
                 );
               },
-              icon: Icon(Icons.chat_bubble)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+              icon: Icon(Icons.filter_alt)),
         ],
         child: SafeArea(
           top: true,

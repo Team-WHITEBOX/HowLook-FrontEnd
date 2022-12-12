@@ -60,16 +60,18 @@ class _FaceDetectorViewState extends State<FaceDetectorView> {
       String text = 'Faces found: ${faces.length}\n\n';
       for (final face in faces) {
         text += 'face: ${face.boundingBox}\n\n';
-        print(face.boundingBox.left);
-        print(face.boundingBox.top);
-        print(face.boundingBox.right);
-        print(face.boundingBox.bottom);
-
       }
       _text = text;
       // TODO: set _customPaint to draw boundingRect on top of image
+      //
+      final face = faces[0];
 
-      _customPaint = CustomPaint(painter: MyPainter(face_position: faces));
+      if (faces.length != 0) {
+      }
+
+      _customPaint = CustomPaint(
+        painter: MyPainter(face_position: face),
+      );
     }
     _isBusy = false;
     if (mounted) {

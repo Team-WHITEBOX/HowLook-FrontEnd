@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
@@ -18,7 +18,7 @@ class Position {
 }
 
 class MyPainter extends CustomPainter {
-  List<Face> face_position;
+  Face face_position;
 
   MyPainter({
     required this.face_position,
@@ -26,41 +26,39 @@ class MyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final List<Position> rect;
-    int i = 0;
-    for (final face in face_position){
-      // rect[i].left = face.boundingBox.left;
-      // rect[i].right = face.boundingBox.right;
-      // rect[i].top = face.boundingBox.top;
-      // rect[i].bottom = face.boundingBox.bottom;
-      i++;
-    }
+    Position rect = Position();
+    rect.left = face_position.boundingBox.left;
+    rect.right = face_position.boundingBox.right;
+    rect.top = face_position.boundingBox.top;
+    rect.bottom = face_position.boundingBox.bottom;
 
-    final bubbleSize = Size(size.width, size.height * 0.8);
-    final tailSize = Size(size.width * 0.1, size.height - bubbleSize.height);
+    late double width = (rect.left! + 100) - (rect.right! - 300);
+    late double height = rect.top! - (rect.bottom! - 600);
+
+    final bubbleSize = Size((width * 0.5) / 2, height * 0.6);
     final fillet = bubbleSize.width * 0.1;
-    final tailStartPoint = Point(size.width * 0.7, bubbleSize.height);
-    //bubble body
+
     final bubblePath = Path()
       ..moveTo(0, fillet)
-      // 왼쪽 위에서 왼쪽 아래 라인
+    // 왼쪽 위에서 왼쪽 아래 라인
       ..lineTo(0, bubbleSize.height - fillet)
       ..quadraticBezierTo(0, bubbleSize.height, fillet, bubbleSize.height)
-      // 왼쪽 아래에서 오른쪽 아래 라인
+    // 왼쪽 아래에서 오른쪽 아래 라인
       ..lineTo(bubbleSize.width - fillet, bubbleSize.height)
       ..quadraticBezierTo(bubbleSize.width, bubbleSize.height, bubbleSize.width,
           bubbleSize.height - fillet)
-      // 오른쪽 아래에서 오른쪽 위 라인
+    // 오른쪽 아래에서 오른쪽 위 라인
       ..lineTo(bubbleSize.width, fillet)
       ..quadraticBezierTo(bubbleSize.width, 0, bubbleSize.width - fillet, 0)
-      // 오른쪽 위에서 왼쪽 아래 라인
+    // 오른쪽 위에서 왼쪽 아래 라인
       ..lineTo(fillet, 0)
       ..quadraticBezierTo(0, 0, 0, fillet);
 
     // paint setting
     final paint = Paint()
-      ..color = Color(0xffFCA311)
-      ..strokeWidth = 2
+      ..imageFilter = ImageFilter.blur(sigmaX: 10, sigmaY: 10)
+      // ..color = Colors.white.withOpacity(1)
+      ..strokeWidth = 4
       ..style = PaintingStyle.stroke;
     // draw
     canvas.drawPath(bubblePath, paint);
