@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/user/view/profile/model/my_profile_screen_model.dart';
 import 'package:howlook/user/view/profile/view/my_feed.dart';
 import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
@@ -74,8 +72,8 @@ class MainProfileCard extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                   colors: [
-                                    PRIMARY_COLOR,
-                                    Color.fromRGBO(0, 32, 19, 1)
+                                    Color(0xFFa6ceff),
+                                    Color(0xFFD07AFF),
                                   ],
                                   begin: FractionalOffset.bottomCenter,
                                   end: FractionalOffset.topCenter,
@@ -116,7 +114,9 @@ class MainProfileCard extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => MyScrap(),
+                                    builder: (_) => MyScrap(
+                                      usermid: memberId,
+                                    ),
                                   ),
                                 );
                               }, //설정 화면 이동

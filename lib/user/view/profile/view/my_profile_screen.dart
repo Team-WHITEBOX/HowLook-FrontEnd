@@ -28,6 +28,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         },
       ),
     );
+    print(resp.data['data']);
     userid = resp.data['data'];
     return userid;
   }
@@ -67,7 +68,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
               // 에러처리
               if (!snapshot.hasData) {
-                print('error2');
+                print('error3');
                 return Center(
                   child: CircularProgressIndicator(),
                 );

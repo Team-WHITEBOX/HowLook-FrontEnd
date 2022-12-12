@@ -6,9 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:howlook/tournament/model/past_tournament_model.dart';
 
 class LankTournamentCard extends StatefulWidget {
-  final String photo;
-  final String member_id;
-
+  // final String photo;
+  // final String member_id;
+  //
   // final int lank_1;
   //
   // final int lank_2;
@@ -16,29 +16,29 @@ class LankTournamentCard extends StatefulWidget {
   // final int lank_3;
   //
   // final int lank_4;
-
-  LankTournamentCard({
-    Key? key,
-    required this.photo,
-    required this.member_id,
-    // required this.lank_1,
-    // required this.lank_2,
-    // required this.lank_3,
-    // required this.lank_4,
-  }): super(key: key);
-
-  factory LankTournamentCard.fromJson({
-    required PastTModel model,
-  }) {
-    return LankTournamentCard(
-      photo: model.photo,
-      member_id: model.member_id,
-      // lank_1: model.lank_1,
-      // lank_2: model.lank_2,
-      // lank_3: model.lank_3,
-      // lank_4: model.lank_4,
-    );
-  }
+  //
+  // LankTournamentCard({
+  //   Key? key,
+  //   required this.photo,
+  //   required this.member_id,
+  //   required this.lank_1,
+  //   required this.lank_2,
+  //   required this.lank_3,
+  //   required this.lank_4,
+  // }): super(key: key);
+  //
+  // factory LankTournamentCard.fromModel({
+  //   required PastTModel model,
+  // }) {
+  //   return LankTournamentCard(
+  //     photo: model.photo,
+  //     member_id: model.member_id,
+  //     lank_1: model.lank_1,
+  //     lank_2: model.lank_2,
+  //     lank_3: model.lank_3,
+  //     lank_4: model.lank_4,
+  //   );
+  // }
 
   @override
   State<LankTournamentCard> createState() => _LankTournamentCardState();
@@ -47,19 +47,8 @@ class LankTournamentCard extends StatefulWidget {
 class _LankTournamentCardState extends State<LankTournamentCard> {
   ScrollController scrollController = ScrollController();
 
-  final List<String> images = <String>[ //토너먼트 사진
-    'asset/img/Profile/HL1.JPG',
-    'asset/img/Profile/HL2.JPG',
-    'asset/img/Profile/HL3.JPG',
-    'asset/img/Profile/HL4.JPG'
-  ];
-
-  final List<String> name = <String>[
-    '강아지는멍멍',
-    '고양이는야옹',
-    '곰은우어어',
-    '호랑이는냠냠',
-  ];
+  List<String> name = ['1', '2', '3','4'];
+  List<String> images= ['asset/img/Profile/HL1.JPG','asset/img/Profile/HL2.JPG','asset/img/Profile/HL3.JPG','asset/img/Profile/HL4.JPG'];
 
   List<String> topRanks = ["🥇", "🥈", "🥉"];
   String tournamentday = '';

@@ -62,6 +62,7 @@ dependencies:
   json_annotation: ^4.7.0
   camera: ^0.10.0+4
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
