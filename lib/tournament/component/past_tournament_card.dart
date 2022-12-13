@@ -6,6 +6,34 @@ import 'package:intl/intl.dart';
 import 'package:howlook/tournament/model/past_tournament_model.dart';
 
 class pastTournamentCard extends StatefulWidget {
+   final int index;
+  // 포스트 아이디
+  final int feed_id;
+  // 이미지 경로
+  final String photo;
+
+  final String member_id;
+
+  pastTournamentCard({
+    required this.index,
+    required this.feed_id,
+    required this.photo,
+    required this.member_id,
+    // required this.index
+    Key? key,
+  }) : super(key : key);
+
+  factory pastTournamentCard.fromModel({
+    required PastTModel model,
+    required int indexValue
+  }) {
+    return pastTournamentCard(
+      feed_id: model.feed_id,
+      photo: model.photo,
+      member_id: model.member_id,
+      index: indexValue,
+    );
+  }
   // final String photo;
   // final String member_id;
   //
@@ -210,98 +238,43 @@ class pastTournamentCard extends StatefulWidget {
 class _pastTournamentCardState extends State<pastTournamentCard> {
   ScrollController scrollController = ScrollController();
 
-  List<String> name = ['1', '2', '3','4'];
-  List<String> images= ['asset/img/Profile/HL1.JPG','asset/img/Profile/HL2.JPG','asset/img/Profile/HL3.JPG','asset/img/Profile/HL4.JPG'];
-
   List<String> topRanks = ["🥇", "🥈", "🥉"];
-  String tournamentday = '';
+
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-        title: '지난 랭킹 순위',
-        child: Scaffold(
-            body: NestedScrollView(
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  SliverAppBar(
-                    collapsedHeight: MediaQuery.of(context).size.width * 0.3,
-                    pinned: true,
-                    expandedHeight: MediaQuery.of(context).size.width * 0.2,
-                    flexibleSpace: FlexibleSpaceBar(
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: TextButton(
-                              onPressed: () {
-                                DatePicker.showDatePicker(
-                                  context,
-                                  showTitleActions: true,
-                                  minTime: DateTime(1900, 1, 1),
-                                  maxTime: DateTime(2022, 12, 31),
-                                  currentTime: DateTime.now(),
-                                  locale: LocaleType.ko,
-                                  onConfirm: (date) {
-                                    tournamentday = DateFormat('yyyy-MM-dd').format(date);
-                                    Text( //랜킹날짜 안내글 어떻게하지...
-                                        '${tournamentday} 랭킹 결과',
-                                        style: TextStyle(
-                                          color: Colors.grey,)
-                                    );
-                                  },
-                                );
-                              },
-                              child: Text(
-                                "보고싶은 순위의 날짜를 선택하세요",
-                                style: TextStyle(
-                                  color: PRIMARY_COLOR,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10.0),
-                          Center(
-                            child: Container(
-                                child: Text(
-                                  '총 n명이 참여했습니다.',
-                                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                                )),
-                          ),
-                        ],
-                      ),
-                      background: const SizedBox(
-                        child: ColoredBox(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ];
-              },
-              body: LankingView(), //ScoreScreen(),
-            )));
+    return listCard(widget.index);
   }
 
-  Widget LankingView() {
-    return CustomScrollView(
-      shrinkWrap: true,
-      slivers: <Widget>[
-        SliverPadding(
-            padding: EdgeInsets.all(20.0),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                childCount: images.length,
-                    (context, index) {
-                  return listCard(index);
-                },
-              ),
-            ))
-      ],
-    );
-  }
+  // Widget LankingView() {
+  //   return CustomScrollView(
+  //     shrinkWrap: true,
+  //     slivers: <Widget>[
+  //       SliverPadding(
+  //           padding: EdgeInsets.all(20.0),
+  //           sliver: SliverList(
+  //             delegate: SliverChildBuilderDelegate(
+  //               childCount: widget.postDTOS.length,
+  //                   (context, index) {
+  //                 return listCard(index);
+  //               },
+  //             ),
+  //           ))
+  //     ],
+  //   );
+  // }
 
 
+  // class PostDTOS {
+  // // 포스트 아이디
+  // final int feed_id;
+  // // 이미지 경로
+  // final String photo;
+  //
+  // final String member_id;
+  //
   Widget listCard(int index) {
+    // int index = widget.postDTOS.length;
     return Container(
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -332,7 +305,8 @@ class _pastTournamentCardState extends State<pastTournamentCard> {
                 ),
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width / 14,
-                  backgroundImage: AssetImage(images[index]),
+                  backgroundImage: NetworkImage('https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${widget.photo}'),
+
                 )),
 
             const SizedBox(width: 10.0),
@@ -345,7 +319,7 @@ class _pastTournamentCardState extends State<pastTournamentCard> {
               ),
             ),
             Text(
-              ' ${name[index]}', // 원하는 형태로 조합
+              ' ${widget.member_id}', // 원하는 형태로 조합
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,

@@ -27,30 +27,6 @@
 // }
 
 class PastTModel {
-  final List<PostDTOS> postDTOS;
-
-  PastTModel({
-    required this.postDTOS,
-  });
-
-  factory PastTModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return PastTModel(
-      postDTOS: json['memberFeeds']
-          .map<PostDTOS>(
-            (x) => PostDTOS(
-              feed_id: x['feed_id'],
-              photo: x['photo'],
-              member_id: x['member_id'],
-            ),
-          )
-          .toList(),
-    );
-  }
-}
-
-class PostDTOS {
   // 포스트 아이디
   final int feed_id;
   // 이미지 경로
@@ -58,16 +34,16 @@ class PostDTOS {
 
   final String member_id;
 
-  PostDTOS({
+  PastTModel({
     required this.feed_id,
     required this.photo,
     required this.member_id,
   });
 
-  factory PostDTOS.fromJson({
+  factory PastTModel.fromJson({
     required Map<String, dynamic> json,
   }) {
-    return PostDTOS(
+    return PastTModel(
       feed_id: json['feed_id'],
       photo: json['photo'],
       member_id: json['member_id'],
