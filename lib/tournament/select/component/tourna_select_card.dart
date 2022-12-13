@@ -5,15 +5,41 @@ import 'package:howlook/tournament/select/view/rect_clipper.dart';
 import 'package:howlook/tournament/select/view/BeforeAfterScreen.dart';
 import 'package:slidable_button/slidable_button.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:howlook/tournament/select/model/tourna_select_model.dart';
 
-class TournamentIng extends StatefulWidget {
-  const TournamentIng({Key? key}) : super(key: key);
+class TournamentIngCard extends StatefulWidget {
+  final int t_post_id;
+
+  final int feed_id;
+
+  final String photo;
+
+  final int score;
+
+  TournamentIngCard({
+    Key? key,
+    required this.t_post_id,
+    required this.feed_id,
+    required this.photo,
+    required this.score,
+  }): super(key: key);
+
+  factory TournamentIngCard.fromModel({
+    required SelectTournaModel model,
+  }) {
+    return TournamentIngCard(
+        t_post_id: model.t_post_id,
+        feed_id: model.feed_id,
+        photo: model.photo,
+        score: model.score,
+    );
+  }
 
   @override
-  State<TournamentIng> createState() => _TournamentIngState();
+  State<TournamentIngCard> createState() => _TournamentIngCardState();
 }
 
-class _TournamentIngState extends State<TournamentIng> {
+class _TournamentIngCardState extends State<TournamentIngCard> {
   final List<String> images = <String>[
     'asset/img/Profile/HL1.JPG',
     'asset/img/Profile/HL2.JPG',
@@ -26,11 +52,7 @@ class _TournamentIngState extends State<TournamentIng> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      title: '오늘의 토너먼트',
-      child: SingleChildScrollView(
-        child: SafeArea(
-            child: Column(
+    return Column(
               children: [
                 const SizedBox(height: 15.0),
                 BeforeAfter(
@@ -60,9 +82,7 @@ class _TournamentIngState extends State<TournamentIng> {
                   ],
                 )
               ],
-            )),
-      ),
-    );
+            );
   }
 
   Widget tournamentImage(String path) {
