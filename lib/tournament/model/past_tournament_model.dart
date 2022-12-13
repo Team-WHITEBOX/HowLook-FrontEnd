@@ -26,27 +26,70 @@
 //   }
 // }
 
+// class PastTModel {
+//   // 포스트 아이디
+//   final int feed_id;
+//   // 이미지 경로
+//   final String photo;
+//
+//   final String member_id;
+//
+//   PastTModel({
+//     required this.feed_id,
+//     required this.photo,
+//     required this.member_id,
+//   });
+//
+//   factory PastTModel.fromJson({
+//     required Map<String, dynamic> json,
+//   }) {
+//     return PastTModel(
+//       feed_id: json['feed_id'],
+//       photo: json['photo'],
+//       member_id: json['member_id'],
+//     );
+//   }
+// }
 class PastTModel {
-  // 포스트 아이디
-  final int feed_id;
-  // 이미지 경로
-  final String photo;
 
-  final String member_id;
+  final List<PostDTOS> postDTOS;
 
   PastTModel({
-    required this.feed_id,
-    required this.photo,
-    required this.member_id,
+    required this.postDTOS,
   });
 
   factory PastTModel.fromJson({
     required Map<String, dynamic> json,
   }) {
     return PastTModel(
-      feed_id: json['feed_id'],
+      postDTOS: json['postDTOS'].map<PostDTOS>(
+            (x) => PostDTOS(
+              photo: x['photo'],
+              member_id: x['member_id'],
+        ),
+      ).toList(),
+    );
+  }
+}
+
+class PostDTOS {
+  final String photo;
+  final String member_id;
+
+
+  PostDTOS({
+    required this.photo,
+    required this.member_id,
+
+  });
+
+  factory PostDTOS.fromJson({
+    required Map<String, dynamic> json,
+  }) {
+    return PostDTOS(
       photo: json['photo'],
       member_id: json['member_id'],
+
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/layout/default_layout.dart';
@@ -22,39 +21,38 @@ class pastTournament extends ConsumerStatefulWidget {
 class _pastTournamentState extends ConsumerState<pastTournament> {
   ScrollController scrollController = ScrollController();
   List<String> topRanks = ["🥇", "🥈", "🥉"];
-  //List<dynamic> list = [];
+  // List<dynamic> list = [];
   String postid = '';
   String tournamentday = '';
 
-  // Future<Map<String, dynamic>> paginateLankTourna(String tournamentday) async {
-  //   //print(tournamentday);
-  //   final dio = Dio();
-  //   final storage = ref.read(secureStorageProvider);
-  //   final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-  //   final resp = await dio.get(
-  //     // MainFeed 관련 api IP주소 추가하기
-  //     'http://$API_SERVICE_URI/tournament/post/$tournamentday',
-  //     options: Options(
-  //       headers: {
-  //         'authorization': 'Bearer $accessToken',
-  //       },
-  //     ),
-  //   );
+  Future<Map<String, dynamic>> paginateLankTourna(String tournamentday) async {
+    //print(tournamentday);
+    final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    final resp = await dio.get(
+      // MainFeed 관련 api IP주소 추가하기
+      'http://$API_SERVICE_URI/tournament/history/$tournamentday',
+      options: Options(
+        headers: {
+          'authorization': 'Bearer $accessToken',
+        },
+      ),
+    );
     //
-    Future<List> paginateLankTourna(String tournamentday) async {
-      print(tournamentday);
-      final dio = Dio();
-      final storage = ref.read(secureStorageProvider);
-      final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-      final resp = await dio.get(
-        // MainFeed 관련 api IP주소 추가하기
-        'http://$API_SERVICE_URI/tournament/post/$tournamentday',
-        options: Options(
-          headers: {
-            'authorization': 'Bearer $accessToken',
-          },
-        ),
-      );
+    // Future<List> paginateLankTourna(String tournamentday) async {
+    //   final dio = Dio();
+    //   final storage = ref.read(secureStorageProvider);
+    //   final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    //   final resp = await dio.get(
+    //     // MainFeed 관련 api IP주소 추가하기
+    //     'http://$API_SERVICE_URI/tournament/post/$tournamentday',
+    //     options: Options(
+    //       headers: {
+    //         'authorization': 'Bearer $accessToken',
+    //       },
+    //     ),
+    //   );
 
     // list = (json.decode(resp.data['data'].toString()) as List)
     //     .map((data) => PastTModel.fromJson(json: resp.data['data']))
@@ -69,8 +67,7 @@ class _pastTournamentState extends ConsumerState<pastTournament> {
 
     //   print(list);
     // return list;//데이터 잘 옴
-
-     print(resp.data['data']);
+    //print(resp.data['data']); //데이터 확인
     return resp.data['data'];
   }
   //
@@ -145,7 +142,7 @@ class _pastTournamentState extends ConsumerState<pastTournament> {
                                       // paginateLankTourna(tournamentday);
                                       tournamentday =
                                           DateFormat('yyyy-MM-dd').format(date);
-                                      print(tournamentday);
+                                      //print(tournamentday);
                                       //paginateLankTourna(tournamentday);
                                     },
                                   );
@@ -176,13 +173,13 @@ class _pastTournamentState extends ConsumerState<pastTournament> {
                     ),
                   ];
                 },
-                body: FutureBuilder<List>(
+                body: FutureBuilder<Map<String, dynamic>> (
                   future: paginateLankTourna(tournamentday),
-                  builder: (_, AsyncSnapshot<List> snapshot) {
+                  builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                     // 에러처리
                     print('도착');
                     if (!snapshot.hasData) {
-                      print('error8');
+                      print('error');
                       return Center(
                         child: CircularProgressIndicator(),
                       );
@@ -195,11 +192,11 @@ class _pastTournamentState extends ConsumerState<pastTournament> {
                             sliver: SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 childCount: snapshot.data!.length,
-                                (context, index) {
+                                (_, index) {
                                   final item = snapshot.data![index];
                                   final pItem = PastTModel.fromJson(json: item);
                                   return pastTournamentCard.fromModel(
-                                      model: pItem, indexValue: index);
+                                      model: pItem, indexValue: index,);
                                   //return listCard(index);
                                 },
                               ),

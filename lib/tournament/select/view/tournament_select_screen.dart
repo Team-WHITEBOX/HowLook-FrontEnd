@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/tournament/select/view/rect_clipper.dart';
-import 'package:howlook/tournament/select/view/BeforeAfterScreen.dart';
-import 'package:slidable_button/slidable_button.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
+import 'package:dio/dio.dart';
+import 'package:howlook/common/const/data.dart';
+import 'package:howlook/tournament/select/model/tourna_select_model.dart';
+import 'package:howlook/tournament/select/component/tourna_select_card.dart';
 
 class TournamentIng extends StatefulWidget {
   const TournamentIng({Key? key}) : super(key: key);
@@ -24,45 +26,50 @@ class _TournamentIngState extends State<TournamentIng> {
   String result = "";
   int _value = 0;
 
+  String postid = '';
+  String tournamentday = '';
+  //
+  // Future<List> paginatePickTourna(String tournamentday) async {
+  //   print(tournamentday);
+  //   final dio = Dio();
+  //   final storage = ref.read(secureStorageProvider);
+  //   final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+  //   final resp = await dio.get(
+  //     // MainFeed 관련 api IP주소 추가하기
+  //     'http://$API_SERVICE_URI/tournament/post/$tournamentday',
+  //     options: Options(
+  //       headers: {
+  //         'authorization': 'Bearer $accessToken',
+  //       },
+  //     ),
+  //   );
+  //   print(resp.data['data']);
+  //   return resp.data['data'];
+  // }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      title: '오늘의 토너먼트',
-      child: SingleChildScrollView(
-        child: SafeArea(
-            child: Column(
-          children: [
-            const SizedBox(height: 15.0),
-            BeforeAfter(
-              beforeImage: tournamentImage(images[0]),
-              afterImage: tournamentImage(images[1]),
-            ),
-            const SizedBox(height: 15.0),
-            Text('Choose your preferred photo.',style: TextStyle(fontSize: 20),),
-            const SizedBox(height: 15.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                selectButton<int>(
-                  value: 1,
-                  groupValue: _value,
-                  leading: 'A',
-                  title: Text('Left'),
-                  onChanged: (value) => setState(() => _value = value!),
-                ),
-                selectButton<int>(
-                  value: 2,
-                  groupValue: _value,
-                  leading: 'B',
-                  title: Text('Right'),
-                  onChanged: (value) => setState(() => _value = value!),
-                ),
-              ],
-            )
-          ],
-        )),
-      ),
-    );
+        title: '오늘의 토너먼트',
+        child: SingleChildScrollView(
+          child: SafeArea(
+            // child: FutureBuilder<List>(
+            //     future: paginatePickTourna(tournamentday),
+            //     builder: (_, AsyncSnapshot<List> snapshot) {
+            //       // 에러처리
+            //       if (!snapshot.hasData) {
+            //         print('error');
+            //         return Center(
+            //           child: CircularProgressIndicator(),
+            //         );
+            //       }
+            //       final item = snapshot.data![0];
+            //       final pItem = SelectTournaModel.fromJson(json: item);
+            //       return TournamentIngCard.fromModel(model: pItem);
+            //     }),
+            child: Text('df'),
+          ),
+        ));
   }
 
   Widget tournamentImage(String path) {
@@ -81,6 +88,7 @@ class _TournamentIngState extends State<TournamentIng> {
   }
 }
 
+// 선택 버튼 코드
 class selectButton<T> extends StatelessWidget {
   final T value;
   final T groupValue;

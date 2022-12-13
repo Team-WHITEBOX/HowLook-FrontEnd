@@ -7,33 +7,52 @@ import 'package:howlook/tournament/model/past_tournament_model.dart';
 
 class pastTournamentCard extends StatefulWidget {
    final int index;
-  // 포스트 아이디
-  final int feed_id;
-  // 이미지 경로
-  final String photo;
+  // // 포스트 아이디
+  // final int feed_id;
+  // // 이미지 경로
+  // final String photo;
+  //
+  // final String member_id;
+  //
+  // pastTournamentCard({
+  //   required this.index,
+  //   required this.feed_id,
+  //   required this.photo,
+  //   required this.member_id,
+  //   // required this.index
+  //   Key? key,
+  // }) : super(key : key);
+  //
+  // factory pastTournamentCard.fromModel({
+  //   required PastTModel model,
+  //   required int indexValue
+  // }) {
+  //   return pastTournamentCard(
+  //     feed_id: model.feed_id,
+  //     photo: model.photo,
+  //     member_id: model.member_id,
+  //     index: indexValue,
+  //   );
+  // }
 
-  final String member_id;
+  final List<PostDTOS> postDTOS;
 
-  pastTournamentCard({
+  const pastTournamentCard({
     required this.index,
-    required this.feed_id,
-    required this.photo,
-    required this.member_id,
-    // required this.index
-    Key? key,
-  }) : super(key : key);
+    required this.postDTOS,
+    Key? key})
+      : super(key: key);
 
   factory pastTournamentCard.fromModel({
     required PastTModel model,
     required int indexValue
   }) {
     return pastTournamentCard(
-      feed_id: model.feed_id,
-      photo: model.photo,
-      member_id: model.member_id,
       index: indexValue,
+      postDTOS: model.postDTOS,
     );
   }
+
   // final String photo;
   // final String member_id;
   //
@@ -235,15 +254,30 @@ class pastTournamentCard extends StatefulWidget {
 //
 // }
 
+class Index{
+  final int indexV;
+
+  Index(this.indexV);
+}
 class _pastTournamentCardState extends State<pastTournamentCard> {
   ScrollController scrollController = ScrollController();
-
   List<String> topRanks = ["🥇", "🥈", "🥉"];
+  //
+  // int index=0;
 
+
+  final indexes = List<Index>.generate(
+    4,
+        (i) => Index(i),
+  );
 
   @override
   Widget build(BuildContext context) {
     return listCard(widget.index);
+    // //return listCard(widget.index);
+    // return Container(
+    //     child:listCard(index)
+    // );
   }
 
   // Widget LankingView() {
@@ -273,6 +307,7 @@ class _pastTournamentCardState extends State<pastTournamentCard> {
   //
   // final String member_id;
   //
+
   Widget listCard(int index) {
     // int index = widget.postDTOS.length;
     return Container(
@@ -305,7 +340,7 @@ class _pastTournamentCardState extends State<pastTournamentCard> {
                 ),
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width / 14,
-                  backgroundImage: NetworkImage('https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${widget.photo}'),
+                  backgroundImage: NetworkImage('https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${widget.postDTOS[index].photo}'),
 
                 )),
 
@@ -319,7 +354,7 @@ class _pastTournamentCardState extends State<pastTournamentCard> {
               ),
             ),
             Text(
-              ' ${widget.member_id}', // 원하는 형태로 조합
+              ' ${widget.postDTOS[index].member_id}', // 원하는 형태로 조합
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
@@ -340,7 +375,7 @@ class _pastTournamentCardState extends State<pastTournamentCard> {
               ),
             ),
           ],
-        )
+        ),
     );
   }
 
