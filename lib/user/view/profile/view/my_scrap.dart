@@ -8,7 +8,7 @@ import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/profile/component/scrap_card.dart';
 import 'package:howlook/user/view/profile/model/scrap_model.dart';
 
-class MyScrap extends StatefulWidget {
+class MyScrap extends ConsumerStatefulWidget {
   final String usermid; // 포스트 아이디로 특정 게시글 조회
   const MyScrap({required this.usermid, Key? key}) : super(key: key);
 

@@ -11,15 +11,15 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/user/view/profile/component/other_profile_card.dart';
 import 'package:howlook/user/view/profile/model/other_profile_model.dart';
 
-class OtherProfileScreen extends StatefulWidget {
+class OtherProfileScreen extends ConsumerStatefulWidget {
   final String usermid; // 포스트 아이디로 특정 게시글 조회
   const OtherProfileScreen({required this.usermid, Key? key}) : super(key: key);
 
   @override
-  State<OtherProfileScreen> createState() => _OtherProfileScreenState();
+  ConsumerState<OtherProfileScreen> createState() => _OtherProfileScreenState();
 }
 
-class _OtherProfileScreenState extends State<OtherProfileScreen> {
+class _OtherProfileScreenState extends ConsumerState<OtherProfileScreen> {
   Future<Map<String, dynamic>> paginateProfile() async {
     final dio = Dio();
     final storage = ref.read(secureStorageProvider);

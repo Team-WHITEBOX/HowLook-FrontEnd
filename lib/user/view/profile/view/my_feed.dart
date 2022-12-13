@@ -7,7 +7,7 @@ import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/profile/component/feed_card.dart';
 import 'package:howlook/user/view/profile/model/feed_model.dart';
 
-class MyFeed extends StatefulWidget {
+class MyFeed extends ConsumerStatefulWidget {
   final String usermid; // 포스트 아이디로 특정 게시글 조회
   const MyFeed({required this.usermid, Key? key}) : super(key: key);
 

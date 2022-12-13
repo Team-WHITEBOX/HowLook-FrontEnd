@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/review/model/normal_review_model.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:howlook/review/view/normal_review_screen.dart';
 
-class NormalReviewCard extends StatefulWidget {
+class NormalReviewCard extends ConsumerStatefulWidget {
   // 포스트 아이디
   final int npostId;
   // 첫 장 이미지 경로
@@ -30,7 +32,7 @@ class NormalReviewCard extends StatefulWidget {
   }
 
   @override
-  State<NormalReviewCard> createState() => _NormalReviewCardState();
+  ConsumerState<NormalReviewCard> createState() => _NormalReviewCardState();
 }
 
 class SliderController {
@@ -38,7 +40,7 @@ class SliderController {
   SliderController(this.sliderValue);
 }
 
-class _NormalReviewCardState extends State<NormalReviewCard> {
+class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
   SliderController _scoreCountController = SliderController(0.0);
   bool? buttonPower = false;
 
@@ -151,6 +153,7 @@ class _NormalReviewCardState extends State<NormalReviewCard> {
                 borderWidth: 2,
                 onPress: () async {
                   final dio = Dio();
+                  final storage = ref.read(secureStorageProvider);
                   final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
                   final resp = await dio.post(
                     'http://$API_SERVICE_URI/eval/reply/register?pid=${widget.npostId}&score=${_scoreCountController.sliderValue}',

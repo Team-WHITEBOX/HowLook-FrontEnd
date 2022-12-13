@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/tournament/select/view/tournament_select_screen.dart';
 import 'package:howlook/tournament/view/past_tournament_screen.dart';
 import 'package:dio/dio.dart';
@@ -9,16 +11,17 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/tournament/model/main_tournament_model.dart';
 import 'package:howlook/tournament/component/main_tournament_card.dart';
 
-class tournamentScreen extends StatefulWidget {
+class tournamentScreen extends ConsumerStatefulWidget {
   const tournamentScreen({Key? key}) : super(key: key);
 
   @override
-  State<tournamentScreen> createState() => _tournamentScreenState();
+  ConsumerState<tournamentScreen> createState() => _tournamentScreenState();
 }
 
-class _tournamentScreenState extends State<tournamentScreen> {
+class _tournamentScreenState extends ConsumerState<tournamentScreen> {
   Future<List> paginateTourna() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기

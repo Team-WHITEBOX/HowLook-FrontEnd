@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:howlook/common/const/colors.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
@@ -11,19 +13,20 @@ import 'package:howlook/tournament/model/past_tournament_model.dart';
 import 'package:howlook/tournament/component/past_tournament_card.dart';
 import 'package:howlook/tournament/component/lanking_card.dart';
 
-class pastTournament extends StatefulWidget {
+class pastTournament extends ConsumerStatefulWidget {
   const pastTournament({Key? key}) : super(key: key);
 
   @override
-  State<pastTournament> createState() => _pastTournamentState();
+  ConsumerState<pastTournament> createState() => _pastTournamentState();
 }
 
-class _pastTournamentState extends State<pastTournament> {
+class _pastTournamentState extends ConsumerState<pastTournament> {
   ScrollController scrollController = ScrollController();
   String postid = '';
 
   Future<Map<String, dynamic>> paginateLankTourna(String tournamentday) async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
@@ -46,6 +49,7 @@ class _pastTournamentState extends State<pastTournament> {
 
   Future<Map<String, dynamic>> paginatePastTourna() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기

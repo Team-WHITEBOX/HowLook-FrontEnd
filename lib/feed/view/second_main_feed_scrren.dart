@@ -61,40 +61,47 @@ class _SecondMainFeedScreenState extends ConsumerState<SecondMainFeedScreen> {
     // CursorPaginationRefetching
     final cp = data as CursorPagination;
 
-    return ListView.separated(
-      controller: controller,
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      itemCount: cp.data.length + 1,
-      itemBuilder: (_, index) {
-        if (index == cp.data.length) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Center(
-              child: data is CursorPaginationFetchingMore
-                  ? CircularProgressIndicator()
-                  : Text('마지막 데이터입니다. ㅠㅠ'),
-            ),
-          );
-        }
-        // 받아온 데이터 JSON 매핑하기
-        // 모델 사용
-        final pItem = cp.data[index];
-        return GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => MainFeedDetailScreen(
-                    npostId: pItem.npostId,
+    return RefreshIndicator(
+      onRefresh: ()async {
+        ref.read(mainfeedProvider.notifier).paginate(
+          forceRefetch: true,
+        );
+      },
+      child: ListView.separated(
+        controller: controller,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: cp.data.length + 1,
+        itemBuilder: (_, index) {
+          if (index == cp.data.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Center(
+                child: data is CursorPaginationFetchingMore
+                    ? CircularProgressIndicator()
+                    : Text('마지막 데이터입니다. ㅠㅠ'),
+              ),
+            );
+          }
+          // 받아온 데이터 JSON 매핑하기
+          // 모델 사용
+          final pItem = cp.data[index];
+          return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => MainFeedDetailScreen(
+                      npostId: pItem.npostId,
+                    ),
                   ),
-                ),
-              );
-            },
-            child: MainFeedCard.fromModel(model: pItem));
-      },
-      separatorBuilder: (_, index) {
-        return SizedBox(height: 16.0);
-      },
+                );
+              },
+              child: MainFeedCard.fromModel(model: pItem));
+        },
+        separatorBuilder: (_, index) {
+          return SizedBox(height: 16.0);
+        },
+      ),
     );
   }
 }

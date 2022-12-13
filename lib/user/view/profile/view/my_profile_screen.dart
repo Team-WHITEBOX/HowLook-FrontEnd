@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/profile/model/my_profile_screen_model.dart';
 import 'package:howlook/user/view/profile/component/my_profile_card.dart';
 
-class MyProfileScreen extends StatefulWidget {
+class MyProfileScreen extends ConsumerStatefulWidget {
 
   @override
-  State<MyProfileScreen> createState() => _MyProfileScreenState();
+  ConsumerState<MyProfileScreen> createState() => _MyProfileScreenState();
 }
 
-class _MyProfileScreenState extends State<MyProfileScreen> {
+class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
   String userid = '';
 
   Future<String> JWTcheck() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
@@ -36,6 +39,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   Future<Map<String, dynamic>> paginateProfile() async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       'http://$API_SERVICE_URI/member/$userid',

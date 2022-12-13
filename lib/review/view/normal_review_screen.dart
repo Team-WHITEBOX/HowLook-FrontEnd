@@ -1,18 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/review/model/normal_review_model.dart';
 import 'package:howlook/review/component/nomal_review_card.dart';
 
-class NormalReview extends StatelessWidget {
+class NormalReview extends ConsumerWidget {
   const NormalReview({Key? key}) : super(key: key);
 
-  Future<Map<String, dynamic>> paginateNormalReview() async {
+  Future<Map<String, dynamic>> paginateNormalReview(WidgetRef ref) async {
     final dio = Dio();
+    final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
@@ -29,13 +32,13 @@ class NormalReview extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
         title: 'Normal Review',
         child: SingleChildScrollView(
             child: SafeArea(
                 child: FutureBuilder<Map<String, dynamic>>(
-                    future: paginateNormalReview(),
+                    future: paginateNormalReview(ref),
                     builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(

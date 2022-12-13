@@ -102,6 +102,7 @@ class MainFeedDetailCard extends ConsumerWidget {
 
     Future<String> JWTcheck() async {
       final dio = Dio();
+      final storage = ref.read(secureStorageProvider);
       final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
       final resp = await dio.get(
         // MainFeed 관련 api IP주소 추가하기

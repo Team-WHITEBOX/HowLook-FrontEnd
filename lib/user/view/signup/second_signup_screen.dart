@@ -11,11 +11,14 @@ import 'package:howlook/user/view/signin/main_login_screen.dart';
 import 'package:intl/intl.dart';
 
 class SecondSignupScreen extends StatefulWidget {
-  final String mid;
-  final String mpw;
+  final String? mid;
+  final String? mpw;
 
-  const SecondSignupScreen({required this.mid, required this.mpw, Key? key})
-      : super(key: key);
+  const SecondSignupScreen({
+    this.mid,
+    this.mpw,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SecondSignupScreen> createState() => _SecondSignupScreenState();
@@ -56,7 +59,6 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
           'gender': "M",
         },
       );
-      print(resp.data);
     }
 
     // validate
@@ -73,8 +75,14 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
           ),
         );
       }
-      _postData();
+      // (widget.mid != null) ? _postData();
 
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => MainLoginScreen(),
+        ),
+            (route) => false,
+      );
     }
 
     return DefaultLayout(
@@ -242,7 +250,7 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
                           MaterialPageRoute(
                             builder: (_) => MainLoginScreen(),
                           ),
-                              (route) => false,
+                          (route) => false,
                         );
                       },
                       style: ElevatedButton.styleFrom(
