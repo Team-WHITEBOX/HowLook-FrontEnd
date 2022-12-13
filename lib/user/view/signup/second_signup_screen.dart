@@ -2,15 +2,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/view/root_tab.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/signin/main_login_screen.dart';
 import 'package:intl/intl.dart';
 
-class SecondSignupScreen extends StatefulWidget {
+class SecondSignupScreen extends ConsumerStatefulWidget {
   final String? mid;
   final String? mpw;
 
@@ -21,10 +22,10 @@ class SecondSignupScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SecondSignupScreen> createState() => _SecondSignupScreenState();
+  ConsumerState<SecondSignupScreen> createState() => _SecondSignupScreenState();
 }
 
-class _SecondSignupScreenState extends State<SecondSignupScreen> {
+class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
   String mid = '';
   String mpw = '';
   String userpw = '';
@@ -61,6 +62,27 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
       );
     }
 
+    void s_postData() async {
+      final storage = ref.read(secureStorageProvider);
+      final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+      final resp = await dio.put(
+        'http://$API_SERVICE_URI/member/socialedit',
+        options: Options(
+          headers: {
+            'authorization': 'Bearer $accessToken'
+          }
+        ),
+        data: {
+          'memberBirthDay': birthDay,
+          'memberHeight': height,
+          'memberName': name,
+          'memberNickName': nickName,
+          'memberPhone': phone,
+          'memberWeight': weight,
+        },
+      );
+    };
+
     // validate
     final formkey = GlobalKey<FormState>();
     Future<void> _submit() async {
@@ -75,7 +97,10 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
           ),
         );
       }
-      // (widget.mid != null) ? _postData();
+      if (widget.mid != null) // 소셜이 아닐 때
+        _postData();
+      else // 소셜일 때
+        s_postData();
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
@@ -217,7 +242,8 @@ class _SecondSignupScreenState extends State<SecondSignupScreen> {
                         currentTime: DateTime.now(),
                         locale: LocaleType.ko,
                         onConfirm: (date) {
-                          birthDay = DateFormat('yyyy-MM-dd').format(date);
+                          birthDay = DateFormat("yyyy-MM-ddTHH:mm:ss.mmm").format(date);
+                          print(date);
                         },
                       );
                     },

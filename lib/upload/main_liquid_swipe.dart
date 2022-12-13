@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/upload/Helpers/Helpers.dart';
 import 'package:howlook/upload/Helpers/LiquidSwipeChildDelegate.dart';
 import 'package:howlook/upload/PageHelpers/LiquidController.dart';
 import 'package:howlook/upload/PageHelpers/page_dragger.dart';
 import 'package:howlook/upload/PageHelpers/page_reveal.dart';
 import 'package:howlook/upload/Provider/LiquidProvider.dart';
+import 'package:howlook/upload/face_detector/face_detector_view.dart';
 import 'package:provider/provider.dart';
 
 export 'package:howlook/upload/Helpers/Helpers.dart';
@@ -318,7 +320,7 @@ class LiquidSwipe extends StatefulWidget {
         assert(initialPage >= 0 && initialPage < itemCount),
         assert(positionSlideIcon >= 0 && positionSlideIcon <= 1),
         liquidSwipeChildDelegate =
-        LiquidSwipeBuilderChildDelegate(itemBuilder, itemCount),
+            LiquidSwipeBuilderChildDelegate(itemBuilder, itemCount),
         super(key: key);
 
   @override
@@ -336,58 +338,72 @@ class _LiquidSwipe extends State<LiquidSwipe> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<LiquidProvider>(
-      create: (BuildContext context) {
-        return LiquidProvider(
-          initialPage: widget.initialPage,
-          loop: widget.enableLoop,
-          length: widget.liquidSwipeChildDelegate.itemCount(),
-          vsync: this,
-          slideIcon: widget.positionSlideIcon,
-          currentUpdateTypeCallback: widget.currentUpdateTypeCallback,
-          slidePercentCallback: widget.slidePercentCallback,
-          onPageChangeCallback: widget.onPageChangeCallback,
-          disableGesture: widget.disableUserGesture,
-          enableSideReveal: widget.enableSideReveal,
-        );
-      },
-      child:
-      Consumer(builder: (BuildContext context, LiquidProvider notifier, _) {
-        liquidController.setContext(context);
-        return Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            notifier.slideDirection == SlideDirection.leftToRight
-                ? widget.liquidSwipeChildDelegate
-                .getChildAtIndex(context, notifier.activePageIndex)
-                : widget.liquidSwipeChildDelegate
-                .getChildAtIndex(context, notifier.nextPageIndex),
-            //Pages
-            PageReveal(
-              //next page reveal
-              horizontalReveal: notifier.slidePercentHor,
-              child: notifier.slideDirection == SlideDirection.leftToRight
+    return DefaultLayout(
+      title: '',
+      actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => FaceDetectorView(),
+                ),
+              );
+            },
+            icon: Icon(Icons.upload)),
+      ],
+      child: ChangeNotifierProvider<LiquidProvider>(
+        create: (BuildContext context) {
+          return LiquidProvider(
+            initialPage: widget.initialPage,
+            loop: widget.enableLoop,
+            length: widget.liquidSwipeChildDelegate.itemCount(),
+            vsync: this,
+            slideIcon: widget.positionSlideIcon,
+            currentUpdateTypeCallback: widget.currentUpdateTypeCallback,
+            slidePercentCallback: widget.slidePercentCallback,
+            onPageChangeCallback: widget.onPageChangeCallback,
+            disableGesture: widget.disableUserGesture,
+            enableSideReveal: widget.enableSideReveal,
+          );
+        },
+        child: Consumer(
+            builder: (BuildContext context, LiquidProvider notifier, _) {
+          liquidController.setContext(context);
+          return Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              notifier.slideDirection == SlideDirection.leftToRight
                   ? widget.liquidSwipeChildDelegate
-                  .getChildAtIndex(context, notifier.nextPageIndex)
+                      .getChildAtIndex(context, notifier.activePageIndex)
                   : widget.liquidSwipeChildDelegate
-                  .getChildAtIndex(context, notifier.activePageIndex),
-              slideDirection: notifier.slideDirection,
-              iconSize: notifier.iconSize,
-              waveType: widget.waveType,
-              verticalReveal: notifier.slidePercentVer,
-              enableSideReveal: notifier.enableSideReveal,
-            ),
-            PageDragger(
-              //Used for gesture control
-              fullTransitionPX: widget.fullTransitionValue,
-              slideIconWidget: widget.slideIconWidget,
-              iconPosition: widget.positionSlideIcon,
-              ignoreUserGestureWhileAnimating:
-              widget.ignoreUserGestureWhileAnimating,
-            ), //PageDragger
-          ], //Widget//Stack
-        );
-      }),
+                      .getChildAtIndex(context, notifier.nextPageIndex),
+              //Pages
+              PageReveal(
+                //next page reveal
+                horizontalReveal: notifier.slidePercentHor,
+                child: notifier.slideDirection == SlideDirection.leftToRight
+                    ? widget.liquidSwipeChildDelegate
+                        .getChildAtIndex(context, notifier.nextPageIndex)
+                    : widget.liquidSwipeChildDelegate
+                        .getChildAtIndex(context, notifier.activePageIndex),
+                slideDirection: notifier.slideDirection,
+                iconSize: notifier.iconSize,
+                waveType: widget.waveType,
+                verticalReveal: notifier.slidePercentVer,
+                enableSideReveal: notifier.enableSideReveal,
+              ),
+              PageDragger(
+                //Used for gesture control
+                fullTransitionPX: widget.fullTransitionValue,
+                slideIconWidget: widget.slideIconWidget,
+                iconPosition: widget.positionSlideIcon,
+                ignoreUserGestureWhileAnimating:
+                    widget.ignoreUserGestureWhileAnimating,
+              ), //PageDragger
+            ], //Widget//Stack
+          );
+        }),
+      ),
     ); //Scaffold
   }
 }

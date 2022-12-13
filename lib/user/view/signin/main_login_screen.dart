@@ -9,6 +9,7 @@ import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:howlook/user/view/signup/second_signup_screen.dart';
 
 class MainLoginScreen extends ConsumerWidget {
   // const MainLoginScreen({Key? key}) : super(key: key);
@@ -54,7 +55,6 @@ class MainLoginScreen extends ConsumerWidget {
                       tokens[3].substring(0, tokens[3].length - 1);
 
                   print(accessToken);
-
                   final storage = ref.read(secureStorageProvider);
 
                   await storage.write(
@@ -62,12 +62,30 @@ class MainLoginScreen extends ConsumerWidget {
                   await storage.write(
                       key: ACCESS_TOKEN_KEY, value: accessToken);
 
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => RootTab(),
-                    ),
-                    (route) => false,
-                  );
+                  // 만약 소셜로그인 대상자가 조회가 안 된다면??
+                  try {
+                    final resp = await dio.get(
+                      'http://$API_SERVICE_URI/member/check',
+                      options: Options(
+                        headers: {
+                          'authorization': 'Bearer $accessToken',
+                        },
+                      ),
+                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => RootTab(),
+                      ),
+                          (route) => false,
+                    );
+                  } catch (e) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => SecondSignupScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  }
                 },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
               ),

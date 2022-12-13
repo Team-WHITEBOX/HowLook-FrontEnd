@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:howlook/common/const/colors.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CameraView extends StatefulWidget {
@@ -38,18 +39,7 @@ class _CameraViewState extends State<CameraView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        actions: [
-          if (_allowPicker)
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  print("Hello");
-                },
-                child: Icon(Icons.add),
-              ),
-            ),
-        ],
+        backgroundColor: PRIMARY_COLOR,
       ),
       body: _body(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -77,32 +67,53 @@ class _CameraViewState extends State<CameraView> {
     return ListView(shrinkWrap: true, children: [
       _image != null
           ? SizedBox(
-        height: 400,
-        width: 400,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Image.file(_image!),
-            if (widget.customPaint != null) widget.customPaint!,
-          ],
-        ),
-      )
+              height: 400,
+              width: 400,
+              child: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Image.file(_image!),
+                  if (widget.customPaint != null) widget.customPaint!,
+                ],
+              ),
+            )
           : Icon(
-        Icons.image,
-        size: 200,
-      ),
+              Icons.image,
+              size: 200,
+            ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('From Gallery'),
-          onPressed: () => _getImage(ImageSource.gallery),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('Take a picture'),
-          onPressed: () => _getImage(ImageSource.camera),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+              colors: [
+                Color(0xFFD07AFF),
+                Color(0xFFa6ceff),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              child: Text(
+                "업로드하기",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                minimumSize: Size(100, 50),
+              ),
+              onPressed: () => _getImage(ImageSource.gallery),
+            ),
+          ),
         ),
       ),
       if (_image != null)

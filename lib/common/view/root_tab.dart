@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/main_feed_screen.dart';
+import 'package:howlook/upload/face_detector/face_detector_view.dart';
 import 'package:howlook/user/view/profile/view/my_profile_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
@@ -9,7 +10,6 @@ import 'package:howlook/common/layout/bottom_navy_bar.dart';
 import 'package:howlook/upload/main_liquid_swipe.dart';
 import 'package:howlook/upload/feed_upload_screen.dart';
 import 'package:howlook/upload/review_upload_screen.dart';
-
 
 class RootTab extends StatefulWidget {
   final int? indexId;

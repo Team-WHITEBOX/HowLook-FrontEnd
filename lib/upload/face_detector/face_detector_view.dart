@@ -31,7 +31,7 @@ class _FaceDetectorViewState extends State<FaceDetectorView> {
   @override
   Widget build(BuildContext context) {
     return CameraView(
-      title: 'Face Detector',
+      title: '모자이크 도우미',
       customPaint: _customPaint,
       text: _text,
       onImage: (inputImage) {
@@ -64,9 +64,6 @@ class _FaceDetectorViewState extends State<FaceDetectorView> {
       // TODO: set _customPaint to draw boundingRect on top of image
       //
       final face = faces[0];
-
-      if (faces.length != 0) {
-      }
 
       _customPaint = CustomPaint(
         painter: MyPainter(face_position: face),

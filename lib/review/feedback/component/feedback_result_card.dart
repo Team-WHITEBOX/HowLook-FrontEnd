@@ -62,7 +62,7 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
               // 내용 영역
                 child: Column(
                   children: [
-                    Text('성별 점수 그래프',style: TextStyle(fontSize: 15, color: Colors.grey),),
+                    Text('성별 점수 그래프',style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'NotoSans'),),
                     ChartPage(
                       npostId: widget.npostId,
                     ),
@@ -80,31 +80,34 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text('종합 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text(''),
+            // Text('종합 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
             // Text('${score[0]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
           ],
         ),
-        Container(
-          width: 1,
-          height: 50,
-          color: Colors.white,
-        ),
+        // Container(
+        //   width: 1,
+        //   height: 50,
+        //   color: Colors.white,
+        // ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text('여자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text(''),
+            // Text('여자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
             // Text('${score[1]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
           ],
         ),
-        Container(
-          width: 1,
-          height: 50,
-          color: Colors.white,
-        ),
+        // Container(
+        //   width: 1,
+        //   height: 50,
+        //   color: Colors.white,
+        // ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text('남자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text(''),
+            // Text('남자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
             // Text('${score[2]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
           ],
         )
