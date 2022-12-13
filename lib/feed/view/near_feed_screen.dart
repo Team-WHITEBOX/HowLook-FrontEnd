@@ -1,15 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/component/main_feed_card.dart';
-import 'package:howlook/feed/model/main_feed_model.dart';
 import 'package:howlook/feed/provider/near_feed_provider.dart';
 import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NearFeedScreen extends ConsumerStatefulWidget {
   const NearFeedScreen({Key? key}) : super(key: key);
@@ -19,9 +16,21 @@ class NearFeedScreen extends ConsumerStatefulWidget {
 }
 
 class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
+  Future<void> _handleCameraAndMic(Permission permission) async {
+    final status = await permission.request();
+    print(status);
+  }
+
+  Future<void> onJoin() async {
+    await _handleCameraAndMic(Permission.location);
+    await _handleCameraAndMic(Permission.locationWhenInUse);
+  }
   final ScrollController controller = ScrollController();
+
   // 위치 정보 불러오기
   Future<Position> getCurrentLocation() async {
+    // onJoin();
+    LocationPermission permission = await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     return position;

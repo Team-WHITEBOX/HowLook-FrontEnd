@@ -1,12 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/near_feed_screen.dart';
 import 'package:howlook/feed/view/second_main_feed_scrren.dart';
-import 'package:howlook/upload/face_detector/camera_view.dart';
-import 'package:howlook/upload/face_detector/face_detector_view.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'main_feed_category.dart';
 
 class MainFeedScreen extends StatefulWidget {
@@ -36,7 +32,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             icon: Icon(Icons.gps_fixed_rounded),
           ),
           IconButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => CategoryScreen()),
                 );

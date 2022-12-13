@@ -46,8 +46,8 @@ class MyPainter extends CustomPainter {
     //   ..strokeWidth = 4;
     // canvas.drawRect(po, paint);
 
-     // final poa = Rect.fromLTRB(left / 2, top / 5, right / 2, bottom / 3);
-    final poa = Rect.fromLTRB(size.width / (left / 1), size.height - (top * 8), size.width - right, size.height * (bottom));
+    final poa = Rect.fromLTRB(left / 2, top / 5, right / 2, bottom / 3);
+    //final poa = Rect.fromLTRB(size.width / (left / 1), size.height - (top * 8), size.width - right, size.height * (bottom));
     //final poa = Rect.fromLTRB(left / 5, top / 6, right / 7, bottom / 8);
     final paint = Paint()
       ..color = Colors.red

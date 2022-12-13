@@ -99,9 +99,8 @@ class _FeedCommentCardState extends ConsumerState<FeedCommentCard> {
                 ),
                 CircleAvatar(
                   radius: 20.0,
-                  backgroundImage: Image.asset(
-                    //'http://$API_SERVICE_URI/photo/${pItem.profilePhoto}',
-                    'asset/img/Profile/HL1.JPG',
+                  backgroundImage: Image.network(
+                    ' ${widget.profilePhoto}',
                     fit: BoxFit.cover,
                   ).image,
                   // Image.network()로 추가하기
@@ -135,12 +134,10 @@ class _FeedCommentCardState extends ConsumerState<FeedCommentCard> {
                 return onLikeButtonTapped(isLiked, widget.replyId);
               },
               likeBuilder: (isLiked) {
-                // isLiked = widget.like_chk;
-                // print('isLiked = $isLiked');
                 return Icon(
                   Icons.favorite,
                   color: isLiked ? Colors.red : Colors.grey,
-                  size: 18,
+                  size: 20,
                 );
               },
               countBuilder: (likeCount, isLiked, String text) {

@@ -3,11 +3,24 @@ import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/common/model/n_pagination_params.dart';
 import 'package:howlook/feed/repository/mainfeed_repository.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+Future<void> _handleCameraAndMic(Permission permission) async {
+  final status = await permission.request();
+  print(status);
+}
+
+Future<void> onJoin() async {
+  await _handleCameraAndMic(Permission.location);
+  await _handleCameraAndMic(Permission.locationWhenInUse);
+}
 // 위치 정보 불러오기
 Future<Position> getCurrentLocation() async {
+  //onJoin();
+  LocationPermission permission = await Geolocator.requestPermission();
   Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);
+
   return position;
 }
 

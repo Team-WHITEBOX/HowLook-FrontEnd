@@ -17,7 +17,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:howlook/user/view/profile/view/my_profile_screen.dart';
 import 'package:howlook/user/view/profile/view/profile_screen.dart';
 
-import '../view/comment_screen.dart';
+import '../view/comment_modal.dart';
 
 class MainFeedDetailCard extends ConsumerWidget {
   final TempUserInfoModel userPostInfo;
