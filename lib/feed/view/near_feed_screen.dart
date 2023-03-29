@@ -84,9 +84,9 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
             controller: controller,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: cp.data.length + 1,
+            itemCount: cp.data.content.length + 1,
             itemBuilder: (_, index) {
-              if (index == cp.data.length) {
+              if (index == cp.data.content.length) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
@@ -99,13 +99,13 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
               }
               // 받아온 데이터 JSON 매핑하기
               // 모델 사용
-              final pItem = cp.data[index];
+              final pItem = cp.data.content[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => FeedDetailScreen(
-                        postId: pItem.npostId,
+                        postId: pItem.postId,
                       ),
                     ),
                   );

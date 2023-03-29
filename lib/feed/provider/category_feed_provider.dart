@@ -103,18 +103,17 @@ class CategoryFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
     final resp = await crepository.cpaginate(
       categorypaginationParams: categorypaginationParams,
     );
-    print('hello3');
 
     if (state is CursorPaginationFetchingMore) {
       final pState = state as CursorPaginationFetchingMore;
 
-      // 기존 데이터에 새로운 데이터 추가
-      state = resp.copyWith(
-        data: [
-          ...pState.data,
-          ...resp.data,
-        ],
-      );
+      // // 기존 데이터에 새로운 데이터 추가
+      // state = resp.copyWith(
+      //   feedmodel: [
+      //     ...pState.pagemodel.content, // 기존에 있던 데이터에
+      //     ...resp.pagemodel.content, // 새로운 데이터 붙여넣기
+      //   ],
+      // );
     } else {
       state = resp;
     }

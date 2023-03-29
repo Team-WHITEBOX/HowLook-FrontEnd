@@ -1,3 +1,5 @@
+import 'package:howlook/feed/model/feed_model.dart';
+import 'package:howlook/feed/model/page_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'cursor_pagination_model.g.dart';
 
@@ -27,7 +29,8 @@ class CursorPagination<T> extends CursorPaginationBase {
   // 여긴 페이지네이션 관련해서 데이터 더 있는지에 대한 정보가 있으면 좋을 것 같음
   // final metaData~~~
   // 이건 페이지네이션 해서 들고온 데이터
-  final List<T> data;
+  // final List<T> data;
+  final PageModel data;
 
   // ** 1차원적으로 생각했을 때 CursorPagination에 isLoading라는 bool 타입의 변수를 추가하면
   // 그 값에 따라 데이터 로딩 중인지 아닌지 구별 가능 하지만, 맨 처음엔 데이터가 없지만 속성을 유지하려고
@@ -41,7 +44,7 @@ class CursorPagination<T> extends CursorPaginationBase {
   });
 
   CursorPagination copyWith({
-    List<T>? data,
+    PageModel? data,
   }) {
     return CursorPagination(
       data: data ?? this.data,

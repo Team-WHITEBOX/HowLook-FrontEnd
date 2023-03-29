@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/feed/view/main_screen.dart';
+import 'package:howlook/feed/view/home_screen.dart';
 import 'package:howlook/upload/face_detector/face_detector_view.dart';
 import 'package:howlook/user/view/profile/view/my_profile_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
@@ -131,7 +131,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
           physics: NeverScrollableScrollPhysics(),
           controller: controller,
           children: [
-            MainScreen(),
+            HomeScreen(),
             MainReviewScreen(),
             Builder(builder: (context) => LiquidSwipe(pages: pages)),
             tournamentScreen(),

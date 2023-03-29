@@ -12,8 +12,8 @@ final feedDetailProvider = Provider.family<FeedModel?, int>((ref, id) {
   if (state is! CursorPagination<FeedModel>) {
     return null;
   }
-  
-  return state.data.firstWhere((element) => element.postId == id);
+
+  return state.data.content.firstWhere((element) => element.postId == id);
 });
 
 // 캐시를 관리하는 모든 Provider => StateNotifierProvider
@@ -74,12 +74,11 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
       //    fetchMore가 아닐때 - 새로고침의 의도가 있을 수 있다. (기존 요청 있더라도 위로 댕겨서 새로고침하는 것을 의미)
       if (state is CursorPagination && !forceRefetch) {
         final pState = state as CursorPagination;
-        // // <- 이건 HowLook에 없는 파라미터라 일단 여기선 Skip ->
-        // // 만약 pState.meta.hasMore이 False일 경우 아래 if문에 진입하여 그대로 return
-        // // -> 더이상 가져올 데이터가 없기 때문
-        // if (!pState.meta.hasMore) {
-        //   return;
-        // }
+        // 만약 pState.data.totalPages == pState.data.number이 같을 경우
+        // 아래 if문에 진입하여 그대로 return -> 더이상 가져올 데이터가 없기 때문
+        if (pState.data.totalPages == pState.data.number) {
+          return;
+        }
       }
 
       // ** 로딩 상태의 정의 **
@@ -111,10 +110,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
         );
 
         paginationParams = paginationParams.copyWith(
-          // // 메타데이터에 현재 페이지 넘버가 추가 된다면 다음과 같이 수정
-          // page: pState.meta.last.pageNum
-          page: (fetchPage + 1),
-          // page:  + 1, 지금 여기서 다음 페이지 값 넣어줘야 함,,,,
+          page: (pState.data.number + 1),
         );
       }
 
@@ -145,10 +141,12 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
 
         // 기존 데이터에 새로운 데이터 추가
         state = resp.copyWith(
-          data: [
-            ...pState.data, // 기존에 있던 데이터에
-            ...resp.data, // 새로운 데이터 붙여넣기
-          ],
+          data: resp.data.copyWith(
+            content: [
+              ...pState.data.content,
+              ...resp.data.content,
+            ],
+          ),
         );
       } else {
         // CursorPaginationLoading 또는 CursorPaginationRefetching 상황이면

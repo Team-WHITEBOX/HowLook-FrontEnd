@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/common/view/kakao_login.dart';
-import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 import 'package:dio/dio.dart';
-import 'package:howlook/user/view/signup/second_signup_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
 
 class IntroScreen extends ConsumerWidget {

@@ -19,7 +19,7 @@ class _FeedRepository implements FeedRepository {
   String? baseUrl;
 
   @override
-  Future<CursorPagination<FeedModel>> paginate(
+  Future<CursorPagination<PageModel>> paginate(
       {paginationParams = const PaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -29,7 +29,7 @@ class _FeedRepository implements FeedRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CursorPagination<FeedModel>>(Options(
+        _setStreamType<CursorPagination<PageModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -41,15 +41,15 @@ class _FeedRepository implements FeedRepository {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CursorPagination<FeedModel>.fromJson(
+    final value = CursorPagination<PageModel>.fromJson(
       _result.data!,
-      (json) => FeedModel.fromJson(json as Map<String, dynamic>),
+      (json) => PageModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }
 
   @override
-  Future<CursorPagination<FeedModel>> npaginate(
+  Future<CursorPagination<PageModel>> npaginate(
       {nearpaginationParams = const NearPaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -60,7 +60,7 @@ class _FeedRepository implements FeedRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CursorPagination<FeedModel>>(Options(
+        _setStreamType<CursorPagination<PageModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -72,15 +72,15 @@ class _FeedRepository implements FeedRepository {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CursorPagination<FeedModel>.fromJson(
+    final value = CursorPagination<PageModel>.fromJson(
       _result.data!,
-      (json) => FeedModel.fromJson(json as Map<String, dynamic>),
+      (json) => PageModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }
 
   @override
-  Future<CursorPagination<FeedModel>> cpaginate(
+  Future<CursorPagination<PageModel>> cpaginate(
       {categorypaginationParams = const CategoryPaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -91,7 +91,7 @@ class _FeedRepository implements FeedRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CursorPagination<FeedModel>>(Options(
+        _setStreamType<CursorPagination<PageModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -103,9 +103,9 @@ class _FeedRepository implements FeedRepository {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CursorPagination<FeedModel>.fromJson(
+    final value = CursorPagination<PageModel>.fromJson(
       _result.data!,
-      (json) => FeedModel.fromJson(json as Map<String, dynamic>),
+      (json) => PageModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

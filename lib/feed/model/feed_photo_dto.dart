@@ -20,6 +20,4 @@ class PhotoDTOs {
       _$PhotoDTOsFromJson(json);
 
   Map<String, dynamic> toJson() => _$PhotoDTOsToJson(this);
-
-
 }

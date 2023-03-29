@@ -7,6 +7,7 @@ import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/common/model/near_pagination_params.dart';
 import 'package:howlook/common/model/pagination_params.dart';
 import 'package:howlook/feed/model/feed_model.dart';
+import 'package:howlook/feed/model/page_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'feed_repository.g.dart';
@@ -31,7 +32,7 @@ abstract class FeedRepository {
     'accessToken': 'true',
   })
   // API에 쿼리 파라미터 추가하는 방법 - PaginationParams 클래스로 정의
-  Future<CursorPagination<FeedModel>> paginate({
+  Future<CursorPagination<PageModel>> paginate({
     // @Quaries()로 annotation할 시 해당 클래스를 쿼리 파라미터로 사용 가능
     // 첫번째 요청에는 안 넣어도 되지만 이후부터 값을 입력해야하기 때문에 우선 ?(null 가능)로 선언
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
@@ -43,7 +44,7 @@ abstract class FeedRepository {
     'accessToken': 'true',
   })
   // API에 쿼리 파라미터 추가하는 방법
-  Future<CursorPagination<FeedModel>> npaginate({
+  Future<CursorPagination<PageModel>> npaginate({
     @Queries() NearPaginationParams? nearpaginationParams =
         const NearPaginationParams(),
   });
@@ -54,7 +55,7 @@ abstract class FeedRepository {
     'accessToken': 'true',
   })
   // API에 쿼리 파라미터 추가하는 방법
-  Future<CursorPagination<FeedModel>> cpaginate({
+  Future<CursorPagination<PageModel>> cpaginate({
     @Queries() CategoryPaginationParams? categorypaginationParams =
         const CategoryPaginationParams(),
   });
