@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'c_pagination_params.g.dart';
+part 'category_pagination_params.g.dart';
 
 @JsonSerializable()
 class CategoryPaginationParams {

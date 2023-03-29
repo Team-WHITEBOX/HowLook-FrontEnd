@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/n_pagination_params.dart';
-import 'package:howlook/feed/repository/mainfeed_repository.dart';
+import 'package:howlook/common/model/near_pagination_params.dart';
+import 'package:howlook/feed/repository/feed_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> _handleCameraAndMic(Permission permission) async {
@@ -27,14 +27,14 @@ Future<Position> getCurrentLocation() async {
 final nearfeedProvider =
     StateNotifierProvider<NearFeedStateNotifier, CursorPaginationBase>(
   (ref) {
-    final nrepository = ref.watch((mainFeedRepositoryProvider));
+    final nrepository = ref.watch((FeedRepositoryProvider));
     final notifier = NearFeedStateNotifier(nrepository: nrepository);
     return notifier;
   },
 );
 
 class NearFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
-  final MainFeedRepository nrepository;
+  final FeedRepository nrepository;
 
   NearFeedStateNotifier({
     required this.nrepository,

@@ -3,7 +3,7 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/user/view/profile/view/my_feed.dart';
 import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
 import 'package:howlook/user/view/profile/view/my_scrap.dart';
-import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail_screen.dart';
 import 'package:howlook/user/view/profile/model/other_profile_model.dart';
 
 class OtherProfileCard extends StatelessWidget {
@@ -92,8 +92,8 @@ class OtherProfileCard extends StatelessWidget {
                                   return InkWell(
                                     onTap: (){
                                       Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (_) => MainFeedDetailScreen(
-                                          npostId: memberFeeds[index].npostId,
+                                        builder: (_) => FeedDetailScreen(
+                                          postId: memberFeeds[index].npostId,
                                         ),
                                       ));
                                     },

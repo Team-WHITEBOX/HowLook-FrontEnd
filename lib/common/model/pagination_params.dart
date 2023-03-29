@@ -4,21 +4,18 @@ part 'pagination_params.g.dart';
 
 @JsonSerializable()
 class PaginationParams {
+  // API 쿼리 파라미터에 들어가는 데이터 값 정의
   final int? page;
-  // final String? after;
 
   const PaginationParams({
     this.page,
-    // this.after,
   });
 
   PaginationParams copyWith({
-    // String? after,
     int? page,
   }) {
     return PaginationParams(
       page: page ?? this.page,
-      // after: after ?? this.after,
     );
    }
 

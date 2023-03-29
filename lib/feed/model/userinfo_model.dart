@@ -2,7 +2,7 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/utils/data_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'userinfomodel.g.dart';
+part 'userinfo_model.g.dart';
 
 @JsonSerializable()
 class UserInfoModel {

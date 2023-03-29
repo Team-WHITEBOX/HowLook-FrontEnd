@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'mainfeed_repository.dart';
+part of 'feed_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'mainfeed_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _MainFeedRepository implements MainFeedRepository {
-  _MainFeedRepository(
+class _FeedRepository implements FeedRepository {
+  _FeedRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,7 +19,7 @@ class _MainFeedRepository implements MainFeedRepository {
   String? baseUrl;
 
   @override
-  Future<CursorPagination<MainFeedModel>> paginate(
+  Future<CursorPagination<FeedModel>> paginate(
       {paginationParams = const PaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -29,51 +29,27 @@ class _MainFeedRepository implements MainFeedRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CursorPagination<MainFeedModel>>(Options(
+        _setStreamType<CursorPagination<FeedModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/feed/recent',
+              '/recent',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CursorPagination<MainFeedModel>.fromJson(
+    final value = CursorPagination<FeedModel>.fromJson(
       _result.data!,
-      (json) => MainFeedModel.fromJson(json as Map<String, dynamic>),
+      (json) => FeedModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }
 
   @override
-  Future<MainFeedDetailModel> getMainFeedDetail({required NPostId}) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'accessToken': 'true'};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<MainFeedDetailModel>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/feed/readbypid?NPostId=${NPostId}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = MainFeedDetailModel.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<CursorPagination<MainFeedModel>> npaginate(
+  Future<CursorPagination<FeedModel>> npaginate(
       {nearpaginationParams = const NearPaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -84,27 +60,27 @@ class _MainFeedRepository implements MainFeedRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CursorPagination<MainFeedModel>>(Options(
+        _setStreamType<CursorPagination<FeedModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/feed/near',
+              '/near',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CursorPagination<MainFeedModel>.fromJson(
+    final value = CursorPagination<FeedModel>.fromJson(
       _result.data!,
-      (json) => MainFeedModel.fromJson(json as Map<String, dynamic>),
+      (json) => FeedModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }
 
   @override
-  Future<CursorPagination<MainFeedModel>> cpaginate(
+  Future<CursorPagination<FeedModel>> cpaginate(
       {categorypaginationParams = const CategoryPaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -115,22 +91,46 @@ class _MainFeedRepository implements MainFeedRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CursorPagination<MainFeedModel>>(Options(
+        _setStreamType<CursorPagination<FeedModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/feed/search',
+              '/search',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CursorPagination<MainFeedModel>.fromJson(
+    final value = CursorPagination<FeedModel>.fromJson(
       _result.data!,
-      (json) => MainFeedModel.fromJson(json as Map<String, dynamic>),
+      (json) => FeedModel.fromJson(json as Map<String, dynamic>),
     );
+    return value;
+  }
+
+  @override
+  Future<FeedModel> getMainFeedDetail({required postId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<FeedModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/readbypid?postId=${postId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = FeedModel.fromJson(_result.data!);
     return value;
   }
 

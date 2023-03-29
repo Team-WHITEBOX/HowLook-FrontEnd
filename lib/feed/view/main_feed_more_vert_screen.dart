@@ -9,12 +9,12 @@ import 'package:howlook/common/secure_storage/secure_storage.dart';
 class MainFeedMoreVertScreen extends ConsumerWidget {
   final String? userId;
   final String memberId;
-  final int npostId;
+  final int postId;
 
   const MainFeedMoreVertScreen({
     required this.userId,
     required this.memberId,
-    required this.npostId,
+    required this.postId,
     Key? key,
   }) : super(key: key);
 
@@ -46,7 +46,7 @@ class MainFeedMoreVertScreen extends ConsumerWidget {
                         await storage.read(key: ACCESS_TOKEN_KEY);
                     try {
                       final resp = await dio.post(
-                        'http://$API_SERVICE_URI/feed/scrap?npost_id=$npostId',
+                        'http://$API_SERVICE_URI/feed/scrap?npost_id=$postId',
                         options: Options(
                           headers: {
                             'authorization': 'Bearer $accessToken',
@@ -154,9 +154,9 @@ class MainFeedMoreVertScreen extends ConsumerWidget {
                                       final storage = ref.read(secureStorageProvider);
                                       final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
                                       try {
-                                        print('http://$API_SERVICE_URI/feed/delete?npost_id=$npostId');
+                                        print('http://$API_SERVICE_URI/feed/delete?npost_id=$postId');
                                         final resp = await dio.delete(
-                                          'http://$API_SERVICE_URI/feed/delete?npost_id=$npostId',
+                                          'http://$API_SERVICE_URI/feed/delete?npost_id=$postId',
                                           options: Options(
                                             headers: {
                                               'authorization':

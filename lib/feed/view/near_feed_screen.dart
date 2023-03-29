@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/feed/component/main_feed_card.dart';
+import 'package:howlook/feed/component/feed_card.dart';
 import 'package:howlook/feed/provider/near_feed_provider.dart';
-import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NearFeedScreen extends ConsumerStatefulWidget {
@@ -25,6 +25,7 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
     await _handleCameraAndMic(Permission.location);
     await _handleCameraAndMic(Permission.locationWhenInUse);
   }
+
   final ScrollController controller = ScrollController();
 
   // 위치 정보 불러오기
@@ -74,10 +75,10 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: RefreshIndicator(
-          onRefresh: ()async {
+          onRefresh: () async {
             ref.read(nearfeedProvider.notifier).paginate(
-              forceRefetch: true,
-            );
+                  forceRefetch: true,
+                );
           },
           child: ListView.separated(
             controller: controller,
@@ -87,8 +88,8 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
             itemBuilder: (_, index) {
               if (index == cp.data.length) {
                 return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   child: Center(
                     child: data is CursorPaginationFetchingMore
                         ? CircularProgressIndicator()
@@ -101,13 +102,15 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
               final pItem = cp.data[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => MainFeedDetailScreen(
-                      npostId: pItem.npostId,
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => FeedDetailScreen(
+                        postId: pItem.npostId,
+                      ),
                     ),
-                  ));
+                  );
                 },
-                child: MainFeedCard.fromModel(model: pItem),
+                child: FeedCard.fromModel(model: pItem),
               );
             },
             separatorBuilder: (_, index) {

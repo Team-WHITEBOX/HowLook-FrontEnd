@@ -8,7 +8,7 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/user/view/signin/main_login_screen.dart';
+import 'package:howlook/user/view/signin/intro_screen.dart';
 import 'package:intl/intl.dart';
 
 class SecondSignupScreen extends ConsumerStatefulWidget {
@@ -49,8 +49,8 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
       final resp = await dio.post(
         'http://$API_SERVICE_URI/account/join',
         data: {
-          'mid': widget.mid,
-          'mpw': widget.mpw,
+          'memberId': widget.mid,
+          'memberPassword': widget.mpw,
           'name': name,
           'nickName': nickName,
           'phone': phone,
@@ -104,7 +104,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => MainLoginScreen(),
+          builder: (_) => IntroScreen(),
         ),
             (route) => false,
       );
@@ -274,7 +274,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                         _submit();
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                            builder: (_) => MainLoginScreen(),
+                            builder: (_) => IntroScreen(),
                           ),
                           (route) => false,
                         );

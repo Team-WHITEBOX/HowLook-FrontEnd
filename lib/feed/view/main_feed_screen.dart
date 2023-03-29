@@ -1,250 +1,101 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/feed/view/near_feed_screen.dart';
-import 'package:howlook/feed/view/second_main_feed_scrren.dart';
-import 'main_feed_category.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/common/model/cursor_pagination_model.dart';
+import 'package:howlook/feed/component/feed_card.dart';
+import 'package:howlook/feed/provider/main_feed_provider.dart';
+import 'package:howlook/feed/view/feed_detail_screen.dart';
 
-class MainFeedScreen extends StatefulWidget {
-  const MainFeedScreen({Key? key}) : super(key: key);
+class MainFeedScreen extends ConsumerStatefulWidget {
 
   @override
-  State<MainFeedScreen> createState() => _MainFeedScreenState();
+  ConsumerState<MainFeedScreen> createState() =>
+      _MainFeedScreenState();
 }
 
-class _MainFeedScreenState extends State<MainFeedScreen> {
+class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
+  final ScrollController controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(scrollListener);
+  }
+
+  void scrollListener() {
+    // 현재 위치가 최대 길이보다 조금 덜 되는 위치까지 왔다면 새로운 데이터를 추가 요청
+    if (controller.offset > controller.position.maxScrollExtent - 300) {
+      ref.read(mainfeedProvider.notifier).paginate(
+        fetchMore: true,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool _canProcess = true;
-    bool _isBusy = false;
-    CustomPaint? _customPaint;
-    String? _text;
+    // 따로 autoDispose 설정하지 않으면 한번 생성된 이후로 데이터가 날아가지 않고 캐싱된다.
+    final data = ref.watch(mainfeedProvider);
 
-    return DefaultLayout(
-        title: 'HowLook',
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => NearFeedScreen()),
-              );
-            },
-            icon: Icon(Icons.gps_fixed_rounded),
-          ),
-          IconButton(
-              onPressed: () async {
+    // 완전 처음 로딩일 떄
+    if (data is CursorPaginationLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    // 에러
+    if (data is CursorPaginationError) {
+      return Center(
+        child: Text(data.message),
+      );
+    }
+
+    // CursorPagination 아래엔 다음과 같은 클래스가 존재
+    // CursorPaginationFetchingMore
+    // CursorPaginationRefetching
+    final cp = data as CursorPagination;
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.read(mainfeedProvider.notifier).paginate(
+          forceRefetch: true,
+        );
+      },
+      child: ListView.separated(
+        controller: controller,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: cp.data.length + 1,
+        itemBuilder: (_, index) {
+          if (index == cp.data.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Center(
+                child: data is CursorPaginationFetchingMore
+                    ? CircularProgressIndicator()
+                    : Text('마지막 데이터입니다. ㅠㅠ'),
+              ),
+            );
+          }
+          // 받아온 데이터 JSON 매핑하기
+          // 모델 사용
+          final pItem = cp.data[index];
+          return GestureDetector(
+              onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => CategoryScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => FeedDetailScreen(
+                      postId: pItem.postId,
+                    ),
+                  ),
                 );
               },
-              icon: Icon(Icons.filter_alt)),
-        ],
-        child: SafeArea(
-          top: true,
-          bottom: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: SecondMainFeedScreen(),
-          ),
-        ));
+              child: FeedCard.fromModel(model: pItem));
+        },
+        separatorBuilder: (_, index) {
+          return SizedBox(height: 16.0);
+        },
+      ),
+    );
   }
 }
-
-//
-// import 'dart:ui';
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:dio/dio.dart';
-// import 'package:howlook/common/const/data.dart';
-// import 'package:howlook/common/layout/default_layout.dart';
-// import 'package:howlook/feed/component/main_feed_card.dart';
-// import 'package:howlook/feed/model/main_feed_model.dart';
-// import 'package:howlook/feed/view/main_feed_detail_screen.dart';
-// import 'package:howlook/feed/view/near_feed_screen.dart';
-// import 'main_feed_category.dart';
-//
-// class MainFeedScreen extends StatefulWidget {
-//   const MainFeedScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   State<MainFeedScreen> createState() => _MainFeedScreenState();
-// }
-//
-// class _MainFeedScreenState extends State<MainFeedScreen> {
-//   // 페이지네이션 api 호출하여 메인피드 데이터 값 받아오기
-//   Future<List> paginateMainFeed() async {
-//     final dio = Dio();
-//     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-//     int page = 0;
-//
-//     final resp = await dio.get(
-//       // MainFeed 관련 api IP주소 추가하기
-//       'http://$API_SERVICE_URI/feed/recent?page=$page',
-//       options: Options(
-//         headers: {
-//           'authorization': 'Bearer $accessToken',
-//         },
-//       ),
-//     );
-//     // 응답 데이터 중 data 값만 반환하여 사용하기!!
-//     return resp.data['data'];
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultLayout(
-//         title: 'HowLook',
-//         actions: <Widget>[
-//           IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble)),
-//           IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
-//         ],
-//         child: SingleChildScrollView(
-//           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-//           child: SafeArea(
-//             top: true,
-//             bottom: false,
-//             child: Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 10.0),
-//               child: Column(
-//                 //mainAxisAlignment: MainAxisAlignment.start,
-//                 children: [
-//                   // 이웃, 모두, 카테고리 버튼 관련
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.start,
-//                     children: [
-//                       TextButton(
-//                         style: TextButton.styleFrom(
-//                           minimumSize: Size(50, 20),
-//                         ),
-//                         onPressed: () {
-//                           // 임시로 이웃버튼 누르면 각 피드 상세 페이지로 이동할 수 있게 우선 구현
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) => NearFeedScreen(),
-//                             ),
-//                           );
-//                         },
-//                         child: Text(
-//                           "이웃",
-//                           style: TextStyle(
-//                             fontFamily: 'NotoSans',
-//                             fontSize: 15,
-//                             fontWeight: FontWeight.w500,
-//                             color: Colors.black,
-//                           ),
-//                         ),
-//                       ),
-//                       TextButton.icon(
-//                         label: Text(''),
-//                         icon: Icon(
-//                           Icons.filter_alt,
-//                           size: 20.0,
-//                         ),
-//                         // 버튼 누르면 필터 설정 값 불러오기
-//                         onPressed: () async {
-//                           final result = await Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) => CategoryScreen(),
-//                             ),
-//                           );
-//                           // result.returnValue에 카테고리 설정 값 날라옴
-//                           // if (result != null) {
-//                           //   print("${result.returnValue.isMenChecked}");
-//                           // }
-//                         },
-//                         style: TextButton.styleFrom(
-//                             primary: Colors.black, minimumSize: Size(50, 20)),
-//                       ),
-//                     ],
-//                   ),
-//                   FutureBuilder<List>(
-//                     future: paginateMainFeed(),
-//                     builder: (context, AsyncSnapshot<List> snapshot) {
-//                       // 에러처리
-//                       if (!snapshot.hasData) {
-//                         print('error');
-//                         return Center(
-//                           child: CircularProgressIndicator(),
-//                         );
-//                       }
-//                       return ListView.separated(
-//                         scrollDirection: Axis.vertical,
-//                         shrinkWrap: true,
-//                         itemCount: snapshot.data!.length,
-//                         itemBuilder: (_, index) {
-//                           // 받아온 데이터 JSON 매핑하기
-//                           // 모델 사용
-//                           final item = snapshot.data![index];
-//                           final pItem = MainFeedModel.fromJson(json: item);
-//                           return GestureDetector(
-//                               onTap: () {
-//                                 Navigator.of(context).push(MaterialPageRoute(
-//                                   builder: (_) => MainFeedDetailScreen(
-//                                     npostId: pItem.npostId,
-//                                   ),
-//                                 ));
-//                               },
-//                               child: MainFeedCard.fromModel(model: pItem));
-//                         },
-//                         separatorBuilder: (_, index) {
-//                           return SizedBox(height: 16.0);
-//                         },
-//                       );
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ));
-//   }
-// }
-
-// Row(
-// mainAxisAlignment: MainAxisAlignment.start,
-// children: [
-// TextButton(
-// style: TextButton.styleFrom(
-// minimumSize: Size(50, 20),
-// ),
-// onPressed: () {
-// // 임시로 이웃버튼 누르면 각 피드 상세 페이지로 이동할 수 있게 우선 구현
-// Navigator.of(context).push(
-// MaterialPageRoute(
-// builder: (_) => NearFeedScreen(),
-// ),
-// );
-// },
-// child: Text(
-// "이웃",
-// style: TextStyle(
-// fontFamily: 'NotoSans',
-// fontSize: 15,
-// fontWeight: FontWeight.w500,
-// color: Colors.black,
-// ),
-// ),
-// ),
-// TextButton.icon(
-// label: Text(''),
-// icon: Icon(
-// Icons.filter_alt,
-// size: 20.0,
-// ),
-// // 버튼 누르면 필터 설정 값 불러오기
-// onPressed: () async {
-// Navigator.of(context).push(
-// MaterialPageRoute(
-// builder: (_) => CategoryScreen(),
-// ),
-// );
-// // result.returnValue에 카테고리 설정 값 날라옴
-// // if (result != null) {
-// //   print("${result.returnValue.isMenChecked}");
-// // }
-// },
-// style: TextButton.styleFrom(
-// primary: Colors.black, minimumSize: Size(50, 20)),
-// ),
-// ],
-// ),

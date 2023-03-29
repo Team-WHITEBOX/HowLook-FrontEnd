@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'photo_dto.dart';
+part of 'feed_photo_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

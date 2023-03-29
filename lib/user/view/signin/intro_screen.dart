@@ -10,10 +10,9 @@ import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/user/view/signup/second_signup_screen.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
 
-class MainLoginScreen extends ConsumerWidget {
-  // const MainLoginScreen({Key? key}) : super(key: key);
-
+class IntroScreen extends ConsumerWidget {
   final dio = Dio();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,51 +40,54 @@ class MainLoginScreen extends ConsumerWidget {
               // 카카오 로그인 버튼
               TextButton(
                 onPressed: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => KakaoLoginScreen(),
-                    ),
+                  await AuthCodeClient.instance.authorize(
+                    redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
                   );
-                  List<String> tokens = result.split(' ');
-
-                  final refreshToken =
-                      tokens[1].substring(0, tokens[1].length - 1);
-                  final accessToken =
-                      tokens[3].substring(0, tokens[3].length - 1);
-
-                  print(accessToken);
-                  final storage = ref.read(secureStorageProvider);
-
-                  await storage.write(
-                      key: REFRESH_TOKEN_KEY, value: refreshToken);
-                  await storage.write(
-                      key: ACCESS_TOKEN_KEY, value: accessToken);
-
-                  // 만약 소셜로그인 대상자가 조회가 안 된다면??
-                  try {
-                    final resp = await dio.get(
-                      'http://$API_SERVICE_URI/member/check',
-                      options: Options(
-                        headers: {
-                          'authorization': 'Bearer $accessToken',
-                        },
-                      ),
-                    );
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (_) => RootTab(),
-                      ),
-                          (route) => false,
-                    );
-                  } catch (e) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (_) => SecondSignupScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  }
+                  // final result = await Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => KakaoLoginScreen(),
+                  //   ),
+                  // );
+                  // List<String> tokens = result.split(' ');
+                  //
+                  // final refreshToken =
+                  //     tokens[1].substring(0, tokens[1].length - 1);
+                  // final accessToken =
+                  //     tokens[3].substring(0, tokens[3].length - 1);
+                  //
+                  // print(accessToken);
+                  // final storage = ref.read(secureStorageProvider);
+                  //
+                  // await storage.write(
+                  //     key: REFRESH_TOKEN_KEY, value: refreshToken);
+                  // await storage.write(
+                  //     key: ACCESS_TOKEN_KEY, value: accessToken);
+                  //
+                  // // 만약 소셜로그인 대상자가 조회가 안 된다면??
+                  // try {
+                  //   final resp = await dio.get(
+                  //     'http://$API_SERVICE_URI/member/check',
+                  //     options: Options(
+                  //       headers: {
+                  //         'authorization': 'Bearer $accessToken',
+                  //       },
+                  //     ),
+                  //   );
+                  //   Navigator.of(context).pushAndRemoveUntil(
+                  //     MaterialPageRoute(
+                  //       builder: (_) => RootTab(),
+                  //     ),
+                  //         (route) => false,
+                  //   );
+                  // } catch (e) {
+                  //   Navigator.of(context).pushAndRemoveUntil(
+                  //     MaterialPageRoute(
+                  //       builder: (_) => SecondSignupScreen(),
+                  //     ),
+                  //     (route) => false,
+                  //   );
+                  // }
                 },
                 child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
               ),

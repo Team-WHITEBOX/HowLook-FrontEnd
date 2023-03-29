@@ -1,7 +1,7 @@
 import 'package:howlook/common/utils/data_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'main_feed_comment_model.g.dart';
+part 'feed_comment_model.g.dart';
 
 @JsonSerializable()
 class MainFeedCommentModel {

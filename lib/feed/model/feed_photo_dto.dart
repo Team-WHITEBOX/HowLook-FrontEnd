@@ -1,7 +1,7 @@
 import 'package:howlook/common/utils/data_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'photo_dto.g.dart';
+part 'feed_photo_dto.g.dart';
 
 @JsonSerializable()
 class PhotoDTOs {

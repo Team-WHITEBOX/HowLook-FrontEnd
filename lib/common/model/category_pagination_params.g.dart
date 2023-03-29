@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'c_pagination_params.dart';
+part of 'category_pagination_params.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

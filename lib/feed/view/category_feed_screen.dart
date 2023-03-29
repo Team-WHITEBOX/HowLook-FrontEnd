@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/feed/component/main_feed_card.dart';
-import 'package:howlook/feed/model/main_feed_model.dart';
-import 'package:howlook/feed/view/main_feed_category.dart';
-import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:howlook/feed/component/feed_card.dart';
+import 'package:howlook/feed/model/feed_model.dart';
+import 'package:howlook/feed/view/category_screen.dart';
+import 'package:howlook/feed/view/feed_detail_screen.dart';
 
 class CategoryFeedScreen extends ConsumerStatefulWidget {
   Arguments arguments;
@@ -89,16 +89,16 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
                 // 받아온 데이터 JSON 매핑하기
                 // 모델 사용
                 final item = snapshot.data![index];
-                final pItem = MainFeedModel.fromJson(item);
+                final pItem = FeedModel.fromJson(item);
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => MainFeedDetailScreen(
-                        npostId: pItem.npostId,
+                      builder: (_) => FeedDetailScreen(
+                        postId: pItem.postId,
                       ),
                     ));
                   },
-                  child: MainFeedCard.fromModel(model: pItem),
+                  child: FeedCard.fromModel(model: pItem),
                 );
               },
               separatorBuilder: (_, index) {

@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/feed/model/main_feed_comment_model.dart';
+import 'package:howlook/feed/model/feed_comment_model.dart';
 import 'package:like_button/like_button.dart';
 
 class FeedCommentCard extends ConsumerStatefulWidget {
@@ -99,11 +100,13 @@ class _FeedCommentCardState extends ConsumerState<FeedCommentCard> {
                 ),
                 CircleAvatar(
                   radius: 20.0,
-                  backgroundImage: Image.network(
-                    ' ${widget.profilePhoto}',
-                    fit: BoxFit.cover,
-                  ).image,
-                  // Image.network()로 추가하기
+                  backgroundImage: widget.profilePhoto != NULL_IMG_URI
+                      ? ExtendedImage.network(
+                          '${widget.profilePhoto}',
+                          fit: BoxFit.cover,
+                          cache: true,
+                        ).image
+                      : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
                 ),
                 const SizedBox(
                   width: 10,

@@ -5,7 +5,7 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/common/view/root_tab.dart';
-import 'package:howlook/user/view/signin/main_login_screen.dart';
+import 'package:howlook/user/view/signin/intro_screen.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import '../../common/const/colors.dart';
 
@@ -62,7 +62,7 @@ class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
       print(e);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => MainLoginScreen(),
+          builder: (_) => IntroScreen(),
         ),
         (route) => false,
       );

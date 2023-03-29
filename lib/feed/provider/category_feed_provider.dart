@@ -1,21 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:howlook/common/model/c_pagination_params.dart';
+import 'package:howlook/common/model/category_pagination_params.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/n_pagination_params.dart';
-import 'package:howlook/feed/repository/mainfeed_repository.dart';
+import 'package:howlook/common/model/near_pagination_params.dart';
+import 'package:howlook/feed/repository/feed_repository.dart';
 
 final categoryfeedProvider =
 StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
       (ref) {
-    final crepository = ref.watch((mainFeedRepositoryProvider));
+    final crepository = ref.watch((FeedRepositoryProvider));
     final notifier = CategoryFeedStateNotifier(crepository: crepository);
     return notifier;
   },
 );
 
 class CategoryFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
-  final MainFeedRepository crepository;
+  final FeedRepository crepository;
 
   CategoryFeedStateNotifier({
     required this.crepository,

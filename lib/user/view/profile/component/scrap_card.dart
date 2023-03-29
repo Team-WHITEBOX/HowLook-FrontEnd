@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/user/view/profile/model/scrap_model.dart';
 import 'package:howlook/common/const/data.dart';
-import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail_screen.dart';
 
 class ScrapCard extends StatelessWidget {
 
@@ -38,8 +38,8 @@ class ScrapCard extends StatelessWidget {
     return InkWell(
         onTap: (){
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => MainFeedDetailScreen(
-              npostId: npostId,
+            builder: (_) => FeedDetailScreen(
+              postId: npostId,
             ),
           ));
         },
