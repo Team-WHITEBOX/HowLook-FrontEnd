@@ -111,9 +111,12 @@ class _FeedRepository implements FeedRepository {
   }
 
   @override
-  Future<FeedModel> getMainFeedDetail({required postId}) async {
+  Future<FeedModel> getFeedDetail(
+      {detailfeedParams = const DetailFeedParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(detailfeedParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
@@ -125,7 +128,7 @@ class _FeedRepository implements FeedRepository {
     )
             .compose(
               _dio.options,
-              '/readbypid?postId=${postId}',
+              '/readbypid',
               queryParameters: queryParameters,
               data: _data,
             )

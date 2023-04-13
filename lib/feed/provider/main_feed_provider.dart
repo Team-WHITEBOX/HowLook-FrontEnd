@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/pagination_params.dart';
+import 'package:howlook/common/model/feed_params/detail_feed_params.dart';
+import 'package:howlook/common/model/feed_params/pagination_params.dart';
 import 'package:howlook/feed/model/feed_model.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 
@@ -9,7 +10,7 @@ import 'package:howlook/feed/repository/feed_repository.dart';
 final feedDetailProvider = Provider.family<FeedModel?, int>((ref, id) {
   final state = ref.watch(mainfeedProvider);
 
-  if (state is! CursorPagination<FeedModel>) {
+  if (state is! CursorPagination) {
     return null;
   }
 
@@ -45,7 +46,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
   }
 
   // paginate 함수
-  void paginate({
+  Future<void> paginate({
     // 현재 페이지 넘버
     int fetchPage = 0,
 
@@ -157,5 +158,41 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
       // 에러 처리
       state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
     }
+  }
+
+  getDetail({
+    required int postId,
+  }) async {
+    DetailFeedParams detailfeedParams = DetailFeedParams(
+      postId: postId,
+    );
+
+    // 만약에 아직 데이터가 하나도 없는 상태라면 (CursorPagination이 아니라면)
+    // 데이터를 가져오는 시도를 한다.
+    if (state is! CursorPagination) {
+      await this.paginate();
+    }
+
+    // 예외처리
+    // state가 CursorPagination이 아닐떄 그냥 리턴
+    if (state is! CursorPagination) {
+      return;
+    }
+
+    // 기존 데이터
+    final pState = state as CursorPagination;
+
+    // 요청 데이터
+    final resp =
+        await repository.getFeedDetail(detailfeedParams: detailfeedParams);
+
+    state = pState.copyWith(
+      data: pState.data.copyWith(
+        content: pState.data.content
+            // 기존 데이터의 postId와 요청 데이터의 postId 비교 연산
+            .map<FeedModel>((e) => e.postId == postId ? resp : e)
+            .toList(),
+      ),
+    );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/near_pagination_params.dart';
+import 'package:howlook/common/model/feed_params/near_pagination_params.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 

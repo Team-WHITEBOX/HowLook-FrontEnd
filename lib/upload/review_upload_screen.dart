@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:glass_kit/glass_kit.dart';
@@ -12,7 +11,6 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:howlook/upload/inputFormatter.dart';
 
 class ReviewUpload extends ConsumerStatefulWidget {
   const ReviewUpload({Key? key}) : super(key: key);

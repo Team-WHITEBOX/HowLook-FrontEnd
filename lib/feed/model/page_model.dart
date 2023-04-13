@@ -1,4 +1,3 @@
-import 'package:howlook/common/utils/data_utils.dart';
 import 'package:howlook/feed/model/feed_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 

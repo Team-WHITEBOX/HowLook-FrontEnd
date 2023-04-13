@@ -2,10 +2,11 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
-import 'package:howlook/common/model/category_pagination_params.dart';
+import 'package:howlook/common/model/feed_params/category_pagination_params.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/near_pagination_params.dart';
-import 'package:howlook/common/model/pagination_params.dart';
+import 'package:howlook/common/model/feed_params/detail_feed_params.dart';
+import 'package:howlook/common/model/feed_params/near_pagination_params.dart';
+import 'package:howlook/common/model/feed_params/pagination_params.dart';
 import 'package:howlook/feed/model/feed_model.dart';
 import 'package:howlook/feed/model/page_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -61,11 +62,12 @@ abstract class FeedRepository {
   });
 
   // Detail Feed API
-  @GET('/readbypid?postId={postId}')
+  @GET('/readbypid')
   @Headers({
     'accessToken': 'true',
   })
-  Future<FeedModel> getMainFeedDetail({
-    @Path('postId') required int postId,
+  Future<FeedModel> getFeedDetail({
+    @Queries() DetailFeedParams? detailfeedParams =
+    const DetailFeedParams(),
   });
 }

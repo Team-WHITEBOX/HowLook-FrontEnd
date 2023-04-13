@@ -19,16 +19,9 @@ class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
   @override
   void initState() {
     super.initState();
-    //deleteToken();
     checkToken();
   }
 
-  // // 토큰 삭제하는 함수
-  // void deleteToken() async {
-  //   await storage.deleteAll();
-  // }
-
-  // initState() 안에서는 async가 안되기 때문에 토큰 체크 함수를 따로 빼서 해야함
   void checkToken() async {
     final dio = Dio();
     // 스토리지로부터 토큰 받아오기

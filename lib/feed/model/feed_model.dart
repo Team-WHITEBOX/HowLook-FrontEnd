@@ -36,30 +36,6 @@ class FeedModel {
     required this.regDate,
   });
 
-  FeedModel copyWith({
-    UserInfoModel? userPostInfo,
-    int? postId,
-    List<PhotoDTOs>? photoDTOs,
-    int? photoCount,
-    int? likeCount,
-    bool? likeCheck,
-    int? replyCount,
-    String? content,
-    List<dynamic>? regDate,
-  }) {
-    return FeedModel(
-      userPostInfo: userPostInfo ?? this.userPostInfo,
-      postId: postId ?? this.postId,
-      photoDTOs: photoDTOs ?? this.photoDTOs,
-      photoCount: photoCount ?? this.photoCount,
-      likeCount: likeCount ?? this.likeCount,
-      likeCheck: likeCheck ?? this.likeCheck,
-      replyCount: replyCount ?? this.replyCount,
-      content: content ?? this.content,
-      regDate: regDate ?? this.regDate,
-    );
-  }
-
   factory FeedModel.fromJson(Map<String, dynamic> json) =>
       _$FeedModelFromJson(json);
 

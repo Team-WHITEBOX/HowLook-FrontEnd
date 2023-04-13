@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/feed/view/home_screen.dart';
 import 'package:howlook/upload/Helpers/Helpers.dart';
 import 'package:howlook/upload/Helpers/LiquidSwipeChildDelegate.dart';
 import 'package:howlook/upload/PageHelpers/LiquidController.dart';
 import 'package:howlook/upload/PageHelpers/page_dragger.dart';
 import 'package:howlook/upload/PageHelpers/page_reveal.dart';
 import 'package:howlook/upload/Provider/LiquidProvider.dart';
-import 'package:howlook/upload/face_detector/face_detector_view.dart';
 import 'package:provider/provider.dart';
 
 export 'package:howlook/upload/Helpers/Helpers.dart';
@@ -345,7 +345,7 @@ class _LiquidSwipe extends State<LiquidSwipe> with TickerProviderStateMixin {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => FaceDetectorView(),
+                  builder: (_) => HomeScreen(),
                 ),
               );
             },

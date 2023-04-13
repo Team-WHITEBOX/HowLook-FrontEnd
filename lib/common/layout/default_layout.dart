@@ -5,6 +5,8 @@ class DefaultLayout extends StatelessWidget {
   final Widget child;
   final String? title;
   final Widget? bottomNavigationBar;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Widget? leading;
   final List<Widget>? actions;
   final FlexibleSpaceBar? flexibleSpace;
@@ -14,6 +16,8 @@ class DefaultLayout extends StatelessWidget {
     this.backgroundColor,
     this.title,
     this.bottomNavigationBar,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.leading,
     this.actions,
     this.flexibleSpace,
@@ -27,6 +31,8 @@ class DefaultLayout extends StatelessWidget {
       appBar: renderAppBar(leading),
       body: child,
       bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
     );
   }
 

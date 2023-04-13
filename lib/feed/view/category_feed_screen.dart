@@ -10,12 +10,6 @@ import 'package:howlook/feed/view/category_screen.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
 
 class CategoryFeedScreen extends ConsumerStatefulWidget {
-  Arguments arguments;
-
-  CategoryFeedScreen({
-    required this.arguments,
-    Key? key,
-  }) : super(key: key);
 
   @override
   ConsumerState<CategoryFeedScreen> createState() => _CategoryFeedScreenState();
@@ -47,22 +41,19 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
     int page = 0;
     String gender;
 
-    if (widget.arguments.isMenChecked)
-      gender = "M";
-    else
-      gender = "F";
-
-    final resp = await dio.get(
-      // MainFeed 관련 api IP주소 추가하기
-      'http://3.34.164.14:8080/feed/search?amekaji=${widget.arguments.isAmericanCasualChecked}&casual=${widget.arguments.isCasualChecked}&guitar=${widget.arguments.isEtcChecked}&minimal=${widget.arguments.isMinimalChecked}&sporty=${widget.arguments.isSportyChecked}&street=${widget.arguments.isStreetChecked}&heightHigh=${widget.arguments.maxHeight}&heightLow=${widget.arguments.minHeight}&weightHigh=${widget.arguments.maxWeight}&weightLow=${widget.arguments.minWeight}&gender=${gender}&page=${page}',
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
+    // final resp = await dio.get(
+    //   // MainFeed 관련 api IP주소 추가하기
+    //   'http://3.34.164.14:8080/feed/search?amekaji=${widget.arguments.isAmericanCasualChecked}&casual=${widget.arguments.isCasualChecked}&guitar=${widget.arguments.isEtcChecked}&minimal=${widget.arguments.isMinimalChecked}&sporty=${widget.arguments.isSportyChecked}&street=${widget.arguments.isStreetChecked}&heightHigh=${widget.arguments.maxHeight}&heightLow=${widget.arguments.minHeight}&weightHigh=${widget.arguments.maxWeight}&weightLow=${widget.arguments.minWeight}&gender=${gender}&page=${page}',
+    //   options: Options(
+    //     headers: {
+    //       'authorization': 'Bearer $accessToken',
+    //     },
+    //   ),
+    // );
+    final List<String> resp = ["Hello"];
     // 응답 데이터 중 data 값만 반환하여 사용하기!!
-    return resp.data['data'];
+    // return resp.data['data'];
+    return resp;
   }
 
   @override

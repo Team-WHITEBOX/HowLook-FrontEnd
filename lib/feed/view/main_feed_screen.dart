@@ -7,10 +7,8 @@ import 'package:howlook/feed/provider/main_feed_provider.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
 
 class MainFeedScreen extends ConsumerStatefulWidget {
-
   @override
-  ConsumerState<MainFeedScreen> createState() =>
-      _MainFeedScreenState();
+  ConsumerState<MainFeedScreen> createState() => _MainFeedScreenState();
 }
 
 class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
@@ -26,8 +24,8 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
     // 현재 위치가 최대 길이보다 조금 덜 되는 위치까지 왔다면 새로운 데이터를 추가 요청
     if (controller.offset > controller.position.maxScrollExtent - 300) {
       ref.read(mainfeedProvider.notifier).paginate(
-        fetchMore: true,
-      );
+            fetchMore: true,
+          );
     }
   }
 
@@ -58,8 +56,8 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
     return RefreshIndicator(
       onRefresh: () async {
         ref.read(mainfeedProvider.notifier).paginate(
-          forceRefetch: true,
-        );
+              forceRefetch: true,
+            );
       },
       child: ListView.separated(
         controller: controller,
@@ -69,7 +67,8 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
         itemBuilder: (_, index) {
           if (index == cp.data.content.length) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Center(
                 child: data is CursorPaginationFetchingMore
                     ? CircularProgressIndicator()
