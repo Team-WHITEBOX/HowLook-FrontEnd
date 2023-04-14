@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:howlook/upload/Helpers/SlideUpdate.dart';
 import 'package:howlook/upload/PageHelpers/animated_page_dragger.dart';
 import 'package:howlook/upload/PageHelpers/page_dragger.dart';
-import 'package:howlook/upload/main_liquid_swipe.dart';
+import 'package:howlook/upload/view/main_liquid_swipe.dart';
 import 'package:provider/provider.dart';
 
 /// Internal Class

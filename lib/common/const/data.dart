@@ -5,6 +5,7 @@ const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 const YOUR_NATIVE_APP_KEY = 'fee362483928c6b3bbbb934a9996d8cb';
 const USERMID_KEY = 'USERMID';
+const NULL_IMG_URI = 'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/null';
 
 // <- 아이디 불러오는 방법 ->
 // final usermid = await storage.read(key: USERMID_KEY);

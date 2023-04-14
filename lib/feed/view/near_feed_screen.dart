@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/feed/component/main_feed_card.dart';
+import 'package:howlook/feed/component/feed_card.dart';
 import 'package:howlook/feed/provider/near_feed_provider.dart';
-import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NearFeedScreen extends ConsumerStatefulWidget {
@@ -25,6 +25,7 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
     await _handleCameraAndMic(Permission.location);
     await _handleCameraAndMic(Permission.locationWhenInUse);
   }
+
   final ScrollController controller = ScrollController();
 
   // 위치 정보 불러오기
@@ -74,21 +75,21 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: RefreshIndicator(
-          onRefresh: ()async {
+          onRefresh: () async {
             ref.read(nearfeedProvider.notifier).paginate(
-              forceRefetch: true,
-            );
+                  forceRefetch: true,
+                );
           },
           child: ListView.separated(
             controller: controller,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: cp.data.length + 1,
+            itemCount: cp.data.content.length + 1,
             itemBuilder: (_, index) {
-              if (index == cp.data.length) {
+              if (index == cp.data.content.length) {
                 return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   child: Center(
                     child: data is CursorPaginationFetchingMore
                         ? CircularProgressIndicator()
@@ -98,16 +99,18 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
               }
               // 받아온 데이터 JSON 매핑하기
               // 모델 사용
-              final pItem = cp.data[index];
+              final pItem = cp.data.content[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => MainFeedDetailScreen(
-                      npostId: pItem.npostId,
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => FeedDetailScreen(
+                        postId: pItem.postId,
+                      ),
                     ),
-                  ));
+                  );
                 },
-                child: MainFeedCard.fromModel(model: pItem),
+                child: FeedCard.fromModel(model: pItem),
               );
             },
             separatorBuilder: (_, index) {

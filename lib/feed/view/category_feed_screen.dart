@@ -4,18 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/feed/component/main_feed_card.dart';
-import 'package:howlook/feed/model/main_feed_model.dart';
-import 'package:howlook/feed/view/main_feed_category.dart';
-import 'package:howlook/feed/view/main_feed_detail_screen.dart';
+import 'package:howlook/feed/component/feed_card.dart';
+import 'package:howlook/feed/model/feed_model.dart';
+import 'package:howlook/feed/view/category_screen.dart';
+import 'package:howlook/feed/view/feed_detail_screen.dart';
 
 class CategoryFeedScreen extends ConsumerStatefulWidget {
-  Arguments arguments;
-
-  CategoryFeedScreen({
-    required this.arguments,
-    Key? key,
-  }) : super(key: key);
 
   @override
   ConsumerState<CategoryFeedScreen> createState() => _CategoryFeedScreenState();
@@ -47,22 +41,19 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
     int page = 0;
     String gender;
 
-    if (widget.arguments.isMenChecked)
-      gender = "M";
-    else
-      gender = "F";
-
-    final resp = await dio.get(
-      // MainFeed 관련 api IP주소 추가하기
-      'http://3.34.164.14:8080/feed/search?amekaji=${widget.arguments.isAmericanCasualChecked}&casual=${widget.arguments.isCasualChecked}&guitar=${widget.arguments.isEtcChecked}&minimal=${widget.arguments.isMinimalChecked}&sporty=${widget.arguments.isSportyChecked}&street=${widget.arguments.isStreetChecked}&heightHigh=${widget.arguments.maxHeight}&heightLow=${widget.arguments.minHeight}&weightHigh=${widget.arguments.maxWeight}&weightLow=${widget.arguments.minWeight}&gender=${gender}&page=${page}',
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
+    // final resp = await dio.get(
+    //   // MainFeed 관련 api IP주소 추가하기
+    //   'http://3.34.164.14:8080/feed/search?amekaji=${widget.arguments.isAmericanCasualChecked}&casual=${widget.arguments.isCasualChecked}&guitar=${widget.arguments.isEtcChecked}&minimal=${widget.arguments.isMinimalChecked}&sporty=${widget.arguments.isSportyChecked}&street=${widget.arguments.isStreetChecked}&heightHigh=${widget.arguments.maxHeight}&heightLow=${widget.arguments.minHeight}&weightHigh=${widget.arguments.maxWeight}&weightLow=${widget.arguments.minWeight}&gender=${gender}&page=${page}',
+    //   options: Options(
+    //     headers: {
+    //       'authorization': 'Bearer $accessToken',
+    //     },
+    //   ),
+    // );
+    final List<String> resp = ["Hello"];
     // 응답 데이터 중 data 값만 반환하여 사용하기!!
-    return resp.data['data'];
+    // return resp.data['data'];
+    return resp;
   }
 
   @override
@@ -89,16 +80,16 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
                 // 받아온 데이터 JSON 매핑하기
                 // 모델 사용
                 final item = snapshot.data![index];
-                final pItem = MainFeedModel.fromJson(item);
+                final pItem = FeedModel.fromJson(item);
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => MainFeedDetailScreen(
-                        npostId: pItem.npostId,
+                      builder: (_) => FeedDetailScreen(
+                        postId: pItem.postId,
                       ),
                     ));
                   },
-                  child: MainFeedCard.fromModel(model: pItem),
+                  child: FeedCard.fromModel(model: pItem),
                 );
               },
               separatorBuilder: (_, index) {

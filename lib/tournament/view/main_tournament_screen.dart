@@ -227,7 +227,6 @@ class _tournamentScreenState extends ConsumerState<tournamentScreen> {
                 builder: (_, AsyncSnapshot<List> snapshot) {
                   // 에러처리
                   if (!snapshot.hasData) {
-                    print('error');
                     return Center(
                       child: CircularProgressIndicator(),
                     );

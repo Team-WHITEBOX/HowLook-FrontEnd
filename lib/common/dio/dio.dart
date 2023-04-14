@@ -4,13 +4,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 
+// dioProvider 안에서 생성한 dio에 interceptors를 더한 dio를 반환받는 dioProvider
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
 
+  // Provider 안에서 또 다른 Provider 관촬하기
   final storage = ref.watch(secureStorageProvider);
 
   dio.interceptors.add(
     CustomInteceptor(
+      // secureStorageProvider 안에서 생성된 Provider로
       storage: storage,
       ref: ref,
     ),

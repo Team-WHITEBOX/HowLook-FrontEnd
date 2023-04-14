@@ -8,7 +8,7 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/user/view/signin/main_login_screen.dart';
+import 'package:howlook/user/view/signin/intro_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:howlook/user/model/signup_model.dart';
 import 'package:howlook/user/provider/signup_provider.dart';
@@ -79,7 +79,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => MainLoginScreen(),
+          builder: (_) => IntroScreen(),
         ),
         (route) => false,
       );
@@ -251,7 +251,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                         _submit(); // 제출
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                            builder: (_) => MainLoginScreen(),
+                            builder: (_) => IntroScreen(),
                           ),
                           (route) => false,
                         );

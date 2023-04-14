@@ -1,4 +1,6 @@
-import 'package:howlook/upload/main_liquid_swipe.dart';
+
+
+import 'package:howlook/upload/Helpers/Helpers.dart';
 
 ///A model class with data specific to Update in [LiquidController]
 class SlideUpdate {

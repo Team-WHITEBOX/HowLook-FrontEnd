@@ -6,7 +6,7 @@ import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/component/main_feed_comment_card.dart';
-import 'package:howlook/feed/model/main_feed_comment_model.dart';
+import 'package:howlook/feed/model/feed_comment_model.dart';
 import 'package:howlook/feed/view/comment_screen.dart';
 
 class FeedCommentScreen extends ConsumerStatefulWidget {

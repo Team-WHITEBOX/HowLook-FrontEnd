@@ -33,19 +33,19 @@ class ChartPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder<Map<String, dynamic>>(
-            future: FeedbackReviewPage(ref),
-            builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final item = ChartModel.fromJson(
-                json: snapshot.data!,
-              );
+        future: FeedbackReviewPage(ref),
+        builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final item = ChartModel.fromJson(
+            json: snapshot.data!,
+          );
 
-              return ChartPageCard.fromModel(model: item);
-            });
+          return ChartPageCard.fromModel(model: item);
+        });
   }
 }
 

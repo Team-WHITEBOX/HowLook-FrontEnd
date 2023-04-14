@@ -9,7 +9,6 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/common/view/root_tab.dart';
-import 'package:howlook/user/view/signup/first_signup_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -105,7 +104,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       final resp = await dio.post(
                         'http://$API_SERVICE_URI/account/generateToken',
                         data: {
-                          'memberID': username,
+                          'memberId': username,
                           'memberPassword': password,
                         },
                       );

@@ -1,5 +1,4 @@
 import 'package:howlook/upload/PageHelpers/animated_page_dragger.dart';
-import 'package:howlook/upload/main_liquid_swipe.dart';
 
 /// A constant value with works like a sensitivity of reveal.
 /// Used if not mentioned here [LiquidSwipe.fullTransitionValue]
