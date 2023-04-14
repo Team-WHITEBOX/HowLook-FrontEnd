@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/upload/Provider/LiquidProvider.dart';
-import 'package:howlook/upload/main_liquid_swipe.dart';
 import 'package:provider/provider.dart';
 
 /// Added in v1.5.0

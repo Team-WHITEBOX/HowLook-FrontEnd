@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
+import 'package:howlook/upload/view/main_liquid_swipe.dart';
+import 'package:howlook/upload/view/upload_screen.dart';
 import 'package:howlook/user/view/profile/view/my_profile_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
-import 'package:howlook/upload/main_liquid_swipe.dart';
-import 'package:howlook/upload/feed_upload_screen.dart';
-import 'package:howlook/upload/review_upload_screen.dart';
+import 'package:howlook/upload/view/review_upload_screen.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({Key? key}) : super(key: key);
@@ -62,7 +62,8 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => FeedUpload(),
+                          builder: (_) => ImageUploadScreen(),
+                          // builder: (_) => FeedUpload(),
                         ),
                       );
                     },
@@ -110,17 +111,6 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
       ),
     ];
     return DefaultLayout(
-      child: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: controller,
-        children: [
-          HomeScreen(),
-          MainReviewScreen(),
-          Builder(builder: (context) => LiquidSwipe(pages: pages)),
-          tournamentScreen(),
-          MyProfileScreen(),
-        ],
-      ),
       bottomNavigationBar: ConvexAppBar(
         curve: null,
         color: Colors.black,
@@ -128,8 +118,8 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.white,
         style: TabStyle.fixedCircle,
         activeColor: Colors.black,
-        cornerRadius: 20,
-        height: 40,
+        cornerRadius: 15,
+        height: 60,
         items: [
           TabItem(
               icon: Icon(
@@ -140,8 +130,12 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
                   _bottomNavIndex == 1 ? Icons.reviews : Icons.reviews_outlined,
                   size: 30)),
           TabItem(
-              icon: Icon(_bottomNavIndex == 2 ? Icons.add_circle : Icons.add_circle_outline,
-                  color: Colors.white, size: 40)),
+              icon: Icon(
+                  _bottomNavIndex == 2
+                      ? Icons.add_circle
+                      : Icons.add_circle_outline,
+                  color: Colors.white,
+                  size: 40)),
           TabItem(
               icon: Icon(
                   _bottomNavIndex == 3
@@ -154,6 +148,17 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
                       ? Icons.person_2
                       : Icons.person_2_outlined,
                   size: 30)),
+        ],
+      ),
+      child: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: controller,
+        children: <Widget>[
+          HomeScreen(),
+          MainReviewScreen(),
+          Builder(builder: (context) => LiquidSwipe(pages: pages)),
+          tournamentScreen(),
+          MyProfileScreen(),
         ],
       ),
     );

@@ -10,7 +10,7 @@ import 'package:glass_kit/glass_kit.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:howlook/upload/inputFormatter.dart';
+import 'package:howlook/upload/view/inputFormatter.dart';
 
 class FeedUpload extends ConsumerStatefulWidget {
   const FeedUpload({Key? key}) : super(key: key);

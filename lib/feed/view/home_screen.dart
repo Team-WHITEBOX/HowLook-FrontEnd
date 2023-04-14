@@ -35,11 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             icon: Icon(Icons.filter_alt)),
       ],
-      child: SafeArea(
-        top: true,
-        bottom: false,
-        child: MainFeedScreen(),
-      ),
+      child: MainFeedScreen(),
     );
   }
 }

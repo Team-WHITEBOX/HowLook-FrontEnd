@@ -10,6 +10,8 @@ class DefaultLayout extends StatelessWidget {
   final Widget? leading;
   final List<Widget>? actions;
   final FlexibleSpaceBar? flexibleSpace;
+  final Color? appBarForegroundColor;
+  final Color? appBarBackgroundColor;
 
   const DefaultLayout({
     required this.child,
@@ -21,6 +23,8 @@ class DefaultLayout extends StatelessWidget {
     this.leading,
     this.actions,
     this.flexibleSpace,
+    this.appBarBackgroundColor,
+    this.appBarForegroundColor,
     Key? key,
   }) : super(key: key);
 
@@ -28,7 +32,11 @@ class DefaultLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor ?? Colors.white,
-      appBar: renderAppBar(leading),
+      appBar: renderAppBar(
+        leading,
+        appBarForegroundColor,
+        appBarBackgroundColor,
+      ),
       body: child,
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
@@ -36,21 +44,25 @@ class DefaultLayout extends StatelessWidget {
     );
   }
 
-  AppBar? renderAppBar(Widget? leading) {
+  AppBar? renderAppBar(
+    Widget? leading,
+    Color? appBarForegroundColor,
+    Color? appBarBackgroundColor,
+  ) {
     if (title == null) {
       return null;
     } else {
       return AppBar(
-        backgroundColor: Colors.white,
+        foregroundColor: appBarForegroundColor ?? Colors.black,
+        backgroundColor: appBarBackgroundColor ?? Colors.white,
         elevation: 0,
         title: Text(
           title!,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
-        foregroundColor: Colors.black,
         leading: leading,
         actions: actions,
       );
