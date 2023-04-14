@@ -105,8 +105,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       final resp = await dio.post(
                         'http://$API_SERVICE_URI/account/generateToken',
                         data: {
-                          'mid': username,
-                          'mpw': password,
+                          'memberID': username,
+                          'memberPassword': password,
                         },
                       );
 

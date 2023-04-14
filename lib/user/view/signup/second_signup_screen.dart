@@ -10,78 +10,49 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/user/view/signin/main_login_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:howlook/user/model/signup_model.dart';
+import 'package:howlook/user/provider/signup_provider.dart';
+import 'package:howlook/user/repository/signup_repository.dart';
 
 class SecondSignupScreen extends ConsumerStatefulWidget {
-  final String? mid;
-  final String? mpw;
-
-  const SecondSignupScreen({
-    this.mid,
-    this.mpw,
-    Key? key,
-  }) : super(key: key);
+  const SecondSignupScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<SecondSignupScreen> createState() => _SecondSignupScreenState();
 }
 
 class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
-  String mid = '';
-  String mpw = '';
-  String userpw = '';
-  String name = '';
-  String nickName = '';
-  String phone = '';
-  int height = 0;
-  int weight = 0;
-  String birthDay = '';
-  String gender = '';
   @override
   Widget build(BuildContext context) {
+    List<SignupModel> newMember = ref.watch(SignupProvider);
+
+    SignupRepository repos = ref.watch(SignupRepositoryProvider);
     // Dio Connection
     final dio = Dio();
+
     // localhost
     final emulatorIP = "10.0.2.2:3000";
     final simulatorIP = "127.0.0.1:3000";
     final ip = Platform.isIOS ? simulatorIP : emulatorIP;
-    // post 함수
-    void _postData() async {
-      final resp = await dio.post(
-        'http://$API_SERVICE_URI/account/join',
-        data: {
-          'mid': widget.mid,
-          'mpw': widget.mpw,
-          'name': name,
-          'nickName': nickName,
-          'phone': phone,
-          'height': height,
-          'weight': weight,
-          'birthDay': birthDay,
-          'gender': "M",
-        },
-      );
-    }
 
     void s_postData() async {
       final storage = ref.read(secureStorageProvider);
       final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
       final resp = await dio.put(
         'http://$API_SERVICE_URI/member/socialedit',
-        options: Options(
-          headers: {
-            'authorization': 'Bearer $accessToken'
-          }
-        ),
+        options: Options(headers: {'authorization': 'Bearer $accessToken'}),
         data: {
-          'memberBirthDay': birthDay,
-          'memberHeight': height,
-          'memberName': name,
-          'memberNickName': nickName,
-          'memberPhone': phone,
-          'memberWeight': weight,
+          'memberBirthDay': newMember[0].birthDay,
+          'memberHeight': newMember[0].height,
+          'memberName': newMember[0].name,
+          'memberNickName': newMember[0].nickName,
+          'memberPhone': newMember[0].phone,
+          'memberWeight': newMember[0].weight,
         },
       );
-    };
+    }
+
+    ;
 
     // validate
     final formkey = GlobalKey<FormState>();
@@ -97,16 +68,20 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
           ),
         );
       }
-      if (widget.mid != null) // 소셜이 아닐 때
-        _postData();
+      // 소셜이 아닐 때
+      if (newMember[0].memberId != null)
+        repos.postData(signupModel: newMember[0]);
       else // 소셜일 때
+      {
         s_postData();
+        ref.watch(SignupProvider.notifier).outputSignupModel();
+      }
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => MainLoginScreen(),
         ),
-            (route) => false,
+        (route) => false,
       );
     }
 
@@ -141,7 +116,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                   CustomTextFormField(
                     hintText: "이름을 입력해주세요",
                     onChanged: (String value) {
-                      name = value;
+                      ref.read(SignupProvider)[0].name = value;
                     },
                     validator: (value) {
                       if (value!.length < 2) {
@@ -162,7 +137,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                   CustomTextFormField(
                     hintText: "별명을 입력해주세요",
                     onChanged: (String value) {
-                      nickName = value;
+                      ref.read(SignupProvider)[0].nickName = value;
                     },
                     validator: (value) {
                       if (value!.length < 1) {
@@ -170,6 +145,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                       } else if (value!.length > 9) {
                         return "별명은 10자보다 길 수 없어요 :(";
                       }
+                      // 닉네임 중복 조회
                     },
                     textInputAction: TextInputAction.next,
                   ),
@@ -185,7 +161,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                   CustomTextFormField(
                     hintText: "(예시) 01012341234",
                     onChanged: (String value) {
-                      phone = value;
+                      ref.read(SignupProvider)[0].phone = value;
                     },
                     validator: (value) {
                       if (value!.length < 11) {
@@ -207,7 +183,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                   CustomTextFormField(
                     hintText: "키를 입력해주세요",
                     onChanged: (String value) {
-                      height = int.parse(value);
+                      ref.read(SignupProvider)[0].height = int.parse(value);
                     },
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
@@ -224,7 +200,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                   CustomTextFormField(
                     hintText: "몸무게를 입력해주세요",
                     onChanged: (String value) {
-                      weight = int.parse(value);
+                      ref.read(SignupProvider)[0].weight = int.parse(value);
                     },
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
@@ -242,8 +218,9 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                         currentTime: DateTime.now(),
                         locale: LocaleType.ko,
                         onConfirm: (date) {
-                          birthDay = DateFormat("yyyy-MM-ddTHH:mm:ss.mmm").format(date);
-                          print(date);
+                          ref.read(SignupProvider)[0].birthDay =
+                              DateFormat("yyyy-MM-ddTHH:mm:ss.mmm")
+                                  .format(date);
                         },
                       );
                     },
@@ -271,7 +248,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                     ),
                     child: ElevatedButton(
                       onPressed: () async {
-                        _submit();
+                        _submit(); // 제출
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (_) => MainLoginScreen(),

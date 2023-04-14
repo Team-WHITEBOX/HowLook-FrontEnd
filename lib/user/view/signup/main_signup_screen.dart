@@ -102,10 +102,7 @@ class MainSignupScreen extends StatelessWidget {
                         child: Text(
                           "계속하기",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white
-                          ),
+                          style: TextStyle(fontSize: 20, color: Colors.white),
                         )),
                   )
                 ],

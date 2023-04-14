@@ -3,22 +3,26 @@ import 'package:howlook/common/component/cust_textform_filed.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/user/view/signup/second_signup_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/user/model/signup_model.dart';
+import 'package:howlook/user/provider/signup_provider.dart';
 
-
-class FirstSignupScreen extends StatefulWidget {
+class FirstSignupScreen extends ConsumerStatefulWidget {
   const FirstSignupScreen({Key? key}) : super(key: key);
 
   @override
-  State<FirstSignupScreen> createState() => _FirstSignupScreenState();
+  ConsumerState<FirstSignupScreen> createState() => _FirstSignupScreenState();
 }
 
-class _FirstSignupScreenState extends State<FirstSignupScreen> {
-  String mid = '';
-  String mpw = '';
-  String mpw_check = '';
+class _FirstSignupScreenState extends ConsumerState<FirstSignupScreen> {
+  String inputMemberId = '';
+  String inputMemberPassword = '';
+  String inputMemberPassword_check = '';
 
   @override
   Widget build(BuildContext context) {
+    final List<SignupModel> newMember = ref.watch(SignupProvider);
+
     // validate
     final formkey = GlobalKey<FormState>();
     Future<void> _submit() async {
@@ -28,16 +32,14 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
         formkey.currentState!.save();
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => SecondSignupScreen(
-              mid: this.mid,
-              mpw: this.mpw,
-            ),
+            builder: (_) => SecondSignupScreen(),
           ),
         );
       }
     }
+
     return DefaultLayout(
-      title: '',
+        title: '',
         child: Form(
           key: formkey,
           child: SingleChildScrollView(
@@ -67,20 +69,19 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                         height: 5,
                       ),
 
-                      // 필요한 정보 받은 텍스트 폼 필드 나열
                       CustomTextFormField(
                         hintText: "아이디를 입력해주세요",
                         onChanged: (String value) {
-                          mid = value;
+                          inputMemberId = value;
                         },
                         textInputAction: TextInputAction.next,
                         validator: (value) {
                           if (value!.length < 5) {
                             return "아이디는 5자보다 짧을 수 없습니다 :(";
                           }
+                          //아이디 중복 조회
                         },
                       ),
-
                       const SizedBox(
                         height: 24.0,
                       ),
@@ -94,9 +95,17 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                       CustomTextFormField(
                         hintText: "비밀번호를 입력해주세요",
                         onChanged: (String value) {
-                          mpw = value;
+                          inputMemberPassword = value;
                         },
                         textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value!.length < 8) {
+                            return "비밀번호는 8자보다 짧을 수 없습니다 :(";
+                          } else if (isValidPwFormat(value.toString()) ==
+                              false) {
+                            return "비밀번호는 문자와 숫자를 모두 포함해야합니다 :(";
+                          }
+                        },
                         obscureText: true,
                       ),
                       const SizedBox(
@@ -112,10 +121,10 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                       CustomTextFormField(
                         hintText: "비밀번호를 한번 더 입력해주세요",
                         onChanged: (String value) {
-                          mpw_check = value;
+                          inputMemberPassword_check = value;
                         },
                         validator: (value) {
-                          if (value!.toString() != mpw) {
+                          if (value!.toString() != inputMemberPassword) {
                             return "비밀번호를 한번 더 확인해주세요 :(";
                           }
                         },
@@ -138,25 +147,31 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                           borderRadius: BorderRadius.circular(40),
                         ),
                         child: ElevatedButton(
-                            onPressed: () async {
-                              _submit();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40),
-                              ),
-                              minimumSize: Size(100, 50),
+                          onPressed: () async {
+                            ref.read(SignupProvider.notifier).addMemberAccount(
+                                memberId: inputMemberId,
+                                memberPassword: inputMemberPassword);
+
+                            print(newMember[0].memberId);
+                            print(newMember[0].memberPassword);
+                            _submit();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40),
                             ),
-                            child: Text(
-                              "계속하기",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.center,
+                            minimumSize: Size(100, 50),
+                          ),
+                          child: Text(
+                            "계속하기",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ],
@@ -164,6 +179,11 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
                 ),
               )),
         ));
+  }
+
+  bool isValidPwFormat(String PasswordInput) {
+    return RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$')
+        .hasMatch(PasswordInput);
   }
 }
 
@@ -220,4 +240,3 @@ class _LabelText extends StatelessWidget {
     );
   }
 }
-
