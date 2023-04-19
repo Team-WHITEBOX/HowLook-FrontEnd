@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
+import 'package:howlook/upload/temp_screen/t_upload_screen.dart';
 import 'package:howlook/upload/view/main_liquid_swipe.dart';
 import 'package:howlook/upload/view/upload_screen.dart';
 import 'package:howlook/user/view/profile/view/my_profile_screen.dart';
@@ -62,7 +63,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => ImageUploadScreen(),
+                          builder: (_) => TUploadScreen(),
                           // builder: (_) => FeedUpload(),
                         ),
                       );

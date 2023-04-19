@@ -19,6 +19,7 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: CandyGlobalVariable.naviagatorState,
       theme: ThemeData(
         fontFamily: 'NotoSans',
       ),
@@ -26,4 +27,9 @@ class _App extends StatelessWidget {
       home: Splash_Screen(),
     );
   }
+}
+
+class CandyGlobalVariable {
+  static final GlobalKey<NavigatorState> naviagatorState =
+  GlobalKey<NavigatorState>();
 }

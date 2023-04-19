@@ -65,6 +65,10 @@
     <key>NSLocationAlwaysUsageDescription</key>
     <string>Can I have location always?</string>
 
+    <!-- Permission options for the `Photo` group -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>In order to access your photo library</string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -88,7 +92,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>In order to access your photo library</string>
 </dict>
 </plist>

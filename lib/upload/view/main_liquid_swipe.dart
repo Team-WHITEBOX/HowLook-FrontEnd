@@ -340,17 +340,6 @@ class _LiquidSwipe extends State<LiquidSwipe> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '',
-      actions: [
-        IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => HomeScreen(),
-                ),
-              );
-            },
-            icon: Icon(Icons.upload)),
-      ],
       child: ChangeNotifierProvider<LiquidProvider>(
         create: (BuildContext context) {
           return LiquidProvider(
