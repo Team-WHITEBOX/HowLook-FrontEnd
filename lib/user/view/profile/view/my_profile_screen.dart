@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
@@ -16,7 +15,7 @@ class MyProfileScreen extends ConsumerStatefulWidget {
 
 class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
-  String userid = '';
+  String memberId = '';
 
   Future<String> JWTcheck() async {
     final dio = Dio();
@@ -31,9 +30,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
         },
       ),
     );
-    userid = resp.data['data'];
-    await storage.write(key: USERMID_KEY, value: userid);
-    return userid;
+    memberId = resp.data['data'];
+    await storage.write(key: USERMID_KEY, value: memberId);
+    return memberId;
   }
 
 
@@ -42,7 +41,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
-      'http://$API_SERVICE_URI/member/$userid',
+      'http://$API_SERVICE_URI/member/$memberId',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',

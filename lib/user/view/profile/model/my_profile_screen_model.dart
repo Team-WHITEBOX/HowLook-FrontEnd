@@ -12,9 +12,9 @@ class MainProfileModel {
 
   final bool me;
 
-  final int memberFeedCnt;
+  final int memberPostCount;
 
-  final List<MemberFeeds> memberFeeds;
+  final List<MemberPosts> memberPosts;
 
 
   MainProfileModel({
@@ -24,16 +24,26 @@ class MainProfileModel {
     required this.memberWeight,
     required this.profilePhoto,
     required this.me,
-    required this.memberFeedCnt,
-    required this.memberFeeds,
+    required this.memberPostCount,
+    required this.memberPosts,
   });
 
-  // "memberId": "jinbum99",
-  // "memberNickName": "진범",
-  // "memberHeight": 100,
-  // "memberWeight": 200,
+  // "memberId": "testuser10",
+  // "memberNickName": "길동이",
+  // "memberHeight": 180,
+  // "memberWeight": 70,
   // "profilePhoto": null,
-  // "memberFeeds": [],
+  // "memberPostCount": 2,
+  // "memberPosts": [
+  // {
+  // "postId": 18,
+  // "mainPhotoPath": "29cd2213-6fdc-48f6-baff-2c161a840e35_balancing-1868051_960_720.jpg"
+  // },
+  // {
+  // "postId": 25,
+  // "mainPhotoPath": "261d363f-c588-4dd3-abaf-952ca9173a49_man-1866574_960_720.jpg"
+  // }
+  // ],
   // "me": true
 
 
@@ -47,13 +57,17 @@ class MainProfileModel {
       memberWeight: json['memberWeight'],
       profilePhoto: json['profilePhoto'],
       me: json['me'],
-      memberFeedCnt: json['memberFeedCnt'],
-      memberFeeds: json['memberFeeds'].map<MemberFeeds>(
-            (x) => MemberFeeds(
-              npostId: x['npostId'],
-              photoDTOs: x[<dynamic>['photoDTOs']],
-              mainPhotoPath: x['mainPhotoPath'],
-              photoCnt: x['photoCnt'],
+      memberPostCount: json['memberPostCount'],
+      // memberPosts: (json['memberPosts'] as List<dynamic>?)?.map<MemberPosts>(
+      //       (x) => MemberPosts(
+      //     postId: x['postId'],
+      //     mainPhotoPath: x['mainPhotoPath'],
+      //   ),
+      // ).toList() ?? [],
+      memberPosts: json['memberPosts'].map<MemberPosts>(
+        (x) => MemberPosts(
+          postId: x['postId'],
+          mainPhotoPath: x['mainPhotoPath'],
         ),
       ).toList(),
     );
@@ -61,55 +75,23 @@ class MainProfileModel {
 
 }
 
-class MemberFeeds {
+class MemberPosts {
   // 포스트 아이디
-  final int npostId;
-  // 이미지 경로
-  final List<PhotoDTOs> photoDTOs;
+  final int postId;
   // 첫 장 이미지 경로
   final String mainPhotoPath;
-  // 이미지 갯수
-  final int photoCnt;
 
-  MemberFeeds({
-    required this.npostId,
-    required this.photoDTOs,
+  MemberPosts({
+    required this.postId,
     required this.mainPhotoPath,
-    required this.photoCnt,
   });
 
-  factory MemberFeeds.fromJson({
+  factory MemberPosts.fromJson({
     required Map<String, dynamic> json,
   }) {
-    return MemberFeeds(
-      npostId: json['npostId'],
-      photoDTOs: json['photoDTOs'].map<PhotoDTOs>(
-            (x) => PhotoDTOs(
-          path: x['path'],
-          photoId: x['photoId'],
-        ),
-      ).toList(),
+    return MemberPosts(
+      postId: json['postId'],
       mainPhotoPath: json['mainPhotoPath'],
-      photoCnt: json['photoCnt'],
-    );
-  }
-}
-
-class PhotoDTOs {
-  final String path;
-  final int photoId;
-
-  PhotoDTOs({
-    required this.path,
-    required this.photoId,
-  });
-
-  factory PhotoDTOs.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return PhotoDTOs(
-      path: json['path'],
-      photoId: json['photoId'],
     );
   }
 }

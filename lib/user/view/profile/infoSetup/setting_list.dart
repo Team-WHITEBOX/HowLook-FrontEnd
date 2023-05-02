@@ -21,7 +21,7 @@ class _SettingList extends State<SettingList> {
           scrollDirection: Axis.vertical,
           children: <Widget>[
             ListTile(
-              leading: const Icon(MdiIcons.accountDetails,color: PRIMARY_COLOR,),
+              leading: const Icon(MdiIcons.accountDetails,color: Colors.black,),
               title: const Text('프로필 수정'),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
@@ -32,25 +32,27 @@ class _SettingList extends State<SettingList> {
               },
             ),
             ListTile(
-              leading: const Icon(MdiIcons.headphones,color: PRIMARY_COLOR,),
+              leading: const Icon(MdiIcons.headphones,color: Colors.black,),
               title: const Text('고객센터'),
               // trailing: const Icon(Icons.navigate_next),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(MdiIcons.bellRing,color: PRIMARY_COLOR,),
+              leading: const Icon(MdiIcons.bellRing,color: Colors.black,),
               title: const Text('알림설정'),
               // trailing: const Icon(Icons.navigate_next),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(MdiIcons.logout,color: PRIMARY_COLOR,),
+              leading: const Icon(MdiIcons.logout,color: Colors.black,),
               title: const Text('로그아웃'),
               // trailing: const Icon(Icons.navigate_next),
-              onTap: () {},
+              onTap: () {
+
+              },
             ),
             ListTile(
-              leading: const Icon(MdiIcons.delete,color: PRIMARY_COLOR,),
+              leading: const Icon(MdiIcons.delete,color: Colors.black,),
               title: const Text('회원탈퇴'),
               // trailing: const Icon(Icons.navigate_next),
               onTap: () {},

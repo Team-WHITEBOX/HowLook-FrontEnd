@@ -5,6 +5,9 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.dumpErrorToConsole(details);
+  };
   KakaoSdk.init(nativeAppKey: 'eaea17f771b2bbca9bb72a90b36e5244');
   runApp(
     ProviderScope(

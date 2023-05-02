@@ -4,6 +4,8 @@ import 'package:howlook/user/view/profile/view/my_feed.dart';
 import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
 import 'package:howlook/user/view/profile/view/my_scrap.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/common/const/data.dart';
+import 'package:extended_image/extended_image.dart';
 
 class MainProfileCard extends StatelessWidget {
   // 아이디
@@ -19,9 +21,9 @@ class MainProfileCard extends StatelessWidget {
 
   final bool me;
 
-  final int memberFeedCnt;
+  final int memberPostCount;
 
-  final List<MemberFeeds> memberFeeds;
+  final List<MemberPosts> memberPosts;
 
   const MainProfileCard(
       {required this.memberId,
@@ -30,8 +32,8 @@ class MainProfileCard extends StatelessWidget {
       required this.memberWeight,
       required this.profilePhoto,
       required this.me,
-      required this.memberFeedCnt,
-      required this.memberFeeds,
+      required this.memberPostCount,
+      required this.memberPosts,
       Key? key})
       : super(key: key);
 
@@ -45,8 +47,8 @@ class MainProfileCard extends StatelessWidget {
       memberWeight: model.memberWeight,
       profilePhoto: model.profilePhoto,
       me: model.me,
-      memberFeedCnt: model.memberFeedCnt,
-      memberFeeds: model.memberFeeds,
+      memberPostCount: model.memberPostCount,
+      memberPosts: model.memberPosts,
     );
   }
 
@@ -72,8 +74,8 @@ class MainProfileCard extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                   colors: [
-                                    Color(0xFFa6ceff),
-                                    Color(0xFFD07AFF),
+                                    Colors.black,
+                                    Colors.grey,
                                   ],
                                   begin: FractionalOffset.bottomCenter,
                                   end: FractionalOffset.topCenter,
@@ -89,20 +91,32 @@ class MainProfileCard extends StatelessWidget {
                                   //   ),
                                   // );
                                   return InkWell(
-                                    onTap: (){
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (_) => FeedDetailScreen(
-                                          postId: memberFeeds[index].npostId,
-                                        ),
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (_) => FeedDetailScreen(
+                                            postId: memberPosts[index].postId,
+                                          ),
+                                        ));
+                                      },
+                                      child: Image.network(
+                                        'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberPosts[index].mainPhotoPath}',
+                                        fit: BoxFit.cover,
                                       ));
-                                    },
-                                    child: Image.network(
-                                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberFeeds[index].mainPhotoPath}',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  );
+                                  //   child: memberPosts.isNotEmpty
+                                  //       ? ExtendedImage.network(
+                                  //     '${memberPosts[index].mainPhotoPath}',
+                                  //     fit: BoxFit.cover,
+                                  //     cache: true,
+                                  //   )
+                                  //       : FadeInImage.assetNetwork(
+                                  //     placeholder: 'asset/img/Profile/BaseProfile.JPG',
+                                  //     image: '',
+                                  //     fit: BoxFit.cover,
+                                  //   ),
+                                  // );
                                 },
-                                itemCount: memberFeeds.length,  // memberFeedCnt, // -> PhotoCnt로 수정
+                                itemCount: memberPosts.length, // memberFeedCnt, // -> PhotoCnt로 수정
                               ),
                             ],
                           ),
@@ -115,7 +129,7 @@ class MainProfileCard extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => MyScrap(
-                                      usermid: memberId,
+                                      memberId: memberId,
                                     ),
                                   ),
                                 );
@@ -129,7 +143,7 @@ class MainProfileCard extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => MyFeed(
-                                      usermid: memberId,
+                                      memberId: memberId,
                                     ),
                                   ),
                                 );
@@ -161,8 +175,8 @@ class MainProfileCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          "${memberNickName}", //"${nickName}",
-                          style: TextStyle(
+                          memberNickName, //"${nickName}",
+                          style: const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(
@@ -170,7 +184,7 @@ class MainProfileCard extends StatelessWidget {
                         ),
                         Text(
                           "${memberHeight}cm ${memberWeight}kg", //"${height}cm ${weight}kg",
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 15,
                           ),
@@ -195,23 +209,33 @@ class MainProfileCard extends StatelessWidget {
               bottom: 60,
               right: 20,
               child: (Container(
-                  padding: EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                        begin: Alignment.bottomRight,
-                        end: Alignment.topLeft,
-                        colors: [
-                          Color(0xFFD07AFF),
-                          Color(0xFFa6ceff),
-                        ]),
-                    borderRadius: BorderRadius.circular(500),
-                  ),
-                  child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.width / 6,
-                    backgroundImage: NetworkImage(
-                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${profilePhoto}',
-                    ),
-                  )
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                      begin: Alignment.bottomRight,
+                      end: Alignment.topLeft,
+                      colors: [
+                        Colors.grey,
+                        Colors.white,
+                      ]),
+                  borderRadius: BorderRadius.circular(500),
+                ),
+                // child: CircleAvatar(
+                //   radius: MediaQuery.of(context).size.width / 6,
+                //   backgroundImage: NetworkImage(
+                //     'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${profilePhoto}',
+                //   ),
+                // )
+                child: CircleAvatar(
+                  radius: MediaQuery.of(context).size.width / 6,
+                  backgroundImage: profilePhoto != null
+                      ? ExtendedImage.network(
+                          profilePhoto,
+                          fit: BoxFit.cover,
+                          cache: true,
+                        ).image
+                      : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
+                ),
               )),
             ),
           ],

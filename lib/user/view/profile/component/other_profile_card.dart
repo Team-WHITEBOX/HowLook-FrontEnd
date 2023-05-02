@@ -5,6 +5,7 @@ import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
 import 'package:howlook/user/view/profile/view/my_scrap.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
 import 'package:howlook/user/view/profile/model/other_profile_model.dart';
+import 'package:extended_image/extended_image.dart';
 
 class OtherProfileCard extends StatelessWidget {
   // 아이디
@@ -20,9 +21,9 @@ class OtherProfileCard extends StatelessWidget {
 
   final bool me;
 
-  final int memberFeedCnt;
+  final int memberPostCount;
 
-  final List<MemberFeeds> memberFeeds;
+  final List<MemberPosts> memberPosts;
 
   const OtherProfileCard(
       {required this.memberId,
@@ -31,8 +32,8 @@ class OtherProfileCard extends StatelessWidget {
         required this.memberWeight,
         required this.profilePhoto,
         required this.me,
-        required this.memberFeedCnt,
-        required this.memberFeeds,
+        required this.memberPostCount,
+        required this.memberPosts,
         Key? key})
       : super(key: key);
 
@@ -46,8 +47,8 @@ class OtherProfileCard extends StatelessWidget {
       memberWeight: model.memberWeight,
       profilePhoto: model.profilePhoto,
       me: model.me,
-      memberFeedCnt: model.memberFeedCnt,
-      memberFeeds: model.memberFeeds,
+      memberPostCount: model.memberPostCount,
+      memberPosts: model.memberPosts,
     );
   }
 
@@ -73,8 +74,8 @@ class OtherProfileCard extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        PRIMARY_COLOR,
-                                        Color.fromRGBO(0, 32, 19, 1)
+                                        Colors.black,
+                                        Colors.grey,
                                       ],
                                       begin: FractionalOffset.bottomCenter,
                                       end: FractionalOffset.topCenter,
@@ -93,17 +94,17 @@ class OtherProfileCard extends StatelessWidget {
                                     onTap: (){
                                       Navigator.of(context).push(MaterialPageRoute(
                                         builder: (_) => FeedDetailScreen(
-                                          postId: memberFeeds[index].npostId,
+                                          postId: memberPosts[index].postId,
                                         ),
                                       ));
                                     },
                                     child: Image.network(
-                                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberFeeds[index].mainPhotoPath}',
+                                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberPosts[index].mainPhotoPath}',
                                       fit: BoxFit.cover,
                                     ),
                                   );
                                 },
-                                itemCount: memberFeeds.length,  // memberFeedCnt, // -> PhotoCnt로 수정
+                                itemCount: memberPosts.length,  // memberFeedCnt, // -> PhotoCnt로 수정
                               ),
                             ],
                           ),
@@ -128,7 +129,7 @@ class OtherProfileCard extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => MyFeed(
-                                      usermid: memberId,
+                                      memberId: memberId,
                                     ),
                                   ),
                                 );
@@ -200,17 +201,21 @@ class OtherProfileCard extends StatelessWidget {
                         begin: Alignment.bottomRight,
                         end: Alignment.topLeft,
                         colors: [
-                          Color(0xFFD07AFF),
-                          Color(0xFFa6ceff),
+                          Colors.grey,
+                          Colors.white,
                         ]),
                     borderRadius: BorderRadius.circular(500),
                   ),
-                  child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.width / 6,
-                    backgroundImage: NetworkImage(
-                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${profilePhoto}',
-                    ),
-                  )
+                child: CircleAvatar(
+                  radius: MediaQuery.of(context).size.width / 6,
+                  backgroundImage: profilePhoto != null
+                      ? ExtendedImage.network(
+                    profilePhoto,
+                    fit: BoxFit.cover,
+                    cache: true,
+                  ).image
+                      : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
+                ),
               )),
             ),
           ],

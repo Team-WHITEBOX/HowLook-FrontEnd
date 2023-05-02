@@ -79,7 +79,7 @@ class FeedCard extends ConsumerWidget {
                           fit: BoxFit.cover,
                           cache: true,
                         ).image
-                      : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
+                      : null,
                 ),
                 const SizedBox(width: 16.0),
                 Column(

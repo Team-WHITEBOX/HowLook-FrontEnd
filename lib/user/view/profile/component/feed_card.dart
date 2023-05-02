@@ -3,20 +3,22 @@ import 'package:howlook/user/view/profile/model/feed_model.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:extended_image/extended_image.dart';
+
 
 class MyFeedCard extends StatelessWidget {
 
   final bool me;
 
-  final int memberFeedCnt;
+  final int memberPostCount;
 
-  final List<MemberFeeds> memberFeeds;
+  final List<MemberPosts> memberPosts;
 
   const MyFeedCard(
       {
         required this.me,
-        required this.memberFeedCnt,
-        required this.memberFeeds,
+        required this.memberPostCount,
+        required this.memberPosts,
         Key? key})
       : super(key: key);
 
@@ -25,8 +27,8 @@ class MyFeedCard extends StatelessWidget {
   }) {
     return MyFeedCard(
       me: model.me,
-      memberFeedCnt: model.memberFeedCnt,
-      memberFeeds: model.memberFeeds,
+      memberPostCount: model.memberPostCount,
+      memberPosts: model.memberPosts,
     );
   }
 
@@ -59,21 +61,45 @@ class MyFeedCard extends StatelessWidget {
               ],
             ),
             childrenDelegate: SliverChildBuilderDelegate(
-              childCount: memberFeedCnt,
+              childCount: memberPosts.length,
                 (_, int index) {
-              return InkWell(
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => FeedDetailScreen(
-                      postId: memberFeeds[index].npostId,
+              // return InkWell(
+              //   onTap: (){
+              //     Navigator.of(context).push(MaterialPageRoute(
+              //       builder: (_) => FeedDetailScreen(
+              //         postId: memberPosts[index].postId,
+              //       ),
+              //     ));
+              //   },
+              //   child: Image.network(
+              //     'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberPosts[index].mainPhotoPath}',
+              //     fit: BoxFit.cover,
+              //   ),
+              // );
+                  return InkWell(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => FeedDetailScreen(
+                          postId: memberPosts[index].postId,
+                        ),
+                      ));
+                    },
+                    // child: memberPosts.isNotEmpty
+                    //     ? ExtendedImage.network(
+                    //   'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberPosts[index].mainPhotoPath}',
+                    //   fit: BoxFit.cover,
+                    //   cache: true,
+                    // )
+                    //     : FadeInImage.assetNetwork(
+                    //   placeholder: 'asset/img/Profile/BaseProfile.JPG',
+                    //   image: '',
+                    //   fit: BoxFit.cover,
+                    // ),
+                    child: Image.network(
+                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberPosts[index].mainPhotoPath}',
+                      fit: BoxFit.cover,
                     ),
-                  ));
-                },
-                child: Image.network(
-                  'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberFeeds[index].mainPhotoPath}',
-                  fit: BoxFit.cover,
-                ),
-              );
+                  );
             }));
   }
 

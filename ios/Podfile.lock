@@ -8,7 +8,7 @@ PODS:
     - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
-  - kakao_flutter_sdk_common (1.4.0):
+  - kakao_flutter_sdk_common (1.4.2):
     - Flutter
   - location (0.0.1):
     - Flutter
@@ -71,13 +71,13 @@ SPEC CHECKSUMS:
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   flutter_web_auth: c25208760459cec375a3c39f6a8759165ca0fa4d
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
-  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
-  kakao_flutter_sdk_common: ee154ed8f05ee1fec394052d6f9db86c8a84f4f9
+  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  kakao_flutter_sdk_common: fc550ec16c85451e874d5304d2e1c540a221f5cb
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
-  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
+  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
 PODFILE CHECKSUM: 7577f97086a104a6a9dd3d3dfcc06867cd94a55f

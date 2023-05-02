@@ -12,8 +12,8 @@ import 'package:howlook/user/view/profile/component/other_profile_card.dart';
 import 'package:howlook/user/view/profile/model/other_profile_model.dart';
 
 class OtherProfileScreen extends ConsumerStatefulWidget {
-  final String usermid; // 포스트 아이디로 특정 게시글 조회
-  const OtherProfileScreen({required this.usermid, Key? key}) : super(key: key);
+  final String memberId; // 포스트 아이디로 특정 게시글 조회
+  const OtherProfileScreen({required this.memberId, Key? key}) : super(key: key);
 
   @override
   ConsumerState<OtherProfileScreen> createState() => _OtherProfileScreenState();
@@ -26,7 +26,7 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfileScreen> {
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
-      'http://$API_SERVICE_URI/member/${widget.usermid}',
+      'http://$API_SERVICE_URI/member/${widget.memberId}',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',
