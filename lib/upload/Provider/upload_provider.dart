@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/main.dart';
-import 'package:howlook/upload/model/select_image_model.dart';
-import 'package:howlook/upload/view/upload_image_edited_screen.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-final GetImageProvider =
+final getImageProvider =
     StateNotifierProvider<GetImageStateNotifier, List<AssetEntity>>(
         (ref) => GetImageStateNotifier());
 

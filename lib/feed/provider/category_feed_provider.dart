@@ -6,7 +6,7 @@ import 'package:howlook/feed/repository/feed_repository.dart';
 final categoryfeedProvider =
 StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
       (ref) {
-    final crepository = ref.watch((FeedRepositoryProvider));
+    final crepository = ref.watch((feedRepositoryProvider));
     final notifier = CategoryFeedStateNotifier(crepository: crepository);
     return notifier;
   },

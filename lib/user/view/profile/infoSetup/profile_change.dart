@@ -88,6 +88,7 @@ class _ProfileChangeScreen extends State<ProfileChanging> {
                         height: 5,
                       ),
                       CustomTextFormField(
+                        label: "닉네임",
                         hintText: "닉네임을 바꿔보세요",
                         onChanged: (String value) {
                           nickName = value;
@@ -111,6 +112,7 @@ class _ProfileChangeScreen extends State<ProfileChanging> {
                         height: 5,
                       ),
                       CustomTextFormField(
+                        label: "키",
                         hintText: "키를 입력해주세요",
                         onChanged: (String value) {
                           height = int.parse(value);
@@ -128,6 +130,7 @@ class _ProfileChangeScreen extends State<ProfileChanging> {
                         height: 5,
                       ),
                       CustomTextFormField(
+                        label: "몸무게",
                         hintText: "몸무게를 입력해주세요",
                         onChanged: (String value) {
                           weight = int.parse(value);
@@ -145,6 +148,7 @@ class _ProfileChangeScreen extends State<ProfileChanging> {
                         height: 5,
                       ),
                       CustomTextFormField(
+                        label: "휴대폰 번호",
                         hintText: "휴대폰 번호를 입력해주세요",
                         onChanged: (String value) {
                           phone = value;
@@ -171,7 +175,7 @@ class _ProfileChangeScreen extends State<ProfileChanging> {
                           ),
                           minimumSize: Size(100, 50),
                         ),
-                        child: Text(
+                        child: const Text(
                           "회원정보 수정 완료",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

@@ -118,7 +118,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "HowLook에 오신걸 환영해요! ☺️",
       textAlign: TextAlign.center,
       style: TextStyle(

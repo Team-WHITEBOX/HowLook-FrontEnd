@@ -12,13 +12,13 @@ class AlbumHeader extends ConsumerStatefulWidget {
 class _AlbumHeaderState extends ConsumerState<AlbumHeader> {
 
   Future<String> _name() async {
-    String name = ref.read(GetImageProvider.notifier).currentAlbum!.name;
+    String name = ref.read(getImageProvider.notifier).currentAlbum!.name;
     return name;
   }
 
   @override
   Widget build(BuildContext context) {
-    final stateRead = ref.read(GetImageProvider.notifier);
+    final stateRead = ref.read(getImageProvider.notifier);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

@@ -13,7 +13,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'feed_repository.g.dart';
 
-final FeedRepositoryProvider = Provider<FeedRepository>(
+final feedRepositoryProvider = Provider<FeedRepository>(
   (ref) {
     // dio를 dioProvider에서 가져오기
     // Provider에서는 watch쓰는게 좋음 -> watch하는 Provider가 변경됐을때 바로 인지해서 새로 가져올 수 있기 때문

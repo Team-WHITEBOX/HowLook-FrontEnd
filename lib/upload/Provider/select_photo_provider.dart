@@ -1,16 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:howlook/main.dart';
-import 'package:howlook/upload/view/upload_image_edited_screen.dart';
+import 'package:dio/dio.dart';
+import 'package:howlook/upload/model/upload_formdata_model.dart';
+import 'package:howlook/upload/repository/feed_upload_repository.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:retrofit/dio.dart';
 import 'package:riverpod/riverpod.dart';
 
-final SelectedImageProvider =
+final selectedImageProvider =
     StateNotifierProvider<SelectedImageStateNotifier, List<SelectedImageInfo>>(
-        (ref) => SelectedImageStateNotifier());
+  (ref) {
+    final repository = ref.watch((feedUploadRepositoryProvider));
+    final notifier = SelectedImageStateNotifier(repository: repository);
+    return notifier;
+  },
+);
 
 class SelectedImageStateNotifier
     extends StateNotifier<List<SelectedImageInfo>> {
-  SelectedImageStateNotifier() : super([]);
+  final FeedUploadRepository repository;
+
+  SelectedImageStateNotifier({
+    required this.repository,
+  }) : super([]);
+
+  // 상태 초기화 함수
+  void clearImage() {
+    state.clear();
+  }
 
   // 이미지 선택하는 함수
   void selectImage(AssetEntity image) {
@@ -39,35 +54,105 @@ class SelectedImageStateNotifier
   void selectImageForEdited(AssetEntity image) {
     // 선택된 이미지에 해당하는 클래스를 state(List)에서 찾고 isSelected 값 True로 바꾸기
     state = state
-        .map((e) => e.image == image
-            ? SelectedImageInfo(
-                image: e.image,
-                isSelected: true,
-                isEdited: e.isEdited,
-                path: e.path,
-              )
-            : SelectedImageInfo(
-                image: e.image,
-                isSelected: false,
-                isEdited: e.isEdited,
-                path: e.path,
-              ))
+        .map(
+          (e) => e.image == image
+              ? SelectedImageInfo(
+                  image: e.image,
+                  isSelected: true,
+                  isEdited: e.isEdited,
+                  path: e.path,
+                )
+              : SelectedImageInfo(
+                  image: e.image,
+                  isSelected: false,
+                  isEdited: e.isEdited,
+                  path: e.path,
+                ),
+        )
         .toList();
   }
 
-  bool hasValue() {
+  bool hasSelectedValue() {
     return state.any((element) => element.isSelected);
   }
 
-  gotoImageEdited() async {
-    final context = CandyGlobalVariable.naviagatorState.currentContext;
+  // state의 편집되지 않은 사진이 존재하면 true 반환
+  //                          없다면 false 반환
+  bool hasEditedValue() {
+    return state.any((element) => !element.isEdited);
+  }
 
-    Navigator.push(
-      context!,
-      MaterialPageRoute(
-        builder: (context) => UploadImageEditedScreen(),
-      ),
+  void setEdited(SelectedImageInfo e, String path) {
+    // 해당 클래스의 경로에 캡처 파일 경로 저장
+    e.path = path;
+    // 편집 여부 true 변경
+    e.isEdited = true;
+    // 해당 이미지 이름 저장
+    e.imageName = path.split('/').last;
+  }
+
+  void setFaceDetection(
+    SelectedImageInfo e,
+    String imageName,
+    String afterOutPath,
+    String afterInPath,
+  ) {
+    state = state
+        .map(
+          (e) => e.imageName == imageName
+              ? SelectedImageInfo(
+                  image: e.image,
+                  isSelected: e.isSelected,
+                  isEdited: e.isEdited,
+                  path: e.path,
+                  imageName: e.imageName,
+                  afterDetectionOutPath: afterOutPath,
+                  afterDetectionInPath: afterInPath,
+                )
+              : SelectedImageInfo(
+                  image: e.image,
+                  isSelected: e.isSelected,
+                  isEdited: e.isEdited,
+                  path: e.path,
+                  imageName: e.imageName,
+                  afterDetectionOutPath: e.afterDetectionOutPath,
+                  afterDetectionInPath: e.afterDetectionInPath,
+                ),
+        )
+        .toList();
+  }
+
+  void setEditedClear() {
+    state = state
+        .map(
+          (e) => SelectedImageInfo(
+            image: e.image,
+            isSelected: e.isSelected,
+            isEdited: e.isEdited = false,
+            path: e.path = '',
+            imageName: e.imageName = '',
+            afterDetectionOutPath: e.afterDetectionOutPath = '',
+            afterDetectionInPath: e.afterDetectionInPath = '',
+          ),
+        )
+        .toList();
+  }
+
+  Future<HttpResponse> uploadImage(
+      UploadModel uploadModel, List<MultipartFile> files) async {
+    final resp = await repository.uploadImage(
+      content: uploadModel.content!,
+      amekaji: uploadModel.hashtagAmekaji!,
+      casual: uploadModel.hashtagCasual!,
+      guitar: uploadModel.hashtagGuitar!,
+      minimal: uploadModel.hashtagMinimal!,
+      sporty: uploadModel.hashtagSporty!,
+      street: uploadModel.hashtagStreet!,
+      latitude: uploadModel.latitude!,
+      longitude: uploadModel.longitude!,
+      files: files,
     );
+    return resp;
   }
 }
 
@@ -76,11 +161,17 @@ class SelectedImageInfo {
   bool isSelected = false;
   bool isEdited = false;
   String path = "";
+  String? imageName = "";
+  String? afterDetectionOutPath = "";
+  String? afterDetectionInPath = "";
 
   SelectedImageInfo({
     required this.image,
     required this.isSelected,
     required this.isEdited,
     required this.path,
+    this.imageName = "",
+    this.afterDetectionOutPath = "",
+    this.afterDetectionInPath = "",
   });
 }

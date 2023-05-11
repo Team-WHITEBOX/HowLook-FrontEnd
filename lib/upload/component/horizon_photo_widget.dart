@@ -15,14 +15,15 @@ class _HorizonPhotoState extends ConsumerState<HorizonPhoto> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedState = ref.watch(SelectedImageProvider);
-    final selectedStateRead = ref.read(SelectedImageProvider.notifier);
+    final selectedState = ref.watch(selectedImageProvider);
+    final selectedStateRead = ref.read(selectedImageProvider.notifier);
 
     return SizedBox(
-      height: 120,
+      height: 125,
+      width: MediaQuery.of(context).size.width - 30,
       child: ListView(
-        controller: scrollController,
         physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(20),
         scrollDirection: Axis.horizontal,
         children: selectedState
             .map(
@@ -30,8 +31,8 @@ class _HorizonPhotoState extends ConsumerState<HorizonPhoto> {
                 alignment: Alignment.center,
                 children: [
                   const SizedBox(
-                    width: 100,
-                    height: 100,
+                    width: 90,
+                    height: 90,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -39,22 +40,43 @@ class _HorizonPhotoState extends ConsumerState<HorizonPhoto> {
                         selectedStateRead.selectImageForEdited(e.image);
                       });
                     },
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: AssetEntityImage(
-                          e.image,
-                          fit: BoxFit.cover,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: AssetEntityImage(
+                                e.image,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        _dimContainer(e.image),
+                      ],
                     ),
                   ),
                 ],
               ),
             )
             .toList(),
+      ),
+    );
+  }
+
+  Widget _dimContainer(AssetEntity e) {
+    final selectedState = ref.watch(selectedImageProvider);
+    final isSelected =
+        selectedState.any((element) => element.image == e && element.isEdited);
+
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.black54 : Colors.transparent,
+        ),
       ),
     );
   }

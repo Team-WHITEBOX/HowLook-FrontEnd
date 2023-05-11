@@ -25,7 +25,7 @@ Future<Position> getCurrentLocation() async {
 final nearfeedProvider =
     StateNotifierProvider<NearFeedStateNotifier, CursorPaginationBase>(
   (ref) {
-    final nrepository = ref.watch((FeedRepositoryProvider));
+    final nrepository = ref.watch((feedRepositoryProvider));
     final notifier = NearFeedStateNotifier(nrepository: nrepository);
     return notifier;
   },

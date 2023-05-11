@@ -154,9 +154,9 @@ class MainFeedMoreVertScreen extends ConsumerWidget {
                                       final storage = ref.read(secureStorageProvider);
                                       final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
                                       try {
-                                        print('http://$API_SERVICE_URI/feed/delete?npost_id=$postId');
+                                        print('http://$API_SERVICE_URI/post/$postId');
                                         final resp = await dio.delete(
-                                          'http://$API_SERVICE_URI/feed/delete?npost_id=$postId',
+                                          'http://$API_SERVICE_URI/post/$postId',
                                           options: Options(
                                             headers: {
                                               'authorization':

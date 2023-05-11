@@ -7,7 +7,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'signup_repository.g.dart';
 
-final SignupRepositoryProvider = Provider<SignupRepository>(
+final signupRepositoryProvider = Provider<SignupRepository>(
       (ref) {
     final dio = ref.watch(dioProvider);
     final repository =

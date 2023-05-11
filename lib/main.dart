@@ -1,16 +1,29 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/user/view/splash_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
-void main() {
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      debug: true, // optional: set to false to disable printing logs to console (default: true)
+      ignoreSsl: true // option: set to false to disable working with http links (default: false)
+  );
+  await initializeDefault();
   KakaoSdk.init(nativeAppKey: 'eaea17f771b2bbca9bb72a90b36e5244');
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: _App(),
     ),
   );
+}
+
+Future<void> initializeDefault() async {
+  FirebaseApp app = await Firebase.initializeApp();
+  print('Initialized default app $app');
 }
 
 class _App extends StatelessWidget {
@@ -19,17 +32,11 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: CandyGlobalVariable.naviagatorState,
       theme: ThemeData(
         fontFamily: 'NotoSans',
       ),
       debugShowCheckedModeBanner: false,
-      home: Splash_Screen(),
+      home: const Splash_Screen(),
     );
   }
-}
-
-class CandyGlobalVariable {
-  static final GlobalKey<NavigatorState> naviagatorState =
-  GlobalKey<NavigatorState>();
 }

@@ -9,7 +9,7 @@ class ImageSelectList extends ConsumerWidget {
   const ImageSelectList({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final getState = ref.watch(GetImageProvider);
+    final getState = ref.watch(getImageProvider);
 
     return GridView(
       physics: const BouncingScrollPhysics(),

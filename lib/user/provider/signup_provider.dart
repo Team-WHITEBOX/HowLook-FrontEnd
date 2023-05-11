@@ -18,7 +18,9 @@ class SignupStateNotifier extends StateNotifier<List<SignupModel>> {
     );
   }
 
-  void clear() {}
+  void clear() {
+    state.clear();
+  }
 
   void outputSignupModel() {
     final SignupModel model = state[0];

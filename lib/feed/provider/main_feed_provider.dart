@@ -22,7 +22,7 @@ final feedDetailProvider = Provider.family<FeedModel?, int>((ref, id) {
 final mainfeedProvider =
     StateNotifierProvider<MainFeedStateNotifier, CursorPaginationBase>(
   (ref) {
-    final repository = ref.watch((FeedRepositoryProvider));
+    final repository = ref.watch((feedRepositoryProvider));
     final notifier = MainFeedStateNotifier(repository: repository);
     return notifier;
   },

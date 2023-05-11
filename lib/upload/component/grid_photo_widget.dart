@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/upload/Provider/select_photo_provider.dart';
-import 'package:howlook/upload/Provider/upload_provider.dart';
-import 'package:howlook/upload/model/select_image_model.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class GridPhotoItemWidget extends ConsumerStatefulWidget {
@@ -16,7 +14,7 @@ class GridPhotoItemWidget extends ConsumerStatefulWidget {
 
 class _GridPhotoItemWidgetState extends ConsumerState<GridPhotoItemWidget> {
   void _selectImage(AssetEntity e) {
-    ref.read(SelectedImageProvider.notifier).selectImage(e);
+    ref.read(selectedImageProvider.notifier).selectImage(e);
   }
 
   @override
@@ -47,29 +45,22 @@ class _GridPhotoItemWidgetState extends ConsumerState<GridPhotoItemWidget> {
   }
 
   Widget _dimContainer(AssetEntity e) {
-    final isSelected = ref
-        .read(SelectedImageProvider.notifier)
-        .state
-        .any((element) => element.image == e);
+    final selectedState = ref.watch(selectedImageProvider);
+
+    final isSelected = selectedState.any((element) => element.image == e);
     return Positioned.fill(
       child: Container(
         decoration: BoxDecoration(
           color: isSelected ? Colors.black38 : Colors.transparent,
-          // border: Border.all(
-          //   color: isSelected ? Colors.lightBlue : Colors.transparent,
-          //   width: 5,
-          // ),
         ),
       ),
     );
   }
 
   Widget _selectNumberContainer(AssetEntity e) {
-    final num = ref
-            .read(SelectedImageProvider.notifier)
-            .state
-            .indexWhere((element) => element.image == e) +
-        1;
+    final selectedState = ref.watch(selectedImageProvider);
+
+    final num = selectedState.indexWhere((element) => element.image == e) + 1;
     return Positioned(
         right: 8,
         top: 1,

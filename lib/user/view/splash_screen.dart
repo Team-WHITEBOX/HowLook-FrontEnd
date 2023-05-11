@@ -65,6 +65,7 @@ class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
+            // builder: (_) => RootTab(),
             builder: (_) => IntroScreen(),
           ),
               (route) => false,

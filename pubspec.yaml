@@ -68,10 +68,21 @@ dependencies:
   dropdown_button2: ^2.0.0
   convex_bottom_bar: ^3.2.0
 
+  # Loading Indicator
+  flutter_spinkit: ^5.2.0
+
   # 업로드 스크린 구성시 이미지 처리 관련 라이브러리
   photo_manager: ^2.6.0
   photo_view: ^0.14.0
   path_provider: ^2.0.14 # 확대 파일 임시 저장 관련 라이브러리
+
+  # 파이어베이스
+  firebase_core: ^2.10.0
+  firebase_storage: ^11.1.1
+  cloud_firestore: ^4.5.2
+
+  # 비식별 처리 후 파베 링크에서 파일 다운로드 관련 라이브러리
+  flutter_downloader: ^1.10.2
 
 dev_dependencies:
   flutter_test:
@@ -115,19 +126,31 @@ flutter:
   fonts:
     - family: NotoSans
       fonts:
-        - asset: asset/fonts/NotoSansKR-Black.otf
+        - asset: asset/fonts/NotoSans/NotoSansKR-Black.otf
           weight: 900
-        - asset: asset/fonts/NotoSansKR-Bold.otf
+        - asset: asset/fonts/NotoSans/NotoSansKR-Bold.otf
           weight: 700
-        - asset: asset/fonts/NotoSansKR-Medium.otf
+        - asset: asset/fonts/NotoSans/NotoSansKR-Medium.otf
           weight: 500
-        - asset: asset/fonts/NotoSansKR-Regular.otf
+        - asset: asset/fonts/NotoSans/NotoSansKR-Regular.otf
           weight: 400
-        - asset: asset/fonts/NotoSansKR-Light.otf
+        - asset: asset/fonts/NotoSans/NotoSansKR-Light.otf
           weight: 300
-        - asset: asset/fonts/NotoSansKR-Thin.otf
+        - asset: asset/fonts/NotoSans/NotoSansKR-Thin.otf
           weight: 100
-
+    - family: NanumSquareNeo
+      fonts:
+        - asset: asset/fonts/NanumSquareNeo/NanumSquareNeoOTF-Hv.otf
+        - asset: asset/fonts/NanumSquareNeo/NanumSquareNeoOTF-Eb.otf
+        - asset: asset/fonts/NanumSquareNeo/NanumSquareNeoOTF-Bd.otf
+        - asset: asset/fonts/NanumSquareNeo/NanumSquareNeoOTF-Rg.otf
+        - asset: asset/fonts/NanumSquareNeo/NanumSquareNeoOTF-Lt.otf
+    - family: NaverNanumSquareRound
+      fonts:
+        - asset: asset/fonts/NaverNanumSquareRound/NanumSquareRoundOTFEB.otf
+        - asset: asset/fonts/NaverNanumSquareRound/NanumSquareRoundOTFB.otf
+        - asset: asset/fonts/NaverNanumSquareRound/NanumSquareRoundOTFR.otf
+        - asset: asset/fonts/NaverNanumSquareRound/NanumSquareRoundOTFL.otf
 
 
   # To add custom fonts to your application, add a fonts section here,
