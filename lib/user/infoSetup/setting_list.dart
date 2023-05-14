@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/user/view/profile/infoSetup/profile_change.dart';
+import 'package:howlook/user/infoSetup/profile_change.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/user/view/splash_screen.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

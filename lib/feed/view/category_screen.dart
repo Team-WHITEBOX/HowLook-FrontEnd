@@ -43,7 +43,7 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
               children: [
                 Row(
                   children: [
-                    const SizedBox(width: 30),
+                    SizedBox(width: MediaQuery.of(context).size.width / 20),
                     Text(
                       "GENDER",
                       style: TextStyle(
@@ -55,14 +55,29 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: MediaQuery.of(context).size.height / 100),
                 // ** 성별 체크박스 **
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Row(
                       children: [
-                        SizedBox(width: 20),
+                        Checkbox(
+                          value: ref.watch(categoryProvider).gender == "M",
+                          activeColor: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4)),
+                          onChanged: (value) {
+                            ref
+                                .read(categoryProvider.notifier)
+                                .toggleGenderSelected(gender: value! ? "M" : "F"); // 수정된 부분
+                            print(ref.watch(categoryProvider).gender);
+                          },
+                          visualDensity: VisualDensity(
+                            horizontal: VisualDensity.minimumDensity,
+                            vertical: VisualDensity.minimumDensity,
+                          ),
+                        ),
                         Text(
                           "MEN",
                           style: TextStyle(
@@ -70,23 +85,26 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             fontSize: 18,
                           ),
                         ),
-                        SizedBox(width: 10),
+                      ],
+                    ),
+                    Row(
+                      children: [
                         Checkbox(
-                          value: state.isManChecked,
+                          value: ref.watch(categoryProvider).gender == "F", // 수정된 부분
                           activeColor: PRIMARY_COLOR,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4)),
                           onChanged: (value) {
                             ref
                                 .read(categoryProvider.notifier)
-                                .toggleGenderSelected(gender: "Man");
+                                .toggleGenderSelected(gender: value! ? "F" : "M"); // 수정된 부분
+                            print(ref.watch(categoryProvider).gender);
                           },
+                          visualDensity: VisualDensity(
+                            horizontal: VisualDensity.minimumDensity,
+                            vertical: VisualDensity.minimumDensity,
+                          ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const SizedBox(width: 20),
                         Text(
                           "WOMEN",
                           style: TextStyle(
@@ -94,79 +112,79 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             fontSize: 18,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Checkbox(
-                          value: state.isWomanChecked,
-                          activeColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          onChanged: (value) {
-                            ref
-                                .read(categoryProvider.notifier)
-                                .toggleGenderSelected(gender: "Woman");
-                          },
-                        ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: MediaQuery.of(context).size.height / 30),
 
                 /////////////////////////////////////////////
                 Row(
                   children: [
+                    SizedBox(width: MediaQuery.of(context).size.width / 20),
+                    Text(
+                      "HIEGHT / WEIGHT",
+                      style: TextStyle(
+                        fontFamily: 'NotoSans',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: BODY_TEXT_COLOR,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 100),
+                Row(
+                  children: [
+                    // SizedBox(width: 20),
+                    SizedBox(width: MediaQuery.of(context).size.width / 20),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            const SizedBox(width: 30),
-                            Text(
-                              "키",
-                              style: TextStyle(
-                                fontFamily: 'NotoSans',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: BODY_TEXT_COLOR,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          "키",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: BODY_TEXT_COLOR,
+                          ),
                         ),
                         SizedBox(
-                            height: MediaQuery.of(context).size.height / 10000),
-                        _Slide(BodyType: "Height"),
+                            height: MediaQuery.of(context).size.height / 100),
+                        _HeightSlide(BodyType: "Height"), //드롭다운 버튼
                       ],
                     ),
-                    // const SizedBox(width: 10),
-                    // Column(
-                    //   children: [
-                    //     Row(
-                    //       children: [
-                    //         // const SizedBox(width: 30),
-                    //         Text(
-                    //           "몸무게",
-                    //           style: TextStyle(
-                    //             fontFamily: 'NotoSans',
-                    //             fontSize: 15,
-                    //             fontWeight: FontWeight.w400,
-                    //             color: BODY_TEXT_COLOR,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     SizedBox(
-                    //         height: MediaQuery.of(context).size.height / 10000),
-                    //     _Slide(BodyType: "Weight"),
-                    //   ],
-                    // ),
+                    SizedBox(width: MediaQuery.of(context).size.width / 20),
+                    // SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "몸무게",
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            color: BODY_TEXT_COLOR,
+                          ),
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height / 100),
+                        _WeightSlide(BodyType: "Weight"), //드롭다운 버튼
+                      ],
+                    ),
                   ],
                 ),
                 /////////////////////////////////////////////
 
                 // ******** 스타일 ********
                 // ** 스타일 텍스트 **
+
+                SizedBox(height: MediaQuery.of(context).size.height / 30),
                 Row(
                   children: [
-                    const SizedBox(width: 30),
+                    SizedBox(width: MediaQuery.of(context).size.width / 20),
                     Text(
                       "STYLE",
                       style: TextStyle(
@@ -178,14 +196,28 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height / 10000),
+                SizedBox(height: MediaQuery.of(context).size.height / 100),
                 // ** 스타일 체크박스 **
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
                       children: <Widget>[
-                        const SizedBox(width: 40),
+                        // const SizedBox(width: 40),
+                        Checkbox(
+                            value: state.hashtagDTOMinimal,
+                            activeColor: PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            onChanged: (value) {
+                              ref
+                                  .read(categoryProvider.notifier)
+                                  .toggleStyleSelected(style: "Minimal");
+
+                              print(ref.watch(categoryProvider).hashtagDTOMinimal);
+                            },
+                            visualDensity: VisualDensity.standard),
+                        // const SizedBox(width: 30),
                         Text(
                           "미니멀",
                           style: TextStyle(
@@ -193,19 +225,21 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             fontSize: 18,
                           ),
                         ),
-                        const SizedBox(width: 30),
-                        Checkbox(
-                          value: state.isMinimalChecked,
-                          activeColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          onChanged: (value) {
-                            ref
-                                .read(categoryProvider.notifier)
-                                .toggleStyleSelected(style: "Minimal");
-                          },
-                        ),
                         SizedBox(width: MediaQuery.of(context).size.width / 8),
+                        Checkbox(
+                            value: state.hashtagDTOCasual,
+                            activeColor: PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            onChanged: (value) {
+                              ref
+                                  .read(categoryProvider.notifier)
+                                  .toggleStyleSelected(style: "Casual");
+
+                              print(ref.watch(categoryProvider).hashtagDTOCasual);
+                            },
+                            visualDensity: VisualDensity.standard),
+                        // const SizedBox(width: 30),
                         Text(
                           "캐주얼",
                           style: TextStyle(
@@ -213,23 +247,24 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             fontSize: 18,
                           ),
                         ),
-                        const SizedBox(width: 30),
-                        Checkbox(
-                          value: state.isCasualChecked,
-                          activeColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          onChanged: (value) {
-                            ref
-                                .read(categoryProvider.notifier)
-                                .toggleStyleSelected(style: "Casual");
-                          },
-                        ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const SizedBox(width: 40),
+                        // const SizedBox(width: 40),
+                        Checkbox(
+                            value: state.hashtagDTOStreet,
+                            activeColor: PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            onChanged: (value) {
+                              ref
+                                  .read(categoryProvider.notifier)
+                                  .toggleStyleSelected(style: "Street");
+                              print(ref.watch(categoryProvider).hashtagDTOStreet);
+                            },
+                            visualDensity: VisualDensity.standard),
+                        // const SizedBox(width: 30),
                         Text(
                           "스트릿",
                           style: TextStyle(
@@ -237,20 +272,21 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             fontSize: 18,
                           ),
                         ),
-                        const SizedBox(width: 30),
-                        Checkbox(
-                          value: state.isStreetChecked,
-                          activeColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          onChanged: (value) {
-                            ref
-                                .read(categoryProvider.notifier)
-                                .toggleStyleSelected(style: "Street");
-                          },
-                        ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 9 + 4),
+                        Checkbox(
+                            value: state.hashtagDTOAmekaji,
+                            activeColor: PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            onChanged: (value) {
+                              ref
+                                  .read(categoryProvider.notifier)
+                                  .toggleStyleSelected(style: "AmericanCasual");
+                              print(ref.watch(categoryProvider).hashtagDTOAmekaji);
+                            },
+                            visualDensity: VisualDensity.standard),
+                        // const SizedBox(width: 15),
                         Text(
                           "아메카지",
                           style: TextStyle(
@@ -258,23 +294,25 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             fontSize: 18,
                           ),
                         ),
-                        const SizedBox(width: 15),
-                        Checkbox(
-                          value: state.isAmericanCasualChecked,
-                          activeColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          onChanged: (value) {
-                            ref
-                                .read(categoryProvider.notifier)
-                                .toggleStyleSelected(style: "AmericanCasual");
-                          },
-                        ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const SizedBox(width: 40),
+                        // const SizedBox(width: 40),
+                        Checkbox(
+                            value: state.hashtagDTOSporty,
+                            activeColor: PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            onChanged: (value) {
+                              ref
+                                  .read(categoryProvider.notifier)
+                                  .toggleStyleSelected(style: "Sporty");
+
+                              print(ref.watch(categoryProvider).hashtagDTOSporty);
+                            },
+                            visualDensity: VisualDensity.standard),
+                        // const SizedBox(width: 30),
                         Text(
                           "스포티",
                           style: TextStyle(
@@ -282,38 +320,27 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             fontSize: 18,
                           ),
                         ),
-                        const SizedBox(width: 30),
-                        Checkbox(
-                          value: state.isSportyChecked,
-                          activeColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          onChanged: (value) {
-                            ref
-                                .read(categoryProvider.notifier)
-                                .toggleStyleSelected(style: "Sporty");
-                          },
-                        ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 9 + 4),
+                        Checkbox(
+                            value: state.hashtagDTOGuitar,
+                            activeColor: PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            onChanged: (value) {
+                              ref
+                                  .read(categoryProvider.notifier)
+                                  .toggleStyleSelected(style: "Etc");
+                              print(ref.watch(categoryProvider).hashtagDTOGuitar);
+                            },
+                            visualDensity: VisualDensity.standard),
+                        // const SizedBox(width: 28),
                         const Text(
                           "기타     ",
                           style: TextStyle(
                             fontFamily: 'NotoSans',
                             fontSize: 18,
                           ),
-                        ),
-                        const SizedBox(width: 28),
-                        Checkbox(
-                          value: state.isEtcChecked,
-                          activeColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4)),
-                          onChanged: (value) {
-                            ref
-                                .read(categoryProvider.notifier)
-                                .toggleStyleSelected(style: "Etc");
-                          },
                         ),
                       ],
                     ),
@@ -329,9 +356,9 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                           begin: Alignment.bottomRight,
                           end: Alignment.topLeft,
                           colors: [
-                            Color(0xFF1D002D),
+                            Colors.black,
                             //Color(0xFFa17fe0),
-                            Color(0xFF603674),
+                            Colors.grey,
                             // #F9E79F
                           ],
                         ),
@@ -372,117 +399,288 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
   }
 }
 
-class _Slide extends ConsumerStatefulWidget {
+class _HeightSlide extends ConsumerStatefulWidget {
   String? BodyType;
 
-  _Slide({
+  _HeightSlide({
     required this.BodyType,
     Key? key,
   }) : super(key: key);
 
   @override
-  ConsumerState<_Slide> createState() => _SlideState();
+  ConsumerState<_HeightSlide> createState() => _HeightSlideState();
 }
 
-class _SlideState extends ConsumerState<_Slide> {
+class _HeightSlideState extends ConsumerState<_HeightSlide> {
+  final List items = [
+    '~ 139cm', //20
+    '140cm ~ 149cm',
+    '150cm ~ 159cm',
+    '160cm ~ 169cm',
+    '170cm ~ 179cm',
+    '180cm ~ 189cm',
+    '190cm ~' //300
+  ];
+
+  String? selectedValue;
+
+  List<int> getMinMax(int index) {
+    final item = items[index];
+    final range = item.split(" ~ ");
+    int min, max;
+    if (index == 0) {
+      min = 20;
+      max = int.parse(range[0].replaceAll("cm", "").trim());
+    } else if (index == items.length - 1) {
+      min = int.parse(range[0].replaceAll("cm", "").trim());
+      max = 300;
+    } else {
+      min = int.parse(range[0].replaceAll("cm", "").trim());
+      max = int.parse(range[1].replaceAll("cm", "").trim());
+    }
+    return [min, max];
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<String> items = [
-      '~ 150cm',
-      '150 ~ 157cm',
-      '155 ~ 162cm',
-      '160 ~ 167cm',
-      '165 ~ 172cm',
-    ];
-    String? selectedValue;
-
-    List<DropdownMenuItem<String>> _addDividersAfterItems(List<String> items) {
-      List<DropdownMenuItem<String>> _menuItems = [];
-      for (var item in items) {
-        _menuItems.addAll(
-          [
-            DropdownMenuItem<String>(
-              value: item,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    return Center(
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          isExpanded: true,
+          hint: Row(
+            children: const [
+              Icon(
+                Icons.list,
+                size: 16,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Expanded(
                 child: Text(
-                  item,
-                  style: const TextStyle(fontSize: 13),
+                  'Height',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ),
-            //If it's last item, we will not add Divider after it.
-            if (item != items.last)
-              const DropdownMenuItem<String>(
-                enabled: false,
-                child: Divider(),
-              ),
-          ],
-        );
-      }
-      return _menuItems;
-    }
-
-    List<double> _getCustomItemsHeights() {
-      List<double> _itemsHeights = [];
-      for (var i = 0; i < (items.length * 2) - 1; i++) {
-        if (i.isEven) {
-          _itemsHeights.add(40);
-        }
-        //Dividers indexes will be the odd indexes
-        if (i.isOdd) {
-          _itemsHeights.add(4);
-        }
-      }
-      return _itemsHeights;
-    }
-
-    return Padding(
-      // padding: EdgeInsets.zero,
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButtonFormField2(
-          decoration: InputDecoration(
-            isDense: true,
-            contentPadding: EdgeInsets.zero,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            ],
           ),
-          hint: Text(
-            '선택하기',
-            style: TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).hintColor,
-            ),
-          ),
-          items: _addDividersAfterItems(items),
+          items: items
+              .map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
+              .toList(),
           value: selectedValue,
           onChanged: (value) {
             setState(() {
-              selectedValue = value as String;
+              selectedValue = value as String?;
             });
+            ref.read(categoryProvider.notifier).changeBodyType(
+                BodyType: "Height",
+                minValue: getMinMax(items.indexOf(selectedValue))[0],
+                maxValue: getMinMax(items.indexOf(selectedValue))[1]);
+            print(ref.watch(categoryProvider).heightLow);
+            print(ref.watch(categoryProvider).heightHigh);
           },
-          onSaved: (value) {
-            selectedValue = value.toString();
-          },
-          buttonStyleData: const ButtonStyleData(
-            height: 60,
-            padding: EdgeInsets.only(left: 15, right: 10),
+          buttonStyleData: ButtonStyleData(
+            height: 50,
+            width: 160,
+            padding: const EdgeInsets.only(left: 14, right: 14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: Colors.grey,
+              ),
+              color: Colors.white,
+            ),
+            elevation: 2,
           ),
           iconStyleData: const IconStyleData(
             icon: Icon(
-              Icons.keyboard_arrow_down,
-              color: Colors.black45,
+              Icons.arrow_forward_ios_outlined,
             ),
-            iconSize: 30,
+            iconSize: 14,
+            // iconEnabledColor: Colors.yellow,
+            // iconDisabledColor: Colors.grey,
           ),
           dropdownStyleData: DropdownStyleData(
+            maxHeight: 200,
+            width: 200,
+            padding: null,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(14),
+              color: Colors.white,
+            ),
+            elevation: 8,
+            offset: const Offset(-20, 0),
+            scrollbarTheme: ScrollbarThemeData(
+              radius: const Radius.circular(40),
+              thickness: MaterialStateProperty.all<double>(6),
+              thumbVisibility: MaterialStateProperty.all<bool>(true),
             ),
           ),
-          menuItemStyleData: MenuItemStyleData(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            customHeights: _getCustomItemsHeights(),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+            padding: EdgeInsets.only(left: 14, right: 14),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WeightSlide extends ConsumerStatefulWidget {
+  String? BodyType;
+
+  _WeightSlide({
+    required this.BodyType,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<_WeightSlide> createState() => _WeightSlideState();
+}
+
+class _WeightSlideState extends ConsumerState<_WeightSlide> {
+  final List items = [
+    '~ 39kg', //20
+    '40kg ~ 49kg',
+    '50kg ~ 59kg',
+    '60kg ~ 69kg',
+    '70kg ~ 79kg',
+    '80kg ~ 89kg',
+    '90kg ~ 99kg',
+    '100kg ~', //300
+  ];
+
+  String? selectedValue;
+
+  List<int> getMinMax(int index) {
+    final item = items[index];
+    final range = item.split(" ~ ");
+    int min, max;
+    if (index == 0) {
+      min = 20;
+      max = int.parse(range[0].replaceAll("kg", "").trim());
+    } else if (index == items.length - 1) {
+      min = int.parse(range[0].replaceAll("kg", "").trim());
+      max = 300;
+    } else {
+      min = int.parse(range[0].replaceAll("kg", "").trim());
+      max = int.parse(range[1].replaceAll("kg", "").trim());
+    }
+    return [min, max];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          isExpanded: true,
+          hint: Row(
+            children: const [
+              Icon(
+                Icons.list,
+                size: 16,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Expanded(
+                child: Text(
+                  'Weight',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          items: items
+              .map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
+              .toList(),
+          value: selectedValue,
+          onChanged: (value) {
+            setState(() {
+              selectedValue = value as String?;
+            });
+            ref.read(categoryProvider.notifier).changeBodyType(
+                BodyType: "Weight",
+                minValue: getMinMax(items.indexOf(selectedValue))[0],
+                maxValue: getMinMax(items.indexOf(selectedValue))[1]);
+            print(ref.watch(categoryProvider).weightLow);
+            print(ref.watch(categoryProvider).weightHigh);
+          },
+          buttonStyleData: ButtonStyleData(
+            height: 50,
+            width: 160,
+            padding: const EdgeInsets.only(left: 14, right: 14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: Colors.grey,
+              ),
+              color: Colors.white,
+            ),
+            elevation: 2,
+          ),
+          iconStyleData: const IconStyleData(
+            icon: Icon(
+              Icons.arrow_downward_outlined,
+            ),
+            iconSize: 14,
+            // iconEnabledColor: Colors.yellow,
+            // iconDisabledColor: Colors.grey,
+          ),
+          dropdownStyleData: DropdownStyleData(
+            maxHeight: 200,
+            width: 200,
+            padding: null,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              color: Colors.white,
+            ),
+            elevation: 8,
+            offset: const Offset(-20, 0),
+            scrollbarTheme: ScrollbarThemeData(
+              radius: const Radius.circular(40),
+              thickness: MaterialStateProperty.all<double>(6),
+              thumbVisibility: MaterialStateProperty.all<bool>(true),
+            ),
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+            padding: EdgeInsets.only(left: 14, right: 14),
           ),
         ),
       ),

@@ -50,9 +50,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
           'memberWeight': newMember[0].weight,
         },
       );
-    }
-
-    ;
+    };
 
     // validate
     final formkey = GlobalKey<FormState>();

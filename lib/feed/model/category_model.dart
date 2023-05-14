@@ -1,70 +1,75 @@
 // 데이터 전달에 사용할 클래스
-import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'category_model.g.dart';
+
+@JsonSerializable()
 class CategoryModel {
-  final bool isManChecked;
-  final bool isWomanChecked;
+  final String gender;
   // 스타일
-  final bool isMinimalChecked;
-  final bool isCasualChecked;
-  final bool isStreetChecked;
-  final bool isAmericanCasualChecked;
-  final bool isSportyChecked;
-  final bool isEtcChecked;
+  final bool hashtagDTOMinimal;
+  final bool hashtagDTOCasual;
+  final bool hashtagDTOStreet;
+  final bool hashtagDTOAmekaji;
+  final bool hashtagDTOSporty;
+  final bool hashtagDTOGuitar;
   // 키
-  final int minHeight;
-  final int maxHeight;
+  final int heightLow;
+  final int heightHigh;
   // 몸무게
-  final int minWeight;
-  final int maxWeight;
+  final int weightLow;
+  final int weightHigh;
+
 
   CategoryModel({
-    required this.isManChecked,
-    required this.isWomanChecked,
-    required this.isMinimalChecked,
-    required this.isCasualChecked,
-    required this.isStreetChecked,
-    required this.isAmericanCasualChecked,
-    required this.isSportyChecked,
-    required this.isEtcChecked,
-    required this.minWeight,
-    required this.maxWeight,
-    required this.minHeight,
-    required this.maxHeight,
+    required this.gender,
+    required this.hashtagDTOMinimal,
+    required this.hashtagDTOCasual,
+    required this.hashtagDTOStreet,
+    required this.hashtagDTOAmekaji,
+    required this.hashtagDTOSporty,
+    required this.hashtagDTOGuitar,
+    required this.weightLow,
+    required this.weightHigh,
+    required this.heightLow,
+    required this.heightHigh,
   });
 
   CategoryModel copyWith({
-    bool? isManChecked,
-    bool? isWomanChecked,
+    String? gender,
     // 스타일
-    bool? isMinimalChecked,
-    bool? isCasualChecked,
-    bool? isStreetChecked,
-    bool? isAmericanCasualChecked,
-    bool? isSportyChecked,
-    bool? isEtcChecked,
+    bool? hashtagDTOMinimal,
+    bool? hashtagDTOCasual,
+    bool? hashtagDTOStreet,
+    bool? hashtagDTOAmekaji,
+    bool? hashtagDTOSporty,
+    bool? hashtagDTOGuitar,
     // 키
-    int? minHeight,
-    int? maxHeight,
+    int? heightLow,
+    int? heightHigh,
     // 몸무게
-    int? minWeight,
-    int? maxWeight,
+    int? weightLow,
+    int? weightHigh,
 
   }) {
     return CategoryModel(
-      isManChecked: isManChecked ?? this.isManChecked,
-      isWomanChecked: isWomanChecked ?? this.isWomanChecked,
-      isMinimalChecked: isMinimalChecked ?? this.isMinimalChecked,
-      isCasualChecked: isCasualChecked ?? this.isCasualChecked,
-      isStreetChecked: isStreetChecked ?? this.isStreetChecked,
-      isAmericanCasualChecked:
-          isAmericanCasualChecked ?? this.isAmericanCasualChecked,
-      isSportyChecked: isSportyChecked ?? this.isSportyChecked,
-      isEtcChecked: isEtcChecked ?? this.isEtcChecked,
-      minHeight: minHeight ?? this.minHeight,
-      maxHeight: maxHeight ?? this.maxHeight,
-      minWeight: minWeight ?? this.minWeight,
-      maxWeight: maxWeight ?? this.maxWeight,
+      gender: gender ?? this.gender,
+      hashtagDTOMinimal: hashtagDTOMinimal ?? this.hashtagDTOMinimal,
+      hashtagDTOCasual: hashtagDTOCasual ?? this.hashtagDTOCasual,
+      hashtagDTOStreet: hashtagDTOStreet ?? this.hashtagDTOStreet,
+      hashtagDTOAmekaji:
+      hashtagDTOAmekaji ?? this.hashtagDTOAmekaji,
+      hashtagDTOSporty: hashtagDTOSporty ?? this.hashtagDTOSporty,
+      hashtagDTOGuitar: hashtagDTOGuitar ?? this.hashtagDTOGuitar,
+      heightLow: heightLow ?? this.heightLow,
+      heightHigh: heightHigh ?? this.heightHigh,
+      weightLow: weightLow ?? this.weightLow,
+      weightHigh: weightHigh ?? this.weightHigh,
     );
   }
+
+  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
+      _$CategoryModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CategoryModelToJson(this);
 }

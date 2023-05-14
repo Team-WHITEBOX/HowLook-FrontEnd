@@ -8,18 +8,17 @@ class CategoryNotifier extends StateNotifier<CategoryModel> {
   CategoryNotifier()
       : super(
           CategoryModel(
-            isManChecked: false,
-            isWomanChecked: false,
-            isMinimalChecked: false,
-            isCasualChecked: false,
-            isStreetChecked: false,
-            isAmericanCasualChecked: false,
-            isSportyChecked: false,
-            isEtcChecked: false,
-            minHeight: 100,
-            maxHeight: 240,
-            minWeight: 20,
-            maxWeight: 165,
+            gender: '',
+            hashtagDTOMinimal: false,
+            hashtagDTOCasual: false,
+            hashtagDTOStreet: false,
+            hashtagDTOAmekaji: false,
+            hashtagDTOSporty: false,
+            hashtagDTOGuitar: false,
+            heightLow: 100,
+            heightHigh: 240,
+            weightLow: 20,
+            weightHigh: 165,
           ),
         );
 
@@ -28,41 +27,33 @@ class CategoryNotifier extends StateNotifier<CategoryModel> {
   }
 
   void toggleGenderSelected({required String gender}) {
-    if (gender == "Man") {
-      state = state.isWomanChecked
-          ? state.copyWith(
-              isManChecked: !state.isManChecked,
-              isWomanChecked: !state.isWomanChecked,
-            )
-          : state.copyWith(
-              isManChecked: !state.isManChecked,
-            );
-    } else {
-      state = state = state.isManChecked
-          ? state.copyWith(
-              isWomanChecked: !state.isWomanChecked,
-              isManChecked: !state.isManChecked,
-            )
-          : state.copyWith(
-              isWomanChecked: !state.isWomanChecked,
-            );
-    }
-  }
-
-  void changeBodyType({
-    required String BodyType,
-    required double minValue,
-    required double maxValue,
-  }) {
-    if (BodyType == "Height") {
+    if (gender == "M") {
       state = state.copyWith(
-        minHeight: minValue.toInt(),
-        maxHeight: maxValue.toInt(),
+        gender: "M",
       );
     } else {
       state = state.copyWith(
-        minWeight: minValue.toInt(),
-        maxWeight: maxValue.toInt(),
+        gender: "F",
+      );
+    }
+  }
+
+
+  void changeBodyType({
+    required String BodyType,
+    required int minValue,
+    required int maxValue,
+  }) {
+    if (BodyType == "Height") {
+      state = state.copyWith(
+        heightLow: minValue.toInt(),
+        heightHigh: maxValue.toInt(),
+      );
+    // } else if (BodyType == "Weight") {
+    } else  {
+      state = state.copyWith(
+        weightLow: minValue.toInt(),
+        weightHigh: maxValue.toInt(),
       );
     }
   }
@@ -70,28 +61,43 @@ class CategoryNotifier extends StateNotifier<CategoryModel> {
   void toggleStyleSelected({required String style}) {
     if (style == "Minimal") {
       state = state.copyWith(
-        isMinimalChecked: !state.isMinimalChecked,
+        hashtagDTOMinimal: !state.hashtagDTOMinimal,
       );
     } else if (style == "Casual") {
       state = state.copyWith(
-        isCasualChecked: !state.isCasualChecked,
+        hashtagDTOCasual: !state.hashtagDTOCasual,
       );
     } else if (style == "Street") {
       state = state.copyWith(
-        isStreetChecked: !state.isStreetChecked,
+        hashtagDTOStreet: !state.hashtagDTOStreet,
       );
     } else if (style == "AmericanCasual") {
       state = state.copyWith(
-        isAmericanCasualChecked: !state.isAmericanCasualChecked,
+        hashtagDTOAmekaji: !state.hashtagDTOAmekaji,
       );
     } else if (style == "Sporty") {
       state = state.copyWith(
-        isSportyChecked: !state.isSportyChecked,
+        hashtagDTOSporty: !state.hashtagDTOSporty,
       );
     } else {
       state = state.copyWith(
-        isEtcChecked: !state.isEtcChecked,
+        hashtagDTOGuitar: !state.hashtagDTOGuitar,
       );
     }
+  }
+
+  void outputCategoryModel() {
+    final CategoryModel model = state ;
+    print('gender: ${model.gender}');
+    print('hashtagDTOMinimal: ${model.hashtagDTOMinimal}');
+    print('hashtagDTOCasual: ${model.hashtagDTOCasual}');
+    print('hashtagDTOStreet: ${model.hashtagDTOStreet}');
+    print('hashtagDTOAmekaji: ${model.hashtagDTOAmekaji}');
+    print('hashtagDTOSporty: ${model.hashtagDTOSporty}');
+    print('hashtagDTOGuitar: ${model.hashtagDTOGuitar}');
+    print('heightLow: ${model.heightLow}');
+    print('heightHigh: ${model.heightHigh}');
+    print('weightLow: ${model.weightLow}');
+    print('weightHigh: ${model.weightHigh}');
   }
 }
