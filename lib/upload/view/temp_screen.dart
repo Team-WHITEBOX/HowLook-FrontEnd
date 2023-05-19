@@ -102,7 +102,7 @@ class _TempScreenState extends ConsumerState<TempScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedState = ref.watch(selectedImageProvider);
-    final selectedStateRead = ref.read(selectedImageProvider.notifier);
+    final newPostState = ref.watch(newPostInfoProvider);
     final isLoadingStateRead = ref.read(loadingIndicatorProvider.notifier);
     PageController controller = PageController();
     late UploadModel uploadModel = UploadModel();
@@ -117,7 +117,7 @@ class _TempScreenState extends ConsumerState<TempScreen> {
           backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
-              isLoadingStateRead.update((state) => true);
+              newPostState.loadingIndicator = false;
               Navigator.pop(context);
             },
             child: const Padding(
@@ -128,13 +128,12 @@ class _TempScreenState extends ConsumerState<TempScreen> {
           actions: [
             GestureDetector(
               onTap: () async {
-                setState(() {
-                  isLoadingStateRead.update((state) => false);
-                });
+                newPostState.loadingIndicator = true;
 
                 var gps = await getCurrentLocation();
                 formKey.currentState?.save();
 
+                // newPostState.uploadModel.hashtagAmekaji = st
                 uploadModel.hashtagAmekaji = styles[0].isSelected;
                 uploadModel.hashtagMinimal = styles[1].isSelected;
                 uploadModel.hashtagCasual = styles[2].isSelected;
@@ -150,22 +149,22 @@ class _TempScreenState extends ConsumerState<TempScreen> {
                     dio.MultipartFile.fromFileSync(e.afterDetectionInPath!))
                     .toList();
 
-                // API 전송
-                final resp =
-                    await selectedStateRead.uploadImage(uploadModel, files);
-
-                if (resp.response.statusCode == 200) {
-                  // 상태 초기화
-                  selectedStateRead.clearImage();
-                  // isLoadingState 초기화
-                  isLoadingStateRead.update((state) => true);
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => RootTab(),
-                    ),
-                    (route) => false,
-                  );
-                }
+                // // API 전송
+                // final resp =
+                //     await selectedStateRead.uploadImage(uploadModel, files);
+                //
+                // if (resp.response.statusCode == 200) {
+                //   // 상태 초기화
+                //   selectedStateRead.clearImage();
+                //   // isLoadingState 초기화
+                //   isLoadingStateRead.update((state) => true);
+                //   Navigator.of(context).pushAndRemoveUntil(
+                //     MaterialPageRoute(
+                //       builder: (_) => RootTab(),
+                //     ),
+                //     (route) => false,
+                //   );
+                // }
               },
               child: const Padding(
                 padding: EdgeInsets.all(15.0),
@@ -242,17 +241,11 @@ class _TempScreenState extends ConsumerState<TempScreen> {
                             height: 30,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
-                              itemCount: styles.length,
+                              itemCount: 6,
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
                                   onTap: () {
-                                    setState(() {
-                                      if (styles[index].isSelected == true) {
-                                        styles[index].isSelected = false;
-                                      } else {
-                                        styles[index].isSelected = true;
-                                      }
-                                    });
+
                                   },
                                   child: Container(
                                     width: 90,
@@ -288,7 +281,7 @@ class _TempScreenState extends ConsumerState<TempScreen> {
           ),
         ),
         Offstage(
-          offstage: isLoadingStateRead.state,
+          offstage: !isLoadingStateRead.state,
           child: Stack(children: <Widget>[
             const Opacity(
               opacity: 0.5,

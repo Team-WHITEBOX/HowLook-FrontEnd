@@ -13,7 +13,7 @@ void main() async {
       ignoreSsl: true // option: set to false to disable working with http links (default: false)
   );
   await initializeDefault();
-  KakaoSdk.init(nativeAppKey: 'eaea17f771b2bbca9bb72a90b36e5244');
+  KakaoSdk.init(nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb');
   runApp(
     const ProviderScope(
       child: _App(),

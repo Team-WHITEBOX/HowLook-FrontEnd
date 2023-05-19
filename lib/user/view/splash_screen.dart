@@ -30,16 +30,16 @@ class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    if (mounted) {
-      if (accessToken != null) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => RootTab(),
-          ),
-              (route) => false,
-        );
-      }
-    }
+    // if (mounted) {
+    //   if (accessToken != null) {
+    //     Navigator.of(context).pushAndRemoveUntil(
+    //       MaterialPageRoute(
+    //         builder: (_) => RootTab(),
+    //       ),
+    //           (route) => false,
+    //     );
+    //   }
+    // }
 
     // refresh token 로직
     try {

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
 
 class IntroScreen extends ConsumerWidget {
@@ -35,9 +37,35 @@ class IntroScreen extends ConsumerWidget {
               // 카카오 로그인 버튼
               TextButton(
                 onPressed: () async {
-                  await AuthCodeClient.instance.authorize(
-                    redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
-                  );
+                  try {
+                    print("HI1");
+                    OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+
+                    // await AuthCodeClient.instance.authorizeWithTalk(
+                    //   redirectUri:
+                    //       'http://3.34.164.14:8080/account/oauth/kakao',
+                    // );
+                    // print("HI2");
+                    print(token.accessToken);
+                    // print("HI3");
+                    // OAuthToken token =
+                    //     await UserApi.instance.loginWithKakaoAccount();
+                    // print('카카오계정으로 로그인 성공');
+                    // print(token.accessToken);
+                    // print(token.refreshToken);
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //   MaterialPageRoute(
+                    //     builder: (_) => RootTab(),
+                    //   ),
+                    //   (route) => false,
+                    // );
+                  } catch (error) {
+                    print('카카오계정으로 로그인 실패 $error');
+                  }
+                  // String token = await AuthCodeClient.instance.authorize(
+                  //   redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
+                  // );
+                  // print(token);
                   // final result = await Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
