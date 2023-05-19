@@ -60,7 +60,8 @@ class DefaultLayout extends StatelessWidget {
           title!,
           style: const TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'NotoSans',
           ),
         ),
         leading: leading,

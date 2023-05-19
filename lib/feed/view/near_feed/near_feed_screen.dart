@@ -5,7 +5,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/feed/component/feed_card.dart';
 import 'package:howlook/feed/provider/near_feed_provider.dart';
-import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NearFeedScreen extends ConsumerStatefulWidget {
@@ -17,8 +17,7 @@ class NearFeedScreen extends ConsumerStatefulWidget {
 
 class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
   Future<void> _handleCameraAndMic(Permission permission) async {
-    final status = await permission.request();
-    print(status);
+    await permission.request();
   }
 
   Future<void> onJoin() async {
@@ -58,7 +57,7 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
 
     // 완전 처음 로딩일 떄
     if (data is CursorPaginationLoading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -70,54 +69,48 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
     }
     final cp = data as CursorPagination;
 
-    return DefaultLayout(
-      title: '지역 기반 게시글',
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: RefreshIndicator(
-          onRefresh: () async {
-            ref.read(nearfeedProvider.notifier).paginate(
-                  forceRefetch: true,
-                );
-          },
-          child: ListView.separated(
-            controller: controller,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: cp.data.content.length + 1,
-            itemBuilder: (_, index) {
-              if (index == cp.data.content.length) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: Center(
-                    child: data is CursorPaginationFetchingMore
-                        ? CircularProgressIndicator()
-                        : Text('마지막 데이터입니다. ㅠㅠ'),
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.read(nearfeedProvider.notifier).paginate(
+              forceRefetch: true,
+            );
+      },
+      child: ListView.separated(
+        controller: controller,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: cp.data.content.length + 1,
+        itemBuilder: (_, index) {
+          if (index == cp.data.content.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0, vertical: 8.0),
+              child: Center(
+                child: data is CursorPaginationFetchingMore
+                    ? const CircularProgressIndicator()
+                    : const Text('마지막 데이터입니다. ㅠㅠ'),
+              ),
+            );
+          }
+          // 받아온 데이터 JSON 매핑하기
+          // 모델 사용
+          final pItem = cp.data.content[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => FeedDetailScreen(
+                    postId: pItem.postId,
                   ),
-                );
-              }
-              // 받아온 데이터 JSON 매핑하기
-              // 모델 사용
-              final pItem = cp.data.content[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => FeedDetailScreen(
-                        postId: pItem.postId,
-                      ),
-                    ),
-                  );
-                },
-                child: FeedCard.fromModel(model: pItem),
+                ),
               );
             },
-            separatorBuilder: (_, index) {
-              return SizedBox(height: 16.0);
-            },
-          ),
-        ),
+            child: FeedCard.fromModel(model: pItem),
+          );
+        },
+        separatorBuilder: (_, index) {
+          return const SizedBox(height: 16.0);
+        },
       ),
     );
   }

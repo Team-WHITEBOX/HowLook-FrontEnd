@@ -29,7 +29,7 @@ class _MainReviewScreenState extends State<MainReviewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
+                const Align(
                     alignment: Alignment.center,
                     child: Padding(
                       padding: EdgeInsets.all(15),

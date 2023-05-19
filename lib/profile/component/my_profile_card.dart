@@ -3,7 +3,7 @@ import 'package:howlook/profile/model/my_profile_screen_model.dart';
 import 'package:howlook/profile/view/my_feed.dart';
 import 'package:howlook/user/infoSetup/setting_list.dart';
 import 'package:howlook/profile/view/my_scrap.dart';
-import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:howlook/profile/model/profile_memberPosts.dart';

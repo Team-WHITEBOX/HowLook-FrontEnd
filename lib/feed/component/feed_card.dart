@@ -65,21 +65,22 @@ class FeedCard extends ConsumerWidget {
     List<int> bodyinfo = [userPostInfo.memberHeight, userPostInfo.memberWeight];
     return Column(
       children: [
+        const SizedBox(height: 8.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                const SizedBox(width: 10.0),
+                const SizedBox(width: 12.0),
                 CircleAvatar(
-                  radius: 18.0,
+                  radius: 16.0,
                   backgroundImage: userPostInfo.profilePhoto != NULL_IMG_URI
                       ? ExtendedImage.network(
-                          '${userPostInfo.profilePhoto}',
+                          userPostInfo.profilePhoto,
                           fit: BoxFit.cover,
                           cache: true,
                         ).image
-                      : null,
+                      : ExtendedImage.asset("asset/img/Profile/BaseProfile.JPG").image,
                 ),
                 const SizedBox(width: 16.0),
                 Column(
@@ -87,7 +88,7 @@ class FeedCard extends ConsumerWidget {
                   children: [
                     Text(
                       userPostInfo.memberId,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
@@ -95,7 +96,7 @@ class FeedCard extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Text(
                       bodyinfo.join(' · '),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: BODY_TEXT_COLOR,
                         fontSize: 13,
                       ),
@@ -126,7 +127,7 @@ class FeedCard extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16.0),
+        const SizedBox(height: 8.0),
         Stack(
           children: [
             AspectRatio(
@@ -134,12 +135,10 @@ class FeedCard extends ConsumerWidget {
               child: PageView.builder(
                 controller: _controller,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    child: ExtendedImage.network(
-                      '${photoDTOs[index].path}',
-                      fit: BoxFit.cover,
-                      cache: true,
-                    ),
+                  return ExtendedImage.network(
+                    photoDTOs[index].path,
+                    fit: BoxFit.cover,
+                    cache: true,
                   );
                 },
                 itemCount: photoCount,
@@ -151,7 +150,7 @@ class FeedCard extends ConsumerWidget {
               child: SmoothPageIndicator(
                 controller: _controller,
                 count: photoCount,
-                effect: ExpandingDotsEffect(
+                effect: const ExpandingDotsEffect(
                     spacing: 5.0,
                     radius: 14.0,
                     dotWidth: 9.0,

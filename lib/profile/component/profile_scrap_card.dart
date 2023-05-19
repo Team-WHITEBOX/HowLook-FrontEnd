@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/profile/model/scrap_model.dart';
 import 'package:howlook/common/const/data.dart';
-import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 
 class ScrapCard extends StatelessWidget {
 

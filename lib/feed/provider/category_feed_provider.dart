@@ -11,7 +11,7 @@ final categoryfeedProvider =
     StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
   (ref) {
     final category = ref.watch(categoryProvider);
-    final crepository = ref.watch((FeedRepositoryProvider));
+    final crepository = ref.watch((feedRepositoryProvider));
     final notifier = CategoryFeedStateNotifier(crepository: crepository);
     return notifier;
   },

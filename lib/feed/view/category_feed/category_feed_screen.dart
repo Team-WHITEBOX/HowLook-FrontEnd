@@ -6,7 +6,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/component/feed_card.dart';
 import 'package:howlook/feed/model/feed_model.dart';
-import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 import 'package:howlook/feed/provider/main_feed_provider.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 import 'package:howlook/feed/provider/category_feed_provider.dart';

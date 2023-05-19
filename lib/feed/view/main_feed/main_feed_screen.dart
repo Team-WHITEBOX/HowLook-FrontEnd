@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/feed/component/feed_card.dart';
 import 'package:howlook/feed/provider/main_feed_provider.dart';
-import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 
 class MainFeedScreen extends ConsumerStatefulWidget {
   @override
@@ -36,7 +36,7 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
 
     // 완전 처음 로딩일 떄
     if (data is CursorPaginationLoading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -71,8 +71,8 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Center(
                 child: data is CursorPaginationFetchingMore
-                    ? CircularProgressIndicator()
-                    : Text('마지막 데이터입니다. ㅠㅠ'),
+                    ? const CircularProgressIndicator()
+                    : const Text('마지막 데이터입니다. ㅠㅠ'),
               ),
             );
           }
@@ -92,7 +92,7 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
               child: FeedCard.fromModel(model: pItem));
         },
         separatorBuilder: (_, index) {
-          return SizedBox(height: 16.0);
+          return const SizedBox();
         },
       ),
     );

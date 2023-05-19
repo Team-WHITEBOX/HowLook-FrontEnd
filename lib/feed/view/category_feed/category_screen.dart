@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/provider/category_provider.dart';
-import 'package:howlook/feed/view/category_feed_screen.dart';
+import 'package:howlook/feed/view/category_feed/category_feed_screen.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);

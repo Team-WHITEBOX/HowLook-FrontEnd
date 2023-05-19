@@ -39,14 +39,18 @@ class IntroScreen extends ConsumerWidget {
                 onPressed: () async {
                   try {
                     print("HI1");
-                    OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-
+                    await AuthCodeClient.instance.authorize().then((code) {
+                      // 인증 코드 수신
+                      print(code);
+                    }).catchError((error) {
+                      // 오류 처리
+                      print(error);
+                    });
                     // await AuthCodeClient.instance.authorizeWithTalk(
                     //   redirectUri:
                     //       'http://3.34.164.14:8080/account/oauth/kakao',
                     // );
                     // print("HI2");
-                    print(token.accessToken);
                     // print("HI3");
                     // OAuthToken token =
                     //     await UserApi.instance.loginWithKakaoAccount();

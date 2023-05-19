@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
+import 'package:howlook/profile/view/my_profile_screen.dart';
 import 'package:howlook/upload/temp_screen/t_upload_screen.dart';
 import 'package:howlook/upload/view/main_liquid_swipe.dart';
-// import 'package:howlook/upload/view/upload_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
 import 'package:howlook/upload/view/review_upload_screen.dart';
@@ -54,7 +54,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     '피드 업로드',
                     style: TextStyle(fontSize: 40, color: Colors.white),
                   ),
@@ -67,7 +67,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
                         ),
                       );
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.add_box_rounded,
                       color: Colors.white,
                     ),
@@ -80,14 +80,14 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
       Stack(
         children: [
           Container(
-            color: Color(0xFFa6ceff),
+            color: const Color(0xFFa6ceff),
           ),
           Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     '리뷰 업로드',
                     style: TextStyle(fontSize: 40, color: Colors.white),
                   ),
@@ -99,7 +99,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
                         ),
                       );
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.add_box_rounded,
                       color: Colors.white,
                     ),
@@ -151,13 +151,13 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         ],
       ),
       child: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: controller,
         children: <Widget>[
-          HomeScreen(),
-          MainReviewScreen(),
+          const HomeScreen(),
+          const MainReviewScreen(),
           Builder(builder: (context) => LiquidSwipe(pages: pages)),
-          tournamentScreen(),
+          const tournamentScreen(),
           MyProfileScreen(),
         ],
       ),
