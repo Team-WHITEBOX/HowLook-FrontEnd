@@ -1,4 +1,4 @@
-import 'package:howlook/user/view/profile/model/my_profile_screen_model.dart';
+import 'package:howlook/profile/model/my_profile_screen_model.dart';
 
 class MyFeedModel {
 

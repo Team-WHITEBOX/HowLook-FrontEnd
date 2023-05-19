@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/user/view/profile/model/scrap_model.dart';
+import 'package:howlook/profile/model/scrap_model.dart';
 import 'package:howlook/review/feedback/model/normal_feedback_model.dart';
 import 'package:howlook/review/feedback/view/feedback_result_screen.dart';
 

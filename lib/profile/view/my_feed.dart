@@ -4,8 +4,8 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/user/view/profile/component/feed_card.dart';
-import 'package:howlook/user/view/profile/model/feed_model.dart';
+import 'package:howlook/profile/component/profile_feed_card.dart';
+import 'package:howlook/profile/model/feed_model.dart';
 
 class MyFeed extends ConsumerStatefulWidget {
   final String memberId; // 포스트 아이디로 특정 게시글 조회

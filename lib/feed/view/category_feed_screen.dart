@@ -12,14 +12,31 @@ import 'package:howlook/feed/repository/feed_repository.dart';
 import 'package:howlook/feed/provider/category_feed_provider.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 
-class CategoryFeedScreen extends ConsumerStatefulWidget {
+import 'category_screen.dart';
 
+class CategoryFeedScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<CategoryFeedScreen> createState() => _CategoryFeedScreenState();
 }
 
 class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
   final ScrollController controller = ScrollController();
+
+  Widget? ShowModalBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const ContinuousRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      builder: (context) {
+        return _BottomSheetContent();
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -32,15 +49,16 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
     // // 현재 위치가 최대 길이보다 조금 덜 되는 위치까지 왔다면 새로운 데이터를 추가 요청
     if (controller.offset > controller.position.maxScrollExtent - 300) {
       ref.read(mainfeedProvider.notifier).paginate(
-        fetchMore: true,
-      );
+            fetchMore: true,
+          );
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
     // 따로 autoDispose 설정하지 않으면 한번 생성된 이후로 데이터가 날아가지 않고 캐싱된다.
     final data = ref.watch(categoryfeedProvider);
+    bool _ischecked = false;
 
     // 완전 처음 로딩일 떄
     if (data is CursorPaginationLoading) {
@@ -58,55 +76,76 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
 
     final cp = data as CursorPagination;
 
-     return RefreshIndicator(
-         onRefresh: () async{
-           ref.read(categoryfeedProvider.notifier).paginate(
-             forceRefetch: true,
-           );
-         },
-       child: DefaultLayout(
-         title: '검색 기반 게시글',
-         child: Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-           child: ListView.separated(
-             controller: controller,
-             scrollDirection: Axis.vertical,
-             shrinkWrap: true,
-             itemCount: cp.data.content.length + 1,
-             itemBuilder: (_, index) {
-               if (index == cp.data.content.length) {
-                 return Padding(
-                   padding:
-                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                   child: Center(
-                     child: data is CursorPaginationFetchingMore
-                         ? CircularProgressIndicator()
-                         : Text('마지막 데이터입니다. ㅠㅠ'),
-                   ),
-                 );
-               }
-               // 받아온 데이터 JSON 매핑하기
-               // 모델 사용
-               // final item = snapshot.data![index];
-               final item = cp.data.content[index];
-               final pItem = FeedModel.fromJson(item.toJson());
-               return GestureDetector(
-                 onTap: () {
-                   Navigator.of(context).push(MaterialPageRoute(
-                     builder: (_) => FeedDetailScreen(
-                       postId: pItem.postId,
-                     ),
-                   ));
-                 },
-                 child: FeedCard.fromModel(model: pItem),
-               );
-             },
-             separatorBuilder: (_, index) {
-               return SizedBox(height: 16.0);
-             },
-           )
-         ),
-       )
-     );
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.read(categoryfeedProvider.notifier).paginate(
+              forceRefetch: true,
+            );
+      },
+      // child: DefaultLayout(
+      //   title: '검색 기반 게시글',
+      child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: ListView.separated(
+            controller: controller,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: cp.data.content.length + 1,
+            itemBuilder: (_, index) {
+              if (index == cp.data.content.length) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Center(
+                    child: data is CursorPaginationFetchingMore
+                        ? CircularProgressIndicator()
+                        : Text('마지막 데이터입니다. ㅠㅠ'),
+                  ),
+                );
+              }
+              // 받아온 데이터 JSON 매핑하기
+              // 모델 사용
+              // final item = snapshot.data![index];
+              final item = cp.data.content[index];
+              final pItem = FeedModel.fromJson(item.toJson());
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => FeedDetailScreen(
+                      postId: pItem.postId,
+                    ),
+                  ));
+                },
+                child: FeedCard.fromModel(model: pItem),
+              );
+            },
+            separatorBuilder: (_, index) {
+              return SizedBox(height: 16.0);
+            },
+          )),
+      // )
+    );
+  }
+}
+
+class _BottomSheetContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          width: MediaQuery.of(context).size.width,
+          child: CategoryScreen(),
+        ),
+      ),
+    );
   }
 }

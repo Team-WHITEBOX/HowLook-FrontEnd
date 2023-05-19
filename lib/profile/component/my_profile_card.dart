@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/user/view/profile/model/my_profile_screen_model.dart';
-import 'package:howlook/user/view/profile/view/my_feed.dart';
+import 'package:howlook/profile/model/my_profile_screen_model.dart';
+import 'package:howlook/profile/view/my_feed.dart';
 import 'package:howlook/user/infoSetup/setting_list.dart';
-import 'package:howlook/user/view/profile/view/my_scrap.dart';
+import 'package:howlook/profile/view/my_scrap.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:howlook/profile/model/profile_memberPosts.dart';
+import 'package:flutter_riverpod/src/consumer.dart';
+import '../provider/profile_provider.dart';
 
 class MainProfileCard extends StatelessWidget {
   // 아이디
@@ -36,6 +39,34 @@ class MainProfileCard extends StatelessWidget {
       required this.memberPosts,
       Key? key})
       : super(key: key);
+  // String? memberId;
+  // // 닉네임
+  // String? memberNickName;
+  // // 키
+  // int? memberHeight;
+  // // 몸무게
+  // int? memberWeight;
+  // // 포토아이디
+  // String? profilePhoto;
+  //
+  // bool? me;
+  //
+  // int? memberPostCount;
+  //
+  // List<MemberPosts>? memberPosts;
+  //
+  //
+  // const MainProfileCard(
+  //     { this.memberId,
+  //       this.memberNickName,
+  //       this.memberHeight,
+  //       this.memberWeight,
+  //       this.profilePhoto,
+  //       this.me,
+  //       this.memberPostCount,
+  //       this.memberPosts,
+  //       Key? key})
+  //     : super(key: key);
 
   factory MainProfileCard.fromModel({
     required MainProfileModel model,
@@ -54,6 +85,8 @@ class MainProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final List<MainProfileModel> userInfo = ref.watch(ProfileProvider);
+
     PageController _controller = PageController();
 
     return Column(

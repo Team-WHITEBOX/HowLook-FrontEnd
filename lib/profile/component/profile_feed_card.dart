@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/user/view/profile/model/feed_model.dart';
+import 'package:howlook/profile/model/feed_model.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';

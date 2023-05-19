@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/user/view/profile/component/scrap_card.dart';
-import 'package:howlook/user/view/profile/model/scrap_model.dart';
+import 'package:howlook/profile/component/profile_scrap_card.dart';
+import 'package:howlook/profile/model/scrap_model.dart';
 //
 // class MyScrap extends ConsumerStatefulWidget {
 //   final String memberId; // 포스트 아이디로 특정 게시글 조회

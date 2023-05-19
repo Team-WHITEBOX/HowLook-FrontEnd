@@ -4,8 +4,10 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/user/view/profile/model/my_profile_screen_model.dart';
-import 'package:howlook/user/view/profile/component/my_profile_card.dart';
+import 'package:howlook/profile/model/my_profile_screen_model.dart';
+import 'package:howlook/profile/component/my_profile_card.dart';
+
+import '../provider/profile_provider.dart';
 
 class MyProfileScreen extends ConsumerStatefulWidget {
 
@@ -35,7 +37,6 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     return memberId;
   }
 
-
   Future<Map<String, dynamic>> paginateProfile() async {
     final dio = Dio();
     final storage = ref.read(secureStorageProvider);
@@ -54,6 +55,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<MainProfileModel> userInfo = ref.watch(ProfileProvider);
+
     return DefaultLayout(
       title: 'My Look',
       child: FutureBuilder<String>(
@@ -76,8 +79,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   child: CircularProgressIndicator(),
                 );
               }
-              final item = snapshot.data!;
-              final pItem = MainProfileModel.fromJson(json: item);
+              final item = snapshot.data;
+              final pItem = MainProfileModel.fromJson(item!);
               return MainProfileCard.fromModel(model: pItem);
             }
             );

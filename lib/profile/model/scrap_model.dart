@@ -1,4 +1,3 @@
-
 class ScrapModel {
 
   final List<ScrapList> scraps;

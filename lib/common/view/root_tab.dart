@@ -5,7 +5,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
 import 'package:howlook/upload/view/main_liquid_swipe.dart';
 import 'package:howlook/upload/view/upload_screen.dart';
-import 'package:howlook/user/view/profile/view/my_profile_screen.dart';
+import 'package:howlook/profile/view/my_profile_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
 import 'package:howlook/upload/view/review_upload_screen.dart';

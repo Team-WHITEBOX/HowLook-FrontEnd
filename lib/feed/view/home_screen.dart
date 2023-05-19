@@ -6,6 +6,8 @@ import 'package:howlook/feed/view/near_feed_screen.dart';
 import 'package:howlook/feed/view/main_feed_screen.dart';
 import 'package:flutter/src/material/bottom_sheet.dart';
 
+import 'category_feed_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -91,22 +93,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       IconButton(
                           onPressed: () async {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => CategoryScreen()),
-                            );
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(builder: (_) => CategoryScreen()),
+                            // );
+                            ShowModalBottomSheet(context);
                           },
                           icon: Icon(Icons.filter_alt)),
-                      MainFeedScreen()
+                      MainFeedScreen(),
                     ],
                   ),
-                    // child: ShowModalBottomSheet(context), //탭2 화면
-                    ),
-                Container(
+                ),
+                // SingleChildScrollView(
+                //   child: CategoryFeedScreen(), //탭2 화면
+                // ),
+                SingleChildScrollView(
                     //탭3 화면
                     ),
                 SingleChildScrollView(
-                  // child: NearFeedScreen(), //탭4 화면
-                ),
+                    // child: NearFeedScreen(), //탭4 화면
+                    ),
               ],
             ),
           ),

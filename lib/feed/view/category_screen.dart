@@ -70,7 +70,8 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                           onChanged: (value) {
                             ref
                                 .read(categoryProvider.notifier)
-                                .toggleGenderSelected(gender: value! ? "M" : "F"); // 수정된 부분
+                                .toggleGenderSelected(
+                                    gender: value! ? "M" : "F"); // 수정된 부분
                             print(ref.watch(categoryProvider).gender);
                           },
                           visualDensity: VisualDensity(
@@ -90,14 +91,16 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                     Row(
                       children: [
                         Checkbox(
-                          value: ref.watch(categoryProvider).gender == "F", // 수정된 부분
+                          value: ref.watch(categoryProvider).gender ==
+                              "F", // 수정된 부분
                           activeColor: PRIMARY_COLOR,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4)),
                           onChanged: (value) {
                             ref
                                 .read(categoryProvider.notifier)
-                                .toggleGenderSelected(gender: value! ? "F" : "M"); // 수정된 부분
+                                .toggleGenderSelected(
+                                    gender: value! ? "F" : "M"); // 수정된 부분
                             print(ref.watch(categoryProvider).gender);
                           },
                           visualDensity: VisualDensity(
@@ -214,7 +217,9 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                                   .read(categoryProvider.notifier)
                                   .toggleStyleSelected(style: "Minimal");
 
-                              print(ref.watch(categoryProvider).hashtagDTOMinimal);
+                              print(ref
+                                  .watch(categoryProvider)
+                                  .hashtagDTOMinimal);
                             },
                             visualDensity: VisualDensity.standard),
                         // const SizedBox(width: 30),
@@ -236,7 +241,8 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                                   .read(categoryProvider.notifier)
                                   .toggleStyleSelected(style: "Casual");
 
-                              print(ref.watch(categoryProvider).hashtagDTOCasual);
+                              print(
+                                  ref.watch(categoryProvider).hashtagDTOCasual);
                             },
                             visualDensity: VisualDensity.standard),
                         // const SizedBox(width: 30),
@@ -261,7 +267,8 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                               ref
                                   .read(categoryProvider.notifier)
                                   .toggleStyleSelected(style: "Street");
-                              print(ref.watch(categoryProvider).hashtagDTOStreet);
+                              print(
+                                  ref.watch(categoryProvider).hashtagDTOStreet);
                             },
                             visualDensity: VisualDensity.standard),
                         // const SizedBox(width: 30),
@@ -283,7 +290,9 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                               ref
                                   .read(categoryProvider.notifier)
                                   .toggleStyleSelected(style: "AmericanCasual");
-                              print(ref.watch(categoryProvider).hashtagDTOAmekaji);
+                              print(ref
+                                  .watch(categoryProvider)
+                                  .hashtagDTOAmekaji);
                             },
                             visualDensity: VisualDensity.standard),
                         // const SizedBox(width: 15),
@@ -309,7 +318,8 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                                   .read(categoryProvider.notifier)
                                   .toggleStyleSelected(style: "Sporty");
 
-                              print(ref.watch(categoryProvider).hashtagDTOSporty);
+                              print(
+                                  ref.watch(categoryProvider).hashtagDTOSporty);
                             },
                             visualDensity: VisualDensity.standard),
                         // const SizedBox(width: 30),
@@ -331,7 +341,8 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                               ref
                                   .read(categoryProvider.notifier)
                                   .toggleStyleSelected(style: "Etc");
-                              print(ref.watch(categoryProvider).hashtagDTOGuitar);
+                              print(
+                                  ref.watch(categoryProvider).hashtagDTOGuitar);
                             },
                             visualDensity: VisualDensity.standard),
                         // const SizedBox(width: 28),
@@ -374,7 +385,7 @@ class _CategoryScreen extends ConsumerState<CategoryScreen> {
                             minimumSize: Size(300, 50),
                           ),
                           onPressed: () {
-                            Navigator.of(context).pushReplacement(
+                            Navigator.of(context).pop(
                               MaterialPageRoute(
                                 builder: (_) => CategoryFeedScreen(),
                               ),
