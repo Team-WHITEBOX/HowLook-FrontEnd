@@ -169,7 +169,7 @@ class _ProfileChangeScreen extends State<ProfileChanging> {
                           _SettingList();
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: PRIMARY_COLOR,
+                          primary: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40),
                           ),

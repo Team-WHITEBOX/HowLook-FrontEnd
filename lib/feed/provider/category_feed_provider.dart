@@ -1,12 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/model/feed_params/category_pagination_params.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
+import 'package:howlook/feed/provider/category_provider.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
+import 'package:flutter_riverpod/src/consumer.dart';
+
+import '../model/category_model.dart';
 
 final categoryfeedProvider =
-StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
-      (ref) {
-    final crepository = ref.watch((feedRepositoryProvider));
+    StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
+  (ref) {
+    final category = ref.watch(categoryProvider);
+    final crepository = ref.watch((FeedRepositoryProvider));
     final notifier = CategoryFeedStateNotifier(crepository: crepository);
     return notifier;
   },
@@ -14,13 +19,15 @@ StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
 
 class CategoryFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
   final FeedRepository crepository;
+  late CategoryModel category;
 
   CategoryFeedStateNotifier({
     required this.crepository,
   }) : super(CursorPaginationLoading()) {
     paginate();
   }
-  void paginate({
+
+  Future<void> paginate({
     int fetchPage = 0,
     int fetchCount = 10,
     bool fetchMore = false,
@@ -42,32 +49,26 @@ class CategoryFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
         return;
       }
 
+      final currentPage = state is CursorPagination
+          ? (state as CursorPagination).data.number
+          : 0;
+
       CategoryPaginationParams categorypaginationParams =
           CategoryPaginationParams(
-        page: fetchPage,
+        page: fetchMore ? currentPage + 1 : 0,
+        size: fetchCount,
+        gender: category.gender,
+        hashtagDTOMinimal: category.hashtagDTOMinimal,
+        hashtagDTOCasual: category.hashtagDTOCasual,
+        hashtagDTOStreet: category.hashtagDTOStreet,
+        hashtagDTOAmekaji: category.hashtagDTOAmekaji,
+        hashtagDTOSporty: category.hashtagDTOSporty,
+        hashtagDTOGuitar: category.hashtagDTOGuitar,
+        heightLow: category.heightLow,
+        heightHigh: category.heightHigh,
+        weightLow: category.weightLow,
+        weightHigh: category.weightHigh,
       );
-
-      if (fetchMore) {
-        final pState = state as CursorPagination;
-
-        state = CursorPaginationFetchingMore(
-          data: pState.data,
-        );
-
-        categorypaginationParams = categorypaginationParams.copyWith(
-          page: (pState.data.number + 1),
-        );
-      } else {
-        if (state is CursorPagination && !forceRefetch) {
-          final pState = state as CursorPagination;
-
-          state = CursorPaginationRefetching(
-            data: pState.data,
-          );
-        } else {
-          state = CursorPaginationLoading();
-        }
-      }
 
       final resp = await crepository.cpaginate(
         categorypaginationParams: categorypaginationParams,
@@ -87,7 +88,7 @@ class CategoryFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
       } else {
         state = resp;
       }
-    } catch(e) {
+    } catch (e) {
       state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
     }
   }

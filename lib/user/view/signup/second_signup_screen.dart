@@ -47,7 +47,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
         },
       );
     }
-    
+
     // validate
     final formKey = GlobalKey<FormState>();
 
@@ -160,7 +160,8 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                       newMember[0].height = int.parse(value);
                     },
                     validator: (value) {
-                      if (value.length != 1 || (int.parse(value) < 100 || int.parse(value) > 250)) {
+                      if (value.length != 1 ||
+                          (int.parse(value) < 100 || int.parse(value) > 250)) {
                         return "100cm ~ 250cm의 범위 내로 입력해주세요 :(";
                       }
                       return null;
@@ -177,7 +178,8 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                       newMember[0].weight = int.parse(value);
                     },
                     validator: (value) {
-                      if (value.length != 1 || (int.parse(value) < 10 || int.parse(value) > 150)) {
+                      if (value.length != 1 ||
+                          (int.parse(value) < 10 || int.parse(value) > 150)) {
                         return "10kg ~ 150kg의 범위 내로 입력해주세요 :(";
                       }
                       return null;

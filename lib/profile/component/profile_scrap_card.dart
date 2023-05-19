@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/user/view/profile/model/scrap_model.dart';
+import 'package:howlook/profile/model/scrap_model.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
 
 class ScrapCard extends StatelessWidget {
 
-  // 포스트 아이디
-  final int npostId;
-  // 이미지 경로
-  final List<PhotoDTOs> photoDTOs;
-  // 첫 장 이미지 경로
-  final String mainPhotoPath;
-  // 이미지 갯수
-  final int photoCnt;
+  final List<ScrapList> scraps;
 
   const ScrapCard({
-    required this.npostId,
-    required this.photoDTOs,
-    required this.mainPhotoPath,
-    required this.photoCnt,
+    required this.scraps,
     Key? key})
       : super(key: key);
 
@@ -26,27 +16,37 @@ class ScrapCard extends StatelessWidget {
     required ScrapModel model,
   }) {
     return ScrapCard(
-      npostId: model.npostId,
-      photoDTOs: model.photoDTOs,
-      mainPhotoPath: model.mainPhotoPath,
-      photoCnt: model.photoCnt,
+      scraps: model.scraps,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => FeedDetailScreen(
-              postId: npostId,
-            ),
-          ));
-        },
-      child: Image.network(
-          'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${mainPhotoPath}',
-        fit: BoxFit.cover,
-      )
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: scraps.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        mainAxisSpacing: 1,
+        crossAxisSpacing: 1,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => FeedDetailScreen(
+                postId: scraps[index].postId,
+              ),
+            ));
+          },
+          child: Image.network(
+            'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${scraps[index].mainPhotoPath}',
+            fit: BoxFit.cover,
+          ),
+        );
+      },
     );
     // return GridView.builder(
     //   //physics: const NeverScrollableScrollPhysics(),

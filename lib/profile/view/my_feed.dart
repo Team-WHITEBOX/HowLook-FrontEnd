@@ -4,18 +4,19 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/user/view/profile/component/feed_card.dart';
-import 'package:howlook/user/view/profile/model/feed_model.dart';
+import 'package:howlook/profile/component/profile_feed_card.dart';
+import 'package:howlook/profile/model/feed_model.dart';
 
 class MyFeed extends ConsumerStatefulWidget {
-  final String usermid; // 포스트 아이디로 특정 게시글 조회
-  const MyFeed({required this.usermid, Key? key}) : super(key: key);
+  final String memberId; // 포스트 아이디로 특정 게시글 조회
+  const MyFeed({required this.memberId, Key? key}) : super(key: key);
 
   @override
   ConsumerState<MyFeed> createState() => _MyFeed();
 }
 
 class _MyFeed extends ConsumerState<MyFeed> {
+
   //final List<String> images = <String>['asset/img/Profile/HL1.JPG', 'asset/img/Profile/HL2.JPG', 'asset/img/Profile/HL3.JPG', 'asset/img/Profile/HL4.JPG'];
 
   Future<Map<String, dynamic>> paginateMyFeed() async {
@@ -24,7 +25,7 @@ class _MyFeed extends ConsumerState<MyFeed> {
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
       // MainFeed 관련 api IP주소 추가하기
-      'http://$API_SERVICE_URI/member/${widget.usermid}',
+      'http://$API_SERVICE_URI/member/${widget.memberId}',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',

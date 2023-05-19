@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/user/view/profile/model/my_profile_screen_model.dart';
-import 'package:howlook/user/view/profile/component/my_profile_card.dart';
+import 'package:howlook/profile/model/my_profile_screen_model.dart';
+import 'package:howlook/profile/component/my_profile_card.dart';
+
+import '../provider/profile_provider.dart';
 
 class MyProfileScreen extends ConsumerStatefulWidget {
 
@@ -16,7 +17,7 @@ class MyProfileScreen extends ConsumerStatefulWidget {
 
 class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
-  String userid = '';
+  String memberId = '';
 
   Future<String> JWTcheck() async {
     final dio = Dio();
@@ -31,18 +32,17 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
         },
       ),
     );
-    userid = resp.data['data'];
-    await storage.write(key: USERMID_KEY, value: userid);
-    return userid;
+    memberId = resp.data['data'];
+    await storage.write(key: USERMID_KEY, value: memberId);
+    return memberId;
   }
-
 
   Future<Map<String, dynamic>> paginateProfile() async {
     final dio = Dio();
     final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
-      'http://$API_SERVICE_URI/member/$userid',
+      'http://$API_SERVICE_URI/member/$memberId',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',
@@ -55,6 +55,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<MainProfileModel> userInfo = ref.watch(ProfileProvider);
+
     return DefaultLayout(
       title: 'My Look',
       child: FutureBuilder<String>(
@@ -77,8 +79,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   child: CircularProgressIndicator(),
                 );
               }
-              final item = snapshot.data!;
-              final pItem = MainProfileModel.fromJson(json: item);
+              final item = snapshot.data;
+              final pItem = MainProfileModel.fromJson(item!);
               return MainProfileCard.fromModel(model: pItem);
             }
             );

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/user/view/profile/model/my_profile_screen_model.dart';
-import 'package:howlook/user/view/profile/view/my_feed.dart';
-import 'package:howlook/user/view/profile/infoSetup/setting_list.dart';
-import 'package:howlook/user/view/profile/view/my_scrap.dart';
+import 'package:howlook/common/const/colors.dart';
+import 'package:howlook/profile/view/my_feed.dart';
+import 'package:howlook/user/infoSetup/setting_list.dart';
+import 'package:howlook/profile/view/my_scrap.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/profile/model/other_profile_model.dart';
+import 'package:extended_image/extended_image.dart';
 
-class MainProfileCard extends StatelessWidget {
+class OtherProfileCard extends StatelessWidget {
   // 아이디
   final String memberId;
   // 닉네임
@@ -19,34 +21,34 @@ class MainProfileCard extends StatelessWidget {
 
   final bool me;
 
-  final int memberFeedCnt;
+  final int memberPostCount;
 
-  final List<MemberFeeds> memberFeeds;
+  final List<MemberPosts> memberPosts;
 
-  const MainProfileCard(
+  const OtherProfileCard(
       {required this.memberId,
-      required this.memberNickName,
-      required this.memberHeight,
-      required this.memberWeight,
-      required this.profilePhoto,
-      required this.me,
-      required this.memberFeedCnt,
-      required this.memberFeeds,
-      Key? key})
+        required this.memberNickName,
+        required this.memberHeight,
+        required this.memberWeight,
+        required this.profilePhoto,
+        required this.me,
+        required this.memberPostCount,
+        required this.memberPosts,
+        Key? key})
       : super(key: key);
 
-  factory MainProfileCard.fromModel({
-    required MainProfileModel model,
+  factory OtherProfileCard.fromModel({
+    required OtherProfileModel model,
   }) {
-    return MainProfileCard(
+    return OtherProfileCard(
       memberId: model.memberId,
       memberNickName: model.memberNickName,
       memberHeight: model.memberHeight,
       memberWeight: model.memberWeight,
       profilePhoto: model.profilePhoto,
       me: model.me,
-      memberFeedCnt: model.memberFeedCnt,
-      memberFeeds: model.memberFeeds,
+      memberPostCount: model.memberPostCount,
+      memberPosts: model.memberPosts,
     );
   }
 
@@ -71,13 +73,13 @@ class MainProfileCard extends StatelessWidget {
                               Container(
                                 decoration: BoxDecoration(
                                     gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFFa6ceff),
-                                    Color(0xFFD07AFF),
-                                  ],
-                                  begin: FractionalOffset.bottomCenter,
-                                  end: FractionalOffset.topCenter,
-                                )),
+                                      colors: [
+                                        Colors.black,
+                                        Colors.grey,
+                                      ],
+                                      begin: FractionalOffset.bottomCenter,
+                                      end: FractionalOffset.topCenter,
+                                    )),
                               ),
                               PageView.builder(
                                 controller: _controller,
@@ -92,17 +94,17 @@ class MainProfileCard extends StatelessWidget {
                                     onTap: (){
                                       Navigator.of(context).push(MaterialPageRoute(
                                         builder: (_) => FeedDetailScreen(
-                                          postId: memberFeeds[index].npostId,
+                                          postId: memberPosts[index].postId,
                                         ),
                                       ));
                                     },
                                     child: Image.network(
-                                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberFeeds[index].mainPhotoPath}',
+                                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberPosts[index].mainPhotoPath}',
                                       fit: BoxFit.cover,
                                     ),
                                   );
                                 },
-                                itemCount: memberFeeds.length,  // memberFeedCnt, // -> PhotoCnt로 수정
+                                itemCount: memberPosts.length,  // memberFeedCnt, // -> PhotoCnt로 수정
                               ),
                             ],
                           ),
@@ -110,26 +112,24 @@ class MainProfileCard extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => MyScrap(
-                                      usermid: memberId,
-                                    ),
-                                  ),
-                                );
-                              }, //설정 화면 이동
-                              icon: Icon(Icons.bookmark_border_outlined),
-                              iconSize: 30,
-                              color: Colors.white,
-                            ),
+                            // IconButton(
+                            //   onPressed: () {
+                            //     Navigator.of(context).push(
+                            //       MaterialPageRoute(
+                            //         builder: (_) => MyScrap(),
+                            //       ),
+                            //     );
+                            //   }, //설정 화면 이동
+                            //   icon: Icon(Icons.bookmark_border_outlined),
+                            //   iconSize: 30,
+                            //   color: Colors.white,
+                            // ),
                             IconButton(
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => MyFeed(
-                                      usermid: memberId,
+                                      memberId: memberId,
                                     ),
                                   ),
                                 );
@@ -138,18 +138,18 @@ class MainProfileCard extends StatelessWidget {
                               iconSize: 30,
                               color: Colors.white,
                             ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => SettingList(),
-                                  ),
-                                );
-                              }, //설정 화면 이동
-                              icon: Icon(Icons.settings),
-                              iconSize: 30,
-                              color: Colors.white,
-                            ),
+                            // IconButton(
+                            //   onPressed: () {
+                            //     Navigator.of(context).push(
+                            //       MaterialPageRoute(
+                            //         builder: (_) => SettingList(),
+                            //       ),
+                            //     );
+                            //   }, //설정 화면 이동
+                            //   icon: Icon(Icons.settings),
+                            //   iconSize: 30,
+                            //   color: Colors.white,
+                            // ),
                           ],
                         )
                       ],
@@ -201,17 +201,21 @@ class MainProfileCard extends StatelessWidget {
                         begin: Alignment.bottomRight,
                         end: Alignment.topLeft,
                         colors: [
-                          Color(0xFFD07AFF),
-                          Color(0xFFa6ceff),
+                          Colors.grey,
+                          Colors.white,
                         ]),
                     borderRadius: BorderRadius.circular(500),
                   ),
-                  child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.width / 6,
-                    backgroundImage: NetworkImage(
-                      'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${profilePhoto}',
-                    ),
-                  )
+                child: CircleAvatar(
+                  radius: MediaQuery.of(context).size.width / 6,
+                  backgroundImage: profilePhoto != null
+                      ? ExtendedImage.network(
+                    profilePhoto,
+                    fit: BoxFit.cover,
+                    cache: true,
+                  ).image
+                      : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
+                ),
               )),
             ),
           ],

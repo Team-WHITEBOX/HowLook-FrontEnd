@@ -719,7 +719,7 @@ PODS:
   - GTMSessionFetcher/Core (3.1.0)
   - image_picker_ios (0.0.1):
     - Flutter
-  - kakao_flutter_sdk_common (1.4.0):
+  - kakao_flutter_sdk_common (1.4.2):
     - Flutter
   - leveldb-library (1.22.2)
   - Libuv-gRPC (0.0.10):

@@ -6,17 +6,37 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/feed/component/feed_card.dart';
 import 'package:howlook/feed/model/feed_model.dart';
-import 'package:howlook/feed/view/category_screen.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
+import 'package:howlook/feed/provider/main_feed_provider.dart';
+import 'package:howlook/feed/repository/feed_repository.dart';
+import 'package:howlook/feed/provider/category_feed_provider.dart';
+import 'package:howlook/common/model/cursor_pagination_model.dart';
+
+import 'category_screen.dart';
 
 class CategoryFeedScreen extends ConsumerStatefulWidget {
-
   @override
   ConsumerState<CategoryFeedScreen> createState() => _CategoryFeedScreenState();
 }
 
 class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
   final ScrollController controller = ScrollController();
+
+  Widget? ShowModalBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const ContinuousRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      builder: (context) {
+        return _BottomSheetContent();
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -27,76 +47,103 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
 
   void scrollListener() {
     // // 현재 위치가 최대 길이보다 조금 덜 되는 위치까지 왔다면 새로운 데이터를 추가 요청
-    // if (controller.offset > controller.position.maxScrollExtent - 300) {
-    //   ref.read(mainfeedProvider.notifier).paginate(
-    //     fetchMore: true,
-    //   );
-    // }
-  }
-  // 페이지네이션 api 호출하여 메인피드 데이터 값 받아오기
-  Future<List> paginateMainFeed(WidgetRef ref) async {
-    final dio = Dio();
-    final storage = ref.read(secureStorageProvider);
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    int page = 0;
-    String gender;
-
-    // final resp = await dio.get(
-    //   // MainFeed 관련 api IP주소 추가하기
-    //   'http://3.34.164.14:8080/feed/search?amekaji=${widget.arguments.isAmericanCasualChecked}&casual=${widget.arguments.isCasualChecked}&guitar=${widget.arguments.isEtcChecked}&minimal=${widget.arguments.isMinimalChecked}&sporty=${widget.arguments.isSportyChecked}&street=${widget.arguments.isStreetChecked}&heightHigh=${widget.arguments.maxHeight}&heightLow=${widget.arguments.minHeight}&weightHigh=${widget.arguments.maxWeight}&weightLow=${widget.arguments.minWeight}&gender=${gender}&page=${page}',
-    //   options: Options(
-    //     headers: {
-    //       'authorization': 'Bearer $accessToken',
-    //     },
-    //   ),
-    // );
-    final List<String> resp = ["Hello"];
-    // 응답 데이터 중 data 값만 반환하여 사용하기!!
-    // return resp.data['data'];
-    return resp;
+    if (controller.offset > controller.position.maxScrollExtent - 300) {
+      ref.read(mainfeedProvider.notifier).paginate(
+            fetchMore: true,
+          );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      title: '검색 기반 게시글',
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: FutureBuilder<List>(
-          future: paginateMainFeed(ref),
-          builder: (context, AsyncSnapshot<List> snapshot) {
-            // 에러처리
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.separated(
-              controller: controller,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (_, index) {
-                // 받아온 데이터 JSON 매핑하기
-                // 모델 사용
-                final item = snapshot.data![index];
-                final pItem = FeedModel.fromJson(item);
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => FeedDetailScreen(
-                        postId: pItem.postId,
-                      ),
-                    ));
-                  },
-                  child: FeedCard.fromModel(model: pItem),
-                );
-              },
-              separatorBuilder: (_, index) {
-                return SizedBox(height: 16.0);
-              },
+    // 따로 autoDispose 설정하지 않으면 한번 생성된 이후로 데이터가 날아가지 않고 캐싱된다.
+    final data = ref.watch(categoryfeedProvider);
+    bool _ischecked = false;
+
+    // 완전 처음 로딩일 떄
+    if (data is CursorPaginationLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    // 에러
+    if (data is CursorPaginationError) {
+      return Center(
+        child: Text(data.message),
+      );
+    }
+
+    final cp = data as CursorPagination;
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.read(categoryfeedProvider.notifier).paginate(
+              forceRefetch: true,
             );
-          },
+      },
+      // child: DefaultLayout(
+      //   title: '검색 기반 게시글',
+      child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: ListView.separated(
+            controller: controller,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: cp.data.content.length + 1,
+            itemBuilder: (_, index) {
+              if (index == cp.data.content.length) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Center(
+                    child: data is CursorPaginationFetchingMore
+                        ? CircularProgressIndicator()
+                        : Text('마지막 데이터입니다. ㅠㅠ'),
+                  ),
+                );
+              }
+              // 받아온 데이터 JSON 매핑하기
+              // 모델 사용
+              // final item = snapshot.data![index];
+              final item = cp.data.content[index];
+              final pItem = FeedModel.fromJson(item.toJson());
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => FeedDetailScreen(
+                      postId: pItem.postId,
+                    ),
+                  ));
+                },
+                child: FeedCard.fromModel(model: pItem),
+              );
+            },
+            separatorBuilder: (_, index) {
+              return SizedBox(height: 16.0);
+            },
+          )),
+      // )
+    );
+  }
+}
+
+class _BottomSheetContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          width: MediaQuery.of(context).size.width,
+          child: CategoryScreen(),
         ),
       ),
     );
