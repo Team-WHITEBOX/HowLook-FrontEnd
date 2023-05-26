@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/feed_params/near_pagination_params.dart';
+import 'package:howlook/common/model/params/feed_params/near_pagination_params.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -26,16 +26,16 @@ final nearfeedProvider =
     StateNotifierProvider<NearFeedStateNotifier, CursorPaginationBase>(
   (ref) {
     final nrepository = ref.watch((feedRepositoryProvider));
-    final notifier = NearFeedStateNotifier(nrepository: nrepository);
+    final notifier = NearFeedStateNotifier(nRepository: nrepository);
     return notifier;
   },
 );
 
 class NearFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
-  final FeedRepository nrepository;
+  final FeedRepository nRepository;
 
   NearFeedStateNotifier({
-    required this.nrepository,
+    required this.nRepository,
   }) : super(CursorPaginationLoading()) {
     paginate();
   }
@@ -92,8 +92,8 @@ class NearFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
         }
       }
 
-      final resp = await nrepository.npaginate(
-        nearpaginationParams: nearpaginationParams,
+      final resp = await nRepository.nPaginate(
+        nearPaginationParams: nearpaginationParams,
       );
 
       if (state is CursorPaginationFetchingMore) {

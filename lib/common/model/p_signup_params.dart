@@ -7,7 +7,7 @@ class PostParams {
 
   final String? memberId;
   final String? memberPassword;
-  final String? userpw;
+  final String? userPw;
   final String? name;
   final String? nickName;
   final String? phone;
@@ -19,7 +19,7 @@ class PostParams {
   const PostParams({
     this.memberId,
     this.memberPassword,
-    this.userpw,
+    this.userPw,
     this.name,
     this.nickName,
     this.phone,
@@ -44,7 +44,7 @@ class PostParams {
     return PostParams(
       memberId: memberId ?? this.memberId,
       memberPassword: memberPassword ?? this.memberPassword,
-      userpw: userpw ?? this.userpw,
+      userPw: userpw ?? this.userPw,
       name: name ?? this.name,
       nickName: nickName ?? this.nickName,
       phone: phone ?? this.phone,

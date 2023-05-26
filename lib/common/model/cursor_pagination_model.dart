@@ -1,5 +1,4 @@
-import 'package:howlook/feed/model/feed_model.dart';
-import 'package:howlook/feed/model/page_model.dart';
+import 'package:howlook/common/model/page_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'cursor_pagination_model.g.dart';
 

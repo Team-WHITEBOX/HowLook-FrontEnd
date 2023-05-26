@@ -15,7 +15,7 @@ class KakaoLoginScreen extends StatelessWidget {
     return Scaffold(
       body: WebView(
         // 여기부터 주목
-        initialUrl: "http://3.34.164.14:8080/oauth2/authorization/kakao",
+        initialUrl: "https://kauth.kakao.com/oauth/authorize?client_id=eaea17f771b2bbca9bb72a90b36e5244&redirect_uri=http://3.34.164.14:8080/account/oauth/kakao&response_type=code",
         onWebViewCreated: (WebViewController webviewController) {
           _controller = webviewController;
         },

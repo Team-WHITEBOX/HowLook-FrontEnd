@@ -9,7 +9,7 @@ part of 'p_signup_params.dart';
 PostParams _$PostParamsFromJson(Map<String, dynamic> json) => PostParams(
       memberId: json['memberId'] as String?,
       memberPassword: json['memberPassword'] as String?,
-      userpw: json['userpw'] as String?,
+      userPw: json['userPw'] as String?,
       name: json['name'] as String?,
       nickName: json['nickName'] as String?,
       phone: json['phone'] as String?,
@@ -23,7 +23,7 @@ Map<String, dynamic> _$PostParamsToJson(PostParams instance) =>
     <String, dynamic>{
       'memberId': instance.memberId,
       'memberPassword': instance.memberPassword,
-      'userpw': instance.userpw,
+      'userPw': instance.userPw,
       'name': instance.name,
       'nickName': instance.nickName,
       'phone': instance.phone,

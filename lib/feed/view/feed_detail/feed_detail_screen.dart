@@ -22,7 +22,7 @@ class _FeedDetailScreenState extends ConsumerState<FeedDetailScreen> {
   void initState() {
     super.initState();
 
-    ref.read(mainfeedProvider.notifier).getDetail(postId: widget.postId);
+    ref.read(mainFeedProvider.notifier).getDetail(postId: widget.postId);
   }
 
   @override
@@ -30,7 +30,7 @@ class _FeedDetailScreenState extends ConsumerState<FeedDetailScreen> {
     final state = ref.watch(feedDetailProvider(widget.postId));
 
     if (state == null) {
-      return DefaultLayout(
+      return const DefaultLayout(
         child: Center(
           child: CircularProgressIndicator(),
         ),

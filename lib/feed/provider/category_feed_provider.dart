@@ -1,28 +1,27 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/model/feed_params/category_pagination_params.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
+import 'package:howlook/common/model/params/feed_params/category_pagination_params.dart';
 import 'package:howlook/feed/provider/category_provider.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
-import 'package:flutter_riverpod/src/consumer.dart';
 
 import '../model/category_model.dart';
 
-final categoryfeedProvider =
+final categoryFeedProvider =
     StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
   (ref) {
     final category = ref.watch(categoryProvider);
-    final crepository = ref.watch((feedRepositoryProvider));
-    final notifier = CategoryFeedStateNotifier(crepository: crepository);
+    final cRepository = ref.watch((feedRepositoryProvider));
+    final notifier = CategoryFeedStateNotifier(cRepository: cRepository);
     return notifier;
   },
 );
 
 class CategoryFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
-  final FeedRepository crepository;
+  final FeedRepository cRepository;
   late CategoryModel category;
 
   CategoryFeedStateNotifier({
-    required this.crepository,
+    required this.cRepository,
   }) : super(CursorPaginationLoading()) {
     paginate();
   }
@@ -70,8 +69,8 @@ class CategoryFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
         weightHigh: category.weightHigh,
       );
 
-      final resp = await crepository.cpaginate(
-        categorypaginationParams: categorypaginationParams,
+      final resp = await cRepository.cPaginate(
+        categoryPaginationParams: categorypaginationParams,
       );
 
       if (state is CursorPaginationFetchingMore) {

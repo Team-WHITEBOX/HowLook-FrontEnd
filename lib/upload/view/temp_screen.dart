@@ -102,6 +102,7 @@ class _TempScreenState extends ConsumerState<TempScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedState = ref.watch(selectedImageProvider);
+    final selectedStateRead = ref.read(selectedImageProvider.notifier);
     final newPostState = ref.watch(newPostInfoProvider);
     final isLoadingStateRead = ref.read(loadingIndicatorProvider.notifier);
     PageController controller = PageController();
@@ -149,22 +150,23 @@ class _TempScreenState extends ConsumerState<TempScreen> {
                     dio.MultipartFile.fromFileSync(e.afterDetectionInPath!))
                     .toList();
 
-                // // API 전송
-                // final resp =
-                //     await selectedStateRead.uploadImage(uploadModel, files);
-                //
-                // if (resp.response.statusCode == 200) {
-                //   // 상태 초기화
-                //   selectedStateRead.clearImage();
-                //   // isLoadingState 초기화
-                //   isLoadingStateRead.update((state) => true);
-                //   Navigator.of(context).pushAndRemoveUntil(
-                //     MaterialPageRoute(
-                //       builder: (_) => RootTab(),
-                //     ),
-                //     (route) => false,
-                //   );
-                // }
+                // API 전송
+                final resp =
+                await selectedStateRead.uploadImage(uploadModel, files);
+
+                if (resp.response.statusCode == 200) {
+                  // 상태 초기화
+                  selectedStateRead.clearImage();
+                  // isLoadingState 초기화
+                  isLoadingStateRead.update((state) => true);
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => RootTab(),
+                    ),
+                        (route) => false,
+                  );
+                }
+
               },
               child: const Padding(
                 padding: EdgeInsets.all(15.0),

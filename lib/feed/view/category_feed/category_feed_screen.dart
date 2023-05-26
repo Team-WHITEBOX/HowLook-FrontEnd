@@ -48,7 +48,7 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
   void scrollListener() {
     // // 현재 위치가 최대 길이보다 조금 덜 되는 위치까지 왔다면 새로운 데이터를 추가 요청
     if (controller.offset > controller.position.maxScrollExtent - 300) {
-      ref.read(mainfeedProvider.notifier).paginate(
+      ref.read(mainFeedProvider.notifier).paginate(
             fetchMore: true,
           );
     }
@@ -57,7 +57,7 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
   @override
   Widget build(BuildContext context) {
     // 따로 autoDispose 설정하지 않으면 한번 생성된 이후로 데이터가 날아가지 않고 캐싱된다.
-    final data = ref.watch(categoryfeedProvider);
+    final data = ref.watch(categoryFeedProvider);
     bool _ischecked = false;
 
     // 완전 처음 로딩일 떄
@@ -78,7 +78,7 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        ref.read(categoryfeedProvider.notifier).paginate(
+        ref.read(categoryFeedProvider.notifier).paginate(
               forceRefetch: true,
             );
       },

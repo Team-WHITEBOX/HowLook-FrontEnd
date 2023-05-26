@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/view/kakao_login.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
@@ -38,14 +39,14 @@ class IntroScreen extends ConsumerWidget {
               TextButton(
                 onPressed: () async {
                   try {
-                    print("HI1");
-                    await AuthCodeClient.instance.authorize().then((code) {
-                      // 인증 코드 수신
-                      print(code);
-                    }).catchError((error) {
-                      // 오류 처리
-                      print(error);
-                    });
+                    // print("HI1");
+                    // await AuthCodeClient.instance.authorize().then((code) {
+                    //   // 인증 코드 수신
+                    //
+                    // }).catchError((error) {
+                    //   // 오류 처리
+                    //   print(error);
+                    // });
                     // await AuthCodeClient.instance.authorizeWithTalk(
                     //   redirectUri:
                     //       'http://3.34.164.14:8080/account/oauth/kakao',
@@ -57,12 +58,12 @@ class IntroScreen extends ConsumerWidget {
                     // print('카카오계정으로 로그인 성공');
                     // print(token.accessToken);
                     // print(token.refreshToken);
-                    // Navigator.of(context).pushAndRemoveUntil(
-                    //   MaterialPageRoute(
-                    //     builder: (_) => RootTab(),
-                    //   ),
-                    //   (route) => false,
-                    // );
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => KakaoLoginScreen(),
+                      ),
+                      (route) => false,
+                    );
                   } catch (error) {
                     print('카카오계정으로 로그인 실패 $error');
                   }

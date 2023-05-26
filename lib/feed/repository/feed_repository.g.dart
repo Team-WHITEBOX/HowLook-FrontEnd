@@ -19,7 +19,7 @@ class _FeedRepository implements FeedRepository {
   String? baseUrl;
 
   @override
-  Future<CursorPagination<PageModel>> paginate(
+  Future<CursorPagination<PageModel>> mPaginate(
       {paginationParams = const PaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -49,12 +49,12 @@ class _FeedRepository implements FeedRepository {
   }
 
   @override
-  Future<CursorPagination<PageModel>> npaginate(
-      {nearpaginationParams = const NearPaginationParams()}) async {
+  Future<CursorPagination<PageModel>> nPaginate(
+      {nearPaginationParams = const NearPaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters
-        .addAll(nearpaginationParams?.toJson() ?? <String, dynamic>{});
+        .addAll(nearPaginationParams?.toJson() ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
@@ -80,12 +80,12 @@ class _FeedRepository implements FeedRepository {
   }
 
   @override
-  Future<CursorPagination<PageModel>> cpaginate(
-      {categorypaginationParams = const CategoryPaginationParams()}) async {
+  Future<CursorPagination<PageModel>> cPaginate(
+      {categoryPaginationParams = const CategoryPaginationParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters
-        .addAll(categorypaginationParams?.toJson() ?? <String, dynamic>{});
+        .addAll(categoryPaginationParams?.toJson() ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
@@ -112,10 +112,10 @@ class _FeedRepository implements FeedRepository {
 
   @override
   Future<FeedModel> getFeedDetail(
-      {detailfeedParams = const DetailFeedParams()}) async {
+      {detailFeedParams = const DetailFeedParams()}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(detailfeedParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.addAll(detailFeedParams?.toJson() ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
@@ -135,6 +135,56 @@ class _FeedRepository implements FeedRepository {
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = FeedModel.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> postLike({required postId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = postId;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/like',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> delLike({required postId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = postId;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/like',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

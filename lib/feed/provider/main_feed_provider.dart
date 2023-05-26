@@ -1,14 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/feed_params/detail_feed_params.dart';
-import 'package:howlook/common/model/feed_params/pagination_params.dart';
+import 'package:howlook/common/model/params/feed_params/detail_feed_params.dart';
+import 'package:howlook/common/model/params/feed_params/pagination_params.dart';
 import 'package:howlook/feed/model/feed_model.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 
 // 각 피드 디테일 페이지 이동 시 캐시 적용을 위한 Detail Provider 사용
 // family Provider을 통해 feedDetailProvider을 생성할 때 id 값을 같이 넣어서 전달
 final feedDetailProvider = Provider.family<FeedModel?, int>((ref, id) {
-  final state = ref.watch(mainfeedProvider);
+  final state = ref.watch(mainFeedProvider);
 
   if (state is! CursorPagination) {
     return null;
@@ -19,7 +19,7 @@ final feedDetailProvider = Provider.family<FeedModel?, int>((ref, id) {
 
 // 캐시를 관리하는 모든 Provider => StateNotifierProvider
 // 왜냐하면 method를 많이 생성해서 로직을 클래스 안에 집어 넣기 위함
-final mainfeedProvider =
+final mainFeedProvider =
     StateNotifierProvider<MainFeedStateNotifier, CursorPaginationBase>(
   (ref) {
     final repository = ref.watch((feedRepositoryProvider));
@@ -133,7 +133,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
 
       // 각 상태에 맞는 paginationParams를 첨부하여 API 실행
       // 가장 최신 데이터 10개 불러오기
-      final resp = await repository.paginate(
+      final resp = await repository.mPaginate(
         paginationParams: paginationParams,
       );
 
@@ -184,7 +184,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
 
     // 요청 데이터
     final resp =
-        await repository.getFeedDetail(detailfeedParams: detailfeedParams);
+        await repository.getFeedDetail(detailFeedParams: detailfeedParams);
 
     state = pState.copyWith(
       data: pState.data.copyWith(
