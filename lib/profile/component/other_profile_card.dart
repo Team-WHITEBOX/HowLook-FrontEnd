@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/profile/view/my_feed.dart';
-import 'package:howlook/user/infoSetup/setting_list.dart';
+import 'package:howlook/user/settingList/setting_list.dart';
 import 'package:howlook/profile/view/my_scrap.dart';
 import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 import 'package:howlook/profile/model/other_profile_model.dart';

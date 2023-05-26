@@ -7,6 +7,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_downloader/src/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,6 +18,7 @@ import 'package:howlook/upload/Provider/loading_provider.dart';
 import 'package:howlook/upload/Provider/select_photo_provider.dart';
 import 'package:howlook/upload/model/upload_formdata_model.dart';
 import 'package:path_provider/path_provider.dart';
+
 
 class TempScreen extends ConsumerStatefulWidget {
   const TempScreen({Key? key}) : super(key: key);

@@ -10,29 +10,30 @@ import 'package:howlook/common/const/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:howlook/review/view/normal_review_screen.dart';
 
-class NormalReviewCard extends ConsumerStatefulWidget {
+
+class CreaterReviewCard extends ConsumerStatefulWidget {
   // 포스트 아이디
   final int npostId;
   // 첫 장 이미지 경로
   final String mainPhotoPath;
 
-  NormalReviewCard({
+  CreaterReviewCard({
     Key? key,
     required this.npostId,
     required this.mainPhotoPath,
   }) : super(key: key);
 
-  factory NormalReviewCard.fromModel({
+  factory CreaterReviewCard.fromModel({
     required ReviewModel model,
   }) {
-    return NormalReviewCard(
+    return CreaterReviewCard(
       npostId: model.npostId,
       mainPhotoPath: model.mainPhotoPath,
     );
   }
 
   @override
-  ConsumerState<NormalReviewCard> createState() => _NormalReviewCardState();
+  ConsumerState<CreaterReviewCard> createState() => _CreaterReviewCardState();
 }
 
 class SliderController {
@@ -40,15 +41,81 @@ class SliderController {
   SliderController(this.sliderValue);
 }
 
-class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
+class _CreaterReviewCardState extends ConsumerState<CreaterReviewCard> with RestorationMixin{
   SliderController _scoreCountController = SliderController(0.0);
   bool? buttonPower = false;
+
+  late RestorableRouteFuture<String> _createrDialogRoute;
+
+  @override
+  String get restorationId => 'dialog_creater';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(
+      _createrDialogRoute,
+      '크리에이터 한줄 평가',
+    );
+  }
+
+  // Displays the popped String value in a SnackBar.
+  void _showInSnackBar(String value) {
+    // The value passed to Navigator.pop() or null.
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '크리에이터 평가',
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
     buttonPower = false;
     super.initState();
+    _createrDialogRoute = RestorableRouteFuture<String>(
+      onPresent: (navigator, arguments) {
+        return navigator.restorablePush(_simpleDialogDemoRoute);
+      },
+      onComplete: _showInSnackBar,
+    );
   }
+
+  static Route<String> _simpleDialogDemoRoute(
+      BuildContext context,
+      Object? arguments,
+      ) {
+    final theme = Theme.of(context);
+
+    return DialogRoute<String>(
+      context: context,
+      builder: (context) => Container(
+        child: SimpleDialog(
+          // title: Text(GalleryLocalizations.of(context)!.dialogSetBackup),
+          children: [
+            _DialogDemoItem(
+              icon: Icons.account_circle,
+              color: theme.colorScheme.primary,
+              text: 'username@gmail.com',
+            ),
+            _DialogDemoItem(
+              icon: Icons.account_circle,
+              color: theme.colorScheme.secondary,
+              text: 'user02@gmail.com',
+            ),
+            _DialogDemoItem(
+              icon: Icons.add_circle,
+              text: 'GalleryLocalizations.of(context)!.dialogAddAccount',
+              color: theme.disabledColor,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 
   Widget buildSlider({
     required SliderController controller,
@@ -91,7 +158,7 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
               label: '${controller.sliderValue.round()}',
               onChanged: (newValue) {
                 setState(
-                  () {
+                      () {
                     controller.sliderValue = newValue;
                     buttonPower = true;
                   },
@@ -191,6 +258,40 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
               style: TextStyle(color: Colors.black38));
         }
       })(),
+    );
+  }
+}
+
+class _DialogDemoItem extends StatelessWidget {
+  const _DialogDemoItem({
+    this.icon,
+    this.color,
+    required this.text,
+  });
+
+  final IconData? icon;
+  final Color? color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialogOption(
+      onPressed: () {
+        Navigator.of(context).pop(text);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, size: 36, color: color),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(start: 16),
+              child: Text(text),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

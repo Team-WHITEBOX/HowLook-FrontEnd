@@ -77,12 +77,13 @@ dependencies:
   path_provider: ^2.0.14 # 확대 파일 임시 저장 관련 라이브러리
 
   # 파이어베이스
-  firebase_core: ^2.10.0
+  firebase_core: ^2.13.0
   firebase_storage: ^11.1.1
   cloud_firestore: ^4.5.2
 
   # 비식별 처리 후 파베 링크에서 파일 다운로드 관련 라이브러리
   flutter_downloader: ^1.10.2
+  mockito: ^5.4.0
 
 dev_dependencies:
   flutter_test:

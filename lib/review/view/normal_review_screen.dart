@@ -7,7 +7,7 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/review/model/normal_review_model.dart';
+import 'package:howlook/review/model/review_model.dart';
 import 'package:howlook/review/component/nomal_review_card.dart';
 
 class NormalReview extends ConsumerWidget {
@@ -46,7 +46,7 @@ class NormalReview extends ConsumerWidget {
                         );
                       }
                       final item = snapshot.data!; //인덱스값
-                      final pItem = NRModel.fromJson(json: item);
+                      final pItem = ReviewModel.fromJson(json: item);
                       return NormalReviewCard.fromModel(model: pItem);
                     }))));
   }

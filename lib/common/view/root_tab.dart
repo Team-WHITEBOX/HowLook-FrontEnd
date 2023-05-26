@@ -9,6 +9,7 @@ import 'package:howlook/upload/view/main_liquid_swipe.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
 import 'package:howlook/upload/view/review_upload_screen.dart';
+import '../../profile/view/my_profile_screen.dart';
 
 class RootTab extends StatefulWidget {
   const RootTab({Key? key}) : super(key: key);
