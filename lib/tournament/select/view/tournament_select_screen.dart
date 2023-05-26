@@ -54,19 +54,19 @@ class _TournamentIngState extends State<TournamentIng> {
         child: SingleChildScrollView(
           child: SafeArea(
             // child: FutureBuilder<List>(
-            //     future: paginatePickTourna(tournamentday),
-            //     builder: (_, AsyncSnapshot<List> snapshot) {
-            //       // 에러처리
-            //       if (!snapshot.hasData) {
-            //         print('error');
-            //         return Center(
-            //           child: CircularProgressIndicator(),
-            //         );
-            //       }
-            //       final item = snapshot.data![0];
-            //       final pItem = SelectTournaModel.fromJson(json: item);
-            //       return TournamentIngCard.fromModel(model: pItem);
-            //     }),
+                // future: paginatePickTourna(tournamentday),
+                // builder: (_, AsyncSnapshot<List> snapshot) {
+                //   // 에러처리
+                //   if (!snapshot.hasData) {
+                //     print('error');
+                //     return Center(
+                //       child: CircularProgressIndicator(),
+                //     );
+                //   }
+                //   final item = snapshot.data![0];
+                //   final pItem = SelectTournaModel.fromJson(json: item);
+                //   return TournamentIngCard.fromModel(model: pItem);
+                // }),
             child: Text('df'),
           ),
         ));

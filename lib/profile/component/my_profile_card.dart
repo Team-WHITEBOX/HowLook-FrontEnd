@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/profile/model/my_profile_screen_model.dart';
 import 'package:howlook/profile/view/my_feed.dart';
-import 'package:howlook/user/infoSetup/setting_list.dart';
+import 'package:howlook/user/settingList/setting_list.dart';
 import 'package:howlook/profile/view/my_scrap.dart';
 import 'package:howlook/feed/view/feed_detail_screen.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:howlook/profile/model/profile_memberPosts.dart';
 import 'package:flutter_riverpod/src/consumer.dart';
-import '../provider/profile_provider.dart';
+// import '../provider/profile_provider.dart';
 
 class MainProfileCard extends StatelessWidget {
   // 아이디
@@ -261,6 +260,7 @@ class MainProfileCard extends StatelessWidget {
                 // )
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width / 6,
+                  // backgroundImage: profilePhoto != 'b7b1099a-28cb-47fa-8d46-c508c1791e66_1685012342349.png'
                   backgroundImage: profilePhoto != null
                       ? ExtendedImage.network(
                           profilePhoto,

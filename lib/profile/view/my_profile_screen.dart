@@ -7,7 +7,6 @@ import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/profile/model/my_profile_screen_model.dart';
 import 'package:howlook/profile/component/my_profile_card.dart';
 
-import '../provider/profile_provider.dart';
 
 class MyProfileScreen extends ConsumerStatefulWidget {
 
@@ -55,7 +54,6 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<MainProfileModel> userInfo = ref.watch(ProfileProvider);
 
     return DefaultLayout(
       title: 'My Look',
@@ -79,8 +77,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   child: CircularProgressIndicator(),
                 );
               }
-              final item = snapshot.data;
-              final pItem = MainProfileModel.fromJson(item!);
+              final item = snapshot.data!;
+              final pItem = MainProfileModel.fromJson(json: item);
               return MainProfileCard.fromModel(model: pItem);
             }
             );
@@ -88,4 +86,5 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
       ),
     );
   }
+
 }

@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             alignment: Alignment.topLeft, //탭바 메뉴를 왼쪽으로 정렬
             child: TabBar(
               //위젯을 통해 상단 탭바 메뉴가 보여진다
-
+              overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
               labelColor: Colors.black, //선택된 Tab의 label 색상
               unselectedLabelColor: Colors.grey, //선택되지 않은 Tab의 label 색상
               labelStyle: TextStyle(fontSize: 15),
