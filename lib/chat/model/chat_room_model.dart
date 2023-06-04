@@ -1,24 +1,24 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'new_talk_model.g.dart';
+part 'chat_room_model.g.dart';
 
 @JsonSerializable()
-class NewTalkModel {
+class ChatRoomModel {
   final String roodId;
   final String roomName;
   final int userCount;
   final bool enter;
 
-  NewTalkModel({
+  ChatRoomModel({
     required this.roodId,
     required this.roomName,
     required this.userCount,
     required this.enter,
   });
 
-  factory NewTalkModel.fromJson(Map<String, dynamic> json) =>
-      _$NewTalkModelFromJson(json);
+  factory ChatRoomModel.fromJson(Map<String, dynamic> json) =>
+      _$ChatRoomModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$NewTalkModelToJson(this);
+  Map<String, dynamic> toJson() => _$ChatRoomModelToJson(this);
 
 }

@@ -1,19 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'new_talk_model.dart';
+part of 'chat_room_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-NewTalkModel _$NewTalkModelFromJson(Map<String, dynamic> json) => NewTalkModel(
+ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
+    ChatRoomModel(
       roodId: json['roodId'] as String,
       roomName: json['roomName'] as String,
       userCount: json['userCount'] as int,
       enter: json['enter'] as bool,
     );
 
-Map<String, dynamic> _$NewTalkModelToJson(NewTalkModel instance) =>
+Map<String, dynamic> _$ChatRoomModelToJson(ChatRoomModel instance) =>
     <String, dynamic>{
       'roodId': instance.roodId,
       'roomName': instance.roomName,

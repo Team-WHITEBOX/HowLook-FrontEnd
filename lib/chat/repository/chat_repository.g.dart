@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'talk_repository.dart';
+part of 'chat_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'talk_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _TalkRepository implements TalkRepository {
-  _TalkRepository(
+class _ChatRepository implements ChatRepository {
+  _ChatRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,14 +19,14 @@ class _TalkRepository implements TalkRepository {
   String? baseUrl;
 
   @override
-  Future<TalkDataModel> getChatList() async {
+  Future<ChatRoomsDataModel> getChatList() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TalkDataModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<ChatRoomsDataModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -38,7 +38,7 @@ class _TalkRepository implements TalkRepository {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = TalkDataModel.fromJson(_result.data!);
+    final value = ChatRoomsDataModel.fromJson(_result.data!);
     return value;
   }
 

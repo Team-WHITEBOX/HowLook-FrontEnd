@@ -1,28 +1,28 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/chat/model/talk_data_model.dart';
+import 'package:howlook/chat/model/chat_rooms_data_model.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'talk_repository.g.dart';
+part 'chat_repository.g.dart';
 
-final talkRepositoryProvider = Provider<TalkRepository>(
+final chatRepositoryProvider = Provider<ChatRepository>(
   (ref) {
     final dio = ref.watch(dioProvider);
     final repository =
-        TalkRepository(dio, baseUrl: 'http://$API_SERVICE_URI/chatroom');
+        ChatRepository(dio, baseUrl: 'http://$API_SERVICE_URI/chatroom');
     return repository;
   },
 );
 
 @RestApi()
-abstract class TalkRepository {
-  factory TalkRepository(Dio dio, {String baseUrl}) = _TalkRepository;
+abstract class ChatRepository {
+  factory ChatRepository(Dio dio, {String baseUrl}) = _ChatRepository;
 
   @GET('/')
   @Headers({
     'accessToken': 'true',
   })
-  Future<TalkDataModel> getChatList();
+  Future<ChatRoomsDataModel> getChatList();
 }

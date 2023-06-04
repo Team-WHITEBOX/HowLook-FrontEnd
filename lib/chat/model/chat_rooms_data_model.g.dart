@@ -1,19 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'talk_data_model.dart';
+part of 'chat_rooms_data_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TalkDataModel _$TalkDataModelFromJson(Map<String, dynamic> json) =>
-    TalkDataModel(
+ChatRoomsDataModel _$ChatRoomsDataModelFromJson(Map<String, dynamic> json) =>
+    ChatRoomsDataModel(
       data: (json['data'] as List<dynamic>)
-          .map((e) => NewTalkModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ChatRoomModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$TalkDataModelToJson(TalkDataModel instance) =>
+Map<String, dynamic> _$ChatRoomsDataModelToJson(ChatRoomsDataModel instance) =>
     <String, dynamic>{
       'data': instance.data,
     };

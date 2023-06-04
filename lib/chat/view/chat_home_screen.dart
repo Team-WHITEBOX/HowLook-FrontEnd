@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/chat/view/open_talk_screen.dart';
+import 'package:howlook/chat/view/open_chat_screen.dart';
 import 'package:howlook/common/component/cust_icon_button.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 
@@ -67,8 +67,8 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 //위젯을 통해 하단 탭별 화면을 보여줌
                 children: <Widget>[
-                  OpenTalkScreen(),
-                  OpenTalkScreen(),
+                  OpenChatScreen(),
+                  OpenChatScreen(),
                 ],
               ),
             ),

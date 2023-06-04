@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/chat/component/new_talk_card.dart';
-import 'package:howlook/chat/provider/talk_provider.dart';
+import 'package:howlook/chat/component/new_chat_room_card.dart';
+import 'package:howlook/chat/provider/chat_provider.dart';
 
-class OpenTalkScreen extends ConsumerStatefulWidget {
-  const OpenTalkScreen({Key? key}) : super(key: key);
+class OpenChatScreen extends ConsumerStatefulWidget {
+  const OpenChatScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<OpenTalkScreen> createState() => _OpenTalkScreenState();
+  ConsumerState<OpenChatScreen> createState() => _OpenChatScreenState();
 }
 
-class _OpenTalkScreenState extends ConsumerState<OpenTalkScreen> {
+class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
   @override
   Widget build(BuildContext context) {
-    final data = ref.watch(newTalkProvider);
+    final data = ref.watch(newChatProvider);
 
     return RefreshIndicator(
       onRefresh: () async {
-        ref.read(newTalkProvider.notifier).getTalkList();
+        ref.read(newChatProvider.notifier).getChatList();
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class _OpenTalkScreenState extends ConsumerState<OpenTalkScreen> {
                     //   ),
                     // );
                   },
-                  child: NewTalkCard.fromModel(model: data[index]),
+                  child: NewChatRoomCard.fromModel(model: data[index]),
                 );
               },
               separatorBuilder: (_, index) {

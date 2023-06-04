@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/chat/model/new_talk_model.dart';
+import 'package:howlook/chat/model/chat_room_model.dart';
 
-class NewTalkCard extends StatelessWidget {
+class NewChatRoomCard extends StatelessWidget {
   final String roodId;
   final String roomName;
   final int userCount;
   final bool enter;
 
-  const NewTalkCard({
+  const NewChatRoomCard({
     required this.roodId,
     required this.roomName,
     required this.userCount,
@@ -15,10 +15,10 @@ class NewTalkCard extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  factory NewTalkCard.fromModel({
-    required NewTalkModel model,
+  factory NewChatRoomCard.fromModel({
+    required ChatRoomModel model,
   }) {
-    return NewTalkCard(
+    return NewChatRoomCard(
       roodId: model.roodId,
       roomName: model.roomName,
       userCount: model.userCount,
