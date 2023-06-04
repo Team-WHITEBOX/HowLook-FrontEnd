@@ -1,26 +1,27 @@
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:howlook/chat/view/chat_home_screen.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
 import 'package:howlook/profile/view/my_profile_screen.dart';
-import 'package:howlook/upload/temp_screen/t_upload_screen.dart';
-import 'package:howlook/upload/view/main_liquid_swipe.dart';
+import 'package:howlook/upload/Provider/review_upload_provider.dart';
+import 'package:howlook/upload/view/upload_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
-import 'package:howlook/upload/view/review_upload_screen.dart';
-import '../../profile/view/my_profile_screen.dart';
 
-class RootTab extends StatefulWidget {
+class RootTab extends ConsumerStatefulWidget {
   const RootTab({Key? key}) : super(key: key);
 
   @override
-  State<RootTab> createState() => _RootTabState();
+  ConsumerState<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
+class _RootTabState extends ConsumerState<RootTab>
+    with SingleTickerProviderStateMixin {
   late TabController controller;
-  int _bottomNavIndex = 0;
+  int _bottomNavIndex = 4;
   bool check = false;
 
   @override
@@ -44,124 +45,146 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = <Widget>[
-      Stack(
-        children: [
-          Container(
-            color: PRIMARY_COLOR,
-          ),
-          Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    '피드 업로드',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => TUploadScreen(),
-                          // builder: (_) => FeedUpload(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.add_box_rounded,
-                      color: Colors.white,
-                    ),
-                    iconSize: 100,
-                  ),
-                ]),
-          )
-        ],
-      ),
-      Stack(
-        children: [
-          Container(
-            color: const Color(0xFFa6ceff),
-          ),
-          Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    '리뷰 업로드',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ReviewUpload(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.add_box_rounded,
-                      color: Colors.white,
-                    ),
-                    iconSize: 100,
-                  ),
-                ]),
-          )
-        ],
-      ),
-    ];
     return DefaultLayout(
-      bottomNavigationBar: ConvexAppBar(
-        curve: null,
-        color: Colors.black,
-        controller: controller,
-        backgroundColor: Colors.white,
-        style: TabStyle.fixedCircle,
-        activeColor: Colors.black,
-        cornerRadius: 15,
-        height: 60,
-        items: [
-          TabItem(
-              icon: Icon(
-                  _bottomNavIndex == 0 ? Icons.home : Icons.home_outlined,
-                  size: 30)),
-          TabItem(
-              icon: Icon(
-                  _bottomNavIndex == 1 ? Icons.reviews : Icons.reviews_outlined,
-                  size: 30)),
-          TabItem(
-              icon: Icon(
-                  _bottomNavIndex == 2
-                      ? Icons.add_circle
-                      : Icons.add_circle_outline,
-                  color: Colors.white,
-                  size: 40)),
-          TabItem(
-              icon: Icon(
-                  _bottomNavIndex == 3
-                      ? Icons.theater_comedy
-                      : Icons.theater_comedy_outlined,
-                  size: 30)),
-          TabItem(
-              icon: Icon(
-                  _bottomNavIndex == 4
-                      ? Icons.person_2
-                      : Icons.person_2_outlined,
-                  size: 30)),
+      floatingActionButton: SizedBox(
+        height: 45.0,
+        width: 45.0,
+        child: FittedBox(
+          child: controller.index != 4
+              ? FloatingActionButton(
+                  backgroundColor: Colors.black87,
+                  child: const Icon(Icons.home),
+                  onPressed: () {
+                    controller.index = 4;
+                  },
+                )
+              : uploadFloatingButton(),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        icons: const [
+          Icons.chat,
+          Icons.chair,
+          Icons.theater_comedy_outlined,
+          Icons.person_2_outlined,
         ],
+        height: 50,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.softEdge,
+        activeIndex: _bottomNavIndex,
+        onTap: (index) => controller.index = index,
       ),
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
         children: <Widget>[
-          const HomeScreen(),
+          const ChatHomeScreen(),
           const MainReviewScreen(),
-          Builder(builder: (context) => LiquidSwipe(pages: pages)),
           const tournamentScreen(),
           MyProfileScreen(),
+          const HomeScreen(),
         ],
       ),
     );
   }
+
+  Widget uploadFloatingButton() {
+    return SpeedDial(
+      icon: Icons.add,
+      activeIcon: Icons.close,
+      // animatedIcon: AnimatedIcons.arrow_menu,
+      animatedIconTheme: const IconThemeData(size: 22),
+      backgroundColor: Colors.black,
+      visible: true,
+      curve: Curves.bounceIn,
+      children: [
+        // 아이콘은 추후 결정
+        SpeedDialChild(
+          child: const Icon(
+            Icons.assignment_turned_in,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.black,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const UploadScreen(),
+                // builder: (_) => FeedUpload(),
+              ),
+            );
+          },
+          label: '피드 업로드',
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+            fontSize: 14.0,
+          ),
+          labelBackgroundColor: Colors.black,
+        ),
+        SpeedDialChild(
+          child: const Icon(
+            Icons.assignment_turned_in,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.black,
+          onTap: () {
+            ref.read(isReviewUpload.notifier).update((state) => true);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const UploadScreen(),
+              ),
+            );
+          },
+          label: '평가 업로드',
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+            fontSize: 14.0,
+          ),
+          labelBackgroundColor: Colors.black,
+        )
+      ],
+    );
+  }
 }
+
+// ConvexAppBar(
+// curve: null,
+// color: Colors.black,
+// controller: controller,
+// backgroundColor: Colors.white,
+// style: TabStyle.fixedCircle,
+// activeColor: Colors.black,
+// cornerRadius: 15,
+// height: 60,
+// items: [
+// TabItem(
+// icon: Icon(
+// _bottomNavIndex == 0 ? Icons.home : Icons.home_outlined,
+// size: 30)),
+// TabItem(
+// icon: Icon(
+// _bottomNavIndex == 1 ? Icons.reviews : Icons.reviews_outlined,
+// size: 30)),
+// TabItem(
+// icon: Icon(
+// _bottomNavIndex == 2
+// ? Icons.add_circle
+//     : Icons.add_circle_outline,
+// color: Colors.white,
+// size: 40)),
+// TabItem(
+// icon: Icon(
+// _bottomNavIndex == 3
+// ? Icons.theater_comedy
+//     : Icons.theater_comedy_outlined,
+// size: 30)),
+// TabItem(
+// icon: Icon(
+// _bottomNavIndex == 4
+// ? Icons.person_2
+//     : Icons.person_2_outlined,
+// size: 30)),
+// ],
+// ),

@@ -602,7 +602,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - cloud_firestore (4.7.1):
+  - cloud_firestore (4.5.2):
     - Firebase/Firestore (= 10.9.0)
     - firebase_core
     - Flutter
@@ -618,7 +618,7 @@ PODS:
   - firebase_core (2.13.0):
     - Firebase/CoreOnly (= 10.9.0)
     - Flutter
-  - firebase_storage (11.2.1):
+  - firebase_storage (11.1.1):
     - Firebase/Storage (= 10.9.0)
     - firebase_core
     - Flutter
@@ -719,7 +719,7 @@ PODS:
   - GTMSessionFetcher/Core (3.1.1)
   - image_picker_ios (0.0.1):
     - Flutter
-  - kakao_flutter_sdk_common (1.4.0):
+  - kakao_flutter_sdk_common (1.4.3):
     - Flutter
   - leveldb-library (1.22.2)
   - Libuv-gRPC (0.0.10):
@@ -826,10 +826,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  cloud_firestore: f9951b7475ab483af80514228921edbef7109fff
+  cloud_firestore: 1a70188998fb6668805201726688819a7acc6575
   Firebase: bd152f0f3d278c4060c5c71359db08ebcfd5a3e2
   firebase_core: fc68c0f9eec4e800b9418deff14a7e0a504016f3
-  firebase_storage: 09fe224b1ae65ffb74241f2e3e89c8ebabbaa5cb
+  firebase_storage: 3c37a0f9a52f7e28771cc01bb5ee639cd7e8c584
   FirebaseAppCheckInterop: e69dde5cd51b88ee1b4339d6766b691272256f9b
   FirebaseAuthInterop: e53c08e60a02de17d1ab77c5032db8ae22d3a799
   FirebaseCore: b68d3616526ec02e4d155166bbafb8eca64af557
@@ -846,8 +846,8 @@ SPEC CHECKSUMS:
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
-  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
-  kakao_flutter_sdk_common: fc550ec16c85451e874d5304d2e1c540a221f5cb
+  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
+  kakao_flutter_sdk_common: 31d55af8ed73538126d26d42bf9e8049a2f76da4
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
@@ -856,9 +856,9 @@ SPEC CHECKSUMS:
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
-  webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
+  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
+  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: a9fedc1ba75c6ab10daa00c97a61a4287ee148a5
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1

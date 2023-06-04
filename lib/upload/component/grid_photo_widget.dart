@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/upload/Provider/review_upload_provider.dart';
 import 'package:howlook/upload/Provider/select_photo_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -13,16 +14,17 @@ class GridPhotoItemWidget extends ConsumerStatefulWidget {
 }
 
 class _GridPhotoItemWidgetState extends ConsumerState<GridPhotoItemWidget> {
-  void _selectImage(AssetEntity e) {
-    ref.read(selectedImageProvider.notifier).selectImage(e);
+  void _selectImage(AssetEntity e, bool isReviewUpload) {
+    ref.read(selectedImageProvider.notifier).selectImage(e, isReviewUpload);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        final isReview = ref.watch(isReviewUpload);
         setState(() {
-          _selectImage(widget.e);
+          _selectImage(widget.e, isReview);
         });
       },
       child: Padding(

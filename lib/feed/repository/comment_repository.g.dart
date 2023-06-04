@@ -29,7 +29,7 @@ class _CommentRepository implements CommentRepository {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CommentPagination<CommentPageModel>>(Options(
       method: 'GET',

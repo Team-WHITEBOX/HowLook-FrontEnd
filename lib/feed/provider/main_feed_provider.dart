@@ -22,19 +22,19 @@ final feedDetailProvider = Provider.family<FeedModel?, int>((ref, id) {
 final mainFeedProvider =
     StateNotifierProvider<MainFeedStateNotifier, CursorPaginationBase>(
   (ref) {
-    final repository = ref.watch((feedRepositoryProvider));
-    final notifier = MainFeedStateNotifier(repository: repository);
+    final mRepository = ref.watch((feedRepositoryProvider));
+    final notifier = MainFeedStateNotifier(mRepository: mRepository);
     return notifier;
   },
 );
 
 class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
   // API 요청을 위해 repository 가져오기
-  final FeedRepository repository;
+  final FeedRepository mRepository;
 
   // 외부에서 API 입력 받기위해 required에 넣기
   MainFeedStateNotifier({
-    required this.repository,
+    required this.mRepository,
 
     // 해당 클래스가 CursorPaginationBase를 상속받기 때문에 해당 클래스의 타입은 모두 가능
     // Loading, Error 등등,,
@@ -133,7 +133,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
 
       // 각 상태에 맞는 paginationParams를 첨부하여 API 실행
       // 가장 최신 데이터 10개 불러오기
-      final resp = await repository.mPaginate(
+      final resp = await mRepository.mPaginate(
         paginationParams: paginationParams,
       );
 
@@ -184,7 +184,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
 
     // 요청 데이터
     final resp =
-        await repository.getFeedDetail(detailFeedParams: detailfeedParams);
+        await mRepository.getFeedDetail(detailFeedParams: detailfeedParams);
 
     state = pState.copyWith(
       data: pState.data.copyWith(

@@ -100,6 +100,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final IconButton? icon;
   final FormFieldSetter? onSaved;
+  final TextEditingController? titleController;
 
   CustomTextFormField(
       {this.maxLines = 1,
@@ -115,6 +116,7 @@ class CustomTextFormField extends StatelessWidget {
       this.errorText,
       this.validator,
       this.onSaved,
+      this.titleController,
       Key? key})
       : super(key: key);
 
@@ -154,6 +156,7 @@ class CustomTextFormField extends StatelessWidget {
           textInputAction: textInputAction,
           validator: validator,
           onSaved: onSaved,
+          controller: titleController,
 
           // Input을 데코하는 함수
           decoration: InputDecoration(

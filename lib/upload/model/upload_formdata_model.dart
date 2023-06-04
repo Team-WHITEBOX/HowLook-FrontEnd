@@ -39,6 +39,30 @@ class UploadModel {
     // this.files
   });
 
+  UploadModel copyWith({
+    String? content,
+    bool? hashtagAmekaji,
+    bool? hashtagCasual,
+    bool? hashtagGuitar,
+    bool? hashtagMinimal,
+    bool? hashtagSporty,
+    bool? hashtagStreet,
+    double? latitude,
+    double? longitude,
+  }) {
+    return UploadModel(
+      content: content ?? this.content,
+      hashtagAmekaji: hashtagAmekaji ?? this.hashtagAmekaji,
+      hashtagCasual: hashtagCasual ?? this.hashtagCasual,
+      hashtagGuitar: hashtagGuitar ?? this.hashtagGuitar,
+      hashtagMinimal: hashtagMinimal ?? this.hashtagMinimal,
+      hashtagSporty: hashtagSporty ?? this.hashtagSporty,
+      hashtagStreet: hashtagStreet ?? this.hashtagStreet,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+    );
+  }
+
   factory UploadModel.fromJson(Map<String, dynamic> json) =>
       _$UploadModelFromJson(json);
 

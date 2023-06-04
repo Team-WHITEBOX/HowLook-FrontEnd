@@ -1,15 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/common/model/params/feed_params/category_pagination_params.dart';
+import 'package:howlook/feed/model/category_model.dart';
 import 'package:howlook/feed/provider/category_provider.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 
-import '../model/category_model.dart';
 
 final categoryFeedProvider =
     StateNotifierProvider<CategoryFeedStateNotifier, CursorPaginationBase>(
   (ref) {
-    final category = ref.watch(categoryProvider);
     final cRepository = ref.watch((feedRepositoryProvider));
     final notifier = CategoryFeedStateNotifier(cRepository: cRepository);
     return notifier;

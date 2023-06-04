@@ -1,4 +1,6 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/user/view/splash_screen.dart';
@@ -14,17 +16,15 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(
-      debug:
-          true, // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl:
-          true // option: set to false to disable working with http links (default: false)
-      );
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await initializeDefault();
   KakaoSdk.init(nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb');
   runApp(
-    const ProviderScope(
-      child: _App(),
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const ProviderScope(
+        child: _App(),
+      ),
     ),
   );
 }
@@ -44,6 +44,9 @@ class _App extends StatelessWidget {
         fontFamily: 'NotoSans',
       ),
       debugShowCheckedModeBanner: false,
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       home: const Splash_Screen(),
     );
   }

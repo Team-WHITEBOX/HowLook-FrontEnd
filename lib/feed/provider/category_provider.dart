@@ -22,11 +22,25 @@ class CategoryNotifier extends StateNotifier<CategoryModel> {
           ),
         );
 
-  void toggleReset() {
-    state = state.copyWith();
+  toggleReset() {
+    state = CategoryModel(
+      gender: '',
+      hashtagDTOMinimal: false,
+      hashtagDTOCasual: false,
+      hashtagDTOStreet: false,
+      hashtagDTOAmekaji: false,
+      hashtagDTOSporty: false,
+      hashtagDTOGuitar: false,
+      heightLow: 100,
+      heightHigh: 240,
+      weightLow: 20,
+      weightHigh: 165,
+    );
   }
 
-  void toggleGenderSelected({required String gender}) {
+  toggleGenderSelected({
+    required String gender,
+  }) {
     if (gender == "M") {
       state = state.copyWith(
         gender: "M",
@@ -38,27 +52,25 @@ class CategoryNotifier extends StateNotifier<CategoryModel> {
     }
   }
 
-
-  void changeBodyType({
-    required String BodyType,
+  changeBodyType({
+    required String bodyType,
     required int minValue,
     required int maxValue,
   }) {
-    if (BodyType == "Height") {
+    if (bodyType == "Height") {
       state = state.copyWith(
-        heightLow: minValue.toInt(),
-        heightHigh: maxValue.toInt(),
+        heightLow: minValue,
+        heightHigh: maxValue,
       );
-    // } else if (BodyType == "Weight") {
-    } else  {
+    } else {
       state = state.copyWith(
-        weightLow: minValue.toInt(),
-        weightHigh: maxValue.toInt(),
+        weightLow: minValue,
+        weightHigh: maxValue,
       );
     }
   }
 
-  void toggleStyleSelected({required String style}) {
+  toggleStyleSelected({required String style}) {
     if (style == "Minimal") {
       state = state.copyWith(
         hashtagDTOMinimal: !state.hashtagDTOMinimal,
@@ -86,8 +98,8 @@ class CategoryNotifier extends StateNotifier<CategoryModel> {
     }
   }
 
-  void outputCategoryModel() {
-    final CategoryModel model = state ;
+  outputCategoryModel() {
+    final CategoryModel model = state;
     print('gender: ${model.gender}');
     print('hashtagDTOMinimal: ${model.hashtagDTOMinimal}');
     print('hashtagDTOCasual: ${model.hashtagDTOCasual}');

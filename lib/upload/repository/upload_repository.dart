@@ -6,21 +6,21 @@ import 'package:howlook/upload/model/upload_formdata_model.dart';
 import 'package:howlook/user/model/signup_model.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'feed_upload_repository.g.dart';
+part 'upload_repository.g.dart';
 
-final feedUploadRepositoryProvider = Provider<FeedUploadRepository>(
+final uploadRepositoryProvider = Provider<UploadRepository>(
       (ref) {
     final dio = ref.watch(dioProvider);
     final repository =
-    FeedUploadRepository(dio, baseUrl: 'http://$API_SERVICE_URI');
+    UploadRepository(dio, baseUrl: 'http://$API_SERVICE_URI');
     return repository;
   },
 );
 
 
 @RestApi()
-abstract class FeedUploadRepository {
-  factory FeedUploadRepository(Dio dio, {String baseUrl}) = _FeedUploadRepository;
+abstract class UploadRepository {
+  factory UploadRepository(Dio dio, {String baseUrl}) = _UploadRepository;
 
   // post 함수
   @POST('/post/regist')
@@ -29,7 +29,7 @@ abstract class FeedUploadRepository {
     'accessToken': 'true',
     'Content-Type': 'multipart/form-data'
   })
-  Future<HttpResponse<dynamic>> uploadImage({
+  Future<HttpResponse<dynamic>> feedUploadImage({
     @Part(name: "content") required String content,
     @Part(name: "hashtagDTO.amekaji") required bool amekaji,
     @Part(name: "hashtagDTO.casual") required bool casual,
@@ -40,6 +40,17 @@ abstract class FeedUploadRepository {
     @Part(name: "latitude") required double latitude,
     @Part(name: "longitude") required double longitude,
     @Part(name: "uploadFileDTO.files") required List<MultipartFile> files,
+  });
+
+  // eval regist 함수
+  @POST('/eval/registerPost')
+  @MultiPart()
+  @Headers({
+    'accessToken': 'true',
+    'Content-Type': 'multipart/form-data'
+  })
+  Future<HttpResponse<dynamic>> reviewUploadImage({
+    @Part(name: "files.files") required List<MultipartFile> files,
   });
 }
 

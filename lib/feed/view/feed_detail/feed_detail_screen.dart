@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/feed/component/feed_card.dart';
+import 'package:howlook/feed/component/detail_feed_card.dart';
 import 'package:howlook/feed/provider/main_feed_provider.dart';
 
 class FeedDetailScreen extends ConsumerStatefulWidget {
@@ -45,7 +45,7 @@ class _FeedDetailScreenState extends ConsumerState<FeedDetailScreen> {
           bottom: false,
           child: Column(
             children: [
-              FeedCard.fromModel(model: state),
+              DetailFeedCard.fromModel(model: state),
             ],
           ),
         ),

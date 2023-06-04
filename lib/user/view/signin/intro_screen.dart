@@ -36,89 +36,89 @@ class IntroScreen extends ConsumerWidget {
               _LoginText(),
               const SizedBox(height: 50.0), // 공백 삽입
               // 카카오 로그인 버튼
-              TextButton(
-                onPressed: () async {
-                  try {
-                    // print("HI1");
-                    // await AuthCodeClient.instance.authorize().then((code) {
-                    //   // 인증 코드 수신
-                    //
-                    // }).catchError((error) {
-                    //   // 오류 처리
-                    //   print(error);
-                    // });
-                    // await AuthCodeClient.instance.authorizeWithTalk(
-                    //   redirectUri:
-                    //       'http://3.34.164.14:8080/account/oauth/kakao',
-                    // );
-                    // print("HI2");
-                    // print("HI3");
-                    // OAuthToken token =
-                    //     await UserApi.instance.loginWithKakaoAccount();
-                    // print('카카오계정으로 로그인 성공');
-                    // print(token.accessToken);
-                    // print(token.refreshToken);
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (_) => KakaoLoginScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  } catch (error) {
-                    print('카카오계정으로 로그인 실패 $error');
-                  }
-                  // String token = await AuthCodeClient.instance.authorize(
-                  //   redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
-                  // );
-                  // print(token);
-                  // final result = await Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => KakaoLoginScreen(),
-                  //   ),
-                  // );
-                  // List<String> tokens = result.split(' ');
-                  //
-                  // final refreshToken =
-                  //     tokens[1].substring(0, tokens[1].length - 1);
-                  // final accessToken =
-                  //     tokens[3].substring(0, tokens[3].length - 1);
-                  //
-                  // print(accessToken);
-                  // final storage = ref.read(secureStorageProvider);
-                  //
-                  // await storage.write(
-                  //     key: REFRESH_TOKEN_KEY, value: refreshToken);
-                  // await storage.write(
-                  //     key: ACCESS_TOKEN_KEY, value: accessToken);
-                  //
-                  // // 만약 소셜로그인 대상자가 조회가 안 된다면??
-                  // try {
-                  //   final resp = await dio.get(
-                  //     'http://$API_SERVICE_URI/member/check',
-                  //     options: Options(
-                  //       headers: {
-                  //         'authorization': 'Bearer $accessToken',
-                  //       },
-                  //     ),
-                  //   );
-                  //   Navigator.of(context).pushAndRemoveUntil(
-                  //     MaterialPageRoute(
-                  //       builder: (_) => RootTab(),
-                  //     ),
-                  //         (route) => false,
-                  //   );
-                  // } catch (e) {
-                  //   Navigator.of(context).pushAndRemoveUntil(
-                  //     MaterialPageRoute(
-                  //       builder: (_) => SecondSignupScreen(),
-                  //     ),
-                  //     (route) => false,
-                  //   );
-                  // }
-                },
-                child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
-              ),
+              // TextButton(
+              //   onPressed: () async {
+              //     try {
+              //       // print("HI1");
+              //       // await AuthCodeClient.instance.authorize().then((code) {
+              //       //   // 인증 코드 수신
+              //       //
+              //       // }).catchError((error) {
+              //       //   // 오류 처리
+              //       //   print(error);
+              //       // });
+              //       // await AuthCodeClient.instance.authorizeWithTalk(
+              //       //   redirectUri:
+              //       //       'http://3.34.164.14:8080/account/oauth/kakao',
+              //       // );
+              //       // print("HI2");
+              //       // print("HI3");
+              //       // OAuthToken token =
+              //       //     await UserApi.instance.loginWithKakaoAccount();
+              //       // print('카카오계정으로 로그인 성공');
+              //       // print(token.accessToken);
+              //       // print(token.refreshToken);
+              //       Navigator.of(context).pushAndRemoveUntil(
+              //         MaterialPageRoute(
+              //           builder: (_) => KakaoLoginScreen(),
+              //         ),
+              //         (route) => false,
+              //       );
+              //     } catch (error) {
+              //       print('카카오계정으로 로그인 실패 $error');
+              //     }
+              //     // String token = await AuthCodeClient.instance.authorize(
+              //     //   redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
+              //     // );
+              //     // print(token);
+              //     // final result = await Navigator.push(
+              //     //   context,
+              //     //   MaterialPageRoute(
+              //     //     builder: (context) => KakaoLoginScreen(),
+              //     //   ),
+              //     // );
+              //     // List<String> tokens = result.split(' ');
+              //     //
+              //     // final refreshToken =
+              //     //     tokens[1].substring(0, tokens[1].length - 1);
+              //     // final accessToken =
+              //     //     tokens[3].substring(0, tokens[3].length - 1);
+              //     //
+              //     // print(accessToken);
+              //     // final storage = ref.read(secureStorageProvider);
+              //     //
+              //     // await storage.write(
+              //     //     key: REFRESH_TOKEN_KEY, value: refreshToken);
+              //     // await storage.write(
+              //     //     key: ACCESS_TOKEN_KEY, value: accessToken);
+              //     //
+              //     // // 만약 소셜로그인 대상자가 조회가 안 된다면??
+              //     // try {
+              //     //   final resp = await dio.get(
+              //     //     'http://$API_SERVICE_URI/member/check',
+              //     //     options: Options(
+              //     //       headers: {
+              //     //         'authorization': 'Bearer $accessToken',
+              //     //       },
+              //     //     ),
+              //     //   );
+              //     //   Navigator.of(context).pushAndRemoveUntil(
+              //     //     MaterialPageRoute(
+              //     //       builder: (_) => RootTab(),
+              //     //     ),
+              //     //         (route) => false,
+              //     //   );
+              //     // } catch (e) {
+              //     //   Navigator.of(context).pushAndRemoveUntil(
+              //     //     MaterialPageRoute(
+              //     //       builder: (_) => SecondSignupScreen(),
+              //     //     ),
+              //     //     (route) => false,
+              //     //   );
+              //     // }
+              //   },
+              //   child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
+              // ),
               const SizedBox(height: 32.0), // 공백 삽입
               _OR(),
               const SizedBox(height: 32.0), // 공백 삽입

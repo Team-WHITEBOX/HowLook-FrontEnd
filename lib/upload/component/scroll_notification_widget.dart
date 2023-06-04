@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/upload/Provider/upload_provider.dart';
+import 'package:howlook/upload/Provider/get_image_provider.dart';
 import 'package:howlook/upload/component/image_select_list_widget.dart';
 
 class ScrollPhoto extends ConsumerStatefulWidget {

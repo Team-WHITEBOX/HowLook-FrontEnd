@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/upload/Provider/upload_provider.dart';
+import 'package:howlook/upload/Provider/get_image_provider.dart';
 import 'package:howlook/upload/component/grid_photo_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 

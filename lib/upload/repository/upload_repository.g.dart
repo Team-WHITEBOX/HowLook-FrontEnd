@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'feed_upload_repository.dart';
+part of 'upload_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'feed_upload_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _FeedUploadRepository implements FeedUploadRepository {
-  _FeedUploadRepository(
+class _UploadRepository implements UploadRepository {
+  _UploadRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,7 +19,7 @@ class _FeedUploadRepository implements FeedUploadRepository {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<dynamic>> uploadImage({
+  Future<HttpResponse<dynamic>> feedUploadImage({
     required content,
     required amekaji,
     required casual,
@@ -86,6 +86,36 @@ class _FeedUploadRepository implements FeedUploadRepository {
             .compose(
               _dio.options,
               '/post/regist',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> reviewUploadImage({required files}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'accessToken': 'true',
+      r'Content-Type': 'multipart/form-data',
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = FormData();
+    _data.files.addAll(files.map((i) => MapEntry('files.files', i)));
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/eval/registerPost',
               queryParameters: queryParameters,
               data: _data,
             )

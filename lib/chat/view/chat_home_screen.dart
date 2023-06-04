@@ -1,30 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/chat/view/open_talk_screen.dart';
 import 'package:howlook/common/component/cust_icon_button.dart';
 import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/feed/provider/category_check_provider.dart';
-import 'package:howlook/feed/view/category_feed/category_selected_screen.dart';
-import 'package:howlook/feed/view/main_feed/main_feed_screen.dart';
-import 'package:flutter/src/material/bottom_sheet.dart';
-import 'package:howlook/feed/view/near_feed/near_feed_screen.dart';
 
-import 'category_feed/category_feed_screen.dart';
-
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class ChatHomeScreen extends StatefulWidget {
+  const ChatHomeScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  State<ChatHomeScreen> createState() => _ChatHomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _ChatHomeScreenState extends State<ChatHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final filterState = ref.watch(isFiltering);
-
     return DefaultLayout(
-      title: 'HowLook',
+      title: "ChatLook",
       actions: <Widget>[
         CustIconButton(
           onTap: () {},
@@ -32,16 +22,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         const SizedBox(width: 30),
         CustIconButton(
-          onTap: () {
-            ref.read(isFiltering.notifier).update((state) => false);
-          },
+          onTap: () {},
           icon: Icons.notifications,
         ),
         const SizedBox(width: 30),
       ],
       child: DefaultTabController(
         initialIndex: 0,
-        length: 3,
+        length: 2,
         child: Column(
           children: [
             Row(
@@ -55,7 +43,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     unselectedLabelColor: Colors.grey, // 선택되지 않은 Tab의 label 색상
                     labelStyle: const TextStyle(fontSize: 15),
                     indicator: const UnderlineTabIndicator(
-                        //선택된 Tab에 스타일 적용 시 사용
+                      //선택된 Tab에 스타일 적용 시 사용
                         borderSide: BorderSide(
                           //선택된 탭바 스타일 적용
                           width: 2.5,
@@ -65,24 +53,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     isScrollable: true, //탭의 크기가 label의 크기만큼 할당되며 스크롤이 가능
                     labelPadding: EdgeInsets.zero,
                     overlayColor: MaterialStateColor.resolveWith(
-                        (states) => Colors.transparent),
+                            (states) => Colors.transparent),
                     tabs: <Widget>[
-                      menuBar('추천'),
-                      menuBar('날씨별코디'),
-                      menuBar('지역별코디')
+                      menuBar('오픈톡'),
+                      menuBar('토론방'),
                     ],
                   ),
                 ),
               ],
             ),
-            Expanded(
+            const Expanded(
               child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 //위젯을 통해 하단 탭별 화면을 보여줌
                 children: <Widget>[
-                  filterState ? CategoryFeedScreen() : MainFeedScreen(),
-                  SingleChildScrollView(),
-                  const NearFeedScreen(),
+                  OpenTalkScreen(),
+                  OpenTalkScreen(),
                 ],
               ),
             ),

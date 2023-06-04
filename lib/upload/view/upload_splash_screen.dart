@@ -1,13 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:howlook/upload/Provider/review_upload_provider.dart';
 import 'package:howlook/upload/Provider/select_photo_provider.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/upload/model/image_info_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:howlook/upload/view/temp_screen.dart';
+import 'package:howlook/upload/view/feed_upload_screen.dart';
+import 'package:howlook/upload/view/review_upload_screen.dart';
 
 class UploadSplashScreen extends ConsumerStatefulWidget {
   const UploadSplashScreen({Key? key}) : super(key: key);
@@ -45,7 +47,9 @@ class _UploadSplashScreenState extends ConsumerState<UploadSplashScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const TempScreen(),
+        builder: (context) => ref.watch(isReviewUpload)
+            ? const ReviewUploadScreen()
+            : const FeedUploadScreen(),
       ),
     );
   }
@@ -69,7 +73,11 @@ class _UploadSplashScreenState extends ConsumerState<UploadSplashScreen> {
 
   // 2
   Future<List<String>> filesPath() async {
-    return ref.read(selectedImageProvider.notifier).state.map((e) => e.path).toList();
+    return ref
+        .read(selectedImageProvider.notifier)
+        .state
+        .map((e) => e.path)
+        .toList();
   }
 
   // 3

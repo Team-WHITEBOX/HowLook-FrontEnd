@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/upload/Provider/upload_provider.dart';
+import 'package:howlook/upload/Provider/get_image_provider.dart';
 
 class AlbumHeader extends ConsumerStatefulWidget {
   const AlbumHeader({Key? key}) : super(key: key);

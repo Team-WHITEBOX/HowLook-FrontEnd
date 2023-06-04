@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:howlook/upload/model/upload_formdata_model.dart';
-import 'package:howlook/upload/repository/feed_upload_repository.dart';
+import 'package:howlook/upload/repository/upload_repository.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:retrofit/dio.dart';
 import 'package:riverpod/riverpod.dart';
@@ -8,7 +8,7 @@ import 'package:riverpod/riverpod.dart';
 final selectedImageProvider =
     StateNotifierProvider<SelectedImageStateNotifier, List<SelectedImageInfo>>(
   (ref) {
-    final repository = ref.watch((feedUploadRepositoryProvider));
+    final repository = ref.watch((uploadRepositoryProvider));
     final notifier = SelectedImageStateNotifier(repository: repository);
     return notifier;
   },
@@ -16,7 +16,7 @@ final selectedImageProvider =
 
 class SelectedImageStateNotifier
     extends StateNotifier<List<SelectedImageInfo>> {
-  final FeedUploadRepository repository;
+  final UploadRepository repository;
 
   SelectedImageStateNotifier({
     required this.repository,
@@ -28,12 +28,17 @@ class SelectedImageStateNotifier
   }
 
   // 이미지 선택하는 함수
-  void selectImage(AssetEntity image) {
+  void selectImage(AssetEntity image, bool isReviewUpload) {
     final addedImageCheck = state.any((e) => _addedImageCheck(image, e.image));
     // 중복 이미지 확인 후 이미지 추가
     if (addedImageCheck) {
       state.removeWhere((element) => _addedImageCheck(image, element.image));
-    } else {
+    } else if (!isReviewUpload) {
+      // 피드 업로드일 경우
+      // 중복이 아니라면 이때 한번 더 사진이 4장 이상인지 걸러야함
+      if (state.length > 3) {
+        return;
+      }
       final item = SelectedImageInfo(
         image: image,
         isSelected: false,
@@ -42,6 +47,19 @@ class SelectedImageStateNotifier
       );
       // state.add(item);
       state = [...state, item];
+    } else {
+      // 평가 업로드일 경우
+      if (state.length >= 1) {
+        return;
+      } else {
+        final item = SelectedImageInfo(
+          image: image,
+          isSelected: false,
+          isEdited: false,
+          path: "",
+        );
+        state = [...state, item];
+      }
     }
   }
 
@@ -138,9 +156,9 @@ class SelectedImageStateNotifier
         .toList();
   }
 
-  Future<HttpResponse> uploadImage(
+  Future<HttpResponse> feedUploadImage(
       UploadModel uploadModel, List<MultipartFile> files) async {
-    final resp = await repository.uploadImage(
+    final resp = await repository.feedUploadImage(
       content: uploadModel.content!,
       amekaji: uploadModel.hashtagAmekaji!,
       casual: uploadModel.hashtagCasual!,
@@ -152,6 +170,12 @@ class SelectedImageStateNotifier
       longitude: uploadModel.longitude!,
       files: files,
     );
+    return resp;
+  }
+
+  Future<HttpResponse> reviewUploadImage(
+      UploadModel uploadModel, List<MultipartFile> files) async {
+    final resp = await repository.reviewUploadImage(files: files);
     return resp;
   }
 }

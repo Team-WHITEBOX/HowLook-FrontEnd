@@ -41,7 +41,8 @@ class _UploadImageEditedScreenState
       if (renderObject is RenderRepaintBoundary) {
         var boundary = renderObject;
         ui.Image image = await boundary.toImage(pixelRatio: 3.5);
-        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+        ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List? pngBytes = byteData!.buffer.asUint8List();
         File imgFile = File('$directory/$fileName');
         imgFile.writeAsBytes(pngBytes);
@@ -96,7 +97,7 @@ class _UploadImageEditedScreenState
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const UploadSplashScreen(),
+                  builder: (context) => UploadSplashScreen(),
                 ),
               );
             }
