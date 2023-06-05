@@ -8,10 +8,12 @@ part of 'comment_params.dart';
 
 CommentParams _$CommentParamsFromJson(Map<String, dynamic> json) =>
     CommentParams(
-      postId: json['postId'] as int?,
+      page: json['page'] as int?,
+      size: json['size'] as int?,
     );
 
 Map<String, dynamic> _$CommentParamsToJson(CommentParams instance) =>
     <String, dynamic>{
-      'postId': instance.postId,
+      'page': instance.page,
+      'size': instance.size,
     };

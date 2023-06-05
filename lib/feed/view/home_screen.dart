@@ -8,6 +8,7 @@ import 'package:howlook/feed/view/category_feed/category_selected_screen.dart';
 import 'package:howlook/feed/view/main_feed/main_feed_screen.dart';
 import 'package:flutter/src/material/bottom_sheet.dart';
 import 'package:howlook/feed/view/near_feed/near_feed_screen.dart';
+import 'package:howlook/feed/view/weather_feed/weather_feed_screen.dart';
 
 import 'category_feed/category_feed_screen.dart';
 
@@ -81,7 +82,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 //위젯을 통해 하단 탭별 화면을 보여줌
                 children: <Widget>[
                   filterState ? CategoryFeedScreen() : MainFeedScreen(),
-                  SingleChildScrollView(),
+                  const WeatherFeedScreen(),
                   const NearFeedScreen(),
                 ],
               ),

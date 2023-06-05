@@ -7,6 +7,7 @@ import 'package:howlook/common/model/params/feed_params/category_pagination_para
 import 'package:howlook/common/model/params/feed_params/detail_feed_params.dart';
 import 'package:howlook/common/model/params/feed_params/near_pagination_params.dart';
 import 'package:howlook/common/model/params/feed_params/pagination_params.dart';
+import 'package:howlook/common/model/params/feed_params/weather_pagination_params.dart';
 import 'package:howlook/feed/model/feed_model.dart';
 import 'package:howlook/common/model/page_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -50,6 +51,17 @@ abstract class FeedRepository {
         const NearPaginationParams(),
   });
 
+  // Weather Feed API
+  @GET('/weather')
+  @Headers({
+    'accessToken': 'true',
+  })
+  // API에 쿼리 파라미터 추가하는 방법
+  Future<CursorPagination<PageModel>> wPaginate({
+    @Queries() WeatherPaginationParams? weatherPaginationParams =
+    const WeatherPaginationParams(),
+  });
+
   // Category Feed API
   @GET('/search')
   @Headers({
@@ -74,6 +86,7 @@ abstract class FeedRepository {
   @POST('/like')
   @Headers({
     'accessToken': 'true',
+    'content-type': 'application/json'
   })
   Future<HttpResponse<dynamic>> postLike({@Body() required int postId});
 

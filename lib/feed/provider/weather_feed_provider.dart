@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/params/feed_params/near_pagination_params.dart';
+import 'package:howlook/common/model/params/feed_params/weather_pagination_params.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -22,20 +22,20 @@ Future<Position> getCurrentLocation() async {
   return position;
 }
 
-final nearfeedProvider =
-    StateNotifierProvider<NearFeedStateNotifier, CursorPaginationBase>(
-  (ref) {
-    final nrepository = ref.watch((feedRepositoryProvider));
-    final notifier = NearFeedStateNotifier(nRepository: nrepository);
+final weatherFeedProvider =
+StateNotifierProvider<WeatherFeedStateNotifier, CursorPaginationBase>(
+      (ref) {
+    final wRepository = ref.watch((feedRepositoryProvider));
+    final notifier = WeatherFeedStateNotifier(wRepository: wRepository);
     return notifier;
   },
 );
 
-class NearFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
-  final FeedRepository nRepository;
+class WeatherFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
+  final FeedRepository wRepository;
 
-  NearFeedStateNotifier({
-    required this.nRepository,
+  WeatherFeedStateNotifier({
+    required this.wRepository,
   }) : super(CursorPaginationLoading()) {
     paginate();
   }
@@ -63,7 +63,7 @@ class NearFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
         return;
       }
 
-      NearPaginationParams nearPaginationParams = NearPaginationParams(
+      WeatherPaginationParams weatherPaginationParams = WeatherPaginationParams(
         page: fetchPage,
         latitude: gps.latitude,
         longitude: gps.longitude,
@@ -76,7 +76,7 @@ class NearFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
           data: pState.data,
         );
 
-        nearPaginationParams = nearPaginationParams.copyWith(
+        weatherPaginationParams = weatherPaginationParams.copyWith(
           page: (pState.data.number + 1),
           longitude: gps.longitude,
           latitude: gps.latitude,
@@ -92,8 +92,8 @@ class NearFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
         }
       }
 
-      final resp = await nRepository.nPaginate(
-        nearPaginationParams: nearPaginationParams,
+      final resp = await wRepository.wPaginate(
+        weatherPaginationParams: weatherPaginationParams,
       );
 
       if (state is CursorPaginationFetchingMore) {

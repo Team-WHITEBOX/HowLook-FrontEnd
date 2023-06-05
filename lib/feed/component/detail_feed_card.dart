@@ -31,19 +31,25 @@ class DetailFeedCard extends ConsumerWidget {
   final String content;
   // 날짜
   final List<dynamic> regDate;
+  // 날씨
+  final int weather;
+  // 온도
+  final int temperature;
 
-  const DetailFeedCard(
-      {required this.userPostInfo,
-      required this.postId,
-      required this.photoDTOs,
-      required this.photoCount,
-      required this.likeCount,
-      required this.likeCheck,
-      required this.replyCount,
-      required this.content,
-      required this.regDate,
-      Key? key})
-      : super(key: key);
+  const DetailFeedCard({
+    required this.userPostInfo,
+    required this.postId,
+    required this.photoDTOs,
+    required this.photoCount,
+    required this.likeCount,
+    required this.likeCheck,
+    required this.replyCount,
+    required this.content,
+    required this.regDate,
+    required this.weather,
+    required this.temperature,
+    Key? key,
+  }) : super(key: key);
 
   factory DetailFeedCard.fromModel({
     required FeedModel model,
@@ -59,6 +65,8 @@ class DetailFeedCard extends ConsumerWidget {
       replyCount: model.replyCount,
       content: model.content,
       regDate: model.regDate,
+      weather: model.weather,
+      temperature: model.temperature,
     );
   }
 
@@ -115,26 +123,40 @@ class DetailFeedCard extends ConsumerWidget {
                   ),
                 ],
               ),
-              IconButton(
-                onPressed: () async {
-                  final storage = ref.read(secureStorageProvider);
-                  String? userid = await storage.read(key: USERMID_KEY);
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return MainFeedMoreVertScreen(
-                        userId: userid,
-                        memberId: userPostInfo.memberId,
-                        postId: postId,
+              Row(
+                children: [
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: ExtendedImage.asset(
+                        "asset/img/weather/weather_$weather.png"),
+                  ),
+                  const SizedBox(width: 10),
+                  Text("$temperature°C"),
+                  const SizedBox(width: 10),
+                  IconButton(
+                    onPressed: () async {
+                      print(userPostInfo.memberNickName);
+                      final storage = ref.read(secureStorageProvider);
+                      String? userid = await storage.read(key: USERMID_KEY);
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return MainFeedMoreVertScreen(
+                            userId: userid,
+                            memberId: userPostInfo.memberId,
+                            postId: postId,
+                          );
+                        },
+                        backgroundColor: Colors.transparent,
                       );
                     },
-                    backgroundColor: Colors.transparent,
-                  );
-                },
-                icon: Icon(
-                  Icons.more_vert,
-                ),
-              ),
+                    icon: Icon(
+                      Icons.more_vert,
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
           const SizedBox(height: 8.0),
@@ -180,16 +202,21 @@ class DetailFeedCard extends ConsumerWidget {
               children: <Widget>[
                 const SizedBox(width: 6),
                 LikeButton(
+                  isLiked: likeCheck,
+                  likeCount: likeCount,
                   likeBuilder: (bool isLiked) {
                     likeCheck == true ? isLiked = true : isLiked = false;
-                    return null;
+                    return Icon(
+                      Icons.home,
+                      color: isLiked ? Colors.red : Colors.grey,
+                    );
                   },
-                  likeCount: likeCount,
-                  onTap: (isLiked) async {
+                  onTap: (bool isLiked) async {
                     if (likeCheck == true) {
                       final code = await repo.delLike(postId: postId);
                       return code.response.statusCode == 200 ? true : false;
                     } else {
+                      print(postId);
                       final code = await repo.postLike(postId: postId);
                       return code.response.statusCode == 200 ? true : false;
                     }
@@ -289,7 +316,7 @@ class DetailFeedCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              CommentScreen(postId: postId),
+              Expanded(child: CommentScreen(postId: postId)),
             ],
           ),
         );

@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/feed/component/feed_card.dart';
-import 'package:howlook/feed/provider/category_check_provider.dart';
-import 'package:howlook/feed/provider/category_feed_provider.dart';
 import 'package:howlook/feed/provider/main_feed_provider.dart';
 import 'package:howlook/feed/view/category_feed/category_selected_screen.dart';
 import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
@@ -26,13 +24,7 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
 
   void scrollListener() {
     if (controller.offset > controller.position.maxScrollExtent - 300) {
-      ref.watch(isFiltering)
-          ? ref.read(categoryFeedProvider.notifier).paginate(
-                fetchMore: true,
-              )
-          : ref.read(mainFeedProvider.notifier).paginate(
-                fetchMore: true,
-              );
+      ref.read(mainFeedProvider.notifier).paginate(fetchMore: true);
     }
   }
 
@@ -41,24 +33,18 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
     final data = ref.watch(mainFeedProvider);
 
     if (data is CursorPaginationLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (data is CursorPaginationError) {
-      return Center(
-        child: Text(data.message),
-      );
+      return Center(child: Text(data.message));
     }
 
     final cp = data as CursorPagination;
 
     return RefreshIndicator(
       onRefresh: () async {
-        ref.read(mainFeedProvider.notifier).paginate(
-              forceRefetch: true,
-            );
+        ref.read(mainFeedProvider.notifier).paginate(forceRefetch: true);
       },
       child: Column(
         children: [

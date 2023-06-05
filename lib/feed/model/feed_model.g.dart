@@ -19,6 +19,8 @@ FeedModel _$FeedModelFromJson(Map<String, dynamic> json) => FeedModel(
       replyCount: json['replyCount'] as int,
       content: json['content'] as String,
       regDate: json['regDate'] as List<dynamic>,
+      weather: json['weather'] as int,
+      temperature: json['temperature'] as int,
     );
 
 Map<String, dynamic> _$FeedModelToJson(FeedModel instance) => <String, dynamic>{
@@ -31,4 +33,6 @@ Map<String, dynamic> _$FeedModelToJson(FeedModel instance) => <String, dynamic>{
       'replyCount': instance.replyCount,
       'content': instance.content,
       'regDate': instance.regDate,
+      'weather': instance.weather,
+      'temperature': instance.temperature,
     };

@@ -23,6 +23,10 @@ class FeedModel {
   final String content;
   // 등록 날짜
   final List<dynamic> regDate;
+  // 날씨
+  final int weather;
+  // 온도
+  final int temperature;
 
   FeedModel({
     required this.userPostInfo,
@@ -34,6 +38,8 @@ class FeedModel {
     required this.replyCount,
     required this.content,
     required this.regDate,
+    required this.weather,
+    required this.temperature,
   });
 
   factory FeedModel.fromJson(Map<String, dynamic> json) =>

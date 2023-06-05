@@ -80,6 +80,37 @@ class _FeedRepository implements FeedRepository {
   }
 
   @override
+  Future<CursorPagination<PageModel>> wPaginate(
+      {weatherPaginationParams = const WeatherPaginationParams()}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters
+        .addAll(weatherPaginationParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CursorPagination<PageModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/weather',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CursorPagination<PageModel>.fromJson(
+      _result.data!,
+      (json) => PageModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<CursorPagination<PageModel>> cPaginate(
       {categoryPaginationParams = const CategoryPaginationParams()}) async {
     const _extra = <String, dynamic>{};
@@ -141,7 +172,10 @@ class _FeedRepository implements FeedRepository {
   Future<HttpResponse<dynamic>> postLike({required postId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    final _headers = <String, dynamic>{
+      r'accessToken': 'true',
+      r'content-type': 'application/json',
+    };
     _headers.removeWhere((k, v) => v == null);
     final _data = postId;
     final _result =
@@ -149,6 +183,7 @@ class _FeedRepository implements FeedRepository {
       method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: 'application/json',
     )
             .compose(
               _dio.options,

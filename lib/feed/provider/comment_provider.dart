@@ -5,25 +5,27 @@ import 'package:howlook/feed/repository/comment_repository.dart';
 import 'package:howlook/feed/repository/feed_repository.dart';
 
 final commentProvider =
-    StateNotifierProvider<CommentStateNotifier, CommentPaginationBase>(
-  (ref) {
+    StateNotifierProvider.family<CommentStateNotifier, CommentPaginationBase, int>(
+  (ref, postId) {
     final repository = ref.watch(commentRepositoryProvider);
-    final notifier = CommentStateNotifier(repository: repository);
+    final notifier = CommentStateNotifier(repository: repository, postId: postId);
     return notifier;
   },
 );
 
 class CommentStateNotifier extends StateNotifier<CommentPaginationBase> {
   final CommentRepository repository;
+  final int postId;
 
   CommentStateNotifier({
     required this.repository,
+    required this.postId,
   }) : super(CommentPaginationLoading()) {
-    paginate();
+    paginate(postId: postId);
   }
 
   Future<void> paginate({
-    int postId = 28,
+    required int postId,
     int fetchPage = 0,
     int fetchCount = 10,
     bool fetchMore = false,
@@ -34,7 +36,9 @@ class CommentStateNotifier extends StateNotifier<CommentPaginationBase> {
         final pState = state as CommentPagination;
 
         // 댓글 전체 페이지 수, 현재 페이지 넘버에 대한 구현 필요
-        return;
+        if (pState.data.totalPages == pState.data.nowPage) {
+          return;
+        }
       }
 
       final isLoading = state is CommentPaginationLoading;
@@ -45,7 +49,10 @@ class CommentStateNotifier extends StateNotifier<CommentPaginationBase> {
         return;
       }
 
-      CommentParams commentParams = CommentParams(postId: postId);
+      CommentParams commentParams = CommentParams(
+        page: fetchPage,
+        size: fetchCount,
+      );
 
       if (fetchMore) {
         final pState = state as CommentPagination;
@@ -54,9 +61,9 @@ class CommentStateNotifier extends StateNotifier<CommentPaginationBase> {
           data: pState.data,
         );
 
-        // commentParams = commentParams.copyWith(
-        //   page: (pState.data.number + 1),
-        // );
+        commentParams = commentParams.copyWith(
+          page: (pState.data.nowPage + 1),
+        );
       } else {
         if (state is CommentPagination && !forceRefetch) {
           final pState = state as CommentPagination;
@@ -71,22 +78,19 @@ class CommentStateNotifier extends StateNotifier<CommentPaginationBase> {
         }
       }
 
-      final resp = await repository.commentPaginate(
-        id: postId,
-        commentParams: commentParams,
-      );
+      final resp = await repository.commentPaginate(postId, commentParams: commentParams);
 
       if (state is CommentPaginationFetchingMore) {
         final pState = state as CommentPaginationFetchingMore;
 
-        // state = resp.copyWith(
-        //   data: resp.data.copyWith(
-        //     content: [
-        //       ...pState.data.content,
-        //       ...resp.data.content
-        //     ],
-        //   ),
-        // );
+        state = resp.copyWith(
+          data: resp.data.copyWith(
+            replies: [
+              ...pState.data.replies,
+              ...resp.data.replies,
+            ],
+          ),
+        );
       } else {
         state = resp;
       }

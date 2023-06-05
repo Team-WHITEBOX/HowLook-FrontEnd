@@ -11,9 +11,7 @@ CommentPagination<T> _$CommentPaginationFromJson<T>(
   T Function(Object? json) fromJsonT,
 ) =>
     CommentPagination<T>(
-      data: (json['data'] as List<dynamic>)
-          .map((e) => CommentPageModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      data: CommentPageModel.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CommentPaginationToJson<T>(

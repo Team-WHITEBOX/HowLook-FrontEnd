@@ -21,7 +21,6 @@ class _FeedDetailScreenState extends ConsumerState<FeedDetailScreen> {
   @override
   void initState() {
     super.initState();
-
     ref.read(mainFeedProvider.notifier).getDetail(postId: widget.postId);
   }
 

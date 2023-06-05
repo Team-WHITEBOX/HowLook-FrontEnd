@@ -96,6 +96,9 @@ dependencies:
   # device preview
   device_preview: ^1.1.0
 
+  # chat
+  dart_amqp: ^0.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -123,6 +126,7 @@ flutter:
   assets:
     - asset/img/logo/
     - asset/img/Profile/BaseProfile.JPG
+    - asset/img/weather/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

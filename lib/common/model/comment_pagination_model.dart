@@ -19,13 +19,13 @@ class CommentPaginationLoading extends CommentPaginationBase {}
   genericArgumentFactories: true,
 )
 class CommentPagination<T> extends CommentPaginationBase {
-  final List<CommentPageModel> data;
+  final CommentPageModel data;
 
   CommentPagination({
     required this.data,
   });
 
-  CommentPagination copyWith({List<CommentPageModel>? data}) {
+  CommentPagination copyWith({CommentPageModel? data}) {
     return CommentPagination(
       data: data ?? this.data,
     );

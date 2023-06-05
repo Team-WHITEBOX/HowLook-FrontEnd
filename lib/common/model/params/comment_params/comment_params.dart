@@ -5,17 +5,21 @@ part 'comment_params.g.dart';
 @JsonSerializable()
 class CommentParams {
   // API 쿼리 파라미터에 들어가는 데이터 값 정의
-  final int? postId;
+  final int? page;
+  final int? size;
 
   const CommentParams({
-    this.postId,
+    this.page,
+    this.size,
   });
 
   CommentParams copyWith({
-    int? postId,
+    int? page,
+    int? size,
   }) {
     return CommentParams(
-      postId: postId ?? this.postId,
+      page: page ?? this.page,
+      size: size ?? this.size,
     );
   }
 

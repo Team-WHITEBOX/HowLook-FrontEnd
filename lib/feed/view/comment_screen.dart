@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/model/comment_pagination_model.dart';
 import 'package:howlook/feed/component/comment_card.dart';
-import 'package:howlook/feed/model/feed_comment_model.dart';
+import 'package:howlook/feed/model/comment_model.dart';
 import 'package:howlook/feed/provider/comment_provider.dart';
 
 class CommentScreen extends ConsumerStatefulWidget {
@@ -29,21 +29,19 @@ class _CommentScreenState extends ConsumerState<CommentScreen> {
 
   void scrollListener() {
     if (controller.offset > controller.position.maxScrollExtent - 300) {
-      ref.read(commentProvider.notifier).paginate(
-            postId: widget.postId,
-          );
+      ref
+          .read(commentProvider(widget.postId).notifier)
+          .paginate(postId: widget.postId, fetchMore: true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final data = ref.watch(commentProvider);
-    final dataRead = ref.read(commentProvider.notifier);
+    final data = ref.watch(commentProvider(widget.postId));
+    final dataRead = ref.read(commentProvider(widget.postId).notifier);
 
     if (data is CommentPaginationLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (data is CommentPaginationError) {
@@ -54,18 +52,15 @@ class _CommentScreenState extends ConsumerState<CommentScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        dataRead.paginate(
-          postId: widget.postId,
-          forceRefetch: true,
-        );
+        dataRead.paginate(postId: widget.postId, forceRefetch: true);
       },
       child: ListView.separated(
         controller: controller,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: cp.data.length + 1,
+        itemCount: cp.data.replies.length + 1,
         itemBuilder: (_, index) {
-          if (index == cp.data.length) {
+          if (index == cp.data.replies.length) {
             return Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -76,17 +71,14 @@ class _CommentScreenState extends ConsumerState<CommentScreen> {
               ),
             );
           }
-          final pItem = cp.data[index];
+          final pItem = cp.data.replies[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 8,
-            ),
+            padding: const EdgeInsets.only(left: 12, right: 12, top: 6),
             child: CommentCard.fromModel(model: pItem),
           );
         },
         separatorBuilder: (_, index) {
-          return const SizedBox(height: 16.0);
+          return const Divider(color: Colors.black26);
         },
       ),
     );

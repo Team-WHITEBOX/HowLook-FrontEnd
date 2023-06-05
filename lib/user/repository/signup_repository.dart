@@ -8,14 +8,13 @@ import 'package:retrofit/retrofit.dart';
 part 'signup_repository.g.dart';
 
 final signupRepositoryProvider = Provider<SignupRepository>(
-      (ref) {
+  (ref) {
     final dio = ref.watch(dioProvider);
     final repository =
-    SignupRepository(dio, baseUrl: 'http://$API_SERVICE_URI');
+        SignupRepository(dio, baseUrl: 'http://$API_SERVICE_URI');
     return repository;
   },
 );
-
 
 @RestApi()
 abstract class SignupRepository {
@@ -29,6 +28,4 @@ abstract class SignupRepository {
   Future<SignupModel> postData({
     @Body() required SignupModel signupModel,
   });
-
 }
-

@@ -15,6 +15,8 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: "ChatLook",
+      appBarBackgroundColor: const Color(0xffEDF0F3),
+      backgroundColor: const Color(0xffEDF0F3),
       actions: <Widget>[
         CustIconButton(
           onTap: () {},
@@ -43,7 +45,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                     unselectedLabelColor: Colors.grey, // 선택되지 않은 Tab의 label 색상
                     labelStyle: const TextStyle(fontSize: 15),
                     indicator: const UnderlineTabIndicator(
-                      //선택된 Tab에 스타일 적용 시 사용
+                        //선택된 Tab에 스타일 적용 시 사용
                         borderSide: BorderSide(
                           //선택된 탭바 스타일 적용
                           width: 2.5,
@@ -53,7 +55,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                     isScrollable: true, //탭의 크기가 label의 크기만큼 할당되며 스크롤이 가능
                     labelPadding: EdgeInsets.zero,
                     overlayColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.transparent),
+                        (states) => Colors.transparent),
                     tabs: <Widget>[
                       menuBar('오픈톡'),
                       menuBar('토론방'),

@@ -163,7 +163,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
   getDetail({
     required int postId,
   }) async {
-    DetailFeedParams detailfeedParams = DetailFeedParams(
+    DetailFeedParams detailFeedParams = DetailFeedParams(
       postId: postId,
     );
 
@@ -184,7 +184,7 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
 
     // 요청 데이터
     final resp =
-        await mRepository.getFeedDetail(detailFeedParams: detailfeedParams);
+        await mRepository.getFeedDetail(detailFeedParams: detailFeedParams);
 
     state = pState.copyWith(
       data: pState.data.copyWith(

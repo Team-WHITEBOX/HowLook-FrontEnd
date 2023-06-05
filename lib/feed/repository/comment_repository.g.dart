@@ -19,8 +19,8 @@ class _CommentRepository implements CommentRepository {
   String? baseUrl;
 
   @override
-  Future<CommentPagination<CommentPageModel>> commentPaginate({
-    required id,
+  Future<CommentPagination<CommentPageModel>> commentPaginate(
+    id, {
     commentParams = const CommentParams(),
   }) async {
     const _extra = <String, dynamic>{};
@@ -38,7 +38,7 @@ class _CommentRepository implements CommentRepository {
     )
             .compose(
               _dio.options,
-              '/list/${id}',
+              '/replyPage/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -48,6 +48,56 @@ class _CommentRepository implements CommentRepository {
       (json) => CommentPageModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> replyPostLike({required ReplyId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = ReplyId;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/replyPage/like',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> delPostLike({required ReplyId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = ReplyId;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/replyPage/like',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
