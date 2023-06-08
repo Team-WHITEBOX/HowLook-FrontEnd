@@ -34,15 +34,15 @@ class FeedCard extends ConsumerWidget {
 
   const FeedCard(
       {required this.userPostInfo,
-      required this.postId,
-      required this.photoDTOs,
-      required this.photoCount,
-      required this.likeCount,
-      required this.likeCheck,
-      required this.replyCount,
-      required this.content,
-      required this.regDate,
-      Key? key})
+        required this.postId,
+        required this.photoDTOs,
+        required this.photoCount,
+        required this.likeCount,
+        required this.likeCheck,
+        required this.replyCount,
+        required this.content,
+        required this.regDate,
+        Key? key})
       : super(key: key);
 
   factory FeedCard.fromModel({
@@ -50,7 +50,7 @@ class FeedCard extends ConsumerWidget {
   }) {
     return FeedCard(
       userPostInfo:
-          model.userPostInfo, //List<UserInfoModel>.from(model.userPostInfo),
+      model.userPostInfo, //List<UserInfoModel>.from(model.userPostInfo),
       postId: model.postId,
       photoDTOs: model.photoDTOs,
       photoCount: model.photoCount,
@@ -84,13 +84,13 @@ class FeedCard extends ConsumerWidget {
                     radius: 16.0,
                     backgroundImage: userPostInfo.profilePhoto != NULL_IMG_URI
                         ? ExtendedImage.network(
-                            userPostInfo.profilePhoto,
-                            fit: BoxFit.cover,
-                            cache: true,
-                          ).image
+                      userPostInfo.profilePhoto,
+                      fit: BoxFit.cover,
+                      cache: true,
+                    ).image
                         : ExtendedImage.asset(
-                                "asset/img/Profile/BaseProfile.JPG")
-                            .image,
+                        "asset/img/Profile/BaseProfile.JPG")
+                        .image,
                   ),
                   const SizedBox(width: 16.0),
                   Column(
@@ -214,7 +214,7 @@ class FeedCard extends ConsumerWidget {
           isScrollControlled: true,
           barrierColor: Colors.black.withOpacity(0.8),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
           builder: (BuildContext context) {
             return FeedCommentScreen(context, postId);
           },
@@ -252,7 +252,7 @@ class FeedCard extends ConsumerWidget {
         return Container(
           height: MediaQuery.of(context).size.height / 2 + 200,
           padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             children: <Widget>[
               Padding(
@@ -268,7 +268,7 @@ class FeedCard extends ConsumerWidget {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 36.0, vertical: 10),
+                const EdgeInsets.symmetric(horizontal: 36.0, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

@@ -1,3 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:howlook/common/utils/data_utils.dart';
+
+part 'chart_page_model.g.dart';
+
+@JsonSerializable()
 class ChartModel {
   // 남자 차트
   final List<dynamic> maleCounts;
@@ -12,13 +18,8 @@ class ChartModel {
     required this.replyCount,
   });
 
-  factory ChartModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return ChartModel(
-      maleCounts: json['maleCounts'],
-      femaleCounts: json['femaleCounts'],
-      replyCount: json['replyCount'].toDouble(),
-    );
-  }
+  factory ChartModel.fromJson(Map<String, dynamic> json) =>
+      _$ChartModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChartModelToJson(this);
 }

@@ -11,15 +11,16 @@ import 'package:howlook/review/feedback/model/chart_page_model.dart';
 import 'package:howlook/review/feedback/component/chart_page_card.dart';
 
 class ChartPage extends ConsumerWidget {
-  final int npostId; // 포스트 아이디로 특정 게시글 조회
-  const ChartPage({required this.npostId, Key? key}) : super(key: key);
+  final int postId; // 포스트 아이디로 특정 게시글 조회
+  const ChartPage({required this.postId, Key? key}) : super(key: key);
 
-  Future<Map<String, dynamic>> FeedbackReviewPage(WidgetRef ref) async {
+  Future<Map<String, dynamic>> FeedbackPage(WidgetRef ref) async {
     final dio = Dio();
     final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    print(postId);
     final resp = await dio.get(
-      'http://$API_SERVICE_URI/eval/getReplyData?NPostId=${npostId}',
+      'http://$API_SERVICE_URI/eval/getReplyData?postId=$postId',
       // 특정 API 뒤에 id 값 넘어서 가져가기
       options: Options(
         headers: {
@@ -27,24 +28,23 @@ class ChartPage extends ConsumerWidget {
         },
       ),
     );
-    return resp.data;
+    return resp.data['data'];
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder<Map<String, dynamic>>(
-        future: FeedbackReviewPage(ref),
+        future: FeedbackPage(ref),
         builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (!snapshot.hasData) {
+            print('errorN4');
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          final item = ChartModel.fromJson(
-            json: snapshot.data!,
-          );
-
-          return ChartPageCard.fromModel(model: item);
+          final item = snapshot.data!; //인덱스값
+          final pItem = ChartModel.fromJson(item);
+          return ChartPageCard.fromModel(model: pItem);
         });
   }
 }

@@ -1,24 +1,21 @@
-// "mainPhotoPath": "8dadd1d8-1064-497a-8372-e113502e7eb7_signature.png",
-// "npostId": 7,
+import 'package:howlook/review/model/review_model_data.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:howlook/common/utils/data_utils.dart';
+
+part 'review_model.g.dart';
+
+@JsonSerializable()
 class ReviewModel {
-  // 포스트 아이디
-  final int npostId;
-  // 첫 장 이미지 경로
-  final String mainPhotoPath;
+  final int status;
+  final String code;
+  final String message;
+  final ReviewModelData data;
+
+  ReviewModel({required this.status, required this.code, required this.message, required this.data});
 
 
+  factory ReviewModel.fromJson(Map<String, dynamic> json) =>
+      _$ReviewModelFromJson(json);
 
-  ReviewModel({
-    required this.npostId,
-    required this.mainPhotoPath,
-  });
-
-  factory ReviewModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return ReviewModel(
-      npostId: json['npostId'],
-      mainPhotoPath: json['mainPhotoPath'],
-    );
-  }
+  Map<String, dynamic> toJson() => _$ReviewModelToJson(this);
 }

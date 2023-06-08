@@ -156,7 +156,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         controller: controller,
         children: <Widget>[
           const HomeScreen(),
-          const MainReviewScreen(),
+          MainReviewScreen(),
           Builder(builder: (context) => LiquidSwipe(pages: pages)),
           const tournamentScreen(),
           MyProfileScreen(),

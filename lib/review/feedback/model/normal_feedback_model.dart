@@ -1,24 +1,25 @@
-class NormalReviewModel {
-  // 포스트 아이디
-  final int npostId;
-  // 첫 장 이미지 경로
-  final String mainPhotoPath;
-  // 평균 점수
-  final double averageScore;
+import 'package:json_annotation/json_annotation.dart';
+import 'package:howlook/common/utils/data_utils.dart';
 
-  NormalReviewModel({
-    required this.npostId,
-    required this.mainPhotoPath,
-    required this.averageScore
-  });
+import 'normal_feedback_model_data.dart';
 
-  factory NormalReviewModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return NormalReviewModel(
-      npostId: json['npostId'],
-      mainPhotoPath: json['mainPhotoPath'],
-      averageScore: json['averageScore'],
-    );
-  }
+part 'normal_feedback_model.g.dart';
+
+@JsonSerializable()
+class NormalFeedbackModel {
+  final int status;
+  final String code;
+  final String message;
+  final List<NormalFeedbackData> data;
+
+  NormalFeedbackModel(
+      {required this.status,
+      required this.code,
+      required this.message,
+      required this.data});
+
+  factory NormalFeedbackModel.fromJson(Map<String, dynamic> json) =>
+      _$NormalFeedbackModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NormalFeedbackModelToJson(this);
 }
