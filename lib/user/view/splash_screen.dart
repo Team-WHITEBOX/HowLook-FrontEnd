@@ -68,7 +68,7 @@ class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
             // builder: (_) => RootTab(),
             builder: (_) => IntroScreen(),
           ),
-              (route) => false,
+          (route) => false,
         );
       }
     }
@@ -77,21 +77,19 @@ class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      backgroundColor: PRIMARY_COLOR,
+      backgroundColor: Colors.black,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'asset/img/logo/logo.png',
-              width: MediaQuery.of(context).size.width / 2,
+          width: MediaQuery.of(context).size.width,
+          child: Center(
+            child: Text(
+              "HowLook",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 36,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            const SizedBox(height: 16.0),
-            CircularProgressIndicator(),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

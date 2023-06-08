@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:howlook/common/layout/default_layout.dart';
+import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/feed/component/category_slide.dart';
 import 'package:howlook/feed/provider/category_check_provider.dart';
 import 'package:howlook/feed/provider/category_feed_provider.dart';
@@ -33,6 +34,7 @@ class _CategoryScreen extends ConsumerState<CategorySelectScreen> {
           ),
           onPressed: () {
             ref.read(categoryProvider.notifier).toggleReset();
+            ref.read(isFiltering.notifier).update((state) => false);
           },
           child: const Text(
             "초기화",
@@ -341,7 +343,7 @@ class _CategoryScreen extends ConsumerState<CategorySelectScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                "미니멀",
+                                "스포티",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
@@ -401,6 +403,7 @@ class _CategoryScreen extends ConsumerState<CategorySelectScreen> {
                   FloatingActionButton(
                     onPressed: () {
                       ref.read(categoryProvider.notifier).toggleReset();
+                      ref.read(isFiltering.notifier).update((state) => false);
                     },
                     backgroundColor: Colors.white,
                     child: const Icon(
@@ -426,13 +429,30 @@ class _CategoryScreen extends ConsumerState<CategorySelectScreen> {
                         ),
                       ),
                       onPressed: () {
-                        ref.read(isFiltering.notifier).update((state) => true);
+                        // 여기서 모든 필터 값 중 하나라도 선택됐다면 isFiltering 값을 true로 변환
+                        if (ref.read(categoryProvider.notifier).checkCategoryInitState() > 0) {
+                          ref.read(isFiltering.notifier).update((state) => true);
+                        } else {
+                          ref.read(isFiltering.notifier).update((state) => false);
+                        }
+
+                        /* VALIDATE */
+                        // 만약 현재 isFiltering이 false가 아니라면 적어도 상태의 값은 2 이상이여야 함
+                        // 성별과 적어도 하나의 스타일이 선택되어야 하기 때문
+                        // 키 몸무게는 모르겠다,,
+
+                        // 여기선 현재 선택된 값을 기준으로 표시할 숫자를 변경하는 것
+                        final state = ref.read(isFiltering.notifier).state;
+                        if (state == true) {
+                          int count = ref.read(categoryProvider.notifier).checkCategoryInitState();
+                          ref.read(categoryCountProvider.notifier).update((state) => count);
+                        }
+
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
+                              builder: (context) => RootTab(),
                             ),
                             (Route<dynamic> route) => false);
-                        print("Hello");
                       },
                       child: const Text(
                         "계속하기",

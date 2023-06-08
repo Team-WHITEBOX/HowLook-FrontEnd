@@ -102,23 +102,23 @@ class CustomTextFormField extends StatelessWidget {
   final FormFieldSetter? onSaved;
   final TextEditingController? titleController;
 
-  CustomTextFormField(
-      {this.maxLines = 1,
-      this.label,
-      this.onChanged,
-      this.isBorder = true,
-      this.icon,
-      this.textInputAction,
-      this.obscureText = false,
-      this.autofocus = false,
-      this.keyboardType,
-      this.hintText,
-      this.errorText,
-      this.validator,
-      this.onSaved,
-      this.titleController,
-      Key? key})
-      : super(key: key);
+  CustomTextFormField({
+    this.maxLines = 1,
+    this.label,
+    this.onChanged,
+    this.isBorder = true,
+    this.icon,
+    this.textInputAction,
+    this.obscureText = false,
+    this.autofocus = false,
+    this.keyboardType,
+    this.hintText,
+    this.errorText,
+    this.validator,
+    this.onSaved,
+    this.titleController,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

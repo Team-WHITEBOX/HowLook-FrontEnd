@@ -20,11 +20,8 @@ void main() async {
   await initializeDefault();
   KakaoSdk.init(nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb');
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const ProviderScope(
-        child: _App(),
-      ),
+    const ProviderScope(
+      child: _App(),
     ),
   );
 }

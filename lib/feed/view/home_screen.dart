@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/component/cust_icon_button.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/provider/category_check_provider.dart';
+import 'package:howlook/feed/provider/category_provider.dart';
 import 'package:howlook/feed/view/category_feed/category_selected_screen.dart';
 import 'package:howlook/feed/view/main_feed/main_feed_screen.dart';
 import 'package:flutter/src/material/bottom_sheet.dart';
@@ -22,8 +23,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final filterState = ref.watch(isFiltering);
-
     return DefaultLayout(
       title: 'HowLook',
       actions: <Widget>[
@@ -33,9 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         const SizedBox(width: 30),
         CustIconButton(
-          onTap: () {
-            ref.read(isFiltering.notifier).update((state) => false);
-          },
+          onTap: () {},
           icon: Icons.notifications,
         ),
         const SizedBox(width: 30),
@@ -81,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 //위젯을 통해 하단 탭별 화면을 보여줌
                 children: <Widget>[
-                  filterState ? CategoryFeedScreen() : MainFeedScreen(),
+                  CategoryFeedScreen(),
                   const WeatherFeedScreen(),
                   const NearFeedScreen(),
                 ],

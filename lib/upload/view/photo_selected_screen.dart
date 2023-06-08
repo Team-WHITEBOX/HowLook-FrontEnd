@@ -5,14 +5,14 @@ import 'package:howlook/upload/component/album_header_widget.dart';
 import 'package:howlook/upload/component/scroll_notification_widget.dart';
 import 'package:howlook/upload/view/upload_image_edited_screen.dart';
 
-class UploadScreen extends ConsumerStatefulWidget {
-  const UploadScreen({Key? key}) : super(key: key);
+class PhotoSelectScreen extends ConsumerStatefulWidget {
+  const PhotoSelectScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<UploadScreen> createState() => _TUploadScreenState();
+  ConsumerState<PhotoSelectScreen> createState() => _PhotoSelectScreenState();
 }
 
-class _TUploadScreenState extends ConsumerState<UploadScreen> {
+class _PhotoSelectScreenState extends ConsumerState<PhotoSelectScreen> {
   @override
   void initState() {
     super.initState();

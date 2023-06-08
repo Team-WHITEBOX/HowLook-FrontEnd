@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/chat/model/chat_msg_data.dart';
+import 'package:howlook/chat/model/chat_msg_model.dart';
 import 'package:howlook/chat/model/chat_rooms_data_model.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
@@ -24,5 +26,23 @@ abstract class ChatRepository {
   @Headers({
     'accessToken': 'true',
   })
-  Future<ChatRoomsDataModel> getChatList();
+  Future<ChatRoomsDataModel> getRoomList();
+
+  @DELETE('/')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<ChatRoomsDataModel> outChatRoom();
+
+  @GET('/chat')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<ChatMsgData> getChatList(@Query('roomId') String roomId);
+
+  @GET('/userlist')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<ChatRoomsDataModel> getUserList(@Query('roomId') String roomId);
 }

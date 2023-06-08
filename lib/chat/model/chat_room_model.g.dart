@@ -8,7 +8,7 @@ part of 'chat_room_model.dart';
 
 ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
     ChatRoomModel(
-      roodId: json['roodId'] as String,
+      roomId: json['roomId'] as String,
       roomName: json['roomName'] as String,
       userCount: json['userCount'] as int,
       enter: json['enter'] as bool,
@@ -16,7 +16,7 @@ ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatRoomModelToJson(ChatRoomModel instance) =>
     <String, dynamic>{
-      'roodId': instance.roodId,
+      'roomId': instance.roomId,
       'roomName': instance.roomName,
       'userCount': instance.userCount,
       'enter': instance.enter,

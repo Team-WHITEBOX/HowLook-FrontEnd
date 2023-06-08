@@ -106,13 +106,10 @@ class MainFeedStateNotifier extends StateNotifier<CursorPaginationBase> {
         final pState = state as CursorPagination;
 
         // 데이터 더 가져오기 위해 state를 FetchingMore로 변경
-        state = CursorPaginationFetchingMore(
-          data: pState.data,
-        );
+        state = CursorPaginationFetchingMore(data: pState.data);
 
-        paginationParams = paginationParams.copyWith(
-          page: (pState.data.number + 1),
-        );
+        paginationParams =
+            paginationParams.copyWith(page: (pState.data.number + 1));
       }
 
       // fetchMore == False (데이터를 처음부터 가져오거나 강제로 새로고침하는 상황)

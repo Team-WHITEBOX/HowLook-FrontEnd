@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +35,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           // 키보드 올라와있을 때, 스크롤 등의 행위를 하면 키보드가 사라짐 - UI/UX 꿀팁
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: SafeArea(
-            top: true,
+            top: false,
             bottom: false,
             child: Padding(
               // 컬럼 위에다가 패딩 넣어서
@@ -122,12 +120,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               key: REFRESH_TOKEN_KEY, value: refreshToken);
                           await storage.write(
                               key: ACCESS_TOKEN_KEY, value: accessToken);
+                          await storage.write(
+                              key: USERMID_KEY, value: username);
 
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (_) => const RootTab(),
                             ),
-                                (route) => false,
+                            (route) => false,
                           );
                         }
                         // ID:비밀번호 형태

@@ -87,7 +87,9 @@ class _MainFeedScreenState extends ConsumerState<MainFeedScreen> {
                   if (index == cp.data.content.length) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
+                        horizontal: 16.0,
+                        vertical: 8.0,
+                      ),
                       child: Center(
                         child: data is CursorPaginationFetchingMore
                             ? const CircularProgressIndicator()

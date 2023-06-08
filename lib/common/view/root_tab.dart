@@ -7,7 +7,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
 import 'package:howlook/profile/view/my_profile_screen.dart';
 import 'package:howlook/upload/Provider/review_upload_provider.dart';
-import 'package:howlook/upload/view/upload_screen.dart';
+import 'package:howlook/upload/view/photo_selected_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
 
@@ -21,13 +21,14 @@ class RootTab extends ConsumerStatefulWidget {
 class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
   late TabController controller;
-  int _bottomNavIndex = 4;
+  int _bottomNavIndex = 0;
   bool check = false;
 
   @override
   void initState() {
     super.initState();
     controller = TabController(length: 5, vsync: this);
+    controller.index = 4;
     controller.addListener(tabListener);
   }
 
@@ -109,7 +110,7 @@ class _RootTabState extends ConsumerState<RootTab>
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => const UploadScreen(),
+                builder: (_) => const PhotoSelectScreen(),
                 // builder: (_) => FeedUpload(),
               ),
             );
@@ -132,7 +133,7 @@ class _RootTabState extends ConsumerState<RootTab>
             ref.read(isReviewUpload.notifier).update((state) => true);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => const UploadScreen(),
+                builder: (_) => const PhotoSelectScreen(),
               ),
             );
           },

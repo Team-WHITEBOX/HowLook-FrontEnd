@@ -30,24 +30,27 @@ class NormalReview extends ConsumerWidget {
     return resp.data['data'];
   }
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
-        title: 'Normal Review',
-        child: SingleChildScrollView(
-            child: SafeArea(
-                child: FutureBuilder<Map<String, dynamic>>(
-                    future: paginateNormalReview(ref),
-                    builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      final item = snapshot.data!; //인덱스값
-                      final pItem = ReviewModel.fromJson(json: item);
-                      return NormalReviewCard.fromModel(model: pItem);
-                    }))));
+      title: 'Normal Review',
+      child: SingleChildScrollView(
+        child: SafeArea(
+          child: FutureBuilder<Map<String, dynamic>>(
+            future: paginateNormalReview(ref),
+            builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              final item = snapshot.data!; //인덱스값
+              final pItem = ReviewModel.fromJson(json: item);
+              return NormalReviewCard.fromModel(model: pItem);
+            },
+          ),
+        ),
+      ),
+    );
   }
 }

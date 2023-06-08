@@ -1,126 +1,83 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:howlook/common/const/colors.dart';
+import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/view/kakao_login.dart';
 import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/login_screen.dart';
 import 'package:howlook/user/view/signup/main_signup_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:howlook/user/view/signup/second_signup_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
+import 'package:uuid/uuid.dart';
 
 class IntroScreen extends ConsumerWidget {
   final dio = Dio();
+
+  // Future<UserCredential> loginWithKakao() async {
+  //   final clientState = const Uuid().v4();
+  //   final authUri = Uri.https('kauth.kakao.com', '/oauth/authorize', {
+  //     'response_type': 'code',
+  //     'client_id': 'eaea17f771b2bbca9bb72a90b36e5244',
+  //     'response_mode': 'form_post',
+  //     'redirect_uri': '$API_SERVICE_URI/account/oauth/kakao',
+  //     'scope': 'account_email profile',
+  //     'state': clientState,
+  //   });
+  //   final authResponse = await FlutterWebAuth.authenticate(
+  //       url: authUri.toString(),
+  //       callbackUrlScheme: "webauthcallback"
+  //   );
+  //   final code = Uri.parse(authResponse).queryParameters['code'];
+  //   final tokenUri = Uri.https('kauth.kakao.com', '/oauth/token', {
+  //     'grant_type': 'authorization_code',
+  //     'client_id': 'eaea17f771b2bbca9bb72a90b36e5244',
+  //     'redirect_uri': '$API_SERVICE_URI/account/oauth/kakao',
+  //     'code': code,
+  //   });
+  //   final tokenResult = await http.post(tokenUri);
+  //   final accessToken = json.decode(tokenResult.body)['access_token'];
+  //   final response = await http.get(
+  //       Uri.parse('$API_SERVICE_URI/kakao/token?accessToken=$accessToken')
+  //   );
+  //   return await FirebaseAuth.instance.signInWithCustomToken(response.body);
+  // }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '',
-      child: SafeArea(
-        top: true,
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _Title(),
+              const _Title(),
               const SizedBox(height: 16.0), // 공백 삽입
-              _SubTitle(),
+              const _SubTitle(),
               const SizedBox(height: 10.0), // 공백 삽입
               Image.asset(
                 'asset/img/logo/hihi.png',
                 width: MediaQuery.of(context).size.width / 2,
                 height: MediaQuery.of(context).size.width / 2,
               ),
-              _LoginText(),
+              const _LoginText(),
               const SizedBox(height: 50.0), // 공백 삽입
               // 카카오 로그인 버튼
-              // TextButton(
-              //   onPressed: () async {
-              //     try {
-              //       // print("HI1");
-              //       // await AuthCodeClient.instance.authorize().then((code) {
-              //       //   // 인증 코드 수신
-              //       //
-              //       // }).catchError((error) {
-              //       //   // 오류 처리
-              //       //   print(error);
-              //       // });
-              //       // await AuthCodeClient.instance.authorizeWithTalk(
-              //       //   redirectUri:
-              //       //       'http://3.34.164.14:8080/account/oauth/kakao',
-              //       // );
-              //       // print("HI2");
-              //       // print("HI3");
-              //       // OAuthToken token =
-              //       //     await UserApi.instance.loginWithKakaoAccount();
-              //       // print('카카오계정으로 로그인 성공');
-              //       // print(token.accessToken);
-              //       // print(token.refreshToken);
-              //       Navigator.of(context).pushAndRemoveUntil(
-              //         MaterialPageRoute(
-              //           builder: (_) => KakaoLoginScreen(),
-              //         ),
-              //         (route) => false,
-              //       );
-              //     } catch (error) {
-              //       print('카카오계정으로 로그인 실패 $error');
-              //     }
-              //     // String token = await AuthCodeClient.instance.authorize(
-              //     //   redirectUri: 'http://3.34.164.14:8080/login/oauth2/code/kakao',
-              //     // );
-              //     // print(token);
-              //     // final result = await Navigator.push(
-              //     //   context,
-              //     //   MaterialPageRoute(
-              //     //     builder: (context) => KakaoLoginScreen(),
-              //     //   ),
-              //     // );
-              //     // List<String> tokens = result.split(' ');
-              //     //
-              //     // final refreshToken =
-              //     //     tokens[1].substring(0, tokens[1].length - 1);
-              //     // final accessToken =
-              //     //     tokens[3].substring(0, tokens[3].length - 1);
-              //     //
-              //     // print(accessToken);
-              //     // final storage = ref.read(secureStorageProvider);
-              //     //
-              //     // await storage.write(
-              //     //     key: REFRESH_TOKEN_KEY, value: refreshToken);
-              //     // await storage.write(
-              //     //     key: ACCESS_TOKEN_KEY, value: accessToken);
-              //     //
-              //     // // 만약 소셜로그인 대상자가 조회가 안 된다면??
-              //     // try {
-              //     //   final resp = await dio.get(
-              //     //     'http://$API_SERVICE_URI/member/check',
-              //     //     options: Options(
-              //     //       headers: {
-              //     //         'authorization': 'Bearer $accessToken',
-              //     //       },
-              //     //     ),
-              //     //   );
-              //     //   Navigator.of(context).pushAndRemoveUntil(
-              //     //     MaterialPageRoute(
-              //     //       builder: (_) => RootTab(),
-              //     //     ),
-              //     //         (route) => false,
-              //     //   );
-              //     // } catch (e) {
-              //     //   Navigator.of(context).pushAndRemoveUntil(
-              //     //     MaterialPageRoute(
-              //     //       builder: (_) => SecondSignupScreen(),
-              //     //     ),
-              //     //     (route) => false,
-              //     //   );
-              //     // }
-              //   },
-              //   child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
-              // ),
+              TextButton(
+                onPressed: () async {
+
+                },
+                child: Image.asset('asset/img/logo/kakao_login_large_wide.png'),
+              ),
               const SizedBox(height: 32.0), // 공백 삽입
-              _OR(),
+              const _OR(),
               const SizedBox(height: 32.0), // 공백 삽입
               // 가로로 "로그인 | 회원가입" 을 구현하기 위한 Row 삽입
               Row(
@@ -131,11 +88,11 @@ class IntroScreen extends ConsumerWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => LoginScreen(),
+                          builder: (_) => const LoginScreen(),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       "로그인",
                       style: TextStyle(
                         fontSize: 12,
@@ -143,23 +100,24 @@ class IntroScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  _board(),
+                  const _Board(),
                   // 회원가입 버튼
                   TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => MainSignupScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "회원가입",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: PRIMARY_COLOR,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const MainSignupScreen(),
                         ),
-                      )),
+                      );
+                    },
+                    child: const Text(
+                      "회원가입",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: PRIMARY_COLOR,
+                      ),
+                    ),
+                  ),
                 ],
               )
             ],
@@ -175,7 +133,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "Hello👋",
       style: TextStyle(
         fontSize: 34,
@@ -191,7 +149,7 @@ class _SubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "만나서 반가워요 :)\n로그인을 해서 다양한 패션을 만나보세요!",
       style: TextStyle(
         fontSize: 16,
@@ -207,7 +165,7 @@ class _LoginText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "HowLook",
       textAlign: TextAlign.center,
       style: TextStyle(
@@ -224,7 +182,7 @@ class _OR extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "  OR   ",
       textAlign: TextAlign.center,
       style: TextStyle(
@@ -236,12 +194,12 @@ class _OR extends StatelessWidget {
   }
 }
 
-class _board extends StatelessWidget {
-  const _board({Key? key}) : super(key: key);
+class _Board extends StatelessWidget {
+  const _Board({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "|",
       textAlign: TextAlign.center,
       style: TextStyle(

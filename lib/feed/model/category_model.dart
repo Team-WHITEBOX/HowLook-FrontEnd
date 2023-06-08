@@ -20,7 +20,6 @@ class CategoryModel {
   final int weightLow;
   final int weightHigh;
 
-
   CategoryModel({
     required this.gender,
     required this.hashtagDTOMinimal,
@@ -50,15 +49,13 @@ class CategoryModel {
     // 몸무게
     int? weightLow,
     int? weightHigh,
-
   }) {
     return CategoryModel(
       gender: gender ?? this.gender,
       hashtagDTOMinimal: hashtagDTOMinimal ?? this.hashtagDTOMinimal,
       hashtagDTOCasual: hashtagDTOCasual ?? this.hashtagDTOCasual,
       hashtagDTOStreet: hashtagDTOStreet ?? this.hashtagDTOStreet,
-      hashtagDTOAmekaji:
-      hashtagDTOAmekaji ?? this.hashtagDTOAmekaji,
+      hashtagDTOAmekaji: hashtagDTOAmekaji ?? this.hashtagDTOAmekaji,
       hashtagDTOSporty: hashtagDTOSporty ?? this.hashtagDTOSporty,
       hashtagDTOGuitar: hashtagDTOGuitar ?? this.hashtagDTOGuitar,
       heightLow: heightLow ?? this.heightLow,

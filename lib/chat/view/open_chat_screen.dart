@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/chat/component/chat_room_card.dart';
-import 'package:howlook/chat/provider/chat_provider.dart';
+import 'package:howlook/chat/provider/chat_room_provider.dart';
+import 'package:howlook/chat/provider/chat_msg_provider.dart';
 
 class OpenChatScreen extends ConsumerStatefulWidget {
   const OpenChatScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final datas = ref.watch(newChatProvider);
+    final datas = ref.watch(chatRoomProvider);
     final List<Widget> chatsType = [
       titleText("대화 중인 오픈 톡"),
       titleText("참여 가능한 오픈톡"),
@@ -31,7 +32,9 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        ref.read(newChatProvider.notifier).getChatList();
+        check1 = 0;
+        check2 = 0;
+        ref.read(chatRoomProvider.notifier).getChatRoomList();
       },
       child: ListView.separated(
         itemCount: chatsType.length,
@@ -41,9 +44,8 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
             color: Colors.white,
             elevation: 4,
             margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: ExpansionTile(
               textColor: Colors.black,
               collapsedTextColor: Colors.black,
@@ -57,7 +59,7 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
                   if (data.enter) {
                     return ChatRoomCard.fromModel(model: data);
                   } else {
-                    ++check1;
+                    check1++;
                     if (check1 == 5) {
                       check1 = 0;
                       return SizedBox(
@@ -79,7 +81,7 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
                       return Container();
                     }
                   }
-                } else {
+                } else if (index == 1) {
                   if (!data.enter) {
                     return ChatRoomCard.fromModel(model: data);
                   } else {
@@ -105,6 +107,8 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
                       return Container();
                     }
                   }
+                } else {
+                  return Container();
                 }
               }).toList(),
             ),

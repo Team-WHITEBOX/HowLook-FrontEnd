@@ -1,8 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/feed/model/category_model.dart';
 
-final categoryProvider = StateNotifierProvider<CategoryNotifier, CategoryModel>(
-    (ref) => CategoryNotifier());
+final categoryCountProvider = StateProvider<int>((ref) => 0);
+
+// final categoryCount = Provider.family<CategoryModel?, int>((ref, count) {
+//   final state = ref.watch(categoryProvider);
+//   final count = ref.watch(categoryCountProvider);
+//
+//   return
+// });
+
+final categoryProvider =
+    StateNotifierProvider<CategoryNotifier, CategoryModel>((ref) {
+  final notifier = CategoryNotifier();
+  return notifier;
+});
 
 class CategoryNotifier extends StateNotifier<CategoryModel> {
   CategoryNotifier()
@@ -38,17 +50,55 @@ class CategoryNotifier extends StateNotifier<CategoryModel> {
     );
   }
 
+  bool checkCategoryCurrGenderState() {
+    return state.gender == '' ? false : true;
+  }
+
+  bool checkCategoryCurrStyleState() {
+    if (state.hashtagDTOMinimal ||
+        state.hashtagDTOGuitar ||
+        state.hashtagDTOSporty ||
+        state.hashtagDTOAmekaji ||
+        state.hashtagDTOStreet ||
+        state.hashtagDTOCasual) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  int checkCategoryInitState() {
+    int count = 0;
+    if (state.gender == "M" || state.gender == "F") {
+      count++;
+    }
+    if (state.hashtagDTOMinimal) {
+      count++;
+    }
+    if (state.hashtagDTOCasual) {
+      count++;
+    }
+    if (state.hashtagDTOStreet) {
+      count++;
+    }
+    if (state.hashtagDTOAmekaji) {
+      count++;
+    }
+    if (state.hashtagDTOSporty) {
+      count++;
+    }
+    return count;
+  }
+
   toggleGenderSelected({
     required String gender,
   }) {
     if (gender == "M") {
-      state = state.copyWith(
-        gender: "M",
-      );
+      state = state.copyWith(gender: "M");
+    } else if (gender == "F") {
+      state = state.copyWith(gender: "F");
     } else {
-      state = state.copyWith(
-        gender: "F",
-      );
+      state = state.copyWith(gender: "");
     }
   }
 

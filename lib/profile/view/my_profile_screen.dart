@@ -7,15 +7,12 @@ import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/profile/model/my_profile_screen_model.dart';
 import 'package:howlook/profile/component/my_profile_card.dart';
 
-
 class MyProfileScreen extends ConsumerStatefulWidget {
-
   @override
   ConsumerState<MyProfileScreen> createState() => _MyProfileScreenState();
 }
 
 class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
-
   String memberId = '';
 
   Future<String> JWTcheck() async {
@@ -54,37 +51,30 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultLayout(
       title: 'My Look',
-      child: FutureBuilder<String>(
-        future: JWTcheck(),
-        builder: (_, AsyncSnapshot<String> snapshot) {
-          // 에러처리
-          if (!snapshot.hasData) {
-            print('error1'); //에러 안남
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return FutureBuilder<Map<String, dynamic>>(
-            future: paginateProfile(),
-            builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-              // 에러처리
-              if (!snapshot.hasData) {
-                print('error3');
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final item = snapshot.data!;
-              final pItem = MainProfileModel.fromJson(json: item);
-              return MainProfileCard.fromModel(model: pItem);
+      child: SingleChildScrollView(
+        child: FutureBuilder<String>(
+          future: JWTcheck(),
+          builder: (_, AsyncSnapshot<String> snapshot) {
+            // 에러처리
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
             }
+            return FutureBuilder<Map<String, dynamic>>(
+              future: paginateProfile(),
+              builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final item = snapshot.data!;
+                final pItem = MainProfileModel.fromJson(json: item);
+                return MainProfileCard.fromModel(model: pItem);
+              },
             );
-        },
+          },
+        ),
       ),
     );
   }
-
 }
