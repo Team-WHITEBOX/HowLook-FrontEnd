@@ -8,22 +8,31 @@ import 'package:howlook/review/feedback/model/feedback_result_model.dart';
 
 class FeedbackResultCard extends StatefulWidget {
   // 포스트 아이디
-  final int npostId;
+  final int postId;
   // 첫 장 이미지 경로
   final String mainPhotoPath;
+  final double averageScore;
+  final double maleScore;
+  final double femaleScore;
 
   const FeedbackResultCard({
     Key? key,
-    required this.npostId,
+    required this.postId,
     required this.mainPhotoPath,
+    required this.averageScore,
+    required this.maleScore,
+    required this.femaleScore,
   }) : super(key: key);
 
   factory FeedbackResultCard.fromModel({
     required FBResultModel model,
   }) {
     return FeedbackResultCard(
-      npostId: model.npostId,
+      postId: model.postId,
       mainPhotoPath: model.mainPhotoPath,
+      averageScore: model.averageScore,
+      maleScore: model.maleScore,
+      femaleScore: model.femaleScore,
     );
   }
 
@@ -36,6 +45,8 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
 
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
+    print(widget.postId); // postId 값 출력
     return CustomScrollView(
           slivers: [
             SliverAppBar( // 헤더 영역
@@ -47,10 +58,10 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
                 Stack(
                     alignment: Alignment.center,
                     children: [
-                      Image.network('https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${widget.mainPhotoPath}'),
+                      Image.network('${widget.mainPhotoPath}'),
                       Container(
                         child: Image.network(
-                          'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${widget.mainPhotoPath}',
+                          '${widget.mainPhotoPath}',
                           color: Colors.black.withOpacity(0.6),
                         ),
                       ),
@@ -64,7 +75,7 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
                   children: [
                     Text('성별 점수 그래프',style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'NotoSans'),),
                     ChartPage(
-                      npostId: widget.npostId,
+                      postId: widget.postId,
                     ),
                   ],
                 )
@@ -81,8 +92,22 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(''),
-            // Text('종합 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
-            // Text('${score[0]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('여자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('${widget.femaleScore}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+          ],
+        ),
+        // Container(
+        //   width: 1,
+        //   height: 50,
+        //   color: Colors.white,
+        // ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+
+          children: [
+            Text(''),
+            Text('종합 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('${widget.averageScore}점', style: TextStyle(color: Colors.white,fontSize: 15),),
           ],
         ),
         // Container(
@@ -94,21 +119,8 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(''),
-            // Text('여자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
-            // Text('${score[1]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
-          ],
-        ),
-        // Container(
-        //   width: 1,
-        //   height: 50,
-        //   color: Colors.white,
-        // ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(''),
-            // Text('남자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
-            // Text('${score[2]}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('남자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text('${widget.maleScore}점', style: TextStyle(color: Colors.white,fontSize: 15),),
           ],
         )
       ],

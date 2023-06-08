@@ -2,6 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'comment_params.g.dart';
 
+//CommentParams? commentParams = const CommentParams(),
+
 @JsonSerializable()
 class CommentParams {
   // API 쿼리 파라미터에 들어가는 데이터 값 정의

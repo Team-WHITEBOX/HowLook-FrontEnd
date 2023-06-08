@@ -10,24 +10,34 @@ import 'package:howlook/common/const/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:howlook/review/view/normal_review_screen.dart';
 
+import '../model/review_model_data.dart';
+import '../view/main_review_screen.dart';
+
 class NormalReviewCard extends ConsumerStatefulWidget {
   // 포스트 아이디
-  final int npostId;
+  final int postId;
   // 첫 장 이미지 경로
   final String mainPhotoPath;
+  final double averageScore;
+  final int hasMore;
 
   NormalReviewCard({
     Key? key,
-    required this.npostId,
+    required this.postId,
     required this.mainPhotoPath,
+    required this.averageScore,
+    required this.hasMore,
   }) : super(key: key);
 
   factory NormalReviewCard.fromModel({
-    required ReviewModel model,
+    required ReviewModelData model,
   }) {
     return NormalReviewCard(
-      npostId: model.npostId,
+      postId: model.postId,
       mainPhotoPath: model.mainPhotoPath,
+      averageScore: model.averageScore,
+      hasMore: model.hasMore,
+
     );
   }
 
@@ -53,7 +63,7 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
   Widget buildSlider({
     required SliderController controller,
     int? divisions,
-    Color color = Colors.deepPurple,
+    Color color = Colors.black87,
     double enabledThumbRadius = 10.0,
     double elevation = 1.0,
   }) {
@@ -91,7 +101,7 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
               label: '${controller.sliderValue.round()}',
               onChanged: (newValue) {
                 setState(
-                  () {
+                      () {
                     controller.sliderValue = newValue;
                     buttonPower = true;
                   },
@@ -111,7 +121,8 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
         aspectRatio: 0.8,
         child: Container(
           child: Image.network(
-            'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${widget.mainPhotoPath}',
+            // 'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${widget.mainPhotoPath}',
+            '${widget.mainPhotoPath}',
             fit: BoxFit.cover,
           ),
         ),
@@ -156,7 +167,8 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                   final storage = ref.read(secureStorageProvider);
                   final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
                   final resp = await dio.post(
-                    'http://$API_SERVICE_URI/eval/reply/register?pid=${widget.npostId}&score=${_scoreCountController.sliderValue}',
+                    'http://$API_SERVICE_URI/eval/reply/register?postId=${widget.postId}&score=${_scoreCountController.sliderValue}',
+                    // 'pid=${widget.postId}&score=${_scoreCountController.sliderValue}',
                     options: Options(
                       headers: {
                         'authorization': 'Bearer $accessToken',
@@ -182,6 +194,21 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                       builder: (_) => NormalReview(),
                     ),
                   );
+                  // if(widget.hasMore != 0){
+                  //   Navigator.of(context).pushReplacement(
+                  //     MaterialPageRoute(
+                  //       builder: (_) => NormalReview(),
+                  //     ),
+                  //   );
+                  // }
+                  // else{
+                  //   Navigator.of(context).pop(
+                  //     MaterialPageRoute(
+                  //       builder: (_) => MainReviewScreen(),
+                  //     ),
+                  //   );
+                  // }
+
                 },
               ),
             ],

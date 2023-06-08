@@ -9,43 +9,90 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/review/feedback/component/feedback_result_card.dart';
 import 'package:howlook/review/feedback/model/feedback_result_model.dart';
 
-class FeedbackResult extends ConsumerWidget {
-  final int npostId; // 포스트 아이디로 특정 게시글 조회
-  const FeedbackResult({required this.npostId, Key? key}) : super(key: key);
+// class FeedbackResult extends ConsumerWidget {
+//   final int postId; // 포스트 아이디로 특정 게시글 조회
+//   const FeedbackResult({required this.postId, Key? key}) : super(key: key);
+//
+//   Future<Map<String, dynamic>> FeedbackReviewPage(WidgetRef ref) async {
+//     final dio = Dio();
+//     final storage = ref.read(secureStorageProvider);
+//     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+//     final resp = await dio.get(
+//       'http://$API_SERVICE_URI/eval/getReplyData?postId=$postId',
+//       // 특정 API 뒤에 id 값 넘어서 가져가기
+//       options: Options(
+//         headers: {
+//           'authorization': 'Bearer $accessToken',
+//         },
+//       ),
+//     );
+//     return resp.data;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final Size size = MediaQuery.of(context).size;
+//     return DefaultLayout(
+//         child: FutureBuilder<Map<String, dynamic>>(
+//             future: FeedbackReviewPage(ref),
+//             builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+//               if (!snapshot.hasData) {
+//                 print('errorN3');
+//                 return Center(
+//                   child: CircularProgressIndicator(),
+//                 );
+//               }
+//               final item = snapshot.data!; //인덱스값
+//               final pItem = FBResultModel.fromJson(json:item);
+//               return FeedbackResultCard.fromModel(model: pItem);
+//             }));
+//   }
+// }
 
-  Future<Map<String, dynamic>> FeedbackReviewPage(WidgetRef ref) async {
+class FeedbackResult extends ConsumerWidget {
+  final int postId; // 포스트 아이디로 특정 게시글 조회
+
+  const FeedbackResult({required this.postId, Key? key}) : super(key: key);
+
+
+  Future<FBResultModel> FeedbackChartPage(WidgetRef ref) async {
     final dio = Dio();
     final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
-      'http://$API_SERVICE_URI/eval/readbypid?NPostId=$npostId',
-      // 특정 API 뒤에 id 값 넘어서 가져가기
+      'http://$API_SERVICE_URI/eval/getReplyData?postId=$postId',
       options: Options(
         headers: {
           'authorization': 'Bearer $accessToken',
         },
       ),
     );
-    return resp.data;
+    return FBResultModel.fromJson(resp.data['data']);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Size size = MediaQuery.of(context).size;
-    return DefaultLayout(
-        child: FutureBuilder<Map<String, dynamic>>(
-            future: FeedbackReviewPage(ref),
-            builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final item = FBResultModel.fromJson(
-                json: snapshot.data!,
-              );
 
-              return FeedbackResultCard.fromModel(model: item);
-            }));
+    return DefaultLayout(
+      child: FutureBuilder<FBResultModel>(
+        future: FeedbackChartPage(ref),
+        builder: (_, AsyncSnapshot<FBResultModel> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            print("errorfbr");
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+
+          final FBResultModel item = snapshot.requireData;
+          return FeedbackResultCard.fromModel(model: item);
+        },
+      ),
+    );
   }
 }

@@ -81,7 +81,7 @@ class _RootTabState extends ConsumerState<RootTab>
         controller: controller,
         children: <Widget>[
           const ChatHomeScreen(),
-          const MainReviewScreen(),
+          MainReviewScreen(),
           const tournamentScreen(),
           MyProfileScreen(),
           const HomeScreen(),
