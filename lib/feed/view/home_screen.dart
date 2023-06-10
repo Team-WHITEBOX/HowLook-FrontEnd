@@ -1,17 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/component/cust_icon_button.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/feed/provider/category_check_provider.dart';
-import 'package:howlook/feed/provider/category_provider.dart';
-import 'package:howlook/feed/view/category_feed/category_selected_screen.dart';
-import 'package:howlook/feed/view/main_feed/main_feed_screen.dart';
-import 'package:flutter/src/material/bottom_sheet.dart';
-import 'package:howlook/feed/view/near_feed/near_feed_screen.dart';
 import 'package:howlook/feed/view/weather_feed/weather_feed_screen.dart';
 
+
+import '../../common/component/cust_icon_button.dart';
+import '../../common/layout/default_layout.dart';
 import 'category_feed/category_feed_screen.dart';
+import 'near_feed/near_feed_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -100,6 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Text(
               menu,
               style: const TextStyle(
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
             ),

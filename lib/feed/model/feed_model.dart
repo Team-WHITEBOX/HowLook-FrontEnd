@@ -1,5 +1,5 @@
 import 'package:howlook/feed/model/feed_photo_dto.dart';
-import 'package:howlook/feed/model/feed_userinfo_model.dart';
+import 'package:howlook/profile/model/user_info_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'feed_model.g.dart';
@@ -19,6 +19,8 @@ class FeedModel {
   final bool likeCheck;
   // 댓글 갯수
   final int replyCount;
+  // 스크랩 여부
+  bool? isScrapped;
   // 내용
   final String content;
   // 등록 날짜
@@ -36,6 +38,7 @@ class FeedModel {
     required this.likeCount,
     required this.likeCheck,
     required this.replyCount,
+    this.isScrapped,
     required this.content,
     required this.regDate,
     required this.weather,

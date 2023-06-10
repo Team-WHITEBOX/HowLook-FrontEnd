@@ -1,76 +1,86 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/common/view/root_tab.dart';
 import 'package:howlook/user/view/signin/intro_screen.dart';
-import '../../common/const/colors.dart';
+import 'package:howlook/user/view/signup/second_signup_screen.dart';
 
-class Splash_Screen extends ConsumerStatefulWidget {
-  const Splash_Screen({Key? key}) : super(key: key);
+
+import '../../common/const/data.dart';
+import '../../common/layout/default_layout.dart';
+import '../../common/secure_storage/secure_storage.dart';
+import '../../profile/repository/profile_repository.dart';
+import '../model/token/token_model.dart';
+import '../repository/sign_in_repository.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<Splash_Screen> createState() => _Splash_ScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+
+
   @override
   void initState() {
     super.initState();
+    // deleteToken();
     checkToken();
   }
 
-  void checkToken() async {
-    final dio = Dio();
-    // 스토리지로부터 토큰 받아오기
+  // 토큰 삭제하는 함수
+  void deleteToken() async {
     final storage = ref.read(secureStorageProvider);
+    await storage.deleteAll();
+  }
 
+  void checkToken() async {
+    final storage = ref.read(secureStorageProvider);
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    // if (mounted) {
-    //   if (accessToken != null) {
-    //     Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(
-    //         builder: (_) => RootTab(),
-    //       ),
-    //           (route) => false,
-    //     );
-    //   }
-    // }
-
-    // refresh token 로직
-    try {
-      final resp = await dio.post(
-        'http://$API_SERVICE_URI/account/generateToken',
-        options: Options(
-          headers: {
-            'authorization': 'Bearer $refreshToken',
-          },
-        ),
-      );
-      // 발급받은 토큰 저장하기
-      await storage.write(
-          key: ACCESS_TOKEN_KEY, value: resp.data['accessToken']);
-      // 루트탭으로 이동
+    if (refreshToken == null || accessToken == null) {
+      if(!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => RootTab(),
+          builder: (_) => IntroScreen(),
         ),
-        (route) => false,
+            (route) => false,
+      );
+      return;
+    }
+
+    try {
+      final code = await ref.read(profileRepositoryProvider).checkToken();
+      // 에러 뜨면 소셜 로그인이라는 것
+      // 200이면 바로 진입
+      // 200이 아니면 리프레쉬 하기
+      if (code.status != 200) {
+        final result = await ref.read(signInRepositoryProvider).refreshToken(
+            tokenModel: TokenModel(
+                accessToken: accessToken, refreshToken: refreshToken));
+
+        await storage.write(
+            key: ACCESS_TOKEN_KEY, value: result.data.accessToken);
+        await storage.write(
+            key: REFRESH_TOKEN_KEY, value: result.data.refreshToken);
+      }
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => IntroScreen(),
+          // builder: (_) => RootTab(),
+        ),
+            (route) => false,
       );
     } catch (e) {
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            // builder: (_) => RootTab(),
-            builder: (_) => IntroScreen(),
-          ),
-          (route) => false,
-        );
-      }
+      if (!mounted) return;
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const SecondSignupScreen(isSocial: true),
+        ),
+      );
     }
   }
 
@@ -79,17 +89,18 @@ class _Splash_ScreenState extends ConsumerState<Splash_Screen> {
     return DefaultLayout(
       backgroundColor: Colors.black,
       child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Center(
-            child: Text(
-              "HowLook",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 36,
-                fontWeight: FontWeight.w700,
-              ),
+        width: MediaQuery.of(context).size.width,
+        child: const Center(
+          child: Text(
+            "HowLook",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 36,
+              fontWeight: FontWeight.w700,
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

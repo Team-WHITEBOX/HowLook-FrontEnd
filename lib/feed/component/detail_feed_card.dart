@@ -1,17 +1,21 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/feed/model/feed_model.dart';
-import 'package:howlook/feed/model/feed_photo_dto.dart';
-import 'package:howlook/feed/model/feed_userinfo_model.dart';
-import 'package:howlook/feed/repository/feed_repository.dart';
-import 'package:howlook/feed/view/comment_screen.dart';
-import 'package:howlook/feed/view/main_feed_more_vert_screen.dart';
 import 'package:like_button/like_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../common/const/colors.dart';
+import '../../common/const/data.dart';
+import '../../profile/model/params/my_profile_params.dart';
+import '../../profile/model/user_info_model.dart';
+import '../../profile/repository/profile_repository.dart';
+import '../model/feed_model.dart';
+import '../model/feed_photo_dto.dart';
+import '../provider/feed/main_feed_provider.dart';
+import '../provider/reply/reply_provider.dart';
+import '../repository/feed_repository.dart';
+import '../view/feed_menu/main_feed_more_vert_screen.dart';
+import '../view/reply/reply_home_screen.dart';
 
 class DetailFeedCard extends ConsumerWidget {
   final UserInfoModel userPostInfo;
@@ -27,6 +31,8 @@ class DetailFeedCard extends ConsumerWidget {
   final bool likeCheck;
   // 댓글
   final int replyCount;
+  // 스크랩 여부
+  bool? isScrapped;
   // 내용
   final String content;
   // 날짜
@@ -36,7 +42,7 @@ class DetailFeedCard extends ConsumerWidget {
   // 온도
   final int temperature;
 
-  const DetailFeedCard({
+  DetailFeedCard({
     required this.userPostInfo,
     required this.postId,
     required this.photoDTOs,
@@ -44,6 +50,7 @@ class DetailFeedCard extends ConsumerWidget {
     required this.likeCount,
     required this.likeCheck,
     required this.replyCount,
+    this.isScrapped,
     required this.content,
     required this.regDate,
     required this.weather,
@@ -67,6 +74,7 @@ class DetailFeedCard extends ConsumerWidget {
       regDate: model.regDate,
       weather: model.weather,
       temperature: model.temperature,
+      isScrapped: model.isScrapped,
     );
   }
 
@@ -75,6 +83,50 @@ class DetailFeedCard extends ConsumerWidget {
     PageController controller = PageController();
     List<int> bodyInfo = [userPostInfo.memberHeight, userPostInfo.memberWeight];
     final repo = ref.watch(feedRepositoryProvider);
+
+    Future<bool> onLikeButtonTapped(bool likeCheck) async {
+      if (!likeCheck) {
+        // false -> true
+        final code = await repo.postLike(postId);
+        if (code.response.statusCode == 200) {
+          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          return !likeCheck;
+        } else {
+          return likeCheck;
+        }
+      } else {
+        // true -> false
+        final code = await repo.delLike(postId);
+        if (code.response.statusCode == 200) {
+          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          return !likeCheck;
+        } else {
+          return likeCheck;
+        }
+      }
+    }
+
+    Future<bool> onScrapedButtonTapped(bool scrapCheck) async {
+      if (!scrapCheck) {
+        // false -> true
+        final code = await repo.postScrap(postId);
+        if (code.response.statusCode == 200) {
+          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          return !scrapCheck;
+        } else {
+          return scrapCheck;
+        }
+      } else {
+        // true -> false
+        final code = await repo.delScrap(postId);
+        if (code.response.statusCode == 200) {
+          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          return !scrapCheck;
+        } else {
+          return scrapCheck;
+        }
+      }
+    }
 
     return SafeArea(
       top: true,
@@ -135,25 +187,31 @@ class DetailFeedCard extends ConsumerWidget {
                   Text("$temperature°C"),
                   const SizedBox(width: 10),
                   IconButton(
-                    onPressed: () async {
-                      print(userPostInfo.memberNickName);
-                      final storage = ref.read(secureStorageProvider);
-                      String? userid = await storage.read(key: USERMID_KEY);
+                    onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) {
+                        builder: (context) {
                           return MainFeedMoreVertScreen(
-                            userId: userid,
+                            userId: "testuser12",
                             memberId: userPostInfo.memberId,
                             postId: postId,
+                            isScrapped: isScrapped!,
                           );
                         },
-                        backgroundColor: Colors.transparent,
+                        elevation: 50,
+                        enableDrag: true,
+                        isDismissible: true,
+                        barrierColor: Colors.black.withOpacity(0.7),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        constraints: const BoxConstraints(
+                          minHeight: 100,
+                          maxHeight: 350,
+                        ),
                       );
                     },
-                    icon: Icon(
-                      Icons.more_vert,
-                    ),
+                    icon: const Icon(Icons.more_vert),
                   ),
                 ],
               )
@@ -199,128 +257,140 @@ class DetailFeedCard extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const SizedBox(width: 6),
-                LikeButton(
-                  isLiked: likeCheck,
-                  likeCount: likeCount,
-                  likeBuilder: (bool isLiked) {
-                    likeCheck == true ? isLiked = true : isLiked = false;
-                    return Icon(
-                      Icons.home,
-                      color: isLiked ? Colors.red : Colors.grey,
-                    );
-                  },
-                  onTap: (bool isLiked) async {
-                    if (likeCheck == true) {
-                      final code = await repo.delLike(postId: postId);
-                      return code.response.statusCode == 200 ? true : false;
-                    } else {
-                      print(postId);
-                      final code = await repo.postLike(postId: postId);
-                      return code.response.statusCode == 200 ? true : false;
-                    }
-                  },
-                  countDecoration: countDecoration,
-                ),
-                CommentButton(context, postId),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget CommentButton(BuildContext context, int postId) {
-    return GestureDetector(
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          enableDrag: false,
-          isScrollControlled: true,
-          barrierColor: Colors.black.withOpacity(0.8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
-          builder: (BuildContext context) {
-            return FeedCommentScreen(context, postId);
-          },
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(top: 2),
-        child: Row(
-          children: [
-            const SizedBox(width: 16),
-            const Icon(
-              Icons.comment_rounded,
-              size: 27,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6, left: 8),
-              child: Center(
-                child: Text(
-                  '$replyCount 개',
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget FeedCommentScreen(BuildContext context, int postId) {
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter subState) {
-        return Container(
-          height: MediaQuery.of(context).size.height / 2 + 200,
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 8,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 36.0, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    const Text(
-                      "댓글",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                      ),
+                Row(
+                  children: [
+                    LikeButton(
+                      isLiked: likeCheck,
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          Icons.favorite,
+                          color: isLiked ? Colors.red : Colors.grey,
+                        );
+                      },
+                      onTap: onLikeButtonTapped,
+                      likeCount: likeCount,
+                      countDecoration: countDecoration,
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(
-                        Icons.close,
-                        size: 32,
+                      onTap: () async {
+                        final userId = await ref
+                            .read(profileRepositoryProvider)
+                            .checkToken();
+                        MyProfileParams myProfileParams =
+                            MyProfileParams(memberId: userId.data);
+                        final userData = ref
+                            .read(profileRepositoryProvider)
+                            .getMyProfile(userId.data,
+                                myProfileParams: myProfileParams);
+
+                        userData.then((value) {
+                          ref
+                              .read(replyProvider(postId).notifier)
+                              .paginate(postId: postId, forceRefetch: true);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReplyHomeScreen(
+                                postId: postId,
+                                profilePhoto: value.data.profilePhoto,
+                              ),
+                            ),
+                          );
+                        }).catchError((err) {
+                          return "";
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 16),
+                            const Icon(Icons.comment_rounded, size: 27),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 6, left: 8),
+                              child: Center(
+                                child: Text(
+                                  '$replyCount 개',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              Expanded(child: CommentScreen(postId: postId)),
-            ],
+                Row(
+                  children: [
+                    LikeButton(
+                      isLiked: isScrapped,
+                      likeBuilder: (bool isScrapped) {
+                        return Icon(
+                          Icons.bookmark,
+                          size: 28,
+                          color: isScrapped ? Colors.black : Colors.grey,
+                        );
+                      },
+                      onTap: onScrapedButtonTapped,
+                    ),
+                    const SizedBox(width: 5),
+                  ],
+                )
+              ],
+            ),
           ),
-        );
-      },
+          Padding(
+            padding: const EdgeInsets.only(top: 3, left: 22),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                "${regDate[0]}.${regDate[1]}.${regDate[2]}",
+                style: const TextStyle(
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 6, left: 22),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: [
+                  const Text(
+                    "|   ",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(
+                    userPostInfo.memberId,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(
+                    "   $content",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -1,15 +1,14 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/view/root_tab.dart';
-import 'package:howlook/feed/component/category_slide.dart';
-import 'package:howlook/feed/provider/category_check_provider.dart';
-import 'package:howlook/feed/provider/category_feed_provider.dart';
-import 'package:howlook/feed/provider/category_provider.dart';
-import 'package:howlook/feed/view/category_feed/category_feed_screen.dart';
-import 'package:howlook/feed/view/home_screen.dart';
+
+import '../../../common/const/colors.dart';
+import '../../../common/layout/default_layout.dart';
+import '../../../common/view/root_tab.dart';
+import '../../component/category_slide.dart';
+import '../../provider/feed/category_provider/category_check_provider.dart';
+import '../../provider/feed/category_provider/category_provider.dart';
+
 
 class CategorySelectScreen extends ConsumerStatefulWidget {
   const CategorySelectScreen({Key? key}) : super(key: key);
@@ -424,8 +423,8 @@ class _CategoryScreen extends ConsumerState<CategorySelectScreen> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         minimumSize: Size(
-                          MediaQuery.of(context).size.height / 3,
-                          MediaQuery.of(context).size.width / 10,
+                          MediaQuery.of(context).size.width * 0.67,
+                          MediaQuery.of(context).size.height / 100,
                         ),
                       ),
                       onPressed: () {

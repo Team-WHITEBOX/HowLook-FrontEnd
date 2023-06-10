@@ -1,7 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/feed/provider/category_provider.dart';
+
+import '../provider/feed/category_provider/category_provider.dart';
 
 class BodyInfoSlide extends ConsumerStatefulWidget {
   String? bodyType;
@@ -99,19 +100,20 @@ class _BodyInfoSlideState extends ConsumerState<BodyInfoSlide> {
             ],
           ),
           items: (widget.bodyType == "Height" ? height : weight)
-              .map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+              .map(
+                (item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
-                  ))
-              .toList(),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ).toList(),
           value: widget.bodyType == "Height" ? selectedHeight : selectedWeight,
           onChanged: (value) {
             setState(() {

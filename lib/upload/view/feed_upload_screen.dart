@@ -10,13 +10,15 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:howlook/common/component/cust_textform_filed.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/view/root_tab.dart';
-import 'package:howlook/upload/Provider/loading_provider.dart';
-import 'package:howlook/upload/Provider/select_photo_provider.dart';
-import 'package:howlook/upload/model/upload_formdata_model.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../../common/component/cust_textform_filed.dart';
+import '../../common/layout/default_layout.dart';
+import '../../common/view/root_tab.dart';
+import '../Provider/loading_provider.dart';
+import '../Provider/select_photo_provider.dart';
+import '../model/upload_formdata_model.dart';
+
 
 class FeedUploadScreen extends ConsumerStatefulWidget {
   const FeedUploadScreen({Key? key}) : super(key: key);
@@ -53,33 +55,41 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
     String dir = (await getApplicationDocumentsDirectory())
         .path; //path provider로 저장할 경로 가져오기
 
-    database.collection('images').snapshots().listen((event) {
-      for (var change in event.docChanges) {
-        switch (change.type) {
-          case DocumentChangeType.modified:
-            change.doc.data()!['paths'].forEach((value) async {
-              // 링크로 파일 로컬에 저장하기
-              await FlutterDownloader.enqueue(
-                url: value['path'], // file url
-                savedDir: '$dir/', // 저장할 dir
-                fileName: value['name'], // 파일명
-                saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-              );
+    database.collection('images').snapshots().listen(
+      (event) {
+        for (var change in event.docChanges) {
+          switch (change.type) {
+            case DocumentChangeType.modified:
+              change.doc.data()!['paths'].forEach((value) async {
+                // 링크로 파일 로컬에 저장하기
+                await FlutterDownloader.enqueue(
+                  url: value['path'], // file url
+                  savedDir: '$dir/', // 저장할 dir
+                  fileName: value['name'], // 파일명
+                  saveInPublicStorage: true, // 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
+                );
 
-              // 비식별 처리 후 링크 저장하기
-              selectedState.map((e) {
-                if (e.imageName == value['name']) {
-                  selectedStateRead.setFaceDetection(
-                      e, value['name'], value['path'], '$dir/${value['name']}');
-                } else {
-                  return e;
-                }
-              }).toList();
-            });
-            break;
+                // 비식별 처리 후 링크 저장하기
+                selectedState.map((e) {
+                  if (e.imageName == value['name']) {
+                    print(value['name']);
+                    print('$dir/${value['name']}');
+                    selectedStateRead.setFaceDetection(
+                      e,
+                      value['name'],
+                      value['path'],
+                      '$dir/${value['name']}',
+                    );
+                  } else {
+                    return e;
+                  }
+                }).toList();
+              });
+              break;
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   static void downloadCallback(String id, int status, int progress) {
@@ -154,10 +164,12 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
                 newPostState.uploadModel.hashtagGuitar =
                     styleState[5].isSelected;
 
-                final List<dio.MultipartFile> files = selectedState
-                    .map((e) =>
-                        dio.MultipartFile.fromFileSync(e.afterDetectionInPath!))
-                    .toList();
+                final List<dio.MultipartFile> files = selectedState.map((e) {
+                  print(e.afterDetectionInPath!);
+                  print(e.afterDetectionOutPath!);
+                  return dio.MultipartFile.fromFileSync(
+                      e.afterDetectionInPath!);
+                }).toList();
 
                 // API 전송
                 final resp = await selectedStateRead.feedUploadImage(
@@ -179,119 +191,119 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
               },
               child: const Padding(
                 padding: EdgeInsets.all(15.0),
-                child: Icon(
-                  Icons.portrait_sharp,
-                  color: Colors.blueAccent,
-                ),
+                child: Icon(Icons.portrait_sharp, color: Colors.blueAccent),
               ),
             ),
           ],
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: PageView.builder(
-                    controller: controller,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (selectedState[0].afterDetectionOutPath == "") {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 8.0),
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.black,
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: PageView.builder(
+                      controller: controller,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (selectedState[0].afterDetectionOutPath == "") {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 8.0),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
+                          );
+                        }
+                        return ExtendedImage.network(
+                          selectedState[index].afterDetectionOutPath!,
+                          fit: BoxFit.cover,
+                          cache: true,
                         );
-                      }
-                      return ExtendedImage.network(
-                        selectedState[index].afterDetectionOutPath!,
-                        fit: BoxFit.cover,
-                        cache: true,
-                      );
-                    },
-                    itemCount: selectedState.length,
-                  ),
-                ),
-                const SizedBox(height: 13),
-                SingleChildScrollView(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        title("한줄 소개"),
-                        const SizedBox(height: 12),
-                        line(),
-                        SizedBox(
-                          height: 180,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: CustomTextFormField(
-                              maxLines: 5,
-                              isBorder: false,
-                              titleController: titleController,
-                              hintText: "당신에 대해서 소개해주세요 :)",
-                              onChanged: (String value) {
-                                content = value;
-                              },
-                              onSaved: (value) {
-                                content = value;
-                              },
-                              validator: (value) {
-                                return null;
-                              },
-                            ),
-                          ),
-                        ),
-                        line(),
-                        const SizedBox(height: 12),
-                        title("스타일"),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: SizedBox(
-                            height: 30,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 6,
-                              itemBuilder: (BuildContext context, int index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    styleStateRead
-                                        .selectedStyle(styles[index].styleName);
-                                  },
-                                  child: Container(
-                                    width: 90,
-                                    decoration: BoxDecoration(
-                                      color: styleState[index].color,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        styleState[index].styleName,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const SizedBox(width: 5),
-                            ),
-                          ),
-                        )
-                      ],
+                      },
+                      itemCount: selectedState.length,
                     ),
                   ),
-                )
-              ],
+                  const SizedBox(height: 13),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          title("한줄 소개"),
+                          const SizedBox(height: 12),
+                          line(),
+                          SizedBox(
+                            height: 180,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: CustomTextFormField(
+                                maxLines: 5,
+                                isBorder: false,
+                                titleController: titleController,
+                                hintText: "당신에 대해서 소개해주세요 :)",
+                                onChanged: (String value) {
+                                  content = value;
+                                },
+                                onSaved: (value) {
+                                  content = value;
+                                },
+                                validator: (value) {
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          line(),
+                          const SizedBox(height: 12),
+                          title("스타일"),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: SizedBox(
+                              height: 30,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 6,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      styleStateRead.selectedStyle(
+                                          styles[index].styleName);
+                                    },
+                                    child: Container(
+                                      width: 90,
+                                      decoration: BoxDecoration(
+                                        color: styleState[index].color,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          styleState[index].styleName,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) =>
+                                        const SizedBox(width: 5),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

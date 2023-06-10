@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/feed/model/comment_model.dart';
-import 'package:howlook/feed/repository/comment_repository.dart';
+import 'package:howlook/feed/model/reply_model.dart';
+import 'package:howlook/feed/repository/reply_repository.dart';
 import 'package:like_button/like_button.dart';
+
+import '../provider/reply/reply_provider.dart';
 
 class CommentCard extends ConsumerStatefulWidget {
   // 댓글 아이디
@@ -39,7 +41,7 @@ class CommentCard extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   factory CommentCard.fromModel({
-    required CommentModel model,
+    required ReplyModel model,
   }) {
     return CommentCard(
       parentId: model.parentId,
@@ -58,88 +60,164 @@ class CommentCard extends ConsumerStatefulWidget {
 }
 
 class _FeedCommentCardState extends ConsumerState<CommentCard> {
-  Future<bool> onLikeButtonTapped(bool likeCheck, int replyId) async {
-    final repo = ref.watch(commentRepositoryProvider);
-
-    if (likeCheck) {
-      final code = await repo.replyPostLike(ReplyId: replyId);
-      return code.response.statusCode == 200 ? true : false;
-    } else {
-      final code = await repo.replyPostLike(ReplyId: replyId);
-      return code.response.statusCode == 200 ? true : false;
-    }
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: widget.content.length < 50 ? 50 : 150,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          CircleAvatar(
-            radius: 15.0,
-            backgroundImage: widget.profilePhoto != NULL_IMG_URI
-                ? ExtendedImage.network(
-                    widget.profilePhoto,
-                    fit: BoxFit.cover,
-                    cache: true,
-                  ).image
-                : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width - 120,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 2),
-                Text(
-                  widget.nickName,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                  ),
+    final repo = ref.watch(replyRepositoryProvider);
+
+    Future<bool> onLikeButtonTapped(bool likeCheck) async {
+      if (likeCheck) {
+        // false -> true
+        final code = await repo.delPostLike(widget.replyId);
+        return code.response.statusCode == 200 ? !likeCheck : likeCheck;
+      } else {
+        // true -> false
+        final code = await repo.replyPostLike(widget.replyId);
+        return code.response.statusCode == 200 ? !likeCheck : likeCheck;
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              title: const Text(
+                "댓글 삭제하기",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
                 ),
-                Text(
-                  widget.content,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Center(
+                    child: Text(
+                      "해당 댓글을 삭제하시겠습니까?",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
+                ],
+              ),
+              actions: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () async {
+                        final code = await ref
+                            .read(replyRepositoryProvider)
+                            .deleteReply(widget.replyId, id: widget.replyId);
+
+                        if (code.response.statusCode == 200) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("댓글이 삭제되었습니다."),
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+                          ref
+                              .read(replyProvider(widget.postId).notifier)
+                              .paginate(postId: widget.postId, forceRefetch: true);
+                        }
+                      },
+                      child: const Text(
+                        "댓글 삭제하기",
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        "취소",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
                 ),
               ],
+            );
+          },
+        );
+      },
+      child: Container(
+        color: Colors.white,
+        height: widget.content.length < 50 ? 50 : widget.content.length * 1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(
+                  radius: 15.0,
+                  backgroundImage: widget.profilePhoto != NULL_IMG_URI
+                      ? ExtendedImage.network(
+                          widget.profilePhoto,
+                          fit: BoxFit.cover,
+                          cache: true,
+                        ).image
+                      : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
+                ),
+                Container(),
+              ],
             ),
-          ),
-          LikeButton(
-            isLiked: widget.likeCheck,
-            likeCount: widget.likeCount,
-            countPostion: CountPostion.bottom,
-            onTap: (isLiked) {
-              return onLikeButtonTapped(isLiked, widget.replyId);
-            },
-            likeBuilder: (isLiked) {
-              return Icon(
-                Icons.favorite,
-                color: isLiked ? Colors.red : Colors.grey,
-                size: 20,
-              );
-            },
-            countBuilder: (likeCount, isLiked, String text) {
-              var color = isLiked ? Colors.red : Colors.grey;
-              Widget result;
-
-              if (likeCount != 0) {
-                result = Text(text, style: TextStyle(color: color));
-              } else {
-                result = Text(
-                  "",
-                  style: TextStyle(color: color),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 120,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 2),
+                  Text(
+                    widget.nickName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 11,
+                    ),
+                  ),
+                  Text(
+                    widget.content,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            LikeButton(
+              isLiked: widget.likeCheck,
+              countPostion: CountPostion.bottom,
+              likeBuilder: (bool isLiked) {
+                return Icon(
+                  Icons.favorite,
+                  color: isLiked ? Colors.red : Colors.grey,
                 );
-              }
-              return result;
-            },
-          ),
-        ],
+              },
+              likeCount: widget.likeCount,
+              onTap: onLikeButtonTapped,
+            ),
+          ],
+        ),
       ),
     );
   }

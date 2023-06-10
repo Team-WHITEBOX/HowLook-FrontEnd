@@ -2,10 +2,8 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
-import 'package:howlook/review/model/review_model_data.dart';
 import 'package:retrofit/http.dart';
 
-import '../../../common/model/params/comment_params/comment_params.dart';
 import '../../../common/model/params/feedback_params/feedback_params.dart';
 import '../model/feedback_model.dart';
 import '../model/normal_feedback_model.dart';

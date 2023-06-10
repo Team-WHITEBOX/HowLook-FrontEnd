@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/layout/default_layout.dart';
 import 'package:dio/dio.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/profile/model/my_profile_screen_model.dart';
-import 'package:howlook/profile/component/my_profile_card.dart';
+
+import '../../common/const/data.dart';
+import '../../common/layout/default_layout.dart';
+import '../../common/secure_storage/secure_storage.dart';
+import '../component/my_profile_card.dart';
+import '../model/user_info_model.dart';
 
 class MyProfileScreen extends ConsumerStatefulWidget {
   @override
@@ -68,7 +69,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 final item = snapshot.data!;
-                final pItem = MainProfileModel.fromJson(json: item);
+                final pItem = UserInfoModel.fromJson(item);
                 return MainProfileCard.fromModel(model: pItem);
               },
             );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/chat/component/chat_room_card.dart';
 import 'package:howlook/chat/provider/chat_room_provider.dart';
-import 'package:howlook/chat/provider/chat_msg_provider.dart';
+import 'package:howlook/chat/provider/chat_msgs_provider.dart';
 
 class OpenChatScreen extends ConsumerStatefulWidget {
   const OpenChatScreen({Key? key}) : super(key: key);

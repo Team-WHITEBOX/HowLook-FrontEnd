@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/component/cust_textform_filed.dart';
-import 'package:howlook/user/settingList/setting_list.dart';
+
+import '../../common/component/cust_textform_filed.dart';
+import '../../common/layout/default_layout.dart';
+import '../../profile/settingList/setting_list.dart';
 
 class ProfileChangeCard extends StatefulWidget {
   const ProfileChangeCard({Key? key}) : super(key: key);
@@ -130,7 +130,7 @@ class _ProfileChangeCardState extends State<ProfileChangeCard> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          SettingList();
+                          SettingScreen();
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,

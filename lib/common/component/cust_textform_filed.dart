@@ -101,6 +101,7 @@ class CustomTextFormField extends StatelessWidget {
   final IconButton? icon;
   final FormFieldSetter? onSaved;
   final TextEditingController? titleController;
+  final String? helperText;
 
   CustomTextFormField({
     this.maxLines = 1,
@@ -117,6 +118,7 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.onSaved,
     this.titleController,
+    this.helperText,
     Key? key,
   }) : super(key: key);
 
@@ -127,10 +129,7 @@ class CustomTextFormField extends StatelessWidget {
 
     final baseBorder = UnderlineInputBorder(
         borderSide: isBorder!
-            ? const BorderSide(
-                color: INPUT_BORDER_COLOR,
-                width: 1.5,
-              )
+            ? const BorderSide(color: INPUT_BORDER_COLOR, width: 1.5)
             : BorderSide.none);
 
     return Column(
@@ -145,7 +144,6 @@ class CustomTextFormField extends StatelessWidget {
               ),
           ],
         ),
-        // const SizedBox(height: 5),
         TextFormField(
           maxLines: maxLines,
           cursorColor: Colors.black,
@@ -158,33 +156,27 @@ class CustomTextFormField extends StatelessWidget {
           onSaved: onSaved,
           controller: titleController,
 
-          // Input을 데코하는 함수
           decoration: InputDecoration(
-            // 양 쪽으로 땡겨서 커서 포인터 이쁘게 만드는 것,,
             contentPadding: const EdgeInsets.only(
               left: 2,
               right: 20,
               bottom: 10,
               top: 10,
             ),
-            // placeholder 같은 것
+
             hintText: hintText,
             errorText: errorText,
-
-            hintStyle: const TextStyle(
-              color: Colors.black45,
-              fontSize: 14.0,
-            ),
+            helperText: helperText,
+            
+            hintStyle: const TextStyle(color: Colors.black45, fontSize: 13.0),
+            helperStyle: const TextStyle(color: Colors.black54, fontSize: 13.0),
+            
             fillColor: Colors.black,
 
-            // false - 배경색 없음
-            // true  - 배경색 있음
             filled: false,
 
-            // 모든 Input 상태의 기본 스타일
             border: baseBorder,
             enabledBorder: baseBorder,
-            // 선택된 Input 상태의 기본 스타일
             focusedBorder: baseBorder.copyWith(
                 borderSide:
                     baseBorder.borderSide.copyWith(color: Colors.black)),

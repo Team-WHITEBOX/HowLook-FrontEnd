@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/common/const/data.dart';
 import 'package:howlook/user/view/splash_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -18,7 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await initializeDefault();
-  KakaoSdk.init(nativeAppKey: 'fee362483928c6b3bbbb934a9996d8cb');
+  KakaoSdk.init(nativeAppKey: YOUR_NATIVE_APP_KEY);
   runApp(
     const ProviderScope(
       child: _App(),
@@ -44,7 +45,7 @@ class _App extends StatelessWidget {
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
-      home: const Splash_Screen(),
+      home: const SplashScreen(),
     );
   }
 }

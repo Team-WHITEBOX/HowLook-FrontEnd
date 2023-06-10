@@ -1,23 +1,24 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/common/dio/dio.dart';
-import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/common/model/params/feed_params/category_pagination_params.dart';
-import 'package:howlook/common/model/params/feed_params/detail_feed_params.dart';
-import 'package:howlook/common/model/params/feed_params/near_pagination_params.dart';
-import 'package:howlook/common/model/params/feed_params/pagination_params.dart';
-import 'package:howlook/common/model/params/feed_params/weather_pagination_params.dart';
-import 'package:howlook/feed/model/feed_model.dart';
-import 'package:howlook/common/model/page_model.dart';
-import 'package:retrofit/retrofit.dart';
+import 'package:retrofit/dio.dart';
+import 'package:retrofit/http.dart';
+
+import '../../common/const/data.dart';
+import '../../common/dio/dio.dart';
+import '../../common/model/cursor_pagination_model.dart';
+import '../../common/model/page_model.dart';
+import '../model/feed_data.dart';
+import '../model/feed_params/category_pagination_params.dart';
+import '../model/feed_params/detail_feed_params.dart';
+import '../model/feed_params/near_pagination_params.dart';
+import '../model/feed_params/pagination_params.dart';
+import '../model/feed_params/weather_pagination_params.dart';
+
 
 part 'feed_repository.g.dart';
 
 final feedRepositoryProvider = Provider<FeedRepository>(
   (ref) {
-    // dio를 dioProvider에서 가져오기
-    // Provider에서는 watch쓰는게 좋음 -> watch하는 Provider가 변경됐을때 바로 인지해서 새로 가져올 수 있기 때문
     final dio = ref.watch(dioProvider);
     final repository = FeedRepository(dio, baseUrl: 'http://$API_SERVICE_URI/post');
     return repository;
@@ -78,7 +79,7 @@ abstract class FeedRepository {
   @Headers({
     'accessToken': 'true',
   })
-  Future<FeedModel> getFeedDetail({
+  Future<FeedData> getFeedDetail({
     @Queries() DetailFeedParams? detailFeedParams =
     const DetailFeedParams(),
   });
@@ -88,11 +89,26 @@ abstract class FeedRepository {
     'accessToken': 'true',
     'content-type': 'application/json'
   })
-  Future<HttpResponse<dynamic>> postLike({@Body() required int postId});
+  Future<HttpResponse<dynamic>> postLike(@Query('postId') int postId);
 
   @DELETE('/like')
   @Headers({
     'accessToken': 'true',
+    'content-type': 'application/json'
   })
-  Future<HttpResponse<dynamic>> delLike({@Body() required int postId});
+  Future<HttpResponse<dynamic>> delLike(@Query('postId') int postId);
+
+  @POST('/scrap')
+  @Headers({
+    'accessToken': 'true',
+    'content-type': 'application/json'
+  })
+  Future<HttpResponse<dynamic>> postScrap(@Query('postId') int postId);
+
+  @DELETE('/scrap')
+  @Headers({
+    'accessToken': 'true',
+    'content-type': 'application/json'
+  })
+  Future<HttpResponse<dynamic>> delScrap(@Query('postId') int postId);
 }

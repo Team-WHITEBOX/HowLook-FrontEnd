@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/chat/model/chat_msg_data.dart';
-import 'package:howlook/chat/model/chat_msg_model.dart';
-import 'package:howlook/chat/model/chat_rooms_data_model.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/common/dio/dio.dart';
+import 'package:howlook/chat/model/chat_user/chat_user_data.dart';
 import 'package:retrofit/retrofit.dart';
+
+import '../../common/const/data.dart';
+import '../../common/dio/dio.dart';
+import '../model/chat_msg/chat_msg_data.dart';
+import '../model/chat_room/chat_room_data.dart';
 
 part 'chat_repository.g.dart';
 
@@ -44,5 +45,5 @@ abstract class ChatRepository {
   @Headers({
     'accessToken': 'true',
   })
-  Future<ChatRoomsDataModel> getUserList(@Query('roomId') String roomId);
+  Future<ChatUserData> getUserList(@Query('roomId') String roomId);
 }

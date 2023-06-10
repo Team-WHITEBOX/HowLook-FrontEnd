@@ -158,32 +158,34 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
               ),
             ),
           ],
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: PageView.builder(
-              controller: controller,
-              itemBuilder: (BuildContext context, int index) {
-                if (ref.watch(selectedImageProvider)[0].afterDetectionOutPath ==
-                    "") {
-                  return const Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.black,
+          child: SingleChildScrollView(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PageView.builder(
+                controller: controller,
+                itemBuilder: (BuildContext context, int index) {
+                  if (ref.watch(selectedImageProvider)[0].afterDetectionOutPath ==
+                      "") {
+                    return const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
+                    );
+                  }
+                  return ExtendedImage.network(
+                    ref
+                        .watch(selectedImageProvider)[index]
+                        .afterDetectionOutPath!,
+                    fit: BoxFit.cover,
+                    cache: true,
                   );
-                }
-                return ExtendedImage.network(
-                  ref
-                      .watch(selectedImageProvider)[index]
-                      .afterDetectionOutPath!,
-                  fit: BoxFit.cover,
-                  cache: true,
-                );
-              },
-              itemCount: ref.watch(selectedImageProvider).length,
+                },
+                itemCount: ref.watch(selectedImageProvider).length,
+              ),
             ),
           ),
         ),

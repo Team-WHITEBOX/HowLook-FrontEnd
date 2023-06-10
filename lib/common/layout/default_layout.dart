@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
+  final Widget? endDrawer;
   final Widget child;
   final String? title;
   final Widget? bottomNavigationBar;
@@ -12,10 +13,12 @@ class DefaultLayout extends StatelessWidget {
   final FlexibleSpaceBar? flexibleSpace;
   final Color? appBarForegroundColor;
   final Color? appBarBackgroundColor;
+  final bool? resizeToAvoidBottomInset;
 
   const DefaultLayout({
     required this.child,
     this.backgroundColor,
+    this.endDrawer,
     this.title,
     this.bottomNavigationBar,
     this.floatingActionButton,
@@ -25,12 +28,14 @@ class DefaultLayout extends StatelessWidget {
     this.flexibleSpace,
     this.appBarBackgroundColor,
     this.appBarForegroundColor,
+    this.resizeToAvoidBottomInset,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: backgroundColor ?? Colors.white,
       appBar: renderAppBar(
         leading,
@@ -38,6 +43,7 @@ class DefaultLayout extends StatelessWidget {
         appBarBackgroundColor,
       ),
       body: child,
+      endDrawer: endDrawer,
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: floatingActionButtonLocation,
@@ -56,6 +62,7 @@ class DefaultLayout extends StatelessWidget {
         foregroundColor: appBarForegroundColor ?? Colors.black,
         backgroundColor: appBarBackgroundColor ?? Colors.white,
         elevation: 0,
+        centerTitle: false,
         title: Text(
           title!,
           style: const TextStyle(

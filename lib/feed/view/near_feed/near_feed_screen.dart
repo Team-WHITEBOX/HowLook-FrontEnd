@@ -6,7 +6,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/feed/component/detail_feed_card.dart';
 import 'package:howlook/feed/component/feed_card.dart';
-import 'package:howlook/feed/provider/near_feed_provider.dart';
+import 'package:howlook/feed/provider/feed/near_provider/near_feed_provider.dart';
 import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/profile/view/my_feed.dart';
-import 'package:howlook/user/settingList/setting_list.dart';
-import 'package:howlook/profile/view/my_scrap.dart';
 import 'package:dio/dio.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/profile/component/other_profile_card.dart';
-import 'package:howlook/profile/model/other_profile_model.dart';
+
+import '../../common/const/data.dart';
+import '../../common/layout/default_layout.dart';
+import '../../common/secure_storage/secure_storage.dart';
+import '../component/other_profile_card.dart';
+import '../model/other_profile_model.dart';
 
 class OtherProfileScreen extends ConsumerStatefulWidget {
   final String memberId; // 포스트 아이디로 특정 게시글 조회

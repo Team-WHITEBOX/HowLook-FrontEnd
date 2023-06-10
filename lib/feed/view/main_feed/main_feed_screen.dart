@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:howlook/common/model/cursor_pagination_model.dart';
 import 'package:howlook/feed/component/feed_card.dart';
-import 'package:howlook/feed/provider/main_feed_provider.dart';
+import 'package:howlook/feed/provider/feed/main_feed_provider.dart';
 import 'package:howlook/feed/view/category_feed/category_selected_screen.dart';
 import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 

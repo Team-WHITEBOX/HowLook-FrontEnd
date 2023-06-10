@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/feed/component/feed_card.dart';
-import 'package:howlook/feed/provider/category_check_provider.dart';
-import 'package:howlook/feed/provider/category_provider.dart';
-import 'package:howlook/feed/provider/main_feed_provider.dart';
-import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
-import 'package:howlook/feed/provider/category_feed_provider.dart';
-import 'package:howlook/common/model/cursor_pagination_model.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../common/model/cursor_pagination_model.dart';
+import '../../component/feed_card.dart';
+import '../../provider/feed/category_provider/category_check_provider.dart';
+import '../../provider/feed/category_provider/category_feed_provider.dart';
+import '../../provider/feed/category_provider/category_provider.dart';
+import '../../provider/feed/main_feed_provider.dart';
+import '../feed_detail/feed_detail_screen.dart';
 import 'category_selected_screen.dart';
 
 class CategoryFeedScreen extends ConsumerStatefulWidget {
@@ -104,38 +105,89 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
     checkStyle(int index) {
       if (index == 0) {
         final state = ref.watch(categoryProvider);
-        if (state.gender == "F" || state.gender == '') {
-          // 만약 빈 값이었으면 숫자 1 증가
-          state.gender == ''
-              ? ref
-                  .read(categoryCountProvider.notifier)
-                  .update((state) => state + 1)
-              : null;
-          ref.read(categoryProvider.notifier).toggleGenderSelected(gender: "M");
-        } else if (state.gender == "M") {
-          ref.read(categoryCountProvider.notifier).update((state) => state - 1);
-          ref.read(categoryProvider.notifier).toggleGenderSelected(gender: "");
-          // 현재 다른 값이 선택 안 되어있으면 isFiltering false로 선택
-          ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()
-              ? ref.read(isFiltering.notifier).update((state) => true)
-              : ref.read(isFiltering.notifier).update((state) => false);
+        // 스타일이 하나라도 선택되어있다면 안되게 막던가 성별을 바꿔야해
+        if (ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()) {
+          // 현재 성별이 남자라면 클릭 안 되게 막아야함
+          if (state.gender == "M") {
+            return;
+          } else if (state.gender == "F") {
+            // 현재 성별이 여자라면 남자로 바꿔야함
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "M");
+          }
+        } else {
+          // 현재 스타일이 하나도 선택되지 않았을 때
+          // 현재 성별이 여자로 되어있다면 남자로 바꾸기
+          if (state.gender == "F") {
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "M");
+          }
+          // 현재 성별이 남자로 되어있다면 성별 비우기
+          // 일단 숫자 내리고 성별 비우고 필터링된 상태 아니라고 하기
+          else if (state.gender == "M") {
+            ref
+                .read(categoryCountProvider.notifier)
+                .update((state) => state - 1);
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "");
+            ref.read(isFiltering.notifier).update((state) => false);
+          }
+          // 성별 아무것도 선택 안 되어있었다면 성별 바꾸고 숫자 올리고 필터링 상태라고 하기
+          else {
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "M");
+            ref
+                .read(categoryCountProvider.notifier)
+                .update((state) => state + 1);
+            ref.read(isFiltering.notifier).update((state) => true);
+          }
         }
       } else if (index == 1) {
         final state = ref.watch(categoryProvider);
-        if (state.gender == "M" || state.gender == '') {
-          state.gender == ''
-              ? ref
-              .read(categoryCountProvider.notifier)
-              .update((state) => state + 1)
-              : null;
-          ref.read(categoryProvider.notifier).toggleGenderSelected(gender: "F");
-        } else if (state.gender == "F") {
-          ref.read(categoryCountProvider.notifier).update((state) => state - 1);
-          ref.read(categoryProvider.notifier).toggleGenderSelected(gender: "");
-          // 현재 다른 값이 선택 안 되어있으면 isFiltering false로 선택
-          ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()
-              ? ref.read(isFiltering.notifier).update((state) => true)
-              : ref.read(isFiltering.notifier).update((state) => false);
+        // 스타일이 하나라도 선택되어있다면 안되게 막던가 성별을 바꿔야해
+        if (ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()) {
+          // 현재 성별이 여자라면 클릭 안 되게 막아야함
+          if (state.gender == "F") {
+            return;
+          } else if (state.gender == "M") {
+            // 현재 성별이 남자라면 여자로 바꿔야함
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "F");
+          }
+        } else {
+          // 현재 스타일이 하나도 선택되지 않았을 때
+          // 현재 성별이 남자로 되어있다면 여자로 바꾸기
+          if (state.gender == "M") {
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "F");
+          }
+          // 현재 성별이 여자로 되어있다면 성별 비우기
+          // 일단 숫자 내리고 성별 비우고 필터링된 상태 아니라고 하기
+          else if (state.gender == "F") {
+            ref
+                .read(categoryCountProvider.notifier)
+                .update((state) => state - 1);
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "");
+            ref.read(isFiltering.notifier).update((state) => false);
+          }
+          // 성별 아무것도 선택 안 되어있었다면 성별 바꾸고 숫자 올리고 필터링 상태라고 하기
+          else {
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "F");
+            ref
+                .read(categoryCountProvider.notifier)
+                .update((state) => state + 1);
+            ref.read(isFiltering.notifier).update((state) => true);
+          }
         }
       } else if (index == 2) {
         final state = ref.watch(categoryProvider);
@@ -146,8 +198,9 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
         ref
             .read(categoryProvider.notifier)
             .toggleStyleSelected(style: "Minimal");
-        final state2 = ref.watch(categoryProvider);
+
         // 바뀐 상태를 통해 숫자 업데이트
+        final state2 = ref.watch(categoryProvider);
         state2.hashtagDTOMinimal
             ? ref
                 .read(categoryCountProvider.notifier)
@@ -157,11 +210,21 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
                 .update((state) => state - 1); // true 인 경우
 
         // 현재 다른 값이 선택 안 되어있으면 isFiltering false로 선택
-        ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()
-            ? ref.read(isFiltering.notifier).update((state) => true)
-            : ref.read(categoryProvider.notifier).checkCategoryCurrGenderState()
-                ? ref.read(isFiltering.notifier).update((state) => false)
-                : ref.read(isFiltering.notifier).update((state) => true);
+        if (ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()) {
+          ref.read(isFiltering.notifier).update((state) => true);
+        } else {
+          if (ref
+              .read(categoryProvider.notifier)
+              .checkCategoryCurrGenderState()) {
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "");
+            ref.read(categoryCountProvider.notifier).update((state) => 0);
+            ref.read(isFiltering.notifier).update((state) => false);
+          } else {
+            ref.read(isFiltering.notifier).update((state) => true);
+          }
+        }
       } else if (index == 3) {
         final state = ref.watch(categoryProvider);
         if (state.gender == "") {
@@ -180,11 +243,21 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
                 .update((state) => state - 1); // true 인 경우
 
         // 현재 다른 값이 선택 안 되어있으면 isFiltering false로 선택
-        ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()
-            ? ref.read(isFiltering.notifier).update((state) => true)
-            : ref.read(categoryProvider.notifier).checkCategoryCurrGenderState()
-                ? ref.read(isFiltering.notifier).update((state) => false)
-                : ref.read(isFiltering.notifier).update((state) => true);
+        if (ref.read(categoryProvider.notifier).checkCategoryCurrStyleState()) {
+          ref.read(isFiltering.notifier).update((state) => true);
+        } else {
+          if (ref
+              .read(categoryProvider.notifier)
+              .checkCategoryCurrGenderState()) {
+            ref
+                .read(categoryProvider.notifier)
+                .toggleGenderSelected(gender: "");
+            ref.read(categoryCountProvider.notifier).update((state) => 0);
+            ref.read(isFiltering.notifier).update((state) => false);
+          } else {
+            ref.read(isFiltering.notifier).update((state) => true);
+          }
+        }
       } else if (index == 4) {
         final state = ref.watch(categoryProvider);
         if (state.gender == "") {
@@ -264,119 +337,126 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
       },
       child: Column(
         children: [
-          Row(
-            children: <Widget>[
-              SizedBox(
-                width: isFilter ? 60 : 40,
-                height: 40,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      top: 5,
-                      left: 8,
-                      child: Container(
-                        width: isFilter ? 50 : 32,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: isFilter
-                              ? Colors.lightBlueAccent.withOpacity(0.3)
-                              : null,
-                          border: Border.all(
-                            width: 0.5,
-                            color: isFilter ? Colors.white : Colors.black26,
-                            style: BorderStyle.solid,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: isFilter
-                            ? Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20, bottom: 3.5),
-                                child: Center(
-                                  child: Text(
-                                    countState.toString(),
-                                    textAlign: TextAlign.right,
-                                    style: const TextStyle(
-                                      color: Colors.blueAccent,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : null,
-                      ),
-                    ),
-                    Positioned(
-                      top: -4.5,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const CategorySelectScreen(),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: isFilter ? 60 : 40,
+                  height: 40,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        top: 5,
+                        left: 8,
+                        child: Container(
+                          width: isFilter ? 50 : 32,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: isFilter
+                                ? Colors.lightBlueAccent.withOpacity(0.3)
+                                : null,
+                            border: Border.all(
+                              width: 0.5,
+                              color: isFilter ? Colors.white : Colors.black26,
+                              style: BorderStyle.solid,
                             ),
-                          );
-                        },
-                        icon: isFilter
-                            ? const Icon(Icons.tune,
-                                size: 18, color: Colors.blueAccent)
-                            : const Icon(Icons.tune, size: 18),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              isFilter ? const SizedBox(width: 10) : const SizedBox(width: 5),
-              Expanded(
-                child: SizedBox(
-                  height: 30,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categoryList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                              onTap: () {
-                                checkStyle(index);
-                              },
-                              child: Container(
-                                width: categoryList[index].length < 3 ? 28 : 45,
-                                decoration: BoxDecoration(
-                                  color: checkColor(index, 0),
-                                  border: Border.all(
-                                    width: 0.5,
-                                    color: checkColor(index, 1),
-                                    style: BorderStyle.solid,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: isFilter
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 20,
+                                    bottom: 3.5,
                                   ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    categoryList[index],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.w900,
-                                      color: checkColor(index, 2),
+                                  child: Center(
+                                    child: Text(
+                                      countState.toString(),
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                )
+                              : null,
+                        ),
+                      ),
+                      Positioned(
+                        top: -4.5,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const CategorySelectScreen(),
                               ),
                             );
                           },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const SizedBox(width: 4),
+                          icon: isFilter
+                              ? const Icon(Icons.tune,
+                                  size: 18, color: Colors.blueAccent)
+                              : const Icon(Icons.tune, size: 18),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                isFilter ? const SizedBox(width: 3) : const SizedBox(width: 5),
+                Expanded(
+                  child: SizedBox(
+                    height: 30,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categoryList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  checkStyle(index);
+                                },
+                                child: Container(
+                                  width:
+                                      categoryList[index].length < 3 ? 30 : 55,
+                                  decoration: BoxDecoration(
+                                    color: checkColor(index, 0),
+                                    border: Border.all(
+                                      width: 0.5,
+                                      color: checkColor(index, 1),
+                                      style: BorderStyle.solid,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      categoryList[index],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w900,
+                                        color: checkColor(index, 2),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const SizedBox(width: 6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: GridView.builder(

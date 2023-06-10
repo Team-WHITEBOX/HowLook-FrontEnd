@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/profile/model/my_profile_screen_model.dart';
-import 'package:howlook/profile/view/my_feed.dart';
-import 'package:howlook/user/settingList/setting_list.dart';
-import 'package:howlook/profile/view/my_scrap.dart';
-import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
-import 'package:howlook/common/const/data.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter_riverpod/src/consumer.dart';
-// import '../provider/profile_provider.dart';
+
+import '../../feed/view/feed_detail/feed_detail_screen.dart';
+import '../model/member_posts.dart';
+import '../model/user_info_model.dart';
+import '../settingList/setting_list.dart';
+import '../view/my_feed.dart';
+import '../view/my_scrap.dart';
 
 class MainProfileCard extends StatelessWidget {
   // 아이디
@@ -21,8 +20,6 @@ class MainProfileCard extends StatelessWidget {
   // 포토아이디
   final String profilePhoto;
 
-  final bool me;
-
   final int memberPostCount;
 
   final List<MemberPosts> memberPosts;
@@ -33,7 +30,6 @@ class MainProfileCard extends StatelessWidget {
       required this.memberHeight,
       required this.memberWeight,
       required this.profilePhoto,
-      required this.me,
       required this.memberPostCount,
       required this.memberPosts,
       Key? key})
@@ -68,7 +64,7 @@ class MainProfileCard extends StatelessWidget {
   //     : super(key: key);
 
   factory MainProfileCard.fromModel({
-    required MainProfileModel model,
+    required UserInfoModel model,
   }) {
     return MainProfileCard(
       memberId: model.memberId,
@@ -76,9 +72,8 @@ class MainProfileCard extends StatelessWidget {
       memberHeight: model.memberHeight,
       memberWeight: model.memberWeight,
       profilePhoto: model.profilePhoto,
-      me: model.me,
-      memberPostCount: model.memberPostCount,
-      memberPosts: model.memberPosts,
+      memberPostCount: model.memberPostCount!,
+      memberPosts: model.memberPosts!,
     );
   }
 
@@ -188,7 +183,7 @@ class MainProfileCard extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => SettingList(),
+                                    builder: (_) => SettingScreen(),
                                   ),
                                 );
                               }, //설정 화면 이동

@@ -91,14 +91,14 @@ class _ChatRepository implements ChatRepository {
   }
 
   @override
-  Future<ChatRoomsDataModel> getUserList(roomId) async {
+  Future<ChatUserData> getUserList(roomId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'roomId': roomId};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ChatRoomsDataModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<ChatUserData>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -110,7 +110,7 @@ class _ChatRepository implements ChatRepository {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ChatRoomsDataModel.fromJson(_result.data!);
+    final value = ChatUserData.fromJson(_result.data!);
     return value;
   }
 

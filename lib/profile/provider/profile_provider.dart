@@ -1,5 +1,5 @@
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:howlook/profile/model/my_profile_screen_model.dart';
+// import 'package:howlook/profile/model/my_profile_model.dart';
 // import 'package:howlook/profile/repository/profile_repository.dart';
 // import 'package:howlook/common/model/cursor_pagination_model.dart';
 //

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
 import 'package:howlook/upload/model/upload_formdata_model.dart';
-import 'package:howlook/user/model/signup_model.dart';
+import 'package:howlook/user/model/sign_up/sign_up_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'upload_repository.g.dart';

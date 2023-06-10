@@ -1,115 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/user/view/signup/first_signup_screen.dart';
 
-class MainSignupScreen extends StatelessWidget {
-  const MainSignupScreen({Key? key}) : super(key: key);
+import '../../../common/const/colors.dart';
+import '../../../common/layout/default_layout.dart';
+import 'first_signup_screen.dart';
+
+class MainSignUpScreen extends StatelessWidget {
+  const MainSignUpScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-        title: '',
-        child: SingleChildScrollView(
-          child: SafeArea(
-            top: true,
-            bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  _Title(),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  _SubTitle(),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _LabelText(
-                        labelText: '내 모습 그대로 당당하게 😄',
-                      ),
-                      _minText(
-                        minText: "나의 정보를 사실대로 올려 주세요.",
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      _LabelText(
-                        labelText: '얼굴은 꼭 제외해주세요! 🙅‍',
-                      ),
-                      _minText(
-                        minText: "HowLook의 정체성을 지켜 주세요",
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      _LabelText(
-                        labelText: '건전한 게시물 📋',
-                      ),
-                      _minText(
-                        minText: "건전한 게시글 위주로 올려 주세요",
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      _LabelText(
-                        labelText: '신고는 적극적으로 🚨',
-                      ),
-                      _minText(
-                        minText: "건전한 HowLook만의 문화를 같이 만들어가요.",
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 75,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.bottomRight,
-                        end: Alignment.topLeft,
-                        colors: [
-                          Color(0xFFD07AFF),
-                          Color(0xFFa6ceff),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(40),
+      title: '',
+      child: SingleChildScrollView(
+        child: SafeArea(
+          top: true,
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 16.0),
+                const _Title(),
+                const SizedBox(height: 30),
+                const _SubTitle(),
+                const SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: const [
+                    _LabelText(labelText: '내 모습 그대로 당당하게 😄'),
+                    _MinText(minText: "나의 정보를 사실대로 올려 주세요."),
+                    SizedBox(height: 30),
+                    _LabelText(labelText: '얼굴은 꼭 제외해주세요! 🙅‍'),
+                    _MinText(minText: "HowLook의 정체성을 지켜 주세요"),
+                    SizedBox(height: 30),
+                    _LabelText(labelText: '건전한 게시물 📋'),
+                    _MinText(minText: "건전한 게시글 위주로 올려 주세요"),
+                    SizedBox(height: 30),
+                    _LabelText(labelText: '신고는 적극적으로 🚨'),
+                    _MinText(minText: "건전한 HowLook만의 문화를 같이 만들어가요."),
+                  ],
+                ),
+                const SizedBox(height: 75),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          minimumSize: Size(100, 50),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => FirstSignupScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "계속하기",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        )),
-                  )
-                ],
-              ),
+                    minimumSize: const Size(100, 50),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const FirstSignUpScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "계속하기",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                )
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -136,7 +95,7 @@ class _SubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "아래의 규칙들을 꼭 명심해 주세요",
       textAlign: TextAlign.center,
       style: TextStyle(
@@ -159,39 +118,35 @@ class _LabelText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        '     ✓ $labelText',
-        style: TextStyle(
-          fontFamily: 'NotoSans',
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-        ),
-        //textAlign: TextAlign.left,
+    return Text(
+      '     ✓ $labelText',
+      style: const TextStyle(
+        fontFamily: 'NotoSans',
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
       ),
+      //textAlign: TextAlign.left,
     );
   }
 }
 
-class _minText extends StatelessWidget {
+class _MinText extends StatelessWidget {
   final String? minText;
 
-  const _minText({this.minText, Key? key}) : super(key: key);
+  const _MinText({this.minText, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        '       $minText',
-        style: TextStyle(
-          fontFamily: 'NotoSans',
-          fontSize: 15,
-          fontWeight: FontWeight.w400,
-          color: BODY_TEXT_COLOR,
-        ),
-        //textAlign: TextAlign.left,
+    return Text(
+      '       $minText',
+      style: const TextStyle(
+        fontFamily: 'NotoSans',
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: BODY_TEXT_COLOR,
       ),
+      //textAlign: TextAlign.left,
     );
   }
 }

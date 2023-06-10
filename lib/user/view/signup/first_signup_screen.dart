@@ -1,52 +1,61 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:howlook/common/component/cust_textform_filed.dart';
-import 'package:howlook/common/const/colors.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/user/view/signup/second_signup_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/user/model/signup_model.dart';
-import 'package:howlook/user/provider/signup_provider.dart';
+import 'package:howlook/user/provider/sign_in_provider.dart';
+import 'package:howlook/user/repository/sign_up_repository.dart';
+import 'package:howlook/user/view/signup/second_signup_screen.dart';
 
-class FirstSignupScreen extends ConsumerStatefulWidget {
-  const FirstSignupScreen({Key? key}) : super(key: key);
+import '../../../common/component/cust_textform_filed.dart';
+import '../../../common/const/colors.dart';
+import '../../../common/layout/default_layout.dart';
+import '../../provider/sign_up_provider.dart';
+
+class FirstSignUpScreen extends ConsumerStatefulWidget {
+  const FirstSignUpScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<FirstSignupScreen> createState() => _FirstSignupScreenState();
+  ConsumerState<FirstSignUpScreen> createState() => _FirstSignUpScreenState();
 }
 
-class _FirstSignupScreenState extends ConsumerState<FirstSignupScreen> {
-  String inputMemberId = '';
-  String inputMemberPassword = '';
-  String inputMemberPasswordCheck = '';
+class _FirstSignUpScreenState extends ConsumerState<FirstSignUpScreen> {
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    // ref.read(SignupProvider.notifier).clear();
+  }
+
+  bool _isValid() {
+    final newMember = ref.watch(signUpProvider);
+
+    return (newMember.memberId!.isNotEmpty &&
+            newMember.memberPassword!.isNotEmpty &&
+            newMember.memberPasswordCheck!.isNotEmpty)
+        ? true
+        : false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<SignupModel> newMember = ref.watch(SignupProvider);
-
-    // validate
-    final formKey = GlobalKey<FormState>();
-
-    Future<void> submit() async {
-      if (formKey.currentState!.validate() == false) {
-        return;
-      } else {
-        formKey.currentState!.save();
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => SecondSignupScreen(),
-          ),
-        );
-      }
-    }
+    final newMember = ref.watch(signUpProvider);
+    final idCheck = ref.watch(idCheckProvider);
 
     return DefaultLayout(
       title: '',
+      leading: IconButton(
+        onPressed: () {
+          ref.read(signUpProvider.notifier).addMemberId(memberId: "");
+          ref
+              .read(signUpProvider.notifier)
+              .addMemberPassword(memberPassword: "");
+          ref
+              .read(signUpProvider.notifier)
+              .addMemberPasswordCheck(memberPasswordCheck: "");
+          ref.read(idCheckProvider.notifier).update((state) => false);
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.arrow_back_ios),
+      ),
       child: Form(
         key: formKey,
         child: SingleChildScrollView(
@@ -66,43 +75,116 @@ class _FirstSignupScreenState extends ConsumerState<FirstSignupScreen> {
                   const SizedBox(height: 40.0),
                   const PageLabelText(labelText: "계정"),
                   const SizedBox(height: 5),
-                  CustomTextFormField(
-                    hintText: "아이디를 입력해주세요",
-                    onSaved: (value) {
-                      setState(() {
-                        inputMemberId = value;
-                      });
-                    },
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value.length < 5) {
-                        return "아이디는 5자보다 짧을 수 없습니다 :(";
-                      }
-                      return null;
-                    },
+                  Stack(
+                    children: [
+                      TextFormField(
+                        cursorColor: Colors.black,
+                        onSaved: (value) {},
+                        onChanged: (value) {
+                          ref
+                              .read(signUpProvider.notifier)
+                              .addMemberId(memberId: value);
+                          ref
+                              .read(idCheckProvider.notifier)
+                              .update((state) => false);
+                        },
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (isValidId(value.toString())) {
+                            return null;
+                          } else {
+                            return "잘못된 아이디 형식입니다 :(";
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.only(
+                            left: 2,
+                            right: 20,
+                            bottom: 10,
+                            top: 10,
+                          ),
+                          hintText: "아이디를 입력해주세요",
+                          helperText: "소문자, 숫자 포함 5자 이상 15자 이내로 입력하세요.",
+                          fillColor: Colors.black,
+                          hintStyle:
+                              TextStyle(color: Colors.black45, fontSize: 14.0),
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: INPUT_BORDER_COLOR, width: 1.5),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: INPUT_BORDER_COLOR,
+                          )),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.5),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 1,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (newMember.memberId!.length > 4) {
+                              final code = await ref
+                                  .read(signUpRepositoryProvider)
+                                  .idCheck(memberId: newMember.memberId!);
+                              if (code.data) {
+                                ref
+                                    .read(idCheckProvider.notifier)
+                                    .update((state) => true);
+                                if (!mounted) return;
+                                showOkAlertDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    title: "아이디 사용 가능",
+                                    message: "해당 아이디는 사용 가능합니다.");
+                              } else {
+                                if (!mounted) return;
+                                showOkAlertDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    title: "아이디 사용 불가능",
+                                    message: "해당 아이디는 사용이 불가능합니다.");
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: newMember.memberId!.length > 4
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
+                          child: const Text(
+                            "중복 확인",
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 24.0),
                   const PageLabelText(labelText: "비밀번호"),
                   const SizedBox(height: 5),
                   CustomTextFormField(
                     hintText: "비밀번호를 입력해주세요",
-                    onSaved: (value) {
-                      setState(() {
-                        inputMemberPassword = value;
-                      });
-                    },
+                    onSaved: (value) {},
                     onChanged: (value) {
-                      inputMemberPassword = value;
+                      ref
+                          .read(signUpProvider.notifier)
+                          .addMemberPassword(memberPassword: value);
                     },
                     validator: (value) {
-                      if (value.length < 8) {
-                        return "비밀번호는 8자보다 짧을 수 없습니다 :(";
-                      } else if (isValidPwFormat(value.toString()) == false) {
-                        return "비밀번호는 문자와 숫자를 모두 포함해야합니다 :(";
+                      if (isValidPwFormat(value.toString())) {
+                        return null;
+                      } else {
+                        return "잘못된 비밀번호 형식입니다 :(";
                       }
-                      return null;
                     },
                     obscureText: true,
+                    helperText: "소문자, 숫자 포함 8자 이상 15자 이내로 입력하세요.",
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 24.0),
@@ -110,13 +192,14 @@ class _FirstSignupScreenState extends ConsumerState<FirstSignupScreen> {
                   const SizedBox(height: 5),
                   CustomTextFormField(
                     hintText: "비밀번호를 한번 더 입력해주세요",
-                    onSaved: (value) {
-                      setState(() {
-                        inputMemberPasswordCheck = value;
-                      });
+                    onSaved: (value) {},
+                    onChanged: (value) {
+                      ref
+                          .read(signUpProvider.notifier)
+                          .addMemberPasswordCheck(memberPasswordCheck: value);
                     },
                     validator: (value) {
-                      if (value.toString() != inputMemberPassword) {
+                      if (value.toString() != newMember.memberPassword) {
                         return "비밀번호를 한번 더 확인해주세요 :(";
                       }
                       return null;
@@ -125,46 +208,41 @@ class _FirstSignupScreenState extends ConsumerState<FirstSignupScreen> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 48.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.bottomRight,
-                        end: Alignment.topLeft,
-                        colors: [
-                          Color(0xFFD07AFF),
-                          Color(0xFFa6ceff),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (formKey.currentState!.validate()) {
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_isValid()) {
+                        if (!idCheck) {
+                          if (!mounted) return;
+                          showOkAlertDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              title: "아이디 중복 확인",
+                              message: "아이디 중복 확인을 먼저 해주세요");
+                        } else if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-
-                          ref.read(SignupProvider.notifier).addMemberAccount(
-                            memberId: inputMemberId,
-                            memberPassword: inputMemberPassword,
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const SecondSignupScreen(isSocial: false),
+                            ),
                           );
-                          submit();
                         }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        minimumSize: const Size(100, 50),
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _isValid() ? Colors.black : Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Text(
-                        "계속하기",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                        textAlign: TextAlign.center,
+                      minimumSize: const Size(120, 50),
+                    ),
+                    child: const Text(
+                      "계속하기",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
@@ -176,8 +254,12 @@ class _FirstSignupScreenState extends ConsumerState<FirstSignupScreen> {
     );
   }
 
-  bool isValidPwFormat(String PasswordInput) {
-    return RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).+$').hasMatch(PasswordInput);
+  bool isValidId(String memberId) {
+    return RegExp(r'^[a-z0-9]{5,15}$').hasMatch(memberId);
+  }
+
+  bool isValidPwFormat(String memberPassword) {
+    return RegExp(r'^[a-z0-9]{8,15}$').hasMatch(memberPassword);
   }
 }
 
