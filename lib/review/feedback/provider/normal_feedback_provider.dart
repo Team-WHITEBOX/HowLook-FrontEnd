@@ -25,28 +25,10 @@ class NormalFeedbackStateNotifier extends StateNotifier<NormalFeedbackModel> {
     required this.repository,
   }) : super(NormalFeedbackModel(status: 0, code: '', message: '', data: [])) {}
 
+  Future<NormalFeedbackModel> GetfeedbackData({required String userId}) async {
+    final userId = repository.getMemberId();
+    final feedbackData = await repository.feedbackData(
+        userId: userId.toString());
+    return feedbackData;
+  }
 }
-
-final memberIdProvider = FutureProvider<String>((ref) async {
-  final repository = ref.watch(NormalFeedbackRepositoryProvider);
-  final feedbackModel = await repository.getMemberId();
-  return feedbackModel.data;
-});
-
-// final feedbackDataProvider = FutureProvider<NormalFeedbackModel>((ref) async {
-//   final repository = ref.watch(NormalFeedbackRepositoryProvider);
-//   final feedbackModel = await repository.getMemberId();
-//   final feedbackParams = FeedbackParams(userId: feedbackModel.data);
-//   final feedbackData = await repository.feedbackData(feedbackParams: feedbackParams);
-//   return feedbackData;
-// });
-
-final feedbackDataProvider = FutureProvider.family<NormalFeedbackModel, String>((ref, userId) async {
-  final repository = ref.watch(NormalFeedbackRepositoryProvider);
-  final feedbackParams = FeedbackParams(userId: userId); // FeedbackParams에 userId를 전달
-  final feedbackData = await repository.feedbackData(feedbackParams: feedbackParams);
-  print(feedbackData);
-  return feedbackData;
-});
-
-

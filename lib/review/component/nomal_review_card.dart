@@ -189,25 +189,25 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                   //     'score': '${_scoreCountController.sliderValue}'
                   //   },
                   // );
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => NormalReview(),
-                    ),
-                  );
-                  // if(widget.hasMore != 0){
-                  //   Navigator.of(context).pushReplacement(
-                  //     MaterialPageRoute(
-                  //       builder: (_) => NormalReview(),
-                  //     ),
-                  //   );
-                  // }
-                  // else{
-                  //   Navigator.of(context).pop(
-                  //     MaterialPageRoute(
-                  //       builder: (_) => MainReviewScreen(),
-                  //     ),
-                  //   );
-                  // }
+                  // Navigator.of(context).pushReplacement(
+                  //   MaterialPageRoute(
+                  //     builder: (_) => NormalReview(),
+                  //   ),
+                  // );
+                  if(widget.hasMore != 0){
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => NormalReview(),
+                      ),
+                    );
+                  }
+                  else{
+                    Navigator.of(context).pop(
+                      MaterialPageRoute(
+                        builder: (_) => MainReviewScreen(),
+                      ),
+                    );
+                  }
 
                 },
               ),

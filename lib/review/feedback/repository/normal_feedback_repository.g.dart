@@ -43,11 +43,9 @@ class _NormalFeedbackRepository implements NormalFeedbackRepository {
   }
 
   @override
-  Future<NormalFeedbackModel> feedbackData(
-      {feedbackParams = const FeedbackParams(userId: '')}) async {
+  Future<NormalFeedbackModel> feedbackData({userId}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(feedbackParams?.toJson() ?? <String, dynamic>{});
+    final queryParameters = <String, dynamic>{r'userId': userId};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);

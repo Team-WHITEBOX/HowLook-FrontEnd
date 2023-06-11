@@ -6,16 +6,14 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:provider/provider.dart';
 import '../../common/const/data.dart';
 import '../../common/secure_storage/secure_storage.dart';
-import '../component/main_review_screen_card.dart';
 import '../feedback/view/normal_feedback_screen.dart';
+import '../model/main_review_model.dart';
+import '../repository/main_review_repository.dart';
 import 'normal_review_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 // 평가 메인 페이지
-import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:provider/provider.dart';
-
 class MainReviewScreen extends ConsumerStatefulWidget {
   MainReviewScreen({Key? key}) : super(key: key);
 
@@ -24,39 +22,34 @@ class MainReviewScreen extends ConsumerStatefulWidget {
 }
 
 class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
-  Future<int> ReviewNumber() async {
-    final dio = Dio();
-    final storage = ref.read(secureStorageProvider);
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    final resp = await dio.get(
-      'http://$API_SERVICE_URI/eval/getEvalCount',
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
-    int count = resp.data['data'];
-    return count;
+
+  late int count = 0;
+  late Future<MainReviewModel> _MainReviewModelFuture;
+
+  Future<void> _fetchMainReviewModel(WidgetRef ref) async {
+    final repository = ref.read(mainReviewRepositoryProvider);
+    _MainReviewModelFuture = repository.reviewCount();
   }
 
   @override
   Widget build(BuildContext context) {
+    _fetchMainReviewModel(ref);
+
     return DefaultLayout(
         title: 'ReviewLook',
         actions: <Widget>[
           IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble)),
           IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
         ],
-        child: FutureBuilder<int>(
-            future: ReviewNumber(),
+        child: FutureBuilder<MainReviewModel>(
+            future: _MainReviewModelFuture,
             builder: (_, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
-                final count = snapshot.data ?? 0;
+                count = snapshot.data?.data ?? 0;
 
                 return SingleChildScrollView(
                   child: SafeArea(
@@ -65,7 +58,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Align(
+                          Align(
                               alignment: Alignment.center,
                               child: Padding(
                                 padding: EdgeInsets.all(15),
@@ -111,6 +104,8 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   }
 
   Widget PanelImage() {
+    _fetchMainReviewModel(ref);
+
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: Padding(
@@ -124,11 +119,31 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
               });
             } else if (direction == DismissDirection.startToEnd) {
               setState(() {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => NormalReview(),
-                  ),
-                );
+                if(count == 0){
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      content: Text("평가글이 없습니다😅",style: TextStyle(color: Colors.white),),
+                      actions: [
+                        _DialogButton(text: "확인"),
+                      ],
+                      backgroundColor: Colors.black87,
+                      shadowColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
+                }
+                else if(count > 0){
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => NormalReview(),
+                    ),
+                  );
+                }
+                else
+                  return print('Error');
               });
             }
           },
@@ -243,6 +258,22 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DialogButton extends StatelessWidget {
+  const _DialogButton({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.of(context).pop(text);
+      },
+      child: Text(text, style: TextStyle(color: Colors.white),),
     );
   }
 }
