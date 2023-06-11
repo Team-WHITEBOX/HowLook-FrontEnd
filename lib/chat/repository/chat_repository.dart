@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/chat/model/chat_user/chat_user_data.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../common/const/data.dart';
 import '../../common/dio/dio.dart';
 import '../model/chat_msg/chat_msg_data.dart';
 import '../model/chat_room/chat_room_data.dart';
+import '../model/chat_user/chat_user_data.dart';
 
 part 'chat_repository.g.dart';
 
@@ -33,7 +33,7 @@ abstract class ChatRepository {
   @Headers({
     'accessToken': 'true',
   })
-  Future<ChatRoomsDataModel> outChatRoom();
+  Future<HttpResponse<dynamic>> outChatRoom(@Query('roomId') String roomId);
 
   @GET('/chat')
   @Headers({

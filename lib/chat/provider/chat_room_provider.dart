@@ -20,6 +20,16 @@ class ChatRoomStateNotifier extends StateNotifier<List<ChatRoomModel>> {
     getChatRoomList();
   }
 
+  int countEnterRoom() {
+    int count = 0;
+    state.map((e) {
+      if (e.enter) {
+        count++;
+      }
+    });
+    return count;
+  }
+
   Future<void> getChatRoomList() async {
     final resp = await chatRepository.getRoomList();
     state = resp.data;

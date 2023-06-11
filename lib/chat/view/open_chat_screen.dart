@@ -47,6 +47,14 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: ExpansionTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              collapsedShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              backgroundColor: Colors.white,
+              collapsedBackgroundColor: Colors.white,
               textColor: Colors.black,
               collapsedTextColor: Colors.black,
               iconColor: Colors.black,
@@ -54,14 +62,16 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
               initiallyExpanded: true,
               title: chatType,
               children: datas.map((data) {
+                final numEnter = ref.read(chatRoomProvider.notifier).countEnterRoom();
+                final numNotEnter = 5 - numEnter;
                 if (index == 0) {
                   // 참여 중인 오픈톡만 출력
                   if (data.enter) {
                     return ChatRoomCard.fromModel(model: data);
                   } else {
-                    check1++;
-                    if (check1 == 5) {
-                      check1 = 0;
+                    if (numEnter != 5) {
+                      return Container();
+                    } else {
                       return SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height / 10,
@@ -77,17 +87,15 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
                           ),
                         ),
                       );
-                    } else {
-                      return Container();
                     }
                   }
                 } else if (index == 1) {
                   if (!data.enter) {
                     return ChatRoomCard.fromModel(model: data);
                   } else {
-                    ++check2;
-                    if (check2 == 5) {
-                      check2 = 0;
+                    if (numNotEnter != 0) {
+                      return Container();
+                    } else {
                       return SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height / 10,
@@ -103,8 +111,6 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
                           ),
                         ),
                       );
-                    } else {
-                      return Container();
                     }
                   }
                 } else {
@@ -136,6 +142,14 @@ class _OpenChatScreenState extends ConsumerState<OpenChatScreen> {
     );
   }
 }
+
+List<String> imageLink = [
+  "asset/img/chat/chat_1.png",
+  "asset/img/chat/chat_2.png",
+  "asset/img/chat/chat_3.png",
+  "asset/img/chat/chat_4.png",
+  "asset/img/chat/chat_5.png",
+];
 
 // Column(
 // crossAxisAlignment: CrossAxisAlignment.start,

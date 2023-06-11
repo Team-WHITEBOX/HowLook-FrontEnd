@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/common/dio/dio.dart';
-import 'package:howlook/user/model/token/token_model.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../../common/const/data.dart';
+import '../../common/dio/dio.dart';
 import '../../user/model/sign_up/sign_up_model.dart';
+import '../../user/model/token/token_model.dart';
 import '../model/check_token_data.dart';
 import '../model/my_profile_data.dart';
 import '../model/params/my_profile_params.dart';

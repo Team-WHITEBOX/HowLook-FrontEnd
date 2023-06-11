@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/model/cursor_pagination_model.dart';
-import 'package:howlook/feed/component/detail_feed_card.dart';
-import 'package:howlook/feed/provider/feed/weather_provider/weather_feed_provider.dart';
-import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
-import 'package:shimmer/shimmer.dart';
+
+import '../../../common/model/cursor_pagination_model.dart';
+import '../../component/detail_feed_card.dart';
+import '../../provider/feed/weather_provider/weather_feed_provider.dart';
+import '../feed_detail/feed_detail_screen.dart';
 
 class WeatherFeedScreen extends ConsumerStatefulWidget {
   const WeatherFeedScreen({Key? key}) : super(key: key);
@@ -35,16 +35,7 @@ class _WeatherFeedScreenState extends ConsumerState<WeatherFeedScreen> {
     final data = ref.watch(weatherFeedProvider);
 
     if (data is CursorPaginationLoading) {
-      return Shimmer.fromColors(
-        baseColor: const Color.fromRGBO(240, 240, 240, 1),
-        highlightColor: Colors.black,
-        child: Container(
-          width: 300,
-          height: 200,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.grey),
-        ),
-      );
-      // return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (data is CursorPaginationError) {

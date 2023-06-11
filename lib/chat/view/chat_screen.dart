@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/chat/provider/chat_user_provider.dart';
+import 'package:howlook/chat/repository/chat_repository.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -15,6 +17,7 @@ import '../component/chat_user_card.dart';
 import '../model/chat_msg/chat_msg_model.dart';
 import '../provider/chat_msg_provider.dart';
 import '../provider/chat_msgs_provider.dart';
+import '../provider/chat_room_provider.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final String userId;
@@ -75,12 +78,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     required String roomId,
     required String userId,
     required String message,
+    String? type,
   }) {
     setState(() {
       stompClient!.send(
         destination: '/pub/chat.message.$roomId',
         body: json.encode({
-          "type": "TALK",
+          "type": type == null ? "TALK" : "LEAVE",
           "roomId": roomId,
           "sender": userId,
           "message": message,
@@ -182,17 +186,49 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   },
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                color: Colors.black12,
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.logout),
-                    )
-                  ],
+              GestureDetector(
+                onTap: () async {
+                  final result = await showOkCancelAlertDialog(
+                    context: context,
+                    title: "오픈톡에서 나가시겠습니까?",
+                    message: "나가기를 하면 대화 내용은 전부 삭제되고 이전 대화 기록을 복구할 수 없습니다.",
+                    cancelLabel: "취소",
+                    okLabel: "확인",
+                    isDestructiveAction: true,
+                  );
+
+                  if (result == OkCancelResult.ok) {
+                    await sendMsgFunction(
+                      type: "LEAVE",
+                      roomId: widget.roomId,
+                      userId: widget.userId,
+                      message: "",
+                    );
+                    if (!mounted) return;
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    await ref.read(chatRepositoryProvider).outChatRoom(roomId);
+                    ref.read(chatRoomProvider.notifier).getChatRoomList();
+                  }
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  color: Colors.black12,
+                  child: Row(
+                    children: const [
+                      SizedBox(width: 10),
+                      Icon(Icons.logout, size: 22),
+                      SizedBox(width: 36),
+                      Text(
+                        "오픈톡 나가기",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -225,6 +261,30 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             child: Center(
                               child: Text(
                                 '${data[index].sender} 님이 입장하셨습니다.',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else if (data[index].type == "LEAVE") {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffEDF0F3),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${data[index].sender} 님이 나가셨습니다..',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,

@@ -42,13 +42,13 @@ class _FeedDetailScreenState extends ConsumerState<FeedDetailScreen> {
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
-          isFilter
-              ? ref
-                  .read(categoryFeedProvider.notifier)
-                  .paginate(forceRefetch: true)
-              : ref
-                  .read(mainFeedProvider.notifier)
-                  .paginate(forceRefetch: true);
+          // isFilter
+          //     ? ref
+          //         .read(categoryFeedProvider.notifier)
+          //         .paginate(forceRefetch: true)
+          //     : ref
+          //         .read(mainFeedProvider.notifier)
+          //         .paginate(forceRefetch: true);
         },
         icon: const Icon(Icons.arrow_back_ios),
       ),

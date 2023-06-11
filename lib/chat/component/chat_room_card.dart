@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/chat/model/chat_room/chat_room_model.dart';
@@ -12,7 +13,6 @@ import '../../common/secure_storage/secure_storage.dart';
 import '../model/chat_msg/chat_msg_model.dart';
 import '../provider/chat_msgs_provider.dart';
 import '../view/chat_screen.dart';
-
 
 class ChatRoomCard extends ConsumerStatefulWidget {
   final String roomId;
@@ -95,6 +95,20 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
 
   delStomp() {
     stompClient!.deactivate();
+  }
+
+  String getImageByStyle() {
+    if (widget.roomName == "street") {
+      return imageLink[0];
+    } else if (widget.roomName == "casual") {
+      return imageLink[1];
+    } else if (widget.roomName == "amekaji") {
+      return imageLink[2];
+    } else if (widget.roomName == "sporty") {
+      return imageLink[3];
+    } else {
+      return imageLink[4];
+    }
   }
 
   @override
@@ -263,47 +277,67 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            color: Colors.grey,
-                            width: 45,
-                            height: 45,
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width / 20),
-                          SizedBox(
-                            width: 120,
-                            height: 35,
-                            child: Stack(
-                              children: [
-                                Text(
+                          Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 0.0,
+                                      offset: const Offset(0, 7),
+                                    )
+                                  ],
+                                ),
+                                child: ExtendedImage.asset(
+                                  getImageByStyle(),
+                                  width: 65,
+                                  height: 65,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.03,
+                              ),
+                              SizedBox(
+                                width: 130,
+                                height: 50,
+                                child: Text(
                                   "# ${getRoomName(widget.roomName)} 방",
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.w800,
                                     fontFamily: 'NanumSquareNeo',
                                   ),
                                 ),
-                                Positioned(
-                                  right: 14,
-                                  child: Text(
-                                    "${widget.userCount}",
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                      fontFamily: 'NanumSquareNeo',
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 35,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${widget.userCount}명 참여",
+                                  style: TextStyle(
+                                    fontFamily: 'NanumSquareNeo',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize:
+                                    MediaQuery.of(context).size.width / 35,
                                   ),
                                 ),
+                                const SizedBox(width: 16),
                               ],
                             ),
                           ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width / 5),
                         ],
                       ),
                     ],
@@ -311,7 +345,7 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
                 ),
               )
             : Container(
-                height: 100,
+                height: 120,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: const Color(0xffececec),
@@ -331,54 +365,77 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            color: Colors.grey,
-                            width: 45,
-                            height: 45,
-                          ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width / 20),
-                          SizedBox(
-                            width: 90,
-                            height: 35,
-                            child: Stack(
-                              children: [
-                                Text(
+                          Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      blurRadius: 5.0,
+                                      spreadRadius: 0.0,
+                                      offset: const Offset(0, 7),
+                                    )
+                                  ],
+                                ),
+                                child: ExtendedImage.asset(
+                                  getImageByStyle(),
+                                  width: 65,
+                                  height: 65,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.03,
+                              ),
+                              SizedBox(
+                                width: 130,
+                                height: 50,
+                                child: Text(
                                   "# ${getRoomName(widget.roomName)} 방",
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontFamily: 'NanumSquareNeo'),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    fontFamily: 'NanumSquareNeo',
+                                  ),
                                 ),
-                                const Positioned(
-                                  bottom: 8,
-                                  child: Text(""),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 35,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${widget.userCount}명 참여",
+                                  style: TextStyle(
+                                    fontFamily: 'NanumSquareNeo',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width / 35,
+                                  ),
                                 ),
+                                const SizedBox(width: 16),
                               ],
                             ),
                           ),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.15),
-                          Text(
-                            "${widget.userCount}명 참여",
-                            style: TextStyle(
-                              fontFamily: 'NanumSquareNeo',
-                              fontWeight: FontWeight.w500,
-                              fontSize: MediaQuery.of(context).size.width / 35,
-                            ),
-                          )
                         ],
                       ),
                       const Divider(color: Colors.black54),
                       Text(
                         "소개글: ${getRoomName(widget.roomName)} 패션에 대해서 자유롭게 얘기하는 방입니다.",
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width / 40,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "NanumSquareNeo"),
+                          fontSize: MediaQuery.of(context).size.width * 0.025,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "NanumSquareNeo",
+                        ),
                       )
                     ],
                   ),
@@ -396,3 +453,11 @@ Map<String, String> roomList = {
   "street": "스트릿",
   "sporty": "스포티",
 };
+
+List<String> imageLink = [
+  "asset/img/chat/chat_1.png",
+  "asset/img/chat/chat_2.png",
+  "asset/img/chat/chat_3.png",
+  "asset/img/chat/chat_4.png",
+  "asset/img/chat/chat_5.png",
+];

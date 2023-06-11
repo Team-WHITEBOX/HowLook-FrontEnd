@@ -24,44 +24,16 @@ class MainProfileCard extends StatelessWidget {
 
   final List<MemberPosts> memberPosts;
 
-  const MainProfileCard(
-      {required this.memberId,
-      required this.memberNickName,
-      required this.memberHeight,
-      required this.memberWeight,
-      required this.profilePhoto,
-      required this.memberPostCount,
-      required this.memberPosts,
-      Key? key})
-      : super(key: key);
-  // String? memberId;
-  // // 닉네임
-  // String? memberNickName;
-  // // 키
-  // int? memberHeight;
-  // // 몸무게
-  // int? memberWeight;
-  // // 포토아이디
-  // String? profilePhoto;
-  //
-  // bool? me;
-  //
-  // int? memberPostCount;
-  //
-  // List<MemberPosts>? memberPosts;
-  //
-  //
-  // const MainProfileCard(
-  //     { this.memberId,
-  //       this.memberNickName,
-  //       this.memberHeight,
-  //       this.memberWeight,
-  //       this.profilePhoto,
-  //       this.me,
-  //       this.memberPostCount,
-  //       this.memberPosts,
-  //       Key? key})
-  //     : super(key: key);
+  const MainProfileCard({
+    required this.memberId,
+    required this.memberNickName,
+    required this.memberHeight,
+    required this.memberWeight,
+    required this.profilePhoto,
+    required this.memberPostCount,
+    required this.memberPosts,
+    Key? key,
+  }) : super(key: key);
 
   factory MainProfileCard.fromModel({
     required UserInfoModel model,
@@ -87,175 +59,142 @@ class MainProfileCard extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Container(
-              child: Column(
-                children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: 0.8,
-                    child: Stack(
-                      children: [
-                        Container(
-                          child: Stack(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                  colors: [
-                                    Colors.black,
-                                    Colors.grey,
-                                  ],
-                                  begin: FractionalOffset.bottomCenter,
-                                  end: FractionalOffset.topCenter,
-                                )),
+            Column(
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 0.8,
+                  child: Stack(
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.black,
+                                  Colors.grey,
+                                ],
+                                begin: FractionalOffset.bottomCenter,
+                                end: FractionalOffset.topCenter,
                               ),
-                              PageView.builder(
-                                controller: _controller,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // return Container(
-                                  //   child: Image.network(
-                                  //     'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberFeeds[index].mainPhotoPath}',
-                                  //     fit: BoxFit.cover,
-                                  //   ),
-                                  // );
-                                  return InkWell(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (_) => FeedDetailScreen(
-                                            postId: memberPosts[index].postId,
-                                          ),
-                                        ));
-                                      },
-                                      child: Image.network(
-                                        'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${memberPosts[index].mainPhotoPath}',
-                                        fit: BoxFit.cover,
-                                      ));
-                                  //   child: memberPosts.isNotEmpty
-                                  //       ? ExtendedImage.network(
-                                  //     '${memberPosts[index].mainPhotoPath}',
-                                  //     fit: BoxFit.cover,
-                                  //     cache: true,
-                                  //   )
-                                  //       : FadeInImage.assetNetwork(
-                                  //     placeholder: 'asset/img/Profile/BaseProfile.JPG',
-                                  //     image: '',
-                                  //     fit: BoxFit.cover,
-                                  //   ),
-                                  // );
+                            ),
+                          ),
+                          PageView.builder(
+                            controller: _controller,
+                            itemBuilder: (BuildContext context, int index) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => FeedDetailScreen(
+                                        postId: memberPosts[index].postId,
+                                      ),
+                                    ),
+                                  );
                                 },
-                                itemCount: memberPosts.length, // memberFeedCnt, // -> PhotoCnt로 수정
-                              ),
-                            ],
+                                child: Image.network(
+                                  memberPosts[index].mainPhotoPath,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            },
+                            itemCount: memberPostCount,
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => MyScrap(
-                                      memberId: memberId,
-                                    ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => MyScrap(
+                                    memberId: memberId,
                                   ),
-                                );
-                              }, //설정 화면 이동
-                              icon: Icon(Icons.bookmark_border_outlined),
-                              iconSize: 30,
-                              color: Colors.white,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => MyFeed(
-                                      memberId: memberId,
-                                    ),
+                                ),
+                              );
+                            }, //설정 화면 이동
+                            icon: const Icon(Icons.bookmark_border_outlined),
+                            iconSize: 30,
+                            color: Colors.white,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => MyFeed(
+                                    memberId: memberId,
                                   ),
-                                );
-                              }, //설정 화면 이동
-                              icon: Icon(Icons.auto_awesome_motion_outlined),
-                              iconSize: 30,
-                              color: Colors.white,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => SettingScreen(),
-                                  ),
-                                );
-                              }, //설정 화면 이동
-                              icon: Icon(Icons.settings),
-                              iconSize: 30,
-                              color: Colors.white,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                                ),
+                              );
+                            }, //설정 화면 이동
+                            icon: const Icon(
+                                Icons.auto_awesome_motion_outlined),
+                            iconSize: 30,
+                            color: Colors.white,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => SettingScreen(),
+                                ),
+                              );
+                            }, //설정 화면 이동
+                            icon: const Icon(Icons.settings),
+                            iconSize: 30,
+                            color: Colors.white,
+                          ),
+                        ],
+                      )
+                    ],
                   ),
-                  Container(
-                    padding: EdgeInsets.all(30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          memberNickName, //"${nickName}",
-                          style: const TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w700),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        memberNickName,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
                         ),
-                        const SizedBox(
-                          height: 5.0,
+                      ),
+                      const SizedBox(height: 5.0),
+                      Text(
+                        "${memberHeight}cm ${memberWeight}kg",
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15,
                         ),
-                        Text(
-                          "${memberHeight}cm ${memberWeight}kg", //"${height}cm ${weight}kg",
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        // Text(
-                        //   "#해시태그1 #해시태그2 #해시태그3",
-                        //   style: TextStyle(
-                        //     color: Colors.grey,
-                        //     fontSize: 15,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      ),
+                      const SizedBox(height: 5.0),
+                    ],
+                  ),
+                )
+              ],
             ),
             Positioned(
               bottom: 60,
               right: 20,
-              child: (Container(
+              child: Container(
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                      begin: Alignment.bottomRight,
-                      end: Alignment.topLeft,
-                      colors: [
-                        Colors.grey,
-                        Colors.white,
-                      ]),
+                    begin: Alignment.bottomRight,
+                    end: Alignment.topLeft,
+                    colors: [
+                      Colors.grey,
+                      Colors.white,
+                    ],
+                  ),
                   borderRadius: BorderRadius.circular(500),
                 ),
-                // child: CircleAvatar(
-                //   radius: MediaQuery.of(context).size.width / 6,
-                //   backgroundImage: NetworkImage(
-                //     'https://howlook-s3-bucket.s3.ap-northeast-2.amazonaws.com/${profilePhoto}',
-                //   ),
-                // )
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width / 6,
-                  // backgroundImage: profilePhoto != 'b7b1099a-28cb-47fa-8d46-c508c1791e66_1685012342349.png'
                   backgroundImage: profilePhoto != null
                       ? ExtendedImage.network(
                           profilePhoto,
@@ -264,7 +203,7 @@ class MainProfileCard extends StatelessWidget {
                         ).image
                       : Image.asset('asset/img/Profile/BaseProfile.JPG').image,
                 ),
-              )),
+              ),
             ),
           ],
         ),

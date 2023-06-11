@@ -6,6 +6,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../common/const/colors.dart';
 import '../../common/const/data.dart';
+import '../../common/secure_storage/secure_storage.dart';
 import '../../profile/model/params/my_profile_params.dart';
 import '../../profile/model/user_info_model.dart';
 import '../../profile/repository/profile_repository.dart';
@@ -275,32 +276,30 @@ class DetailFeedCard extends ConsumerWidget {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        final userId = await ref
-                            .read(profileRepositoryProvider)
-                            .checkToken();
+                        final storage = ref.watch(secureStorageProvider);
+                        final userId = await storage.read(key: USERMID_KEY);
+
                         MyProfileParams myProfileParams =
-                            MyProfileParams(memberId: userId.data);
-                        final userData = ref
+                            MyProfileParams(memberId: userId!);
+
+                        final userData = await ref
                             .read(profileRepositoryProvider)
-                            .getMyProfile(userId.data,
+                            .getMyProfile(userId,
                                 myProfileParams: myProfileParams);
 
-                        userData.then((value) {
-                          ref
-                              .read(replyProvider(postId).notifier)
-                              .paginate(postId: postId, forceRefetch: true);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReplyHomeScreen(
-                                postId: postId,
-                                profilePhoto: value.data.profilePhoto,
-                              ),
+                        ref
+                            .read(replyProvider(postId).notifier)
+                            .paginate(postId: postId, forceRefetch: true);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReplyHomeScreen(
+                              postId: postId,
+                              profilePhoto: userData.data.profilePhoto,
                             ),
-                          );
-                        }).catchError((err) {
-                          return "";
-                        });
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 2),

@@ -5,11 +5,15 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:howlook/chat/view/chat_home_screen.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
+import 'package:howlook/profile/provider/profile_provider.dart';
 import 'package:howlook/profile/view/my_profile_screen.dart';
 import 'package:howlook/upload/Provider/review_upload_provider.dart';
 import 'package:howlook/upload/view/photo_selected_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
+
+import '../const/data.dart';
+import '../secure_storage/secure_storage.dart';
 
 class RootTab extends ConsumerStatefulWidget {
   const RootTab({Key? key}) : super(key: key);
@@ -23,6 +27,7 @@ class _RootTabState extends ConsumerState<RootTab>
   late TabController controller;
   int _bottomNavIndex = 0;
   bool check = false;
+  String memberId = "";
 
   @override
   void initState() {
@@ -74,7 +79,14 @@ class _RootTabState extends ConsumerState<RootTab>
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.softEdge,
         activeIndex: _bottomNavIndex,
-        onTap: (index) => controller.index = index,
+        onTap: (index) async {
+          if (index == 3) {
+            final storage = ref.watch(secureStorageProvider);
+            memberId = (await storage.read(key: USERMID_KEY))!;
+            await ref.read(profileProvider(memberId).notifier).getUserInfoData();
+          }
+          controller.index = index;
+        },
       ),
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
@@ -83,7 +95,7 @@ class _RootTabState extends ConsumerState<RootTab>
           const ChatHomeScreen(),
           MainReviewScreen(),
           const tournamentScreen(),
-          MyProfileScreen(),
+          MyProfileScreen(memberId: memberId,),
           const HomeScreen(),
         ],
       ),
