@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/upload/Provider/select_photo_provider.dart';
-import 'package:howlook/upload/component/album_header_widget.dart';
-import 'package:howlook/upload/component/scroll_notification_widget.dart';
-import 'package:howlook/upload/view/upload_image_edited_screen.dart';
+
+import '../Provider/get_image_provider.dart';
+import '../Provider/review_upload_provider.dart';
+import '../Provider/select_photo_provider.dart';
+import '../component/album_header_widget.dart';
+import '../component/scroll_notification_widget.dart';
+import 'upload_image_edited_screen.dart';
 
 class PhotoSelectScreen extends ConsumerStatefulWidget {
   const PhotoSelectScreen({Key? key}) : super(key: key);
@@ -16,8 +19,8 @@ class _PhotoSelectScreenState extends ConsumerState<PhotoSelectScreen> {
   @override
   void initState() {
     super.initState();
+    ref.read(getImageProvider.notifier).checkPermission();
   }
-
   @override
   Widget build(BuildContext context) {
     final selectedStateRead = ref.read(selectedImageProvider.notifier);
@@ -32,6 +35,7 @@ class _PhotoSelectScreenState extends ConsumerState<PhotoSelectScreen> {
         leading: GestureDetector(
           onTap: () {
             // 상태 초기화
+            ref.read(isReviewUpload.notifier).update((state) => false);
             selectedStateRead.clearImage();
             Navigator.pop(context);
           },
@@ -48,8 +52,7 @@ class _PhotoSelectScreenState extends ConsumerState<PhotoSelectScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        UploadImageEditedScreen(),
+                    builder: (context) => const UploadImageEditedScreen(),
                   ),
                 );
               }

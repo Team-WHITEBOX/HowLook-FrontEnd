@@ -6,7 +6,7 @@ import 'package:howlook/chat/view/chat_home_screen.dart';
 import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/feed/view/home_screen.dart';
 import 'package:howlook/profile/provider/profile_provider.dart';
-import 'package:howlook/profile/view/my_profile_screen.dart';
+import 'package:howlook/profile/view/profile/my_profile_screen.dart';
 import 'package:howlook/upload/Provider/review_upload_provider.dart';
 import 'package:howlook/upload/view/photo_selected_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
@@ -69,13 +69,16 @@ class _RootTabState extends ConsumerState<RootTab>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: const [
-          Icons.chat,
-          Icons.chair,
-          Icons.theater_comedy_outlined,
-          Icons.person_2_outlined,
+        icons: [
+          _bottomNavIndex == 0 ? Icons.forum : Icons.forum_outlined,
+          _bottomNavIndex == 1 ? Icons.analytics : Icons.analytics_outlined,
+          _bottomNavIndex == 2
+              ? Icons.theater_comedy
+              : Icons.theater_comedy_outlined,
+          _bottomNavIndex == 3 ? Icons.person_2 : Icons.person_2_outlined,
         ],
-        height: 50,
+        height: 60,
+        iconSize: 32,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.softEdge,
         activeIndex: _bottomNavIndex,
@@ -83,7 +86,9 @@ class _RootTabState extends ConsumerState<RootTab>
           if (index == 3) {
             final storage = ref.watch(secureStorageProvider);
             memberId = (await storage.read(key: USERMID_KEY))!;
-            await ref.read(profileProvider(memberId).notifier).getUserInfoData();
+            await ref
+                .read(profileProvider(memberId).notifier)
+                .getUserInfoData();
           }
           controller.index = index;
         },
@@ -95,7 +100,9 @@ class _RootTabState extends ConsumerState<RootTab>
           const ChatHomeScreen(),
           MainReviewScreen(),
           const tournamentScreen(),
-          MyProfileScreen(memberId: memberId,),
+          MyProfileScreen(
+            memberId: memberId,
+          ),
           const HomeScreen(),
         ],
       ),
@@ -106,17 +113,19 @@ class _RootTabState extends ConsumerState<RootTab>
     return SpeedDial(
       icon: Icons.add,
       activeIcon: Icons.close,
-      // animatedIcon: AnimatedIcons.arrow_menu,
-      animatedIconTheme: const IconThemeData(size: 22),
+      animatedIconTheme: const IconThemeData(size: 60),
       backgroundColor: Colors.black,
       visible: true,
       curve: Curves.bounceIn,
+      childrenButtonSize: const Size(72, 72),
+      spaceBetweenChildren: 18,
       children: [
         // 아이콘은 추후 결정
         SpeedDialChild(
           child: const Icon(
             Icons.assignment_turned_in,
             color: Colors.white,
+            size: 32,
           ),
           backgroundColor: Colors.black,
           onTap: () {
@@ -131,7 +140,7 @@ class _RootTabState extends ConsumerState<RootTab>
           labelStyle: const TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.white,
-            fontSize: 14.0,
+            fontSize: 18.0,
           ),
           labelBackgroundColor: Colors.black,
         ),
@@ -139,6 +148,7 @@ class _RootTabState extends ConsumerState<RootTab>
           child: const Icon(
             Icons.assignment_turned_in,
             color: Colors.white,
+            size: 32,
           ),
           backgroundColor: Colors.black,
           onTap: () {
@@ -153,7 +163,7 @@ class _RootTabState extends ConsumerState<RootTab>
           labelStyle: const TextStyle(
             fontWeight: FontWeight.w500,
             color: Colors.white,
-            fontSize: 14.0,
+            fontSize: 18.0,
           ),
           labelBackgroundColor: Colors.black,
         )
@@ -161,43 +171,3 @@ class _RootTabState extends ConsumerState<RootTab>
     );
   }
 }
-
-// ConvexAppBar(
-// curve: null,
-// color: Colors.black,
-// controller: controller,
-// backgroundColor: Colors.white,
-// style: TabStyle.fixedCircle,
-// activeColor: Colors.black,
-// cornerRadius: 15,
-// height: 60,
-// items: [
-// TabItem(
-// icon: Icon(
-// _bottomNavIndex == 0 ? Icons.home : Icons.home_outlined,
-// size: 30)),
-// TabItem(
-// icon: Icon(
-// _bottomNavIndex == 1 ? Icons.reviews : Icons.reviews_outlined,
-// size: 30)),
-// TabItem(
-// icon: Icon(
-// _bottomNavIndex == 2
-// ? Icons.add_circle
-//     : Icons.add_circle_outline,
-// color: Colors.white,
-// size: 40)),
-// TabItem(
-// icon: Icon(
-// _bottomNavIndex == 3
-// ? Icons.theater_comedy
-//     : Icons.theater_comedy_outlined,
-// size: 30)),
-// TabItem(
-// icon: Icon(
-// _bottomNavIndex == 4
-// ? Icons.person_2
-//     : Icons.person_2_outlined,
-// size: 30)),
-// ],
-// ),

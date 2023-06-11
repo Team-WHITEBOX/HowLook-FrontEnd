@@ -9,12 +9,13 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/view/root_tab.dart';
-import 'package:howlook/upload/Provider/loading_provider.dart';
-import 'package:howlook/upload/Provider/select_photo_provider.dart';
-import 'package:howlook/upload/model/upload_formdata_model.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../../common/layout/default_layout.dart';
+import '../../common/view/root_tab.dart';
+import '../Provider/loading_provider.dart';
+import '../Provider/select_photo_provider.dart';
+import '../model/upload_formdata_model.dart';
 
 class ReviewUploadScreen extends ConsumerStatefulWidget {
   const ReviewUploadScreen({Key? key}) : super(key: key);
@@ -30,9 +31,6 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
   // FireBase - Database
   final database = FirebaseFirestore.instance;
   late CollectionReference databaseRef;
-  // Upload Model
-  UploadModel uploadModel = UploadModel();
-  String content = "";
 
   Future<void> getPhoto() async {
     await getFaceDetectionImage();
@@ -40,7 +38,6 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
 
   Future<void> getFaceDetectionImage() async {
     final selectedState = ref.watch(selectedImageProvider);
-    final selectedStateRead = ref.read(selectedImageProvider.notifier);
     String dir = (await getApplicationDocumentsDirectory())
         .path; //path provider로 저장할 경로 가져오기
 
@@ -60,7 +57,7 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
               // 비식별 처리 후 링크 저장하기
               selectedState.map((e) {
                 if (e.imageName == value['name']) {
-                  selectedStateRead.setFaceDetection(
+                  ref.read(selectedImageProvider.notifier).setFaceDetection(
                       e, value['name'], value['path'], '$dir/${value['name']}');
                 } else {
                   return e;
@@ -94,6 +91,8 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController();
+    final newPostState = ref.watch(newPostInfoProvider);
+    final selectedImage = ref.watch(selectedImageProvider);
 
     return Stack(
       children: [
@@ -121,8 +120,7 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
                     .read(newPostInfoProvider.notifier)
                     .toggleLoadingIndicator(true);
 
-                final List<dio.MultipartFile> files = ref
-                    .watch(selectedImageProvider)
+                final List<dio.MultipartFile> files = selectedImage
                     .map((e) =>
                         dio.MultipartFile.fromFileSync(e.afterDetectionInPath!))
                     .toList();
@@ -130,8 +128,7 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
                 // API 전송
                 final resp = await ref
                     .read(selectedImageProvider.notifier)
-                    .reviewUploadImage(
-                        ref.watch(newPostInfoProvider).uploadModel, files);
+                    .reviewUploadImage(newPostState.uploadModel, files);
 
                 if (resp.response.statusCode == 200) {
                   // 상태 초기화
@@ -141,9 +138,10 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
                       .read(newPostInfoProvider.notifier)
                       .toggleLoadingIndicator(false);
 
+                  if (!mounted) return;
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (_) => RootTab(),
+                      builder: (_) => const RootTab(),
                     ),
                     (route) => false,
                   );
@@ -164,8 +162,7 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
               child: PageView.builder(
                 controller: controller,
                 itemBuilder: (BuildContext context, int index) {
-                  if (ref.watch(selectedImageProvider)[0].afterDetectionOutPath ==
-                      "") {
+                  if (selectedImage[0].afterDetectionOutPath == "") {
                     return const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -177,9 +174,7 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
                     );
                   }
                   return ExtendedImage.network(
-                    ref
-                        .watch(selectedImageProvider)[index]
-                        .afterDetectionOutPath!,
+                    selectedImage[index].afterDetectionOutPath!,
                     fit: BoxFit.cover,
                     cache: true,
                   );
@@ -190,7 +185,7 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
           ),
         ),
         Offstage(
-          offstage: !(ref.watch(newPostInfoProvider).loadingIndicator!),
+          offstage: !(newPostState.loadingIndicator!),
           child: Stack(
             children: <Widget>[
               const Opacity(

@@ -11,7 +11,9 @@ class NewPostInfoStateNotifier extends StateNotifier<PostInfo> {
       : super(
           PostInfo(
             loadingIndicator: false,
-            uploadModel: UploadModel(),
+            uploadModel: UploadModel(
+              content: "",
+            ),
           ),
         );
 
@@ -21,6 +23,15 @@ class NewPostInfoStateNotifier extends StateNotifier<PostInfo> {
     );
   }
 
+  addContent(String content) {
+    UploadModel uploadModel = UploadModel(content: content);
+    state = state.copyWith(uploadModel: uploadModel);
+  }
+
+  clearState() {
+    state =
+        PostInfo(loadingIndicator: false, uploadModel: UploadModel(content: ''));
+  }
 }
 
 class PostInfo {

@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/params/my_profile_params.dart';
-import '../model/user_info_model.dart';
+import '../model/profile/profile_model.dart';
 import '../repository/profile_repository.dart';
 
 final profileProvider =
-    StateNotifierProvider.family<ProfileStateNotifier, UserInfoModel, String>(
+    StateNotifierProvider.family<ProfileStateNotifier, ProfileModel, String>(
   (ref, memberId) {
     final repository = ref.watch((profileRepositoryProvider));
     final notifier =
@@ -14,7 +14,7 @@ final profileProvider =
   },
 );
 
-class ProfileStateNotifier extends StateNotifier<UserInfoModel> {
+class ProfileStateNotifier extends StateNotifier<ProfileModel> {
   final String memberId;
   final ProfileRepository repository;
 
@@ -22,23 +22,25 @@ class ProfileStateNotifier extends StateNotifier<UserInfoModel> {
     required this.memberId,
     required this.repository,
   }) : super(
-          UserInfoModel(
+          ProfileModel(
             memberId: "",
             memberNickName: "",
             memberHeight: 0,
             memberWeight: 0,
             profilePhoto: "",
+            memberPostCount: 0,
+            memberPosts: [],
           ),
         );
 
   getUserInfoData() async {
     MyProfileParams myProfileParams = MyProfileParams(memberId: memberId);
 
-    final data = await repository.getMyProfile(
+    final resp = await repository.getMyProfile(
       memberId,
       myProfileParams: myProfileParams,
     );
 
-    state = data.data;
+    state = resp.data;
   }
 }

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 
-import '../../common/const/data.dart';
-import '../../common/layout/default_layout.dart';
-import '../../common/secure_storage/secure_storage.dart';
-import '../component/other_profile_card.dart';
-import '../model/other_profile_model.dart';
+import '../../../common/const/data.dart';
+import '../../../common/layout/default_layout.dart';
+import '../../../common/secure_storage/secure_storage.dart';
+import '../../component/other_profile_card.dart';
+import '../../model/other_profile_model.dart';
 
 class OtherProfileScreen extends ConsumerStatefulWidget {
   final String memberId; // 포스트 아이디로 특정 게시글 조회

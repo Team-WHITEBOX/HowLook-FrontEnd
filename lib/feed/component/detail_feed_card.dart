@@ -8,7 +8,7 @@ import '../../common/const/colors.dart';
 import '../../common/const/data.dart';
 import '../../common/secure_storage/secure_storage.dart';
 import '../../profile/model/params/my_profile_params.dart';
-import '../../profile/model/user_info_model.dart';
+import '../../profile/model/user_info/user_info_model.dart';
 import '../../profile/repository/profile_repository.dart';
 import '../model/feed_model.dart';
 import '../model/feed_photo_dto.dart';
@@ -18,7 +18,7 @@ import '../repository/feed_repository.dart';
 import '../view/feed_menu/main_feed_more_vert_screen.dart';
 import '../view/reply/reply_home_screen.dart';
 
-class DetailFeedCard extends ConsumerWidget {
+class DetailFeedCard extends ConsumerStatefulWidget {
   final UserInfoModel userPostInfo;
   // 포스트 아이디
   final int postId;
@@ -80,26 +80,31 @@ class DetailFeedCard extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DetailFeedCard> createState() => _DetailFeedCardState();
+}
+
+class _DetailFeedCardState extends ConsumerState<DetailFeedCard> {
+  @override
+  Widget build(BuildContext context) {
     PageController controller = PageController();
-    List<int> bodyInfo = [userPostInfo.memberHeight, userPostInfo.memberWeight];
+    List<int> bodyInfo = [widget.userPostInfo.memberHeight, widget.userPostInfo.memberWeight];
     final repo = ref.watch(feedRepositoryProvider);
 
     Future<bool> onLikeButtonTapped(bool likeCheck) async {
       if (!likeCheck) {
         // false -> true
-        final code = await repo.postLike(postId);
+        final code = await repo.postLike(widget.postId);
         if (code.response.statusCode == 200) {
-          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          ref.read(mainFeedProvider.notifier).getDetail(postId: widget.postId);
           return !likeCheck;
         } else {
           return likeCheck;
         }
       } else {
         // true -> false
-        final code = await repo.delLike(postId);
+        final code = await repo.delLike(widget.postId);
         if (code.response.statusCode == 200) {
-          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          ref.read(mainFeedProvider.notifier).getDetail(postId: widget.postId);
           return !likeCheck;
         } else {
           return likeCheck;
@@ -110,18 +115,18 @@ class DetailFeedCard extends ConsumerWidget {
     Future<bool> onScrapedButtonTapped(bool scrapCheck) async {
       if (!scrapCheck) {
         // false -> true
-        final code = await repo.postScrap(postId);
+        final code = await repo.postScrap(widget.postId);
         if (code.response.statusCode == 200) {
-          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          ref.read(mainFeedProvider.notifier).getDetail(postId: widget.postId);
           return !scrapCheck;
         } else {
           return scrapCheck;
         }
       } else {
         // true -> false
-        final code = await repo.delScrap(postId);
+        final code = await repo.delScrap(widget.postId);
         if (code.response.statusCode == 200) {
-          ref.read(mainFeedProvider.notifier).getDetail(postId: postId);
+          ref.read(mainFeedProvider.notifier).getDetail(postId: widget.postId);
           return !scrapCheck;
         } else {
           return scrapCheck;
@@ -143,22 +148,47 @@ class DetailFeedCard extends ConsumerWidget {
                   const SizedBox(width: 12.0),
                   CircleAvatar(
                     radius: 16.0,
-                    backgroundImage: userPostInfo.profilePhoto != NULL_IMG_URI
+                    backgroundImage: widget.userPostInfo.profilePhoto != NULL_IMG_URI
                         ? ExtendedImage.network(
-                            userPostInfo.profilePhoto,
+                            widget.userPostInfo.profilePhoto,
                             fit: BoxFit.cover,
                             cache: true,
+                            loadStateChanged: (ExtendedImageState state) {
+                              switch (state.extendedImageLoadState) {
+                                case LoadState.loading:
+                                  return const CircularProgressIndicator(
+                                      color: Colors.black);
+                                case LoadState.completed:
+                                  break;
+                                case LoadState.failed:
+                                  break;
+                              }
+                              return null;
+                            },
                           ).image
                         : ExtendedImage.asset(
-                                "asset/img/Profile/BaseProfile.JPG")
-                            .image,
+                            "asset/img/Profile/BaseProfile.JPG",
+                            loadStateChanged: (ExtendedImageState state) {
+                              switch (state.extendedImageLoadState) {
+                                case LoadState.loading:
+                                  return const CircularProgressIndicator(
+                                      color: Colors.black);
+                                  break;
+                                case LoadState.completed:
+                                  break;
+                                case LoadState.failed:
+                                  break;
+                              }
+                              return null;
+                            },
+                          ).image,
                   ),
                   const SizedBox(width: 16.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        userPostInfo.memberId,
+                        widget.userPostInfo.memberId,
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
@@ -182,21 +212,26 @@ class DetailFeedCard extends ConsumerWidget {
                     width: 30,
                     height: 30,
                     child: ExtendedImage.asset(
-                        "asset/img/weather/weather_$weather.png"),
+                      "asset/img/weather/weather_${widget.weather}.png",
+                    ),
                   ),
                   const SizedBox(width: 10),
-                  Text("$temperature°C"),
+                  Text("${widget.temperature}°C"),
                   const SizedBox(width: 10),
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      final storage = ref.watch(secureStorageProvider);
+                      final userId = await storage.read(key: USERMID_KEY);
+
+                      if (!mounted) return;
                       showModalBottomSheet(
                         context: context,
                         builder: (context) {
                           return MainFeedMoreVertScreen(
-                            userId: "testuser12",
-                            memberId: userPostInfo.memberId,
-                            postId: postId,
-                            isScrapped: isScrapped!,
+                            userId: userId,
+                            memberId: widget.userPostInfo.memberId,
+                            postId: widget.postId,
+                            isScrapped: widget.isScrapped!,
                           );
                         },
                         elevation: 50,
@@ -227,12 +262,12 @@ class DetailFeedCard extends ConsumerWidget {
                   controller: controller,
                   itemBuilder: (BuildContext context, int index) {
                     return ExtendedImage.network(
-                      photoDTOs[index].path,
+                      widget.photoDTOs[index].path,
                       fit: BoxFit.cover,
                       cache: true,
                     );
                   },
-                  itemCount: photoCount,
+                  itemCount: widget.photoCount,
                 ),
               ),
               Positioned(
@@ -240,7 +275,7 @@ class DetailFeedCard extends ConsumerWidget {
                 right: 18,
                 child: SmoothPageIndicator(
                   controller: controller,
-                  count: photoCount,
+                  count: widget.photoCount,
                   effect: const WormEffect(
                     spacing: 5.0,
                     radius: 14.0,
@@ -263,7 +298,7 @@ class DetailFeedCard extends ConsumerWidget {
                 Row(
                   children: [
                     LikeButton(
-                      isLiked: likeCheck,
+                      isLiked: widget.likeCheck,
                       likeBuilder: (bool isLiked) {
                         return Icon(
                           Icons.favorite,
@@ -271,7 +306,7 @@ class DetailFeedCard extends ConsumerWidget {
                         );
                       },
                       onTap: onLikeButtonTapped,
-                      likeCount: likeCount,
+                      likeCount: widget.likeCount,
                       countDecoration: countDecoration,
                     ),
                     GestureDetector(
@@ -288,14 +323,14 @@ class DetailFeedCard extends ConsumerWidget {
                                 myProfileParams: myProfileParams);
 
                         ref
-                            .read(replyProvider(postId).notifier)
-                            .paginate(postId: postId, forceRefetch: true);
+                            .read(replyProvider(widget.postId).notifier)
+                            .paginate(postId: widget.postId, forceRefetch: true);
 
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ReplyHomeScreen(
-                              postId: postId,
+                              postId: widget.postId,
                               profilePhoto: userData.data.profilePhoto,
                             ),
                           ),
@@ -312,7 +347,7 @@ class DetailFeedCard extends ConsumerWidget {
                                   const EdgeInsets.only(bottom: 6, left: 8),
                               child: Center(
                                 child: Text(
-                                  '$replyCount 개',
+                                  '${widget.replyCount} 개',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ),
@@ -326,7 +361,7 @@ class DetailFeedCard extends ConsumerWidget {
                 Row(
                   children: [
                     LikeButton(
-                      isLiked: isScrapped,
+                      isLiked: widget.isScrapped,
                       likeBuilder: (bool isScrapped) {
                         return Icon(
                           Icons.bookmark,
@@ -347,7 +382,7 @@ class DetailFeedCard extends ConsumerWidget {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Text(
-                "${regDate[0]}.${regDate[1]}.${regDate[2]}",
+                "${widget.regDate[0]}.${widget.regDate[1]}.${widget.regDate[2]}",
                 style: const TextStyle(
                   color: Colors.black87,
                 ),
@@ -370,7 +405,7 @@ class DetailFeedCard extends ConsumerWidget {
                     textAlign: TextAlign.left,
                   ),
                   Text(
-                    userPostInfo.memberId,
+                    widget.userPostInfo.memberId,
                     style: const TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.w700,
@@ -378,7 +413,7 @@ class DetailFeedCard extends ConsumerWidget {
                     textAlign: TextAlign.left,
                   ),
                   Text(
-                    "   $content",
+                    "   ${widget.content}",
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w300,

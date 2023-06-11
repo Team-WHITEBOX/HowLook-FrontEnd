@@ -1,14 +1,13 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/user/provider/sign_in_provider.dart';
-import 'package:howlook/user/repository/sign_up_repository.dart';
-import 'package:howlook/user/view/signup/second_signup_screen.dart';
 
 import '../../../common/component/cust_textform_filed.dart';
 import '../../../common/const/colors.dart';
 import '../../../common/layout/default_layout.dart';
 import '../../provider/sign_up_provider.dart';
+import '../../repository/sign_up_repository.dart';
+import 'second_signup_screen.dart';
 
 class FirstSignUpScreen extends ConsumerStatefulWidget {
   const FirstSignUpScreen({Key? key}) : super(key: key);
@@ -69,11 +68,11 @@ class _FirstSignUpScreenState extends ConsumerState<FirstSignUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // 상단 텍스트
-                  const PageTitle(),
+                  PageTitle(),
                   const SizedBox(height: 16.0),
-                  const PageSubTitle(),
+                  PageSubTitle(),
                   const SizedBox(height: 40.0),
-                  const PageLabelText(labelText: "계정"),
+                  PageLabelText("계정"),
                   const SizedBox(height: 5),
                   Stack(
                     children: [
@@ -151,7 +150,7 @@ class _FirstSignUpScreenState extends ConsumerState<FirstSignUpScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: newMember.memberId!.length > 4
+                            backgroundColor: newMember.memberId!.length > 4 && idCheck
                                 ? Colors.black
                                 : Colors.grey,
                           ),
@@ -166,7 +165,7 @@ class _FirstSignUpScreenState extends ConsumerState<FirstSignUpScreen> {
                     ],
                   ),
                   const SizedBox(height: 24.0),
-                  const PageLabelText(labelText: "비밀번호"),
+                  PageLabelText("비밀번호"),
                   const SizedBox(height: 5),
                   CustomTextFormField(
                     hintText: "비밀번호를 입력해주세요",
@@ -188,7 +187,7 @@ class _FirstSignUpScreenState extends ConsumerState<FirstSignUpScreen> {
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 24.0),
-                  const PageLabelText(labelText: "비밀번호 확인"),
+                  PageLabelText("비밀번호 확인"),
                   const SizedBox(height: 5),
                   CustomTextFormField(
                     hintText: "비밀번호를 한번 더 입력해주세요",
@@ -263,54 +262,39 @@ class _FirstSignUpScreenState extends ConsumerState<FirstSignUpScreen> {
   }
 }
 
-class PageTitle extends StatelessWidget {
-  const PageTitle({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      "회원가입✏️",
-      style: TextStyle(
-        fontSize: 26,
-        fontWeight: FontWeight.w700,
-        color: Colors.black,
-      ),
-    );
-  }
+Widget PageTitle({
+  String? title,
+}) {
+  return Text(
+    title ?? "회원가입✏️",
+    style: const TextStyle(
+      fontSize: 26,
+      fontWeight: FontWeight.w700,
+      color: Colors.black,
+    ),
+  );
 }
 
-class PageSubTitle extends StatelessWidget {
-  const PageSubTitle({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      "당신의 정보를 기입해주세요 :)",
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w100,
-        color: BODY_TEXT_COLOR,
-      ),
-    );
-  }
+Widget PageSubTitle({
+  String? subTitle,
+}) {
+  return Text(
+    subTitle ?? "당신의 정보를 기입해주세요 :)",
+    style: const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w100,
+      color: BODY_TEXT_COLOR,
+    ),
+  );
 }
 
-class PageLabelText extends StatelessWidget {
-  final String labelText;
-  const PageLabelText({
-    required this.labelText,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      labelText,
-      textAlign: TextAlign.left,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
+Widget PageLabelText(String labelText) {
+  return Text(
+    labelText,
+    textAlign: TextAlign.left,
+    style: const TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
+    ),
+  );
 }

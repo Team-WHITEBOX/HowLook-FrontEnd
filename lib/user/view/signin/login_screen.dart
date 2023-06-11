@@ -36,6 +36,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return DefaultLayout(
       title: '',
+      actions: <Widget>[
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const MainSignUpScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.info),
+        ),
+      ],
       child: Form(
         key: formKey,
         child: SingleChildScrollView(

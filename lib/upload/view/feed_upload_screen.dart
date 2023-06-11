@@ -19,7 +19,6 @@ import '../Provider/loading_provider.dart';
 import '../Provider/select_photo_provider.dart';
 import '../model/upload_formdata_model.dart';
 
-
 class FeedUploadScreen extends ConsumerStatefulWidget {
   const FeedUploadScreen({Key? key}) : super(key: key);
 
@@ -28,6 +27,8 @@ class FeedUploadScreen extends ConsumerStatefulWidget {
 }
 
 class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
+  final formKey = GlobalKey<FormState>();
+
   // FireBase - Storage
   final storage = FirebaseStorage.instance;
   late Reference storageRef;
@@ -35,8 +36,6 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
   final database = FirebaseFirestore.instance;
   late CollectionReference databaseRef;
   // Upload Model
-  UploadModel uploadModel = UploadModel();
-  String content = "";
 
   // 위치 정보 불러오기
   Future<Position> getCurrentLocation() async {
@@ -51,7 +50,6 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
 
   Future<void> getFaceDetectionImage() async {
     final selectedState = ref.watch(selectedImageProvider);
-    final selectedStateRead = ref.read(selectedImageProvider.notifier);
     String dir = (await getApplicationDocumentsDirectory())
         .path; //path provider로 저장할 경로 가져오기
 
@@ -74,12 +72,12 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
                   if (e.imageName == value['name']) {
                     print(value['name']);
                     print('$dir/${value['name']}');
-                    selectedStateRead.setFaceDetection(
-                      e,
-                      value['name'],
-                      value['path'],
-                      '$dir/${value['name']}',
-                    );
+                    ref.read(selectedImageProvider.notifier).setFaceDetection(
+                          e,
+                          value['name'],
+                          value['path'],
+                          '$dir/${value['name']}',
+                        );
                   } else {
                     return e;
                   }
@@ -113,15 +111,9 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedState = ref.watch(selectedImageProvider);
-    final selectedStateRead = ref.read(selectedImageProvider.notifier);
     final newPostState = ref.watch(newPostInfoProvider);
-    final newPostStateRead = ref.read(newPostInfoProvider.notifier);
     final styleState = ref.watch(styleInfoProvider);
-    final styleStateRead = ref.read(styleInfoProvider.notifier);
-    final formKey = GlobalKey<FormState>();
     PageController controller = PageController();
-    TextEditingController titleController =
-        TextEditingController(text: content);
 
     return Stack(
       children: [
@@ -132,8 +124,10 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
           backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
-              newPostStateRead.toggleLoadingIndicator(false);
-              styleStateRead.clear();
+              ref
+                  .read(newPostInfoProvider.notifier)
+                  .toggleLoadingIndicator(false);
+              ref.read(styleInfoProvider.notifier).clear();
               Navigator.pop(context);
             },
             child: const Padding(
@@ -144,49 +138,56 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
           actions: [
             GestureDetector(
               onTap: () async {
-                var gps = await getCurrentLocation();
-                formKey.currentState?.save();
+                if (formKey.currentState!.validate()) {
+                  final styleState = ref.watch(styleInfoProvider);
+                  final newPostState = ref.watch(newPostInfoProvider);
 
-                newPostStateRead.toggleLoadingIndicator(true);
-                newPostState.uploadModel.content = content;
-                newPostState.uploadModel.latitude = gps.latitude;
-                newPostState.uploadModel.longitude = gps.longitude;
-                newPostState.uploadModel.hashtagAmekaji =
-                    styleState[0].isSelected;
-                newPostState.uploadModel.hashtagMinimal =
-                    styleState[1].isSelected;
-                newPostState.uploadModel.hashtagCasual =
-                    styleState[2].isSelected;
-                newPostState.uploadModel.hashtagStreet =
-                    styleState[3].isSelected;
-                newPostState.uploadModel.hashtagSporty =
-                    styleState[4].isSelected;
-                newPostState.uploadModel.hashtagGuitar =
-                    styleState[5].isSelected;
+                  var gps = await getCurrentLocation();
+                  formKey.currentState?.save();
 
-                final List<dio.MultipartFile> files = selectedState.map((e) {
-                  print(e.afterDetectionInPath!);
-                  print(e.afterDetectionOutPath!);
-                  return dio.MultipartFile.fromFileSync(
-                      e.afterDetectionInPath!);
-                }).toList();
+                  ref
+                      .read(newPostInfoProvider.notifier)
+                      .toggleLoadingIndicator(true);
 
-                // API 전송
-                final resp = await selectedStateRead.feedUploadImage(
-                    newPostState.uploadModel, files);
+                  newPostState.uploadModel.latitude = gps.latitude;
+                  newPostState.uploadModel.longitude = gps.longitude;
+                  newPostState.uploadModel.hashtagAmekaji =
+                      styleState[0].isSelected;
+                  newPostState.uploadModel.hashtagMinimal =
+                      styleState[1].isSelected;
+                  newPostState.uploadModel.hashtagCasual =
+                      styleState[2].isSelected;
+                  newPostState.uploadModel.hashtagStreet =
+                      styleState[3].isSelected;
+                  newPostState.uploadModel.hashtagSporty =
+                      styleState[4].isSelected;
+                  newPostState.uploadModel.hashtagGuitar =
+                      styleState[5].isSelected;
 
-                if (resp.response.statusCode == 200) {
-                  // 상태 초기화
-                  selectedStateRead.clearImage();
-                  // LoadingIndicator false로 초기화
-                  newPostStateRead.toggleLoadingIndicator(false);
+                  final List<dio.MultipartFile> files = selectedState.map((e) {
+                    return dio.MultipartFile.fromFileSync(
+                        e.afterDetectionInPath!);
+                  }).toList();
 
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => RootTab(),
-                    ),
-                    (route) => false,
-                  );
+                  // API 전송
+                  final resp = await ref
+                      .read(selectedImageProvider.notifier)
+                      .feedUploadImage(newPostState.uploadModel, files);
+
+                  if (resp.response.statusCode == 200) {
+                    // 상태 초기화
+                    ref.read(selectedImageProvider.notifier).clearImage();
+                    // LoadingIndicator false로 초기화
+                    ref.read(newPostInfoProvider.notifier).clearState();
+
+                    if (!mounted) return;
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => const RootTab(),
+                      ),
+                      (route) => false,
+                    );
+                  }
                 }
               },
               child: const Padding(
@@ -244,16 +245,20 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
                               child: CustomTextFormField(
                                 maxLines: 5,
                                 isBorder: false,
-                                titleController: titleController,
                                 hintText: "당신에 대해서 소개해주세요 :)",
                                 onChanged: (String value) {
-                                  content = value;
+                                  ref
+                                      .read(newPostInfoProvider.notifier)
+                                      .addContent(value);
                                 },
-                                onSaved: (value) {
-                                  content = value;
-                                },
+                                onSaved: (value) {},
                                 validator: (value) {
-                                  return null;
+                                  if (value.toString().isEmpty) {
+                                    print("Hl");
+                                    return "내용을 입력해주세요";
+                                  } else {
+                                    return null;
+                                  }
                                 },
                               ),
                             ),
@@ -272,8 +277,12 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return GestureDetector(
                                     onTap: () {
-                                      styleStateRead.selectedStyle(
-                                          styles[index].styleName);
+                                      print(index);
+                                      print(styles[index].styleName);
+                                      ref
+                                          .read(styleInfoProvider.notifier)
+                                          .selectedStyle(
+                                              styles[index].styleName);
                                     },
                                     child: Container(
                                       width: 90,

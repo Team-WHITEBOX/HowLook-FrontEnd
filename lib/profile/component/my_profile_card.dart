@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 
+import '../../common/const/data.dart';
 import '../../feed/view/feed_detail/feed_detail_screen.dart';
-import '../model/member_posts.dart';
-import '../model/user_info_model.dart';
-import '../settingList/setting_list.dart';
-import '../view/my_feed.dart';
-import '../view/my_scrap.dart';
+import '../model/profile/member_posts.dart';
+import '../model/profile/profile_model.dart';
+import '../view/profile/my_feed_screen.dart';
+import '../view/profile/my_scrap.dart';
+import '../view/setting/setting_list.dart';
 
 class MainProfileCard extends StatelessWidget {
   // 아이디
@@ -36,7 +37,7 @@ class MainProfileCard extends StatelessWidget {
   }) : super(key: key);
 
   factory MainProfileCard.fromModel({
-    required UserInfoModel model,
+    required ProfileModel model,
   }) {
     return MainProfileCard(
       memberId: model.memberId,
@@ -44,15 +45,13 @@ class MainProfileCard extends StatelessWidget {
       memberHeight: model.memberHeight,
       memberWeight: model.memberWeight,
       profilePhoto: model.profilePhoto,
-      memberPostCount: model.memberPostCount!,
-      memberPosts: model.memberPosts!,
+      memberPostCount: model.memberPostCount,
+      memberPosts: model.memberPosts,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // final List<MainProfileModel> userInfo = ref.watch(ProfileProvider);
-
     PageController _controller = PageController();
 
     return Column(
@@ -92,8 +91,9 @@ class MainProfileCard extends StatelessWidget {
                                     ),
                                   );
                                 },
-                                child: Image.network(
+                                child: ExtendedImage.network(
                                   memberPosts[index].mainPhotoPath,
+                                  cache: true,
                                   fit: BoxFit.cover,
                                 ),
                               );
@@ -123,7 +123,7 @@ class MainProfileCard extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => MyFeed(
+                                  builder: (_) => MyFeedScreen(
                                     memberId: memberId,
                                   ),
                                 ),
@@ -195,7 +195,7 @@ class MainProfileCard extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width / 6,
-                  backgroundImage: profilePhoto != null
+                  backgroundImage: profilePhoto != NULL_IMG_URI
                       ? ExtendedImage.network(
                           profilePhoto,
                           fit: BoxFit.cover,

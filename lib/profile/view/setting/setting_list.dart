@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/common/layout/default_layout.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/profile/settingList/profileChange_screen.dart';
-import 'package:howlook/user/model/token/token_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../user/view/signin/intro_screen.dart';
-import '../repository/profile_repository.dart';
+import '../../../common/const/data.dart';
+import '../../../common/layout/default_layout.dart';
+import '../../../common/secure_storage/secure_storage.dart';
+import '../../../user/model/token/token_model.dart';
+import '../../../user/view/signin/intro_screen.dart';
+import '../../repository/profile_repository.dart';
+import 'profile_change_screen.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
   @override
@@ -36,7 +36,7 @@ class _SettingList extends ConsumerState<SettingScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfileChanging()),
+                MaterialPageRoute(builder: (context) => ProfileChangeScreen()),
               );
             },
           ),

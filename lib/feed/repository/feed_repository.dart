@@ -84,6 +84,13 @@ abstract class FeedRepository {
     const DetailFeedParams(),
   });
 
+  @DELETE('/{postId}')
+  @Headers({
+    'accessToken': 'true',
+    'content-type': 'application/json'
+  })
+  Future<HttpResponse<dynamic>> delPost(@Path('postId') int postId);
+
   @POST('/like')
   @Headers({
     'accessToken': 'true',

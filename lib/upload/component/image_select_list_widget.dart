@@ -12,7 +12,7 @@ class ImageSelectList extends ConsumerWidget {
     final getState = ref.watch(getImageProvider);
 
     return GridView(
-      physics: const BouncingScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(),
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,

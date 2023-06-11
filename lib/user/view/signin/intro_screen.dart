@@ -26,7 +26,6 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
     if (await isKakaoTalkInstalled()) {
       code = await AuthCodeClient.instance.authorizeWithTalk();
       token = await AuthApi.instance.issueAccessToken(authCode: code);
-      print("HELLOHELLOHELLO $token");
     } else {
       code = await AuthCodeClient.instance.authorize();
       token = await AuthApi.instance.issueAccessToken(authCode: code);

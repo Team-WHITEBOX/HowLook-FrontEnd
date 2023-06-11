@@ -7,7 +7,7 @@ part of 'upload_formdata_model.dart';
 // **************************************************************************
 
 UploadModel _$UploadModelFromJson(Map<String, dynamic> json) => UploadModel(
-      content: json['content'] as String?,
+      content: json['content'] as String,
       hashtagAmekaji: json['hashtagDTO.amekaji'] as bool?,
       hashtagCasual: json['hashtagDTO.casual'] as bool?,
       hashtagGuitar: json['hashtagDTO.guitar'] as bool?,

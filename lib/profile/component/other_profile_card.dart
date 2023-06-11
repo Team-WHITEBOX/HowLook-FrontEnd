@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howlook/profile/view/my_feed.dart';
+import 'package:howlook/profile/view/profile/my_feed_screen.dart';
 import 'package:howlook/feed/view/feed_detail/feed_detail_screen.dart';
 import 'package:howlook/profile/model/other_profile_model.dart';
 import 'package:extended_image/extended_image.dart';
@@ -125,7 +125,7 @@ class OtherProfileCard extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => MyFeed(
+                                    builder: (_) => MyFeedScreen(
                                       memberId: memberId,
                                     ),
                                   ),

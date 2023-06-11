@@ -10,7 +10,6 @@ class AlbumHeader extends ConsumerStatefulWidget {
 }
 
 class _AlbumHeaderState extends ConsumerState<AlbumHeader> {
-
   Future<String> _name() async {
     String name = ref.read(getImageProvider.notifier).currentAlbum!.name;
     return name;
@@ -91,7 +90,7 @@ class _AlbumHeaderState extends ConsumerState<AlbumHeader> {
                   FutureBuilder(
                     future: _name(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if(snapshot.hasData == false) {
+                      if (snapshot.hasData == false) {
                         return const Text("모든 사진");
                       } else {
                         return Text(
@@ -104,13 +103,8 @@ class _AlbumHeaderState extends ConsumerState<AlbumHeader> {
                       }
                     },
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                  )
+                  const SizedBox(width: 6),
+                  const Icon(Icons.arrow_drop_down, color: Colors.white),
                 ],
               ),
             ),

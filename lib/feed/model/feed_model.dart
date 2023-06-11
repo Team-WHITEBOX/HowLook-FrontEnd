@@ -1,5 +1,5 @@
 import 'package:howlook/feed/model/feed_photo_dto.dart';
-import 'package:howlook/profile/model/user_info_model.dart';
+import 'package:howlook/profile/model/user_info/user_info_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'feed_model.g.dart';

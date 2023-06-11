@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../common/component/cust_textform_filed.dart';
 import '../../common/layout/default_layout.dart';
-import '../../profile/settingList/setting_list.dart';
+import '../../profile/view/setting/setting_list.dart';
 
 class ProfileChangeCard extends StatefulWidget {
   const ProfileChangeCard({Key? key}) : super(key: key);

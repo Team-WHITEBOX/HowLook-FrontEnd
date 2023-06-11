@@ -6,7 +6,7 @@ part 'upload_formdata_model.g.dart';
 @JsonSerializable()
 class UploadModel {
   // Content
-  String? content;
+  String content;
   // Style
   @JsonKey(name: 'hashtagDTO.amekaji')
   bool? hashtagAmekaji;
@@ -27,7 +27,7 @@ class UploadModel {
   // List<MultipartFile>? files;
 
   UploadModel({
-    this.content,
+    required this.content,
     this.hashtagAmekaji,
     this.hashtagCasual,
     this.hashtagGuitar,

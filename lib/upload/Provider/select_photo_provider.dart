@@ -24,7 +24,7 @@ class SelectedImageStateNotifier
 
   // 상태 초기화 함수
   void clearImage() {
-    state.clear();
+    state = [];
   }
 
   // 이미지 선택하는 함수
@@ -158,8 +158,11 @@ class SelectedImageStateNotifier
 
   Future<HttpResponse> feedUploadImage(
       UploadModel uploadModel, List<MultipartFile> files) async {
+
+    print(uploadModel.content);
+
     final resp = await repository.feedUploadImage(
-      content: uploadModel.content!,
+      content: uploadModel.content,
       amekaji: uploadModel.hashtagAmekaji!,
       casual: uploadModel.hashtagCasual!,
       guitar: uploadModel.hashtagGuitar!,

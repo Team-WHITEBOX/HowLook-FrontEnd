@@ -1,83 +1,65 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../common/component/cust_textform_filed.dart';
-import '../../../common/const/colors.dart';
 import '../../../common/layout/default_layout.dart';
-import '../../provider/sign_up_provider.dart';
-import '../../repository/sign_up_repository.dart';
-import '../signin/intro_screen.dart';
-import 'first_signup_screen.dart';
+import '../../../user/provider/sign_up_provider.dart';
+import '../../../user/repository/sign_up_repository.dart';
+import '../../../user/view/signup/first_signup_screen.dart';
+import '../../provider/profile_edit_provider.dart';
 
-class SecondSignupScreen extends ConsumerStatefulWidget {
-  final bool? isSocial;
-
-  const SecondSignupScreen({
-    required this.isSocial,
-    Key? key,
-  }) : super(key: key);
+class ProfileChangeScreen extends ConsumerStatefulWidget {
+  const ProfileChangeScreen({super.key});
 
   @override
-  ConsumerState<SecondSignupScreen> createState() => _SecondSignupScreenState();
+  ConsumerState<ProfileChangeScreen> createState() => _ProfileChangeScreen();
 }
 
-class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
+class _ProfileChangeScreen extends ConsumerState<ProfileChangeScreen> {
   final formKey = GlobalKey<FormState>();
-  final List gender = ["남자", "여자"];
-
-  String? gen;
 
   bool _isValid() {
-    final newMember = ref.watch(signUpProvider);
-    bool status = newMember.nickName!.isNotEmpty &&
-        newMember.phone!.isNotEmpty &&
-        (newMember.height! >= 100 && newMember.height! <= 250) &&
-        (newMember.weight! >= 20 && newMember.weight! <= 150) &&
-        newMember.birthDay!.isNotEmpty;
+    final userData = ref.watch(profileEditProvider);
+    final nickCheck = ref.watch(editNicknameProvider);
 
-    if (widget.isSocial!) {
-      // 소셜이라면 status 그대로 반환
-      return status;
-    } else {
-      // 소셜 아니라면 gender 값이 비어있는지 확인하고 반환
-      return (status && newMember.gender!.isNotEmpty);
-    }
+    bool status = nickCheck &&
+        userData.memberNickName.isNotEmpty &&
+        userData.memberPhone.isNotEmpty &&
+        (userData.memberHeight >= 100 && userData.memberHeight <= 250) &&
+        (userData.memberWeight >= 20 && userData.memberWeight <= 150);
+
+    return status;
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final newMember = ref.watch(signUpProvider);
-    final nickCheck = ref.watch(idNicknameProvider);
-    final bool isSocial = widget.isSocial!;
+    final userData = ref.watch(profileEditProvider);
+    final nickCheck = ref.watch(editNicknameProvider);
 
     Future<void> submit() async {
-      final result = isSocial
-          ? await ref.read(signUpProvider.notifier).socialEdit()
-          : await ref.read(signUpProvider.notifier).postJoin();
+      final result =
+          await ref.read(profileEditProvider.notifier).updateProfileData();
 
       if (result) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("환영해요 ${newMember.name}님! 가입이 완료되었어요 :)"),
-            duration: const Duration(seconds: 3),
+          const SnackBar(
+            content: Text("회원 정보 수정이 완료되었어요 :)"),
+            duration: Duration(seconds: 3),
           ),
         );
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => IntroScreen(),
-          ),
-          (route) => false,
-        );
+        Navigator.pop(context);
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("죄송합니다. 가입이 이루어지지 않았어요 다시 시도해주세요 :("),
+            content: Text("죄송합니다. 회원 정보가 수정되지 않았어요 :("),
             duration: Duration(seconds: 3),
           ),
         );
@@ -86,6 +68,12 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
 
     return DefaultLayout(
       title: '',
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.arrow_back_ios),
+      ),
       child: Form(
         key: formKey,
         child: SingleChildScrollView(
@@ -98,42 +86,24 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  PageTitle(),
+                  PageTitle(title: "회원 정보 수정 ✏️"),
                   const SizedBox(height: 16.0),
-                  PageSubTitle(),
+                  PageSubTitle(subTitle: "새로운 정보를 기입해주세요 :)"),
                   const SizedBox(height: 40.0),
-                  PageLabelText("이름"),
-                  const SizedBox(height: 5),
-                  CustomTextFormField(
-                    hintText: "이름을 입력해주세요",
-                    onSaved: (value) {},
-                    onChanged: (value) {
-                      ref
-                          .read(signUpProvider.notifier)
-                          .addMemberName(memberName: value);
-                    },
-                    validator: (value) {
-                      if (value!.length < 2) {
-                        return "이름은 2자보다 짧을 수 없어요 :(";
-                      }
-                      return null;
-                    },
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 24.0),
                   PageLabelText("별명"),
                   const SizedBox(height: 5),
                   Stack(
                     children: [
                       CustomTextFormField(
+                        initialValue: userData.memberNickName,
                         hintText: "별명을 입력해주세요",
                         onSaved: (value) {},
                         onChanged: (value) {
                           ref
-                              .read(signUpProvider.notifier)
+                              .read(profileEditProvider.notifier)
                               .addMemberNickName(memberNickName: value);
                           ref
-                              .read(idNicknameProvider.notifier)
+                              .read(editNicknameProvider.notifier)
                               .update((state) => false);
                         },
                         validator: (value) {
@@ -151,13 +121,13 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                         right: 1,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (newMember.nickName!.length > 2) {
+                            if (userData.memberNickName.length > 1) {
                               final code = await ref
                                   .read(signUpRepositoryProvider)
-                                  .nickCheck(nickName: newMember.nickName!);
+                                  .nickCheck(nickName: userData.memberNickName);
                               if (code.data) {
                                 ref
-                                    .read(idNicknameProvider.notifier)
+                                    .read(editNicknameProvider.notifier)
                                     .update((state) => true);
                                 if (!mounted) return;
                                 showOkAlertDialog(
@@ -176,7 +146,7 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: newMember.nickName!.length > 1 && nickCheck
+                            backgroundColor: (userData.memberNickName.length > 2 && nickCheck)
                                 ? Colors.black
                                 : Colors.grey,
                           ),
@@ -194,12 +164,13 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                   PageLabelText("휴대폰 번호"),
                   const SizedBox(height: 5),
                   CustomTextFormField(
+                    initialValue: userData.memberPhone,
                     hintText: "휴대폰 번호를 입력해주세요",
                     helperText: "(예시) 01012341234, - 를 제외한 숫자를 입력해주세요",
                     onSaved: (value) {},
                     onChanged: (value) {
                       ref
-                          .read(signUpProvider.notifier)
+                          .read(profileEditProvider.notifier)
                           .addMemberPhone(memberPhone: value);
                     },
                     validator: (value) {
@@ -213,15 +184,15 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                     keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 24.0),
-                  isSocial ? Container() : genderBySocial(),
                   PageLabelText("키"),
                   const SizedBox(height: 5),
                   CustomTextFormField(
+                    initialValue: userData.memberHeight.toString(),
                     hintText: "키를 입력해주세요",
                     onSaved: (value) {},
                     onChanged: (value) {
                       ref
-                          .read(signUpProvider.notifier)
+                          .read(profileEditProvider.notifier)
                           .addMemberHeight(memberHeight: int.parse(value));
                     },
                     helperText: "100 ~ 250cm 범위 내로, 숫자만 입력해주세요",
@@ -241,11 +212,12 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                   PageLabelText("몸무게"),
                   const SizedBox(height: 5),
                   CustomTextFormField(
+                    initialValue: userData.memberWeight.toString(),
                     hintText: "몸무게를 입력해주세요",
                     onSaved: (value) {},
                     onChanged: (value) {
                       ref
-                          .read(signUpProvider.notifier)
+                          .read(profileEditProvider.notifier)
                           .addMemberWeight(memberWeight: int.parse(value));
                     },
                     helperText: "20 ~ 150kg 범위 내로, 숫자만 입력해주세요",
@@ -259,36 +231,6 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
                     },
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 24.0),
-                  PageLabelText("생일"),
-                  const SizedBox(height: 5),
-                  TextButton(
-                    onPressed: () {
-                      DatePicker.showDatePicker(
-                        context,
-                        showTitleActions: true,
-                        minTime: DateTime(1900, 1, 1),
-                        maxTime: DateTime(2023, 12, 31),
-                        currentTime: DateTime.now(),
-                        locale: LocaleType.ko,
-                        onConfirm: (date) {
-                          ref.read(signUpProvider.notifier).addMemberBirthday(
-                                memberBirthday:
-                                    DateFormat("yyyy-MM-dd").format(date),
-                              );
-                        },
-                      );
-                    },
-                    child: Text(
-                      newMember.birthDay == ""
-                          ? "당신의 생일을 알려주세요 :)"
-                          : newMember.birthDay!.substring(0, 10),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: BODY_TEXT_COLOR,
-                      ),
-                    ),
                   ),
                   const SizedBox(height: 24.0),
                   ElevatedButton(
@@ -343,91 +285,5 @@ class _SecondSignupScreenState extends ConsumerState<SecondSignupScreen> {
 
   bool isValidWeightFormat(String memberWeight) {
     return RegExp(r'^[0-9]{2,3}$').hasMatch(memberWeight);
-  }
-
-  Widget genderBySocial() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        PageLabelText("성별"),
-        const SizedBox(height: 5),
-        Column(
-          children: [
-            DropdownButtonHideUnderline(
-              child: DropdownButton2(
-                isExpanded: true,
-                hint: Row(
-                  children: const [
-                    SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        '선택하기',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black45,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                items: gender
-                    .map(
-                      (item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: Text(
-                            item,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                value: gen,
-                onChanged: (value) {
-                  setState(() {
-                    gen = value;
-                  });
-
-                  ref.read(signUpProvider.notifier).addMemberGender(
-                        memberGender: gen == "남자" ? "M" : "F",
-                      );
-                },
-                buttonStyleData: const ButtonStyleData(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                ),
-                iconStyleData: const IconStyleData(
-                  icon: Icon(Icons.expand_more, color: Colors.grey, size: 24),
-                ),
-                dropdownStyleData: DropdownStyleData(
-                  maxHeight: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: Colors.white,
-                  ),
-                  elevation: 2,
-                ),
-                menuItemStyleData: const MenuItemStyleData(
-                  height: 45,
-                  padding: EdgeInsets.only(left: 12, right: 2),
-                ),
-              ),
-            ),
-            Container(color: INPUT_BORDER_COLOR, height: 2),
-          ],
-        ),
-        const SizedBox(height: 18.0),
-      ],
-    );
   }
 }

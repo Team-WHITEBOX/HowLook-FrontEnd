@@ -122,7 +122,7 @@ class SignUpStateNotifier extends StateNotifier<SignUpModel> {
       nickName: state.nickName,
       phone: state.phone,
       height: state.height,
-      weight: state.height,
+      weight: state.weight,
       birthDay: state.birthDay,
     ));
 

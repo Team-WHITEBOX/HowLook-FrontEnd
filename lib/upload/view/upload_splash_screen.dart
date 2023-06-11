@@ -11,6 +11,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:howlook/upload/view/feed_upload_screen.dart';
 import 'package:howlook/upload/view/review_upload_screen.dart';
 
+import '../Provider/loading_provider.dart';
+
 class UploadSplashScreen extends ConsumerStatefulWidget {
   const UploadSplashScreen({Key? key}) : super(key: key);
 
@@ -44,6 +46,8 @@ class _UploadSplashScreenState extends ConsumerState<UploadSplashScreen> {
     await setDatabase();
 
     // 4
+    ref.read(newPostInfoProvider.notifier).toggleLoadingIndicator(false);
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

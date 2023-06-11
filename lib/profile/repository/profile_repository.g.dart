@@ -19,7 +19,7 @@ class _ProfileRepository implements ProfileRepository {
   String? baseUrl;
 
   @override
-  Future<UserInfoData> getMyProfile(
+  Future<ProfileData> getMyProfile(
     memberId, {
     required myProfileParams,
   }) async {
@@ -30,7 +30,7 @@ class _ProfileRepository implements ProfileRepository {
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<UserInfoData>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<ProfileData>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -42,7 +42,7 @@ class _ProfileRepository implements ProfileRepository {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UserInfoData.fromJson(_result.data!);
+    final value = ProfileData.fromJson(_result.data!);
     return value;
   }
 
@@ -91,6 +91,61 @@ class _ProfileRepository implements ProfileRepository {
             .compose(
               _dio.options,
               '/logout',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<ProfileEditData> getProfileData() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ProfileEditData>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/edit',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ProfileEditData.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> updateProfileData(
+      {required profileEditModel}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'accessToken': 'true',
+      r'content-type': 'application/json',
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(profileEditModel.toJson());
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'application/json',
+    )
+            .compose(
+              _dio.options,
+              '/edit',
               queryParameters: queryParameters,
               data: _data,
             )

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'user_info_model.dart';
+import 'user_info/user_info_model.dart';
 
 part 'my_profile_data.g.dart';
 

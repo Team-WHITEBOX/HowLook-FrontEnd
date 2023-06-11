@@ -102,6 +102,7 @@ class CustomTextFormField extends StatelessWidget {
   final FormFieldSetter? onSaved;
   final TextEditingController? titleController;
   final String? helperText;
+  final String? initialValue;
 
   CustomTextFormField({
     this.maxLines = 1,
@@ -119,6 +120,7 @@ class CustomTextFormField extends StatelessWidget {
     this.onSaved,
     this.titleController,
     this.helperText,
+    this.initialValue,
     Key? key,
   }) : super(key: key);
 
@@ -155,6 +157,7 @@ class CustomTextFormField extends StatelessWidget {
           validator: validator,
           onSaved: onSaved,
           controller: titleController,
+          initialValue: initialValue,
 
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.only(
