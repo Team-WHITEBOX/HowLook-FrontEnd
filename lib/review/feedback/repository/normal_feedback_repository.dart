@@ -33,6 +33,6 @@ abstract class NormalFeedbackRepository {
     'accessToken': 'true',
   })
   Future<NormalFeedbackModel> feedbackData({
-    @Query('userId') String? userId,
+    @Query('userID') String? userID,
   });
 }

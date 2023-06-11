@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'normal_feedback_repository.dart';
+part of 'main_review_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'normal_feedback_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _NormalFeedbackRepository implements NormalFeedbackRepository {
-  _NormalFeedbackRepository(
+class _MainReviewRepository implements MainReviewRepository {
+  _MainReviewRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,51 +19,26 @@ class _NormalFeedbackRepository implements NormalFeedbackRepository {
   String? baseUrl;
 
   @override
-  Future<FeedbackModel> getMemberId() async {
+  Future<MainReviewModel> reviewCount() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<FeedbackModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<MainReviewModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/member/check',
+              '/getEvalCount',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = FeedbackModel.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<NormalFeedbackModel> feedbackData({userID}) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'userID': userID};
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{r'accessToken': 'true'};
-    _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<NormalFeedbackModel>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/eval/readByUserId',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = NormalFeedbackModel.fromJson(_result.data!);
+    final value = MainReviewModel.fromJson(_result.data!);
     return value;
   }
 

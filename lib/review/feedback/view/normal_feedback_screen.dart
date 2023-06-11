@@ -46,8 +46,10 @@ class NormalFeedback extends ConsumerWidget {
                     } else {
                       final userId = snapshot.data?.data ?? "";
 
-                      final feedBackModel =
-                          ref.watch(NormalFeedbackProvider.notifier).GetfeedbackData(userId: userId);
+                      final feedBackModel = ref
+                          .read(NormalFeedbackProvider.notifier)
+                          .getFeedbackData(userId: userId);
+
                       return FutureBuilder<NormalFeedbackModel>(
                         future: feedBackModel,
                         builder: (context, snapshot) {
@@ -62,41 +64,42 @@ class NormalFeedback extends ConsumerWidget {
                             return const Center(
                                 child: CircularProgressIndicator());
                           } else if (snapshot.data?.data == [] ||
-                              snapshot.data == null
-                          // || snapshot.data?.data.isEmpty ?? true
-                          ) {
+                                  snapshot.data == null
+                              // || snapshot.data?.data.isEmpty ?? true
+                              ) {
                             return Center(
-                                child: Container(
-                              height: 400,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '평가글이 없습니다.',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                              child: Container(
+                                height: 400,
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text(
+                                        '평가글이 없습니다.',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '당신의 스타일을 평가받아보세요!',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
+                                      Text(
+                                        '당신의 스타일을 평가받아보세요!',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ));
+                            );
                           } else {
                             final feedbackDataModel = snapshot.data!.data ?? [];
-                            return Container(
+                            return SizedBox(
                               height: 400,
                               child: Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 child: Swiper(
                                   autoplay: false,
                                   scale: 0.9,
