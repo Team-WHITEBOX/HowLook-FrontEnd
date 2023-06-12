@@ -10,31 +10,31 @@ import 'package:howlook/common/const/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:howlook/review/view/normal_review_screen.dart';
 
+import '../model/creator_review_model_data.dart';
 import '../model/normal_review_model_data.dart';
-import '../repository/normal_review_repository.dart';
 import '../view/main_review_screen.dart';
 
-class NormalReviewCard extends ConsumerStatefulWidget {
+class CreatorReviewCard extends ConsumerStatefulWidget {
   // 포스트 아이디
-  final int postId;
+  final int creatorEvalId;
   // 첫 장 이미지 경로
   final String mainPhotoPath;
   final double averageScore;
   final int hasMore;
 
-  NormalReviewCard({
+  CreatorReviewCard({
     Key? key,
-    required this.postId,
+    required this.creatorEvalId,
     required this.mainPhotoPath,
     required this.averageScore,
     required this.hasMore,
   }) : super(key: key);
 
-  factory NormalReviewCard.fromModel({
-    required ReviewModelData model,
+  factory CreatorReviewCard.fromModel({
+    required CreatorReviewModelData model,
   }) {
-    return NormalReviewCard(
-      postId: model.postId,
+    return CreatorReviewCard(
+      creatorEvalId: model.creatorEvalId,
       mainPhotoPath: model.mainPhotoPath,
       averageScore: model.averageScore,
       hasMore: model.hasMore,
@@ -43,7 +43,7 @@ class NormalReviewCard extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<NormalReviewCard> createState() => _NormalReviewCardState();
+  ConsumerState<CreatorReviewCard> createState() => _NormalReviewCardState();
 }
 
 class SliderController {
@@ -51,7 +51,7 @@ class SliderController {
   SliderController(this.sliderValue);
 }
 
-class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
+class _NormalReviewCardState extends ConsumerState<CreatorReviewCard> {
   SliderController _scoreCountController = SliderController(0.0);
   bool? buttonPower = false;
 
@@ -117,7 +117,6 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(children: <Widget>[
       AspectRatio(
         aspectRatio: 0.8,
@@ -148,9 +147,6 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
   }
 
   _ReviewTabBar(bool buttonPower) {
-    final repo = ref.watch(NormalReviewRepositoryProvider);
-    final bool check = false;
-
     return Container(
       child: (() {
         if (buttonPower == true) {
@@ -168,21 +164,18 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                 borderRadius: 50,
                 borderWidth: 2,
                 onPress: () async {
-                  // final dio = Dio();
-                  // final storage = ref.read(secureStorageProvider);
-                  // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-                  // final resp = await dio.post(
-                  //   'http://$API_SERVICE_URI/eval/reply/register?postId=${widget.postId}&score=${_scoreCountController.sliderValue}',
-                  //   // 'pid=${widget.postId}&score=${_scoreCountController.sliderValue}',
-                  //   options: Options(
-                  //     headers: {
-                  //       'authorization': 'Bearer $accessToken',
-                  //     },
-                  //   ),
-                  // );
-                  final code = await repo.postNormalReviewReply(postId: widget.postId, score: _scoreCountController.sliderValue);
-                  code.response.statusCode == 200 ? !check : check;
-                  // return code.response.statusCode == 200 ? !likeCheck : likeCheck;
+                  final dio = Dio();
+                  final storage = ref.read(secureStorageProvider);
+                  final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+                  final resp = await dio.post(
+                    'http://$API_SERVICE_URI/eval/reply/register?postId=${widget.creatorEvalId}&score=${_scoreCountController.sliderValue}',
+                    // 'pid=${widget.postId}&score=${_scoreCountController.sliderValue}',
+                    options: Options(
+                      headers: {
+                        'authorization': 'Bearer $accessToken',
+                      },
+                    ),
+                  );
                   // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
                   // String url = 'http://$API_SERVICE_URI/eval/reply/register';
                   //
@@ -202,36 +195,21 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                   //     builder: (_) => NormalReview(),
                   //   ),
                   // );
-                  if(widget.hasMore != 0 && check == true){
+                  if(widget.hasMore != 0){
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (_) => NormalReview(),
                       ),
                     );
                   }
-                  else if(widget.hasMore == 0 && check == true){
+                  else{
                     Navigator.of(context).pop(
                       MaterialPageRoute(
                         builder: (_) => MainReviewScreen(),
                       ),
                     );
                   }
-                  else {
-                    AlertDialog(
-                      content: Text(
-                        "다시 평가해주세요😅",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      actions: [
-                        _DialogButton(text: "확인"),
-                      ],
-                      backgroundColor: Colors.black87,
-                      shadowColor: Colors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    );
-                  }
+
                 },
               ),
             ],
@@ -241,25 +219,6 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
               style: TextStyle(color: Colors.black38));
         }
       })(),
-    );
-  }
-}
-
-class _DialogButton extends StatelessWidget {
-  const _DialogButton({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        Navigator.of(context).pop(text);
-      },
-      child: Text(
-        text,
-        style: TextStyle(color: Colors.white),
-      ),
     );
   }
 }

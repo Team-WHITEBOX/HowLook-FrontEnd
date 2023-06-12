@@ -7,44 +7,46 @@ import 'dart:math';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
-import 'package:howlook/review/feedback/model/chart_page_model.dart';
 import 'package:howlook/review/feedback/component/chart_page_card.dart';
+
+import '../model/normal_result_data_model.dart';
+import '../model/normal_result_model.dart';
+import '../provider/normal_result_provider.dart';
 
 class ChartPage extends ConsumerWidget {
   final int postId; // 포스트 아이디로 특정 게시글 조회
-  const ChartPage({required this.postId, Key? key}) : super(key: key);
+  ChartPage({required this.postId, Key? key}) : super(key: key);
 
-  Future<Map<String, dynamic>> FeedbackPage(WidgetRef ref) async {
-    final dio = Dio();
-    final storage = ref.read(secureStorageProvider);
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    print(postId);
-    final resp = await dio.get(
-      'http://$API_SERVICE_URI/eval/getReplyData?postId=$postId',
-      // 특정 API 뒤에 id 값 넘어서 가져가기
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
-    return resp.data['data'];
+  late Future<NormalResultModel> _NormalChartFuture;
+
+  Future<void> _fetchNormalChart(WidgetRef ref) async {
+    final repository = ref.read(NormalResultProvider.notifier);
+    _NormalChartFuture = repository.getResultData(postId: postId);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<Map<String, dynamic>>(
-        future: FeedbackPage(ref),
-        builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-          if (!snapshot.hasData) {
-            print('errorN4');
+    _fetchNormalChart(ref);
+
+    return FutureBuilder<NormalResultModel>(
+        future: _NormalChartFuture,
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else if (snapshot.hasData) {
+            final item = snapshot.data!.data;
+            return ChartPageCard.fromModel(model: item);
+          } else {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          final item = snapshot.data!; //인덱스값
-          final pItem = ChartModel.fromJson(item);
-          return ChartPageCard.fromModel(model: pItem);
         });
   }
 }

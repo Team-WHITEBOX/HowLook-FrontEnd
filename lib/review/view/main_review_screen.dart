@@ -9,6 +9,7 @@ import '../../common/secure_storage/secure_storage.dart';
 import '../feedback/view/normal_feedback_screen.dart';
 import '../model/main_review_model.dart';
 import '../repository/main_review_repository.dart';
+import 'creator_review_screen.dart';
 import 'normal_review_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,6 @@ class MainReviewScreen extends ConsumerStatefulWidget {
 }
 
 class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
-
   late int count = 0;
   late Future<MainReviewModel> _MainReviewModelFuture;
 
@@ -114,16 +114,46 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
           key: UniqueKey(),
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
-              setState(() {
-                CreaterFeedback();
-              });
+              setState(
+                () {
+                  if (count == 0) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        content: Text(
+                          "평가글이 없습니다😅",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        actions: [
+                          _DialogButton(text: "확인"),
+                        ],
+                        backgroundColor: Colors.black87,
+                        shadowColor: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  } else if (count > 0) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => CreaterReview(),
+                      ),
+                    );
+                  } else
+                    return print('Error');
+                },
+              );
             } else if (direction == DismissDirection.startToEnd) {
               setState(() {
-                if(count == 0){
+                if (count == 0) {
                   showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
-                      content: Text("평가글이 없습니다😅",style: TextStyle(color: Colors.white),),
+                      content: Text(
+                        "평가글이 없습니다😅",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       actions: [
                         _DialogButton(text: "확인"),
                       ],
@@ -134,15 +164,13 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                       ),
                     ),
                   );
-                }
-                else if(count > 0){
+                } else if (count > 0) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => NormalReview(),
                     ),
                   );
-                }
-                else
+                } else
                   return print('Error');
               });
             }
@@ -273,7 +301,10 @@ class _DialogButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).pop(text);
       },
-      child: Text(text, style: TextStyle(color: Colors.white),),
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
 }

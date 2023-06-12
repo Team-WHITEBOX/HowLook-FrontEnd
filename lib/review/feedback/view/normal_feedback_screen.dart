@@ -44,11 +44,10 @@ class NormalFeedback extends ConsumerWidget {
                       print("error1");
                       return Text('Error: ${snapshot.error}');
                     } else {
-                      final userId = snapshot.data?.data ?? "";
 
                       final feedBackModel = ref
                           .read(NormalFeedbackProvider.notifier)
-                          .getFeedbackData(userId: userId);
+                          .getFeedbackData();
 
                       return FutureBuilder<NormalFeedbackModel>(
                         future: feedBackModel,
@@ -57,17 +56,9 @@ class NormalFeedback extends ConsumerWidget {
                               ConnectionState.waiting) {
                             return const Center(
                                 child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            print(snapshot.data);
-                            print(snapshot.data?.data);
-                            print("error2");
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          } else if (snapshot.data?.data == [] ||
-                                  snapshot.data == null
-                              // || snapshot.data?.data.isEmpty ?? true
-                              ) {
-                            return Center(
+                          } else if (snapshot.hasError || snapshot.data?.data == [] ||
+                                  snapshot.data == null )
+                          { return Center(
                               child: Container(
                                 height: 400,
                                 child: Padding(
