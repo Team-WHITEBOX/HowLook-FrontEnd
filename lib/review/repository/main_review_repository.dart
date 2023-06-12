@@ -4,6 +4,7 @@ import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
 import 'package:retrofit/http.dart';
 
+import '../model/isCreator_model.dart';
 import '../model/main_review_model.dart';
 
 part 'main_review_repository.g.dart';
@@ -26,4 +27,9 @@ abstract class MainReviewRepository {
   })
   Future<MainReviewModel> reviewCount();
 
+  @GET('/CreatorEval/isCreator')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<IsCreatorModel> checkCreator();
 }
