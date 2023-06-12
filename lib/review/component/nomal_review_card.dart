@@ -145,7 +145,7 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
     ]);
   }
 
-  _ReviewTabBar(bool buttonPower) {
+  Widget _ReviewTabBar(bool buttonPower) {
     final repo = ref.watch(NormalReviewRepositoryProvider);
     final bool check = false;
 
@@ -171,83 +171,68 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                     score: _scoreCountController.sliderValue,
                   );
 
-                  final message = await repo.reviewData();
+                  try {
+                    final data = await repo.reviewData();
 
-                  if (code.response.statusCode == 200) {
-                    if (message.message.toLowerCase().contains("실패")) {
-                      // "실패"라는 단어가 포함되어 있을 때
-                      Navigator.of(context).pop(
-                        MaterialPageRoute(
-                          builder: (_) => MainReviewScreen(),
-                        ),
-                      );
-                      // 화면 전환 후 화면 새로고침
-                        setState(() {});
-                    } else if (message.message.toLowerCase().contains("성공")) {
-                      // "성공"이라는 단어가 포함되어 있을 때
-                      // if (widget.hasMore != 0) {
-                      //   Navigator.of(context).push(
-                      //     MaterialPageRoute(
-                      //       builder: (_) => NormalReview(),
-                      //     ),
-                      //   ).then((_) {
-                      //     // 화면 전환 후 화면 새로고침
-                      //     setState(() {});
-                      //   });
-                      // } else {
-                      //   print("4");
-                      //   Navigator.of(context).push(
-                      //     MaterialPageRoute(
-                      //       builder: (_) => MainReviewScreen(),
-                      //     ),
-                      //   ).then((_) {
-                      //     // 화면 전환 후 화면 새로고침
-                      //     setState(() {});
-                      //   });
-                      // }
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => NormalReview(),
-                        ),
-                      ).then((_) {
+                    if (code.response.statusCode == 200) {
+                      if (data.message.toLowerCase().contains("실패")) {
+                        // "실패"라는 단어가 포함되어 있을 때
+                        if (!mounted) return;
+                        Navigator.pop(context);
                         // 화면 전환 후 화면 새로고침
                         setState(() {});
-                      });
+                      } else if (data.message.toLowerCase().contains("성공")) {
+                        if (!mounted) return;
+                        Navigator.of(context)
+                            .pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => NormalReview(),
+                          ),
+                        )
+                            .then((_) {
+                          // 화면 전환 후 화면 새로고침
+                          setState(() {});
+                        });
+                      }
+                    } else {
+                      print(code.data.toString());
+
+                      code.response.statusCode == 200 ? !check : check;
+
+                      if (widget.hasMore != 0 && check == true) {
+                        if (!mounted) return;
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => NormalReview(),
+                          ),
+                        );
+                      } else if (widget.hasMore == 0 && check == true) {
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        setState(() {});
+                      } else {
+                        AlertDialog(
+                          content: Text(
+                            "오류발생😅",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          actions: [
+                            _DialogButton(text: "확인"),
+                          ],
+                          backgroundColor: Colors.black87,
+                          shadowColor: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        );
+                      }
                     }
-                  }  else {
-
-                  print(code.data.toString());
-
-                  code.response.statusCode == 200 ? !check : check;
-
-                  if (widget.hasMore != 0 && check == true) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => NormalReview(),
-                      ),
-                    );
-                  } else if (widget.hasMore == 0 && check == true) {
-                    Navigator.of(context).pop(
-                      MaterialPageRoute(
-                        builder: (_) => MainReviewScreen(),
-                      ),
-                    );
+                  } catch (err) {
+                    // "실패"라는 단어가 포함되어 있을 때
+                    if (!mounted) return;
+                    Navigator.pop(context);
+                    // 화면 전환 후 화면 새로고침
                     setState(() {});
-                  } else {
-                    AlertDialog(
-                      content: Text(
-                        "오류발생😅",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      actions: [
-                        _DialogButton(text: "확인"),
-                      ],
-                      backgroundColor: Colors.black87,
-                      shadowColor: Colors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    );
                   }
                 },
               ),

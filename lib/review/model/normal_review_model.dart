@@ -11,8 +11,12 @@ class ReviewModel {
   final String message;
   final ReviewModelData data;
 
-  ReviewModel({required this.status, required this.code, required this.message, required this.data});
-
+  ReviewModel({
+    required this.status,
+    required this.code,
+    required this.message,
+    required this.data,
+  });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) =>
       _$ReviewModelFromJson(json);
