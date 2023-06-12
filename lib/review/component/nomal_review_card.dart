@@ -116,6 +116,7 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(children: <Widget>[
       AspectRatio(
         aspectRatio: 0.8,
@@ -166,63 +167,58 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                 borderRadius: 50,
                 borderWidth: 2,
                 onPress: () async {
-                  // final dio = Dio();
-                  // final storage = ref.read(secureStorageProvider);
-                  // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-                  // final resp = await dio.post(
-                  //   'http://$API_SERVICE_URI/eval/reply/register?postId=${widget.postId}&score=${_scoreCountController.sliderValue}',
-                  //   // 'pid=${widget.postId}&score=${_scoreCountController.sliderValue}',
-                  //   options: Options(
-                  //     headers: {
-                  //       'authorization': 'Bearer $accessToken',
-                  //     },
-                  //   ),
-                  // );
                   final code = await repo.postNormalReviewReply(
                     postId: widget.postId,
                     score: _scoreCountController.sliderValue,
                   );
-                  code.response.statusCode == 200 ? !check : check;
-                  // return code.response.statusCode == 200 ? !likeCheck : likeCheck;
-                  // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-                  // String url = 'http://$API_SERVICE_URI/eval/reply/register';
-                  //
-                  // http.Response response = await http.post(
-                  //   // Uri(path: url),
-                  //   url,
-                  //   headers: {
-                  //       'authorization': 'Bearer $accessToken',
-                  //     },
-                  //   body: <String, String> {
-                  //     'pid': '${widget.npostId}',
-                  //     'score': '${_scoreCountController.sliderValue}'
-                  //   },
-                  // );
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(
-                  //     builder: (_) => NormalReview(),
-                  //   ),
-                  // );
-                  if (widget.hasMore != 0 && check == true) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => NormalReview(),
-                      ),
-                    );
-                  } else if (widget.hasMore == 0 && check == true) {
-                    // Navigator.of(context).pop(
-                    //   MaterialPageRoute(
-                    //     builder: (_) => MainReviewScreen(),
-                    //   ),
-                    // );
-                    // setState(() {});
-                    Navigator.of(context).popAndPushNamed('/main_review_screen').then((_) {
-                      setState(() {});
-                    });
-                  } else {
+
+                  final message = await repo.reviewData();
+
+                  if (code.response.statusCode == 200) {
+                    if (message.message.toLowerCase().contains("실패")) {
+                      // "실패"라는 단어가 포함되어 있을 때
+                      Navigator.of(context).pop(
+                        MaterialPageRoute(
+                          builder: (_) => MainReviewScreen(),
+                        ),
+                      );
+                      // 화면 전환 후 화면 새로고침
+                        setState(() {});
+                    } else if (message.message.toLowerCase().contains("성공")) {
+                      // "성공"이라는 단어가 포함되어 있을 때
+                      // if (widget.hasMore != 0) {
+                      //   Navigator.of(context).push(
+                      //     MaterialPageRoute(
+                      //       builder: (_) => NormalReview(),
+                      //     ),
+                      //   ).then((_) {
+                      //     // 화면 전환 후 화면 새로고침
+                      //     setState(() {});
+                      //   });
+                      // } else {
+                      //   print("4");
+                      //   Navigator.of(context).push(
+                      //     MaterialPageRoute(
+                      //       builder: (_) => MainReviewScreen(),
+                      //     ),
+                      //   ).then((_) {
+                      //     // 화면 전환 후 화면 새로고침
+                      //     setState(() {});
+                      //   });
+                      // }
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => NormalReview(),
+                        ),
+                      ).then((_) {
+                        // 화면 전환 후 화면 새로고침
+                        setState(() {});
+                      });
+                    }
+                  }  else {
                     AlertDialog(
                       content: Text(
-                        "다시 평가해주세요😅",
+                        "오류발생😅",
                         style: TextStyle(color: Colors.white),
                       ),
                       actions: [

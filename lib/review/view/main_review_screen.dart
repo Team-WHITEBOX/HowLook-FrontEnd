@@ -10,7 +10,6 @@ import '../../payment/view/main_payment_screen.dart';
 import '../feedback/view/normal_feedback_screen.dart';
 import '../model/isCreator_model.dart';
 import '../model/main_review_model.dart';
-import '../provider/main_review_provider.dart';
 import '../repository/main_review_repository.dart';
 import 'creator_review_screen.dart';
 import 'normal_review_screen.dart';
@@ -37,7 +36,6 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   @override
   Widget build(BuildContext context) {
     _fetchMainReviewModel(ref);
-    // bool check = ref.read(MainReviewProvider.notifier).checkIsCreator();
 
     return DefaultLayout(
         title: 'ReviewLook',
@@ -130,6 +128,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
 
   Widget PanelImage() {
     _fetchMainReviewModel(ref);
+    final repo = ref.read(mainReviewRepositoryProvider);
 
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
@@ -137,67 +136,103 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Dismissible(
           key: UniqueKey(),
-          onDismissed: (direction) {
+          onDismissed: (direction) async {
             if (direction == DismissDirection.endToStart) {
-              setState(
-                    () {
-                  if (count == 0) {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        content: Text(
-                          "평가글이 없습니다😅",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        actions: [
-                          _DialogButton(text: "확인"),
-                        ],
-                        backgroundColor: Colors.black87,
-                        shadowColor: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    );
-                  } else if (count > 0) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => CreaterReview(),
-                      ),
-                    );
-                  } else
-                    return print('Error');
-                },
-              );
+              final check = await repo.checkCreator();
+              print(check.data);
+              if (check.data == false) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    content: Text(
+                      "사용하실 수 없는 기능입니다😅"
+                          "크리에이터가 되어보세요!",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    actions: [
+                      _DialogButton(text: "확인"),
+                    ],
+                    backgroundColor: Colors.black87,
+                    shadowColor: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ).then((_) {
+                  // 다이얼로그 닫힌 후 화면 새로고침
+                  setState(() {});
+                });
+              } else if (count == 0 && check.data == true) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    content: Text(
+                      "평가글이 없습니다😅",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    actions: [
+                      _DialogButton(text: "확인"),
+                    ],
+                    backgroundColor: Colors.black87,
+                    shadowColor: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ).then((_) {
+                  // 다이얼로그 닫힌 후 화면 새로고침
+                  setState(() {});
+                });
+              } else if (count > 0 && check.data == true) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => CreaterReview(),
+                  ),
+                ).then((_) {
+                  // 화면 전환 후 화면 새로고침
+                  setState(() {});
+                });
+              } else {
+                print('Error');
+                // 화면 새로고침
+                setState(() {});
+              }
             } else if (direction == DismissDirection.startToEnd) {
-              setState(() {
-                if (count == 0) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      content: Text(
-                        "평가글이 없습니다😅",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      actions: [
-                        _DialogButton(text: "확인"),
-                      ],
-                      backgroundColor: Colors.black87,
-                      shadowColor: Colors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+              if (count == 0) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    content: Text(
+                      "평가글이 없습니다😅",
+                      style: TextStyle(color: Colors.white),
                     ),
-                  );
-                } else if (count > 0) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => NormalReview(),
+                    actions: [
+                      _DialogButton(text: "확인"),
+                    ],
+                    backgroundColor: Colors.black87,
+                    shadowColor: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  );
-                } else
-                  return print('Error');
-              });
+                  ),
+                ).then((_) {
+                  // 다이얼로그 닫힌 후 화면 새로고침
+                  setState(() {});
+                });
+              } else if (count > 0) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => NormalReview(),
+                  ),
+                ).then((_) {
+                  // 화면 전환 후 화면 새로고침
+                  setState(() {});
+                });
+              } else {
+                print('Error');
+                // 화면 새로고침
+                setState(() {});
+              }
             }
           },
           background: Container(
@@ -291,7 +326,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   child: NormalFeedback(),
                 ),
                 Container(
-                  child: CreaterFeedback(),
+                  child: CreaterFeedback()
                 ),
               ],
             ),
