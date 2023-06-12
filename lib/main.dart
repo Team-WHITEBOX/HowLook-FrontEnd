@@ -10,13 +10,6 @@ import 'common/const/data.dart';
 import 'payment/view/payment_result_screen.dart';
 import 'user/view/splash_screen.dart';
 
-// Future<void> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-//
-//   runApp(_App());
-// }
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);

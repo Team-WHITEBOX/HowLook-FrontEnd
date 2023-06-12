@@ -37,7 +37,8 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   @override
   Widget build(BuildContext context) {
     _fetchMainReviewModel(ref);
-    bool check = ref.read(MainReviewProvider.notifier).checkIsCreator().;
+    // bool check = ref.read(MainReviewProvider.notifier).checkIsCreator();
+
     return DefaultLayout(
         title: 'ReviewLook',
         actions: <Widget>[
@@ -57,8 +58,8 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   borderRadius: BorderRadius.circular(32),
                 ),
                 constraints: const BoxConstraints(
-                  minHeight: 300,
-                  maxHeight: 500,
+                  minHeight: 250,
+                  maxHeight: 450,
                 ),
               );
             },
@@ -130,15 +131,6 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   Widget PanelImage() {
     _fetchMainReviewModel(ref);
 
-    FutureBuilder<MainReviewModel>(
-        future: _MainReviewModelFuture,
-        builder: (_, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else {
-        count = snapshot.data?.data ?? 0;
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: Padding(
@@ -148,7 +140,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
               setState(
-                () {
+                    () {
                   if (count == 0) {
                     showDialog(
                       context: context,
