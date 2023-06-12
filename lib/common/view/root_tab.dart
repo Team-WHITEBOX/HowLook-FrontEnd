@@ -99,7 +99,7 @@ class _RootTabState extends ConsumerState<RootTab>
         children: <Widget>[
           const ChatHomeScreen(),
           MainReviewScreen(),
-          const tournamentScreen(),
+          const TournamentScreen(),
           MyProfileScreen(
             memberId: memberId,
           ),

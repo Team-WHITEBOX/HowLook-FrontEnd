@@ -3,11 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
-import 'package:howlook/common/secure_storage/secure_storage.dart';
-import 'package:howlook/review/model/normal_review_model.dart';
-import 'package:dio/dio.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:http/http.dart' as http;
 import 'package:howlook/review/view/normal_review_screen.dart';
 
 import '../model/normal_review_model_data.dart';
@@ -166,43 +161,15 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                 borderRadius: 50,
                 borderWidth: 2,
                 onPress: () async {
-                  // final dio = Dio();
-                  // final storage = ref.read(secureStorageProvider);
-                  // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-                  // final resp = await dio.post(
-                  //   'http://$API_SERVICE_URI/eval/reply/register?postId=${widget.postId}&score=${_scoreCountController.sliderValue}',
-                  //   // 'pid=${widget.postId}&score=${_scoreCountController.sliderValue}',
-                  //   options: Options(
-                  //     headers: {
-                  //       'authorization': 'Bearer $accessToken',
-                  //     },
-                  //   ),
-                  // );
                   final code = await repo.postNormalReviewReply(
                     postId: widget.postId,
                     score: _scoreCountController.sliderValue,
                   );
+
+                  print(code.data.toString());
+
                   code.response.statusCode == 200 ? !check : check;
-                  // return code.response.statusCode == 200 ? !likeCheck : likeCheck;
-                  // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-                  // String url = 'http://$API_SERVICE_URI/eval/reply/register';
-                  //
-                  // http.Response response = await http.post(
-                  //   // Uri(path: url),
-                  //   url,
-                  //   headers: {
-                  //       'authorization': 'Bearer $accessToken',
-                  //     },
-                  //   body: <String, String> {
-                  //     'pid': '${widget.npostId}',
-                  //     'score': '${_scoreCountController.sliderValue}'
-                  //   },
-                  // );
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(
-                  //     builder: (_) => NormalReview(),
-                  //   ),
-                  // );
+
                   if (widget.hasMore != 0 && check == true) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
@@ -210,15 +177,12 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                       ),
                     );
                   } else if (widget.hasMore == 0 && check == true) {
-                    // Navigator.of(context).pop(
-                    //   MaterialPageRoute(
-                    //     builder: (_) => MainReviewScreen(),
-                    //   ),
-                    // );
-                    // setState(() {});
-                    Navigator.of(context).popAndPushNamed('/main_review_screen').then((_) {
-                      setState(() {});
-                    });
+                    Navigator.of(context).pop(
+                      MaterialPageRoute(
+                        builder: (_) => MainReviewScreen(),
+                      ),
+                    );
+                    setState(() {});
                   } else {
                     AlertDialog(
                       content: Text(
@@ -240,8 +204,10 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
             ],
           );
         } else {
-          return const Text('평가를 해주세요',
-              style: TextStyle(color: Colors.black38));
+          return const Text(
+            '평가를 해주세요',
+            style: TextStyle(color: Colors.black38),
+          );
         }
       })(),
     );

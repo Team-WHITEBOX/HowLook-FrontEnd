@@ -44,7 +44,10 @@ abstract class NormalReviewRepository {
   @POST('/reply/register')
   @Headers({
     'accessToken': 'true',
+    'content-type': 'application/json',
   })
-  Future<HttpResponse<dynamic>> postNormalReviewReply(
-      {@Body() required int postId, required double score});
+  Future<HttpResponse<dynamic>> postNormalReviewReply({
+    @Query('postId') required int postId,
+    @Query('score') required double score,
+  });
 }

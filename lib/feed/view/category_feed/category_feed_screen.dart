@@ -21,11 +21,6 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
     controller.addListener(scrollListener);
   }
 

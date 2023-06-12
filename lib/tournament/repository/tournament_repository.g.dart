@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'normal_review_repository.dart';
+part of 'tournament_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'normal_review_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _NormalReviewRepository implements NormalReviewRepository {
-  _NormalReviewRepository(
+class _TournamentRepository implements TournamentRepository {
+  _TournamentRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,79 +19,71 @@ class _NormalReviewRepository implements NormalReviewRepository {
   String? baseUrl;
 
   @override
-  Future<ReviewModel> reviewData() async {
+  Future<MainTournamentData> getTodayTournament({required date}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ReviewModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<MainTournamentData>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/readNextEval',
+              '/post/${date}',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ReviewModel.fromJson(_result.data!);
+    final value = MainTournamentData.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<CreatorReviewModel> reviewCratorData() async {
+  Future<MainTournamentResultData> getTodayTournamentResult(
+      {required date}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<CreatorReviewModel>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<MainTournamentResultData>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/readNextEval',
+              '/history/${date}',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CreatorReviewModel.fromJson(_result.data!);
+    final value = MainTournamentResultData.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<HttpResponse<dynamic>> postNormalReviewReply({
-    required postId,
-    required score,
-  }) async {
+  Future<HttpResponse<dynamic>> putTodayTournament(
+      {required mainTournamentModel}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'postId': postId,
-      r'score': score,
-    };
-    final _headers = <String, dynamic>{
-      r'accessToken': 'true',
-      r'content-type': 'application/json',
-    };
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    final _data = mainTournamentModel.map((e) => e.toJson()).toList();
     final _result =
         await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
-      method: 'POST',
+      method: 'PUT',
       headers: _headers,
       extra: _extra,
-      contentType: 'application/json',
     )
             .compose(
               _dio.options,
-              '/reply/register',
+              '/result',
               queryParameters: queryParameters,
               data: _data,
             )
