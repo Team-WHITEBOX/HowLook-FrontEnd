@@ -6,6 +6,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:provider/provider.dart';
 import '../../common/const/data.dart';
 import '../../common/secure_storage/secure_storage.dart';
+import '../../payment/view/main_payment_screen.dart';
 import '../feedback/view/normal_feedback_screen.dart';
 import '../model/main_review_model.dart';
 import '../repository/main_review_repository.dart';
@@ -22,7 +23,6 @@ class MainReviewScreen extends ConsumerStatefulWidget {
 }
 
 class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
-
   late int count = 0;
   late Future<MainReviewModel> _MainReviewModelFuture;
 
@@ -38,8 +38,29 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
     return DefaultLayout(
         title: 'ReviewLook',
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: Icon(Icons.chat_bubble)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+          IconButton(
+            onPressed: () {
+              if (!mounted) return;
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return const MainPaymentScreen();
+                },
+                elevation: 50,
+                enableDrag: true,
+                isDismissible: true,
+                barrierColor: Colors.black.withOpacity(0.7),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                constraints: const BoxConstraints(
+                  minHeight: 250,
+                  maxHeight: 450,
+                ),
+              );
+            },
+            icon: const Icon(Icons.payment),
+          ),
         ],
         child: FutureBuilder<MainReviewModel>(
             future: _MainReviewModelFuture,
@@ -61,10 +82,10 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                           Align(
                               alignment: Alignment.center,
                               child: Padding(
-                                padding: EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(15),
                                 child: Text(
                                   '지금 $count명이 당신의 평가를 기다리고 있습니다.',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black54,
@@ -119,11 +140,14 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
               });
             } else if (direction == DismissDirection.startToEnd) {
               setState(() {
-                if(count == 0){
+                if (count == 0) {
                   showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
-                      content: Text("평가글이 없습니다😅",style: TextStyle(color: Colors.white),),
+                      content: Text(
+                        "평가글이 없습니다😅",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       actions: [
                         _DialogButton(text: "확인"),
                       ],
@@ -134,15 +158,13 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                       ),
                     ),
                   );
-                }
-                else if(count > 0){
+                } else if (count > 0) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => NormalReview(),
                     ),
                   );
-                }
-                else
+                } else
                   return print('Error');
               });
             }
@@ -273,7 +295,10 @@ class _DialogButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).pop(text);
       },
-      child: Text(text, style: TextStyle(color: Colors.white),),
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
 }

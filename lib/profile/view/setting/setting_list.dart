@@ -9,6 +9,7 @@ import '../../../common/secure_storage/secure_storage.dart';
 import '../../../user/model/token/token_model.dart';
 import '../../../user/view/signin/intro_screen.dart';
 import '../../repository/profile_repository.dart';
+import '../payment/payment_screen.dart';
 import 'profile_change_screen.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
@@ -37,6 +38,20 @@ class _SettingList extends ConsumerState<SettingScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ProfileChangeScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.payment,
+              color: Colors.black,
+            ),
+            title: const Text('루비 결제'),
+            trailing: const Icon(Icons.navigate_next),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PaymentScreen()),
               );
             },
           ),

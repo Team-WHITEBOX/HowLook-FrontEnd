@@ -64,7 +64,7 @@ class DetailFeedCard extends ConsumerStatefulWidget {
   }) {
     return DetailFeedCard(
       userPostInfo:
-          model.userPostInfo, //List<UserInfoModel>.from(model.userPostInfo),
+          model.userPostInfo,
       postId: model.postId,
       photoDTOs: model.photoDTOs,
       photoCount: model.photoCount,

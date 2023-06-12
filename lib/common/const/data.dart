@@ -19,6 +19,7 @@ const myFirebaseStorage = "gs://facedetection-5ac05.appspot.com";
 const emulatorIP = "10.0.2.2:3000";
 const simulatorIP = "127.0.0.1:3000";
 const API_SERVICE_URI = "3.34.164.14:8080";
+const MANAGER_SERVICE_URI = "3.34.81.70:8080";
 const REDIRECT_URI = "http://3.34.164.14:8080/account/oauth/kakao";
 
 final ip = Platform.isIOS ? simulatorIP : emulatorIP;

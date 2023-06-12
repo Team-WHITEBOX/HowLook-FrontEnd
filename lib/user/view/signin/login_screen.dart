@@ -8,6 +8,7 @@ import '../../../common/const/data.dart';
 import '../../../common/layout/default_layout.dart';
 import '../../../common/secure_storage/secure_storage.dart';
 import '../../../common/view/root_tab.dart';
+import '../../../manager/view/manager_root_screen.dart';
 import '../../model/sign_in_model.dart';
 import '../../provider/sign_in_provider.dart';
 import '../../repository/sign_in_repository.dart';
@@ -41,7 +42,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => const MainSignUpScreen(),
+                builder: (_) => const ManagerRootScreen(),
               ),
             );
           },
