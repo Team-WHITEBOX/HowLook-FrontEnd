@@ -12,7 +12,7 @@ part 'main_review_repository.g.dart';
 final mainReviewRepositoryProvider = Provider<MainReviewRepository>(
       (ref) {
     final dio = ref.watch(dioProvider);
-    final repository = MainReviewRepository(dio, baseUrl: 'http://$API_SERVICE_URI/eval');
+    final repository = MainReviewRepository(dio, baseUrl: 'http://$API_SERVICE_URI');
     return repository;
   },
 );
@@ -21,7 +21,7 @@ final mainReviewRepositoryProvider = Provider<MainReviewRepository>(
 abstract class MainReviewRepository {
   factory MainReviewRepository(Dio dio, {String baseUrl}) = _MainReviewRepository;
 
-  @GET('/getEvalCount')
+  @GET('/eval/getEvalCount')
   @Headers({
     'accessToken': 'true',
   })

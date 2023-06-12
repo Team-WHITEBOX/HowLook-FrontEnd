@@ -33,7 +33,7 @@ class _MainReviewRepository implements MainReviewRepository {
     )
             .compose(
               _dio.options,
-              '/getEvalCount',
+              '/eval/getEvalCount',
               queryParameters: queryParameters,
               data: _data,
             )

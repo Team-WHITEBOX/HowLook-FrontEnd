@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/colors.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
+import 'package:howlook/review/model/normal_review_model.dart';
+import 'package:dio/dio.dart';
+import 'package:howlook/common/const/data.dart';
+import 'package:http/http.dart' as http;
 import 'package:howlook/review/view/normal_review_screen.dart';
 
 import '../model/normal_review_model_data.dart';
@@ -166,6 +171,51 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                     score: _scoreCountController.sliderValue,
                   );
 
+                  final message = await repo.reviewData();
+
+                  if (code.response.statusCode == 200) {
+                    if (message.message.toLowerCase().contains("실패")) {
+                      // "실패"라는 단어가 포함되어 있을 때
+                      Navigator.of(context).pop(
+                        MaterialPageRoute(
+                          builder: (_) => MainReviewScreen(),
+                        ),
+                      );
+                      // 화면 전환 후 화면 새로고침
+                        setState(() {});
+                    } else if (message.message.toLowerCase().contains("성공")) {
+                      // "성공"이라는 단어가 포함되어 있을 때
+                      // if (widget.hasMore != 0) {
+                      //   Navigator.of(context).push(
+                      //     MaterialPageRoute(
+                      //       builder: (_) => NormalReview(),
+                      //     ),
+                      //   ).then((_) {
+                      //     // 화면 전환 후 화면 새로고침
+                      //     setState(() {});
+                      //   });
+                      // } else {
+                      //   print("4");
+                      //   Navigator.of(context).push(
+                      //     MaterialPageRoute(
+                      //       builder: (_) => MainReviewScreen(),
+                      //     ),
+                      //   ).then((_) {
+                      //     // 화면 전환 후 화면 새로고침
+                      //     setState(() {});
+                      //   });
+                      // }
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => NormalReview(),
+                        ),
+                      ).then((_) {
+                        // 화면 전환 후 화면 새로고침
+                        setState(() {});
+                      });
+                    }
+                  }  else {
+
                   print(code.data.toString());
 
                   code.response.statusCode == 200 ? !check : check;
@@ -186,7 +236,7 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                   } else {
                     AlertDialog(
                       content: Text(
-                        "다시 평가해주세요😅",
+                        "오류발생😅",
                         style: TextStyle(color: Colors.white),
                       ),
                       actions: [
