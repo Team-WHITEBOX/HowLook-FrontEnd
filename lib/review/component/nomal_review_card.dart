@@ -38,7 +38,6 @@ class NormalReviewCard extends ConsumerStatefulWidget {
       mainPhotoPath: model.mainPhotoPath,
       averageScore: model.averageScore,
       hasMore: model.hasMore,
-
     );
   }
 
@@ -102,7 +101,7 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
               label: '${controller.sliderValue.round()}',
               onChanged: (newValue) {
                 setState(
-                      () {
+                  () {
                     controller.sliderValue = newValue;
                     buttonPower = true;
                   },
@@ -117,7 +116,6 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(children: <Widget>[
       AspectRatio(
         aspectRatio: 0.8,
@@ -180,7 +178,10 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                   //     },
                   //   ),
                   // );
-                  final code = await repo.postNormalReviewReply(postId: widget.postId, score: _scoreCountController.sliderValue);
+                  final code = await repo.postNormalReviewReply(
+                    postId: widget.postId,
+                    score: _scoreCountController.sliderValue,
+                  );
                   code.response.statusCode == 200 ? !check : check;
                   // return code.response.statusCode == 200 ? !likeCheck : likeCheck;
                   // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
@@ -202,21 +203,23 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                   //     builder: (_) => NormalReview(),
                   //   ),
                   // );
-                  if(widget.hasMore != 0 && check == true){
+                  if (widget.hasMore != 0 && check == true) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (_) => NormalReview(),
                       ),
                     );
-                  }
-                  else if(widget.hasMore == 0 && check == true){
-                    Navigator.of(context).pop(
-                      MaterialPageRoute(
-                        builder: (_) => MainReviewScreen(),
-                      ),
-                    );
-                  }
-                  else {
+                  } else if (widget.hasMore == 0 && check == true) {
+                    // Navigator.of(context).pop(
+                    //   MaterialPageRoute(
+                    //     builder: (_) => MainReviewScreen(),
+                    //   ),
+                    // );
+                    // setState(() {});
+                    Navigator.of(context).popAndPushNamed('/main_review_screen').then((_) {
+                      setState(() {});
+                    });
+                  } else {
                     AlertDialog(
                       content: Text(
                         "다시 평가해주세요😅",

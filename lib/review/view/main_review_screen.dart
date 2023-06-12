@@ -8,7 +8,9 @@ import '../../common/const/data.dart';
 import '../../common/secure_storage/secure_storage.dart';
 import '../../payment/view/main_payment_screen.dart';
 import '../feedback/view/normal_feedback_screen.dart';
+import '../model/isCreator_model.dart';
 import '../model/main_review_model.dart';
+import '../provider/main_review_provider.dart';
 import '../repository/main_review_repository.dart';
 import 'creator_review_screen.dart';
 import 'normal_review_screen.dart';
@@ -35,7 +37,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   @override
   Widget build(BuildContext context) {
     _fetchMainReviewModel(ref);
-
+    bool check = ref.read(MainReviewProvider.notifier).checkIsCreator().;
     return DefaultLayout(
         title: 'ReviewLook',
         actions: <Widget>[
@@ -128,6 +130,15 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   Widget PanelImage() {
     _fetchMainReviewModel(ref);
 
+    FutureBuilder<MainReviewModel>(
+        future: _MainReviewModelFuture,
+        builder: (_, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const CircularProgressIndicator();
+      } else if (snapshot.hasError) {
+        return Text('Error: ${snapshot.error}');
+      } else {
+        count = snapshot.data?.data ?? 0;
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: Padding(
@@ -244,6 +255,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   }
 
   Widget ReviewTabBar() {
+
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
