@@ -50,8 +50,7 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
 
   Future<void> getFaceDetectionImage() async {
     final selectedState = ref.watch(selectedImageProvider);
-    String dir = (await getApplicationDocumentsDirectory())
-        .path; //path provider로 저장할 경로 가져오기
+    String dir = (await getApplicationDocumentsDirectory()).path;
 
     database.collection('images').snapshots().listen(
       (event) {
@@ -99,13 +98,13 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
   @override
   void initState() {
     super.initState();
+    FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     getPhoto();
-    FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override

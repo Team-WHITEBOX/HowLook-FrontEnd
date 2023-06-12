@@ -4,7 +4,9 @@ import 'package:retrofit/retrofit.dart';
 
 import '../../common/const/data.dart';
 import '../../common/dio/dio.dart';
-import '../payment_model.dart';
+import '../model/curr_ruby_data.dart';
+import '../model/curr_ruby_model.dart';
+import '../model/payment_model.dart';
 
 part 'payment_repository.g.dart';
 
@@ -29,4 +31,11 @@ abstract class PaymentRepository {
   Future<HttpResponse<dynamic>> postCharge(
     @Queries() PaymentModel paymentModel,
   );
+
+  @GET('/readUsercash')
+  @Headers({
+    'accessToken': 'true',
+    'content-type': 'application/json',
+  })
+  Future<CurrRubyData> getCurrentRuby();
 }

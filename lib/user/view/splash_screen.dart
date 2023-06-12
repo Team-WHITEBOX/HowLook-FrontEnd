@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/user/view/signin/intro_screen.dart';
-import 'package:howlook/user/view/signup/second_signup_screen.dart';
-
 
 import '../../common/const/data.dart';
 import '../../common/layout/default_layout.dart';
@@ -11,6 +9,7 @@ import '../../common/secure_storage/secure_storage.dart';
 import '../../profile/repository/profile_repository.dart';
 import '../model/token/token_model.dart';
 import '../repository/sign_in_repository.dart';
+import 'signup/second_signup_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

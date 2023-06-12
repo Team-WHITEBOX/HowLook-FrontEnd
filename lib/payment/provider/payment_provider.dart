@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../payment_model.dart';
+import '../model/payment_model.dart';
 import '../repository/payment_repository.dart';
 
 final paymentProvider =
@@ -19,18 +19,26 @@ class PaymentStateNotifier extends StateNotifier<PaymentModel> {
     required this.paymentRepository,
   }) : super(
           PaymentModel(
+            currRuby: 0,
             amount: 0,
             ruby: 0,
             impUid: '',
           ),
-        );
+        ) {
+    getCurrRuby();
+  }
+
+  getCurrRuby() async {
+    final resp = await paymentRepository.getCurrentRuby();
+    state = state.copyWith(currRuby: resp.data.ruby);
+  }
 
   addToken(int ruby) {
     int total = state.ruby + ruby;
 
     state = state.copyWith(
       ruby: total,
-      amount: total * 10,
+      amount: total * 100,
     );
   }
 
@@ -40,9 +48,14 @@ class PaymentStateNotifier extends StateNotifier<PaymentModel> {
     );
   }
 
-  // clear() {
-  //   stt
-  // }
+  clear() {
+    state = PaymentModel(
+      currRuby: state.currRuby,
+      amount: 0,
+      ruby: 0,
+      impUid: "",
+    );
+  }
 
   chargeToken() async {
     final resp = await paymentRepository.postCharge(state);

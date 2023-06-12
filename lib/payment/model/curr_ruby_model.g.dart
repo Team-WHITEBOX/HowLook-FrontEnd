@@ -1,20 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'payment_model.dart';
+part of 'curr_ruby_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PaymentModel _$PaymentModelFromJson(Map<String, dynamic> json) => PaymentModel(
-      amount: json['amount'] as int,
+CurrRubyModel _$CurrRubyModelFromJson(Map<String, dynamic> json) =>
+    CurrRubyModel(
       ruby: json['ruby'] as int,
-      impUid: json['impUid'] as String,
     );
 
-Map<String, dynamic> _$PaymentModelToJson(PaymentModel instance) =>
+Map<String, dynamic> _$CurrRubyModelToJson(CurrRubyModel instance) =>
     <String, dynamic>{
-      'amount': instance.amount,
       'ruby': instance.ruby,
-      'impUid': instance.impUid,
     };

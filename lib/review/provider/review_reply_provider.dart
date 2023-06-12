@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../feedback/model/normal_feedback_model.dart';
+import '../model/normal_review_model.dart';
 import '../repository/normal_review_repository.dart';
 
 final ReviewReplyProvider =
-StateNotifierProvider<ReviewReplyStateNotifier, ReviewModel>(
+StateNotifierProvider<ReviewReplyStateNotifier, NormalFeedbackModel>(
       (ref) {
     final repository = ref.watch((NormalReviewRepositoryProvider));
     final notifier = ReviewReplyStateNotifier(repository: repository);

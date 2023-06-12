@@ -55,8 +55,8 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   borderRadius: BorderRadius.circular(32),
                 ),
                 constraints: const BoxConstraints(
-                  minHeight: 250,
-                  maxHeight: 450,
+                  minHeight: 300,
+                  maxHeight: 500,
                 ),
               );
             },

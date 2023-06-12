@@ -135,9 +135,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               .read(memberPasswordProvider.notifier)
                               .update((state) => "");
 
-                          print(refreshToken);
-                          print(accessToken);
-
                           if (!mounted) return;
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(

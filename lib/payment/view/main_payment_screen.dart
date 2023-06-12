@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../profile/view/payment/payment_screen.dart';
 import '../provider/payment_provider.dart';
 
 class MainPaymentScreen extends ConsumerStatefulWidget {
@@ -56,32 +57,10 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                       ),
                       const SizedBox(height: 25),
                       GestureDetector(
-                        onTap: () async {
-                          // if (!widget.isScrapped) {
-                          //   final code = await repo.postScrap(widget.postId);
-                          //   if (code.response.statusCode == 200) {
-                          //     ref
-                          //         .read(mainFeedProvider.notifier)
-                          //         .getDetail(postId: widget.postId);
-                          //     Navigator.pop(context);
-                          //   } else {
-                          //     return;
-                          //   }
-                          // } else {
-                          //   final code = await repo.delScrap(widget.postId);
-                          //   if (code.response.statusCode == 200) {
-                          //     ref
-                          //         .read(mainFeedProvider.notifier)
-                          //         .getDetail(postId: widget.postId);
-                          //     Navigator.pop(context);
-                          //   } else {
-                          //     return;
-                          //   }
-                          // }
-                        },
-                        child: const Text(
-                          "500",
-                          style: TextStyle(
+                        onTap: () async {},
+                        child: Text(
+                          amount.currRuby.toString(),
+                          style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w800,
                           ),
@@ -101,33 +80,18 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                       const SizedBox(height: 25),
                       GestureDetector(
                         onTap: () async {
-                          // if (!widget.isScrapped) {
-                          //   final code = await repo.postScrap(widget.postId);
-                          //   if (code.response.statusCode == 200) {
-                          //     ref
-                          //         .read(mainFeedProvider.notifier)
-                          //         .getDetail(postId: widget.postId);
-                          //     Navigator.pop(context);
-                          //   } else {
-                          //     return;
-                          //   }
-                          // } else {
-                          //   final code = await repo.delScrap(widget.postId);
-                          //   if (code.response.statusCode == 200) {
-                          //     ref
-                          //         .read(mainFeedProvider.notifier)
-                          //         .getDetail(postId: widget.postId);
-                          //     Navigator.pop(context);
-                          //   } else {
-                          //     return;
-                          //   }
-                          // }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PaymentScreen()),
+                          );
                         },
                         child: Text(
                           amount.ruby.toString(),
                           style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w800,
+                            color: Colors.blueAccent,
                           ),
                         ),
                       ),
@@ -155,7 +119,7 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                         Image.asset('asset/img/ruby/ruby.png'),
                         const SizedBox(width: 10),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.73,
+                          width: MediaQuery.of(context).size.width * 0.65,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
@@ -172,7 +136,7 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                               SizedBox(
                                 height: 28,
                                 child: Text(
-                                  "KRW 100",
+                                  "KRW 1,000",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
@@ -206,7 +170,7 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                         ExtendedImage.asset("asset/img/ruby/ruby.png"),
                         const SizedBox(width: 10),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.73,
+                          width: MediaQuery.of(context).size.width * 0.65,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
@@ -223,7 +187,7 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                               SizedBox(
                                 height: 28,
                                 child: Text(
-                                  "KRW 1000",
+                                  "KRW 10,000",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
@@ -257,7 +221,7 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                         ExtendedImage.asset("asset/img/ruby/ruby.png"),
                         const SizedBox(width: 10),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.73,
+                          width: MediaQuery.of(context).size.width * 0.65,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
@@ -274,7 +238,7 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                               SizedBox(
                                 height: 28,
                                 child: Text(
-                                  "KRW 10000",
+                                  "KRW 100,000",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
@@ -284,7 +248,41 @@ class _MainFeedMoreVertScreenState extends ConsumerState<MainPaymentScreen> {
                             ],
                           ),
                         )
-
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(color: Colors.black12, height: 1),
+            GestureDetector(
+              onTap: () async {
+                ref.read(paymentProvider.notifier).clear();
+              },
+              child: Container(
+                height: 64,
+                color: Colors.white10,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 24.0, right: 24.0, top: 8, bottom: 8),
+                  child: SizedBox(
+                    height: 32,
+                    child: Row(
+                      children: const <Widget>[
+                        SizedBox(width: 4),
+                        Icon(Icons.delete_forever, color: Colors.red, size: 40),
+                        SizedBox(width: 24),
+                        SizedBox(
+                          height: 28,
+                          child: Text(
+                            "초기화",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

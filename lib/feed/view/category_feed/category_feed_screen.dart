@@ -459,6 +459,7 @@ class _CategoryFeedScreenState extends ConsumerState<CategoryFeedScreen> {
           ),
           Expanded(
             child: GridView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
                 mainAxisSpacing: 1,

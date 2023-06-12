@@ -3,10 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:howlook/common/const/data.dart';
-import 'package:howlook/user/view/splash_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+
+import 'common/const/data.dart';
+import 'payment/view/payment_result_screen.dart';
+import 'user/view/splash_screen.dart';
 
 // Future<void> main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +47,9 @@ class _App extends StatelessWidget {
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
+      routes: {
+        '/payment-result' : (context) => ResultScreen(),
+      },
       home: const SplashScreen(),
     );
   }
