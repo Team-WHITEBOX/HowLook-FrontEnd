@@ -52,43 +52,30 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.bottomRight,
-                      end: Alignment.topLeft,
-                      colors: [
-                        Color(0xFFD07AFF),
-                        Color(0xFFa6ceff),
-                      ],
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(40),
+                    minimumSize: const Size(150, 40),
                   ),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const TournamentScreen(),
                       ),
-                      minimumSize: const Size(150, 40),
-                    ),
-                    onPressed: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (_) => TournamentIng(),
-                      //   ),
-                      // );
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        "참여하러가기 Click!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Text(
+                      "참여하러가기 Click!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
                   ),
