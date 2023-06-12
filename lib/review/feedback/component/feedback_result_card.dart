@@ -4,28 +4,47 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:howlook/review/feedback/view/chart_page_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
-import 'package:howlook/review/feedback/model/feedback_result_model.dart';
+
+import '../model/normal_result_data_model.dart';
 
 class FeedbackResultCard extends StatefulWidget {
-  // 포스트 아이디
   final int postId;
   // 첫 장 이미지 경로
   final String mainPhotoPath;
+  // 평균 점수
   final double averageScore;
   final double maleScore;
   final double femaleScore;
+  final double maxScore;
+  final double minScore;
+  final double replyCount;
+  final int maleCount;
+  final int femaleCount;
+  final List<double> maleScores;
+  final List<double> femaleScores;
+  final List<int> maleCounts;
+  final List<int> femaleCounts;
 
-  const FeedbackResultCard({
-    Key? key,
-    required this.postId,
-    required this.mainPhotoPath,
-    required this.averageScore,
-    required this.maleScore,
-    required this.femaleScore,
-  }) : super(key: key);
+  FeedbackResultCard(
+      {Key? key,
+        required this.postId,
+        required this.mainPhotoPath,
+        required this.averageScore,
+        required this.maleScore,
+        required this.femaleScore,
+        required this.maxScore,
+        required this.minScore,
+        required this.replyCount,
+        required this.maleCount,
+        required this.femaleCount,
+        required this.maleScores,
+        required this.femaleScores,
+        required this.maleCounts,
+        required this.femaleCounts,
+      }) : super(key: key);
 
   factory FeedbackResultCard.fromModel({
-    required FBResultModel model,
+    required NormalResultData model,
   }) {
     return FeedbackResultCard(
       postId: model.postId,
@@ -33,6 +52,15 @@ class FeedbackResultCard extends StatefulWidget {
       averageScore: model.averageScore,
       maleScore: model.maleScore,
       femaleScore: model.femaleScore,
+      maxScore: model.maxScore,
+      minScore: model.minScore,
+      replyCount: model.replyCount,
+      maleCount: model.maleCount,
+      femaleCount: model.femaleCount,
+      maleScores: model.maleScores,
+      femaleScores: model.femaleScores,
+      maleCounts: model.maleCounts,
+      femaleCounts: model.femaleCounts,
     );
   }
 

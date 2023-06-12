@@ -25,7 +25,7 @@ class NormalFeedbackStateNotifier extends StateNotifier<NormalFeedbackModel> {
     required this.repository,
   }) : super(NormalFeedbackModel(status: 0, code: '', message: '', data: [])) {}
 
-  Future<NormalFeedbackModel> getFeedbackData({required String userId}) async {
+  Future<NormalFeedbackModel> getFeedbackData() async {
     final userId = await repository.getMemberId();
     final feedbackData = await repository.feedbackData(
         userID: userId.data);

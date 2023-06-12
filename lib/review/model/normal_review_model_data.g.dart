@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'review_model_data.dart';
+part of 'normal_review_model_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

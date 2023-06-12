@@ -7,90 +7,48 @@ import 'package:howlook/review/feedback/view/chart_page_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/review/feedback/component/feedback_result_card.dart';
-import 'package:howlook/review/feedback/model/feedback_result_model.dart';
 
-// class FeedbackResult extends ConsumerWidget {
-//   final int postId; // 포스트 아이디로 특정 게시글 조회
-//   const FeedbackResult({required this.postId, Key? key}) : super(key: key);
-//
-//   Future<Map<String, dynamic>> FeedbackReviewPage(WidgetRef ref) async {
-//     final dio = Dio();
-//     final storage = ref.read(secureStorageProvider);
-//     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-//     final resp = await dio.get(
-//       'http://$API_SERVICE_URI/eval/getReplyData?postId=$postId',
-//       // 특정 API 뒤에 id 값 넘어서 가져가기
-//       options: Options(
-//         headers: {
-//           'authorization': 'Bearer $accessToken',
-//         },
-//       ),
-//     );
-//     return resp.data;
-//   }
-//
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final Size size = MediaQuery.of(context).size;
-//     return DefaultLayout(
-//         child: FutureBuilder<Map<String, dynamic>>(
-//             future: FeedbackReviewPage(ref),
-//             builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-//               if (!snapshot.hasData) {
-//                 print('errorN3');
-//                 return Center(
-//                   child: CircularProgressIndicator(),
-//                 );
-//               }
-//               final item = snapshot.data!; //인덱스값
-//               final pItem = FBResultModel.fromJson(json:item);
-//               return FeedbackResultCard.fromModel(model: pItem);
-//             }));
-//   }
-// }
+import '../model/normal_result_data_model.dart';
+import '../model/normal_result_model.dart';
+import '../provider/normal_feedback_provider.dart';
+import '../provider/normal_result_provider.dart';
 
 class FeedbackResult extends ConsumerWidget {
   final int postId; // 포스트 아이디로 특정 게시글 조회
+  FeedbackResult({required this.postId, Key? key}) : super(key: key);
 
-  const FeedbackResult({required this.postId, Key? key}) : super(key: key);
+  late Future<NormalResultModel> _NormalResultFuture;
 
-
-  Future<FBResultModel> FeedbackChartPage(WidgetRef ref) async {
-    final dio = Dio();
-    final storage = ref.read(secureStorageProvider);
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    final resp = await dio.get(
-      'http://$API_SERVICE_URI/eval/getReplyData?postId=$postId',
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
-    return FBResultModel.fromJson(resp.data['data']);
+  Future<void> _fetchNormalResultModel(WidgetRef ref) async {
+    final repository = ref.read(NormalResultProvider.notifier);
+    _NormalResultFuture = repository.getResultData(postId: postId);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Size size = MediaQuery.of(context).size;
+    _fetchNormalResultModel(ref);
 
+    final Size size = MediaQuery.of(context).size;
     return DefaultLayout(
-      child: FutureBuilder<FBResultModel>(
-        future: FeedbackChartPage(ref),
-        builder: (_, AsyncSnapshot<FBResultModel> snapshot) {
+      child: FutureBuilder<NormalResultModel>(
+        future: _NormalResultFuture,
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            print("errorfbr");
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
+          } else if (snapshot.hasData) {
+            final item = snapshot.data!.data; //인덱스값
+            return FeedbackResultCard.fromModel(model: item);
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
-
-          final FBResultModel item = snapshot.requireData;
-          return FeedbackResultCard.fromModel(model: item);
         },
       ),
     );

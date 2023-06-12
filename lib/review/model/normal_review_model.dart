@@ -1,8 +1,8 @@
-import 'package:howlook/review/model/review_model_data.dart';
+import 'package:howlook/review/model/normal_review_model_data.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:howlook/common/utils/data_utils.dart';
 
-part 'review_model.g.dart';
+part 'normal_review_model.g.dart';
 
 @JsonSerializable()
 class ReviewModel {

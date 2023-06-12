@@ -10,6 +10,7 @@ import '../../payment/view/main_payment_screen.dart';
 import '../feedback/view/normal_feedback_screen.dart';
 import '../model/main_review_model.dart';
 import '../repository/main_review_repository.dart';
+import 'creator_review_screen.dart';
 import 'normal_review_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -135,9 +136,36 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
           key: UniqueKey(),
           onDismissed: (direction) {
             if (direction == DismissDirection.endToStart) {
-              setState(() {
-                CreaterFeedback();
-              });
+              setState(
+                () {
+                  if (count == 0) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        content: Text(
+                          "평가글이 없습니다😅",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        actions: [
+                          _DialogButton(text: "확인"),
+                        ],
+                        backgroundColor: Colors.black87,
+                        shadowColor: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  } else if (count > 0) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => CreaterReview(),
+                      ),
+                    );
+                  } else
+                    return print('Error');
+                },
+              );
             } else if (direction == DismissDirection.startToEnd) {
               setState(() {
                 if (count == 0) {
