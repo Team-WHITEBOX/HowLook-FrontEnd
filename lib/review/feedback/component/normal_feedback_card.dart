@@ -3,9 +3,9 @@
 // import 'package:flutter_swiper/flutter_swiper.dart';
 // import 'package:howlook/profile/model/scrap_model.dart';
 // import 'package:howlook/review/feedback/model/normal_feedback_model_data.dart';
-// import 'package:howlook/review/feedback/view/feedback_result_screen.dart';
+// import 'package:howlook/review/feedback/view/normal_feedback_result_screen.dart';
 //
-// import '../provider/normal_feedback_provider.dart';
+// import '../provider/feedback_provider.dart';
 //
 // class NormalFeedbackCard extends ConsumerWidget {
 //
@@ -134,7 +134,7 @@
 import 'package:flutter/material.dart';
 import 'package:howlook/profile/model/scrap_model.dart';
 import 'package:howlook/review/feedback/model/normal_feedback_model.dart';
-import 'package:howlook/review/feedback/view/feedback_result_screen.dart';
+import 'package:howlook/review/feedback/view/normal_feedback_result_screen.dart';
 
 import '../model/normal_feedback_model_data.dart';
 
@@ -246,7 +246,7 @@ class NormalFeedbackCard extends StatelessWidget {
                   Container(
                       alignment: Alignment.center,
                       child: Text(
-                        'Score: ${averageScore}',
+                        'Score: ${averageScore.toStringAsFixed(1)}',
                         style: TextStyle(color: Colors.white),
                       ))
                 ]),

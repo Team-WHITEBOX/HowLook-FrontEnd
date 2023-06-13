@@ -205,7 +205,10 @@ class _NormalReviewCardState extends ConsumerState<NormalReviewCard> {
                           MaterialPageRoute(
                             builder: (_) => NormalReview(),
                           ),
-                        );
+                        ).then((_) {
+                          // 화면 전환 후 화면 새로고침
+                          setState(() {});
+                        });
                       } else if (widget.hasMore == 0 && check == true) {
                         if (!mounted) return;
                         Navigator.pop(context);

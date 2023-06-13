@@ -6,11 +6,11 @@ import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/review/feedback/view/chart_page_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:howlook/common/const/data.dart';
-import 'package:howlook/review/feedback/component/feedback_result_card.dart';
+import 'package:howlook/review/feedback/component/normal_feedback_result_card.dart';
 
 import '../model/normal_result_data_model.dart';
 import '../model/normal_result_model.dart';
-import '../provider/normal_feedback_provider.dart';
+import '../provider/feedback_provider.dart';
 import '../provider/normal_result_provider.dart';
 
 class FeedbackResult extends ConsumerWidget {

@@ -20,7 +20,7 @@ class CreaterReview extends ConsumerWidget {
 
   Future<void> _fetchReviewModel(WidgetRef ref) async {
     final repository = ref.read(NormalReviewRepositoryProvider);
-    _reviewCreatorModelFuture = repository.reviewCratorData();
+    _reviewCreatorModelFuture = repository.reviewCreatorData();
   }
 
   @override

@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/normal_result_data_model.dart';
 import '../model/normal_result_model.dart';
-import '../repository/normal_result_repository.dart';
+import '../repository/result_repository.dart';
 
 final NormalResultProvider =
 StateNotifierProvider<NormalResultStateNotifier, NormalResultModel>(
       (ref) {
-    final repository = ref.watch((NormalResultRepositoryProvider));
+    final repository = ref.watch((ResultRepositoryProvider));
     final notifier = NormalResultStateNotifier(repository: repository);
     return notifier;
   },
@@ -16,7 +16,7 @@ StateNotifierProvider<NormalResultStateNotifier, NormalResultModel>(
 
 class NormalResultStateNotifier extends StateNotifier<NormalResultModel> {
   // API 요청을 위해 repository 가져오기
-  final NormalResultRepository repository;
+  final ResultRepository repository;
 
   // 외부에서 API 입력 받기위해 required에 넣기
   NormalResultStateNotifier({

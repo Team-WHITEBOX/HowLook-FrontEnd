@@ -6,6 +6,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/review/feedback/view/normal_feedback_result_screen.dart';
 
+import '../component/creator_feedback_card.dart';
+import '../model/creator_feedback_model.dart';
 import '../model/feedback_model.dart';
 import '../model/normal_feedback_model.dart';
 import '../provider/feedback_provider.dart';
@@ -13,8 +15,8 @@ import '../model/normal_feedback_model_data.dart';
 import '../component/normal_feedback_card.dart';
 import '../repository/feedback_repository.dart';
 
-class NormalFeedback extends ConsumerWidget {
-  NormalFeedback({Key? key}) : super(key: key);
+class CreatorFeedback extends ConsumerWidget {
+  CreatorFeedback({Key? key}) : super(key: key);
 
   late int count = 0;
   late Future<FeedbackModel> _NormalFeedbackFuture;
@@ -44,21 +46,20 @@ class NormalFeedback extends ConsumerWidget {
                       print("error1");
                       return Text('Error: ${snapshot.error}');
                     } else {
-
-                      final feedBackModel = ref
+                      final creatorFeedBackModel = ref
                           .read(NormalFeedbackProvider.notifier)
-                          .getFeedbackData();
+                          .getCreatorFeedbackData();
 
-                      return FutureBuilder<NormalFeedbackModel>(
-                        future: feedBackModel,
+                      return FutureBuilder<CreatorFeedbackModel>(
+                        future: creatorFeedBackModel,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
+                              ConnectionState.waiting ||
+                              snapshot.data!.data == null) {
                             return const Center(
                                 child: CircularProgressIndicator());
-                          } else if (snapshot.hasError || snapshot.data?.data == [] ||
-                                  snapshot.data == null )
-                          { return Center(
+                          } else if (snapshot.data!.data!.isEmpty) {
+                            return Center(
                               child: Container(
                                 height: 400,
                                 child: Padding(
@@ -86,7 +87,7 @@ class NormalFeedback extends ConsumerWidget {
                               ),
                             );
                           } else {
-                            final feedbackDataModel = snapshot.data!.data ?? [];
+                            final feedbackDataModel = snapshot.data!.data!;
                             return SizedBox(
                               height: 400,
                               child: Padding(
@@ -98,7 +99,7 @@ class NormalFeedback extends ConsumerWidget {
                                   itemCount: feedbackDataModel.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return NormalFeedbackCard.fromModel(
+                                    return CreatorFeedbackCard.fromModel(
                                       model: feedbackDataModel[index],
                                     );
                                   },

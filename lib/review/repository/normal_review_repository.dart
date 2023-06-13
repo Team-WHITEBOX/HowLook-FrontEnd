@@ -19,7 +19,7 @@ final NormalReviewRepositoryProvider = Provider<NormalReviewRepository>(
   (ref) {
     final dio = ref.watch(dioProvider);
     final repository =
-        NormalReviewRepository(dio, baseUrl: 'http://$API_SERVICE_URI/eval');
+        NormalReviewRepository(dio, baseUrl: 'http://$API_SERVICE_URI');
     return repository;
   },
 );
@@ -29,25 +29,36 @@ abstract class NormalReviewRepository {
   factory NormalReviewRepository(Dio dio, {String baseUrl}) =
       _NormalReviewRepository;
 
-  @GET('/readNextEval')
+  @GET('/eval/readNextEval')
   @Headers({
     'accessToken': 'true',
   })
   Future<ReviewModel> reviewData();
 
-  @GET('/readNextEval')
+  @GET('/eval/readNextEval')
   @Headers({
     'accessToken': 'true',
   })
-  Future<CreatorReviewModel> reviewCratorData();
+  Future<CreatorReviewModel> reviewCreatorData();
 
-  @POST('/reply/register')
+  @POST('/eval/reply/register')
   @Headers({
     'accessToken': 'true',
     'content-type': 'application/json',
   })
   Future<HttpResponse<dynamic>> postNormalReviewReply({
     @Query('postId') required int postId,
+    @Query('score') required double score,
+  });
+
+  @POST('/CreatorReply/evalCreator')
+  @Headers({
+    'accessToken': 'true',
+    'content-type': 'application/json',
+  })
+  Future<HttpResponse<dynamic>> postCreatorReviewReply({
+    @Query('postId') required int postId,
+    @Query('review') required String review,
     @Query('score') required double score,
   });
 }
