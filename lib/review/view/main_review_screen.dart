@@ -366,8 +366,8 @@ class _DialogButton extends StatelessWidget {
 }
 
 class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
-  late Future<MainReviewModel> RcountFuture;
-  late Future<MainReviewModel> CcountFuture;
+  late Future<MainReviewModel> rCountFuture;
+  late Future<MainReviewModel> cCountFuture;
   late Future<MainReviewModel> _MainReviewModelFuture;
 
   Future<void> _fetchMainReviewModel(WidgetRef ref) async {
@@ -416,8 +416,8 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
-            // RcountFuture = ref.read(ReviewProvider).getReviewCount; **
-            // CcountFuture = ref.read(ReviewProvider).getCreatorCount; **
+            rCountFuture = ref.read(reviewProviderRepository.notifier).getReviewCount();
+            cCountFuture = ref.read(reviewProviderRepository.notifier).getCreatorCount();
 
             return SingleChildScrollView(
               child: SafeArea(
@@ -505,7 +505,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   // 다이얼로그 닫힌 후 화면 새로고침
                   setState(() {});
                 });
-              } else if (await RcountFuture == 0 && check.data == true) {
+              } else if ((await cCountFuture).data == 0 && check.data == true) {
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
@@ -526,24 +526,26 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   // 다이얼로그 닫힌 후 화면 새로고침
                   setState(() {});
                 });
-              // } else if (await RcountFuture > 0 && check.data == true) {
-              //   Navigator.of(context)
-              //       .push(
-              //     MaterialPageRoute(
-              //       builder: (_) => CreaterReview(),
-              //     ),
-              //   )
-              //       .then((_) {
-              //     // 화면 전환 후 화면 새로고침
-              //     setState(() {});
-              //   });**
-              } else {
+              }
+              else if ((await cCountFuture).data > 0 && check.data == true) {
+                Navigator.of(context)
+                    .push(
+                  MaterialPageRoute(
+                    builder: (_) => CreaterReview(),
+                  ),
+                )
+                    .then((_) {
+                  // 화면 전환 후 화면 새로고침
+                  setState(() {});
+                });
+              }
+              else {
                 print('Error');
                 // 화면 새로고침
                 setState(() {});
               }
             } else if (direction == DismissDirection.startToEnd) {
-              if (await RcountFuture == 0) {
+              if ((await rCountFuture).data == 0) {
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
@@ -564,17 +566,17 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   // 다이얼로그 닫힌 후 화면 새로고침
                   setState(() {});
                 });
-              // } else if (await RcountFuture > 0) {
-              //   Navigator.of(context)
-              //       .push(
-              //     MaterialPageRoute(
-              //       builder: (_) => NormalReview(),
-              //     ),
-              //   )
-              //       .then((_) {
-              //     // 화면 전환 후 화면 새로고침
-              //     setState(() {});
-              //   });**
+              } else if ((await rCountFuture).data > 0) {
+                Navigator.of(context)
+                    .push(
+                  MaterialPageRoute(
+                    builder: (_) => NormalReview(),
+                  ),
+                )
+                    .then((_) {
+                  // 화면 전환 후 화면 새로고침
+                  setState(() {});
+                });
               } else {
                 print('Error');
                 // 화면 새로고침

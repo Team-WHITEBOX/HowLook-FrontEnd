@@ -90,7 +90,7 @@ class _ManagerRepository implements ManagerRepository {
     )
             .compose(
               _dio.options,
-              '/reject',
+              '/accept',
               queryParameters: queryParameters,
               data: _data,
             )

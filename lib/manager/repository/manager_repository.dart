@@ -37,7 +37,7 @@ abstract class ManagerRepository {
     @Query('postId') required int postId,
   });
 
-  @DELETE('/reject')
+  @DELETE('/accept')
   @Headers({})
   Future<HttpResponse<dynamic>> delReport({
     @Query('postId') required int postId,
