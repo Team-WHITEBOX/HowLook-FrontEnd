@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'normal_feedback_repository.dart';
+part of 'result_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'normal_feedback_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _NormalFeedbackRepository implements NormalFeedbackRepository {
-  _NormalFeedbackRepository(
+class _ResultRepository implements ResultRepository {
+  _ResultRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,51 +19,77 @@ class _NormalFeedbackRepository implements NormalFeedbackRepository {
   String? baseUrl;
 
   @override
-  Future<FeedbackModel> getMemberId() async {
+  Future<NormalResultModel> resultData({postId}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'accessToken': 'true'};
-    _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<FeedbackModel>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/member/check',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = FeedbackModel.fromJson(_result.data!);
-    return value;
-  }
-
-  @override
-  Future<NormalFeedbackModel> feedbackData({userID}) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'userID': userID};
+    final queryParameters = <String, dynamic>{r'postId': postId};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<NormalFeedbackModel>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<NormalResultModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/eval/readByUserId',
+              '/eval/getReplyData',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = NormalFeedbackModel.fromJson(_result.data!);
+    final value = NormalResultModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CreatorModel> creatorData({creatorEvalId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'creatorEvalId': creatorEvalId};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CreatorModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CreatorEval/readByCreatorId',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CreatorModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CreatorResultModel> creatorResultData({postId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'postId': postId};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CreatorResultModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CreatorData/getReplyData',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CreatorResultModel.fromJson(_result.data!);
     return value;
   }
 

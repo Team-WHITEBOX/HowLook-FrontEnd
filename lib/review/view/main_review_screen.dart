@@ -8,6 +8,7 @@ import '../../common/const/data.dart';
 import '../../common/secure_storage/secure_storage.dart';
 import '../../payment/provider/payment_provider.dart';
 import '../../payment/view/main_payment_screen.dart';
+import '../feedback/view/creator_feedback_screen.dart';
 import '../feedback/view/normal_feedback_screen.dart';
 import '../model/isCreator_model.dart';
 import '../model/main_review_model.dart';
@@ -148,7 +149,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   builder: (_) => AlertDialog(
                     content: Text(
                       "사용하실 수 없는 기능입니다😅"
-                          "크리에이터가 되어보세요!",
+                          "\n크리에이터가 되어보세요!",
                       style: TextStyle(color: Colors.white),
                     ),
                     actions: [
@@ -328,26 +329,12 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   child: NormalFeedback(),
                 ),
                 Container(
-                  child: CreaterFeedback()
+                  child: CreatorFeedback()
                 ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget CreaterFeedback() {
-    return DefaultLayout(
-      child: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            child: Center(
-              child: Text('사용하실 수 없습니다.'),
-            ),
-          ),
-        ),
       ),
     );
   }

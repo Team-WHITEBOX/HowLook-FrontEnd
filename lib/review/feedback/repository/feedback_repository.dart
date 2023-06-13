@@ -5,10 +5,11 @@ import 'package:howlook/common/dio/dio.dart';
 import 'package:retrofit/http.dart';
 
 import '../../../common/model/params/feedback_params/feedback_params.dart';
+import '../model/creator_feedback_model.dart';
 import '../model/feedback_model.dart';
 import '../model/normal_feedback_model.dart';
 
-part 'normal_feedback_repository.g.dart';
+part 'feedback_repository.g.dart';
 
 final NormalFeedbackRepositoryProvider = Provider<NormalFeedbackRepository>(
       (ref) {
@@ -34,5 +35,13 @@ abstract class NormalFeedbackRepository {
   })
   Future<NormalFeedbackModel> feedbackData({
     @Query('userID') String? userID,
+  });
+
+  @GET('/CreatorEval/readByUserId')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<CreatorFeedbackModel> feedbackCreatorData({
+    @Query('userId') String? userId,
   });
 }

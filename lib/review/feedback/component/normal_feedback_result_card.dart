@@ -69,49 +69,54 @@ class FeedbackResultCard extends StatefulWidget {
 }
 
 class _FeedbackResultCardState extends State<FeedbackResultCard> {
-
-
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
     print(widget.postId); // postId 값 출력
     return CustomScrollView(
-          slivers: [
-            SliverAppBar( // 헤더 영역
-              expandedHeight: MediaQuery.of(context).size.width * 1.0,  // 헤더의 최대 높이
-              pinned: true, // 축소시 상단에 AppBar가 고정되는지 설정
-              flexibleSpace: FlexibleSpaceBar(// 늘어나는 영역의 UI 정의
-                title: tabTitle(),
-                background: //Image.asset(images[0], fit: BoxFit.cover,),
-                Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.network('${widget.mainPhotoPath}'),
-                      Container(
-                        child: Image.network(
-                          '${widget.mainPhotoPath}',
-                          color: Colors.black.withOpacity(0.6),
-                        ),
-                      ),
-                    ]),
+      slivers: [
+        SliverAppBar(
+          // 헤더 영역
+          expandedHeight: MediaQuery.of(context).size.width * 1.0,
+          // 헤더의 최대 높이
+          pinned: true,
+          // 축소시 상단에 AppBar가 고정되는지 설정
+          flexibleSpace: FlexibleSpaceBar(
+            // 늘어나는 영역의 UI 정의
+            title: tabTitle(),
+            background: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.network('${widget.mainPhotoPath}'),
+                Container(
+                  child: Image.network(
+                    '${widget.mainPhotoPath}',
+                    color: Colors.black.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: Colors.black45,
+        ),
+        SliverToBoxAdapter(
+          child: Column(
+            children: [
+              Text(
+                '성별 점수 그래프',
+                style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'NotoSans'),
               ),
-              backgroundColor: Colors.black45,
-            ),
-            SliverFillRemaining(
-              // 내용 영역
-                child: Column(
-                  children: [
-                    Text('성별 점수 그래프',style: TextStyle(fontSize: 18, color: Colors.black, fontFamily: 'NotoSans'),),
-                    ChartPage(
-                      postId: widget.postId,
-                    ),
-                  ],
-                )
-            ),
-          ],);
+              ChartPage(
+                postId: widget.postId,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
-  Widget tabTitle(){
+  Widget tabTitle() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -120,35 +125,42 @@ class _FeedbackResultCardState extends State<FeedbackResultCard> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(''),
-            Text('여자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
-            Text('${widget.femaleScore}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text(
+              '여자 평균',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            ),
+            Text(
+              '${widget.femaleScore.toStringAsFixed(1)}점',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            ),
           ],
         ),
-        // Container(
-        //   width: 1,
-        //   height: 50,
-        //   color: Colors.white,
-        // ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-
-          children: [
-            Text(''),
-            Text('종합 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
-            Text('${widget.averageScore}점', style: TextStyle(color: Colors.white,fontSize: 15),),
-          ],
-        ),
-        // Container(
-        //   width: 1,
-        //   height: 50,
-        //   color: Colors.white,
-        // ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(''),
-            Text('남자 평균', style: TextStyle(color: Colors.white,fontSize: 15),),
-            Text('${widget.maleScore}점', style: TextStyle(color: Colors.white,fontSize: 15),),
+            Text(
+              '종합 평균',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            ),
+            Text(
+              '${widget.averageScore.toStringAsFixed(1)}점',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(''),
+            Text(
+              '남자 평균',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            ),
+            Text(
+              '${widget.maleScore.toStringAsFixed(1)}점',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            ),
           ],
         )
       ],
