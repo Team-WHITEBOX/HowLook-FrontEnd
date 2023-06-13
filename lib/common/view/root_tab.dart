@@ -48,7 +48,9 @@ class _RootTabState extends ConsumerState<RootTab>
     }
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      show();
+      if (widget.isCharge != null && widget.isCharge == true) {
+        show();
+      }
     });
   }
 

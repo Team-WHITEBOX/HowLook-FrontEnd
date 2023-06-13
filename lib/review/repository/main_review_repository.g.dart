@@ -43,6 +43,30 @@ class _MainReviewRepository implements MainReviewRepository {
   }
 
   @override
+  Future<MainReviewModel> creatorCount() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<MainReviewModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CreatorEval/getEvalCount',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = MainReviewModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<IsCreatorModel> checkCreator() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

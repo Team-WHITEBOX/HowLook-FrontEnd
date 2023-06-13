@@ -27,6 +27,12 @@ abstract class MainReviewRepository {
   })
   Future<MainReviewModel> reviewCount();
 
+  @GET('/CreatorEval/getEvalCount')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<MainReviewModel> creatorCount();
+
   @GET('/CreatorEval/isCreator')
   @Headers({
     'accessToken': 'true',
