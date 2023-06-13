@@ -57,7 +57,7 @@ class _NormalReviewRepository implements NormalReviewRepository {
     )
             .compose(
               _dio.options,
-              '/eval/readNextEval',
+              '/CreatorEval/readNextCreatorEval',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -113,10 +113,7 @@ class _NormalReviewRepository implements NormalReviewRepository {
       r'review': review,
       r'score': score,
     };
-    final _headers = <String, dynamic>{
-      r'accessToken': 'true',
-      r'content-type': 'application/json',
-    };
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result =
@@ -124,7 +121,6 @@ class _NormalReviewRepository implements NormalReviewRepository {
       method: 'POST',
       headers: _headers,
       extra: _extra,
-      contentType: 'application/json',
     )
             .compose(
               _dio.options,

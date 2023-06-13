@@ -34,18 +34,14 @@ class NormalReview extends ConsumerWidget {
             future: _reviewModelFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 final pItem = snapshot.data!.data;
                 return NormalReviewCard.fromModel(model: pItem);
               } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
             },
           ),

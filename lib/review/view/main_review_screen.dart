@@ -142,14 +142,13 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
           onDismissed: (direction) async {
             if (direction == DismissDirection.endToStart) {
               final check = await repo.checkCreator();
-              print(check.data);
               if (check.data == false) {
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
                     content: Text(
                       "사용하실 수 없는 기능입니다😅"
-                          "\n크리에이터가 되어보세요!",
+                      "\n크리에이터가 되어보세요!",
                       style: TextStyle(color: Colors.white),
                     ),
                     actions: [
@@ -187,11 +186,13 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   setState(() {});
                 });
               } else if (count > 0 && check.data == true) {
-                Navigator.of(context).push(
+                Navigator.of(context)
+                    .push(
                   MaterialPageRoute(
                     builder: (_) => CreaterReview(),
                   ),
-                ).then((_) {
+                )
+                    .then((_) {
                   // 화면 전환 후 화면 새로고침
                   setState(() {});
                 });
@@ -223,11 +224,13 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                   setState(() {});
                 });
               } else if (count > 0) {
-                Navigator.of(context).push(
+                Navigator.of(context)
+                    .push(
                   MaterialPageRoute(
                     builder: (_) => NormalReview(),
                   ),
-                ).then((_) {
+                )
+                    .then((_) {
                   // 화면 전환 후 화면 새로고침
                   setState(() {});
                 });
@@ -285,7 +288,6 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
   }
 
   Widget ReviewTabBar() {
-
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
@@ -328,9 +330,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
                 Container(
                   child: NormalFeedback(),
                 ),
-                Container(
-                  child: CreatorFeedback()
-                ),
+                Container(child: CreatorFeedback()),
               ],
             ),
           ),

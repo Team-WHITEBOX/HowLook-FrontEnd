@@ -362,8 +362,7 @@ class CreatorReviewCard extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<CreatorReviewCard> createState() =>
-      _CreatorReviewCardState();
+  ConsumerState<CreatorReviewCard> createState() => _CreatorReviewCardState();
 }
 
 class SliderController {
@@ -378,8 +377,9 @@ class _CreatorReviewCardState extends ConsumerState<CreatorReviewCard> {
 
   @override
   void initState() {
-    buttonPower = false;
     super.initState();
+    buttonPower = false;
+    print(widget.creatorEvalId);
   }
 
   Widget buildSlider({
@@ -423,7 +423,7 @@ class _CreatorReviewCardState extends ConsumerState<CreatorReviewCard> {
               label: '${controller.sliderValue.round()}',
               onChanged: (newValue) {
                 setState(
-                      () {
+                  () {
                     controller.sliderValue = newValue;
                     buttonPower = true;
                   },
@@ -544,17 +544,17 @@ class _CreatorReviewCardState extends ConsumerState<CreatorReviewCard> {
 }
 
 class _CreatorDialogButton extends ConsumerStatefulWidget {
+  final int creatorEvalId;
+  final double score;
+  final String text;
+  final String review;
+
   _CreatorDialogButton({
     required this.creatorEvalId,
     required this.score,
     required this.review,
     required this.text,
   });
-
-  final int creatorEvalId;
-  final double score;
-  final String text;
-  final String review;
 
   @override
   _CreatorDialogButtonState createState() => _CreatorDialogButtonState();

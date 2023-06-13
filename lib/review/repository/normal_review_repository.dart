@@ -1,16 +1,10 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:dio/dio.dart' hide Headers;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/common/const/data.dart';
 import 'package:howlook/common/dio/dio.dart';
-import 'package:howlook/review/model/normal_review_model_data.dart';
 import 'package:retrofit/http.dart';
-import '../../common/const/data.dart';
-import '../../common/dio/dio.dart';
 import '../model/creator_review_model.dart';
-import '../model/normal_reply_model.dart';
 import '../model/normal_review_model.dart';
 
 part 'normal_review_repository.g.dart';
@@ -35,7 +29,7 @@ abstract class NormalReviewRepository {
   })
   Future<ReviewModel> reviewData();
 
-  @GET('/eval/readNextEval')
+  @GET('/CreatorEval/readNextCreatorEval')
   @Headers({
     'accessToken': 'true',
   })
@@ -54,7 +48,7 @@ abstract class NormalReviewRepository {
   @POST('/CreatorReply/evalCreator')
   @Headers({
     'accessToken': 'true',
-    'content-type': 'application/json',
+    // 'content-type': 'application/json',
   })
   Future<HttpResponse<dynamic>> postCreatorReviewReply({
     @Query('postId') required int postId,
