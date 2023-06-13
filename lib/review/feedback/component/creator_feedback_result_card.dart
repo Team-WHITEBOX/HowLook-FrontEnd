@@ -102,14 +102,15 @@ class _CreatorFeedbackResultCardState extends State<CreatorFeedbackResultCard> {
         ),
         SliverFillRemaining(
           // 내용 영역
-            child: Column(
-              children: [
-                Text("크리에이터의 코멘트가 도착했습니다!", style: TextStyle(fontSize: 18,
-                    color: Colors.black,
-                    fontFamily: 'NotoSans'),),
-                CommentFeedback(postId: widget.creatorEvalId,)
-              ],
-            )
+          //   child: Column(
+          //     children: [
+          //       Text("크리에이터의 코멘트가 도착했습니다!", style: TextStyle(fontSize: 18,
+          //           color: Colors.black,
+          //           fontFamily: 'NotoSans'),),
+          //       CommentFeedback(postId: widget.creatorEvalId,)
+          //     ],
+          //   )
+          child: CommentFeedback(postId: widget.creatorEvalId,),
         ),
       ],);
   }
