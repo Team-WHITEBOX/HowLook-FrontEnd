@@ -9,22 +9,26 @@ class MainTournamentResultModel {
   final int tournamentHistoryId;
   final List<int> date;
   final List<MainTournamentModel> postDTOS;
+  final int voteCount;
 
   MainTournamentResultModel({
     required this.tournamentHistoryId,
     required this.date,
     required this.postDTOS,
+    required this.voteCount,
   });
 
   MainTournamentResultModel copyWith({
     int? tournamentHistoryId,
     List<int>? date,
     List<MainTournamentModel>? postDTOS,
+    int? voteCount,
   }) {
     return MainTournamentResultModel(
       tournamentHistoryId: tournamentHistoryId ?? this.tournamentHistoryId,
       date: date ?? this.date,
       postDTOS: postDTOS ?? this.postDTOS,
+      voteCount: voteCount ?? this.voteCount,
     );
   }
 

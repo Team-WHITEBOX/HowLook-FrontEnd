@@ -5,8 +5,8 @@ import 'package:retrofit/retrofit.dart';
 import '../../common/const/data.dart';
 import '../../common/dio/dio.dart';
 import '../model/main_tournament/main_tournament_data.dart';
-import '../model/main_tournament/main_tournament_model.dart';
 import '../model/main_tournament_result/main_tournament_result_data.dart';
+import '../model/params/tournament_result_params.dart';
 
 part 'tournament_repository.g.dart';
 
@@ -45,6 +45,6 @@ abstract class TournamentRepository {
     'accessToken': 'true',
   })
   Future<HttpResponse<dynamic>> putTodayTournament({
-    @Body() required List<MainTournamentModel> mainTournamentModel,
+    @Body() required List<MainTournamentResultParams> mainTournamentResultParams,
   });
 }

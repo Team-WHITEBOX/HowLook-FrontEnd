@@ -125,6 +125,43 @@ class _UploadRepository implements UploadRepository {
     return httpResponse;
   }
 
+  @override
+  Future<HttpResponse<dynamic>> creatorReviewUploadImage({
+    required files,
+    required content,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      r'accessToken': 'true',
+      r'Content-Type': 'multipart/form-data',
+    };
+    _headers.removeWhere((k, v) => v == null);
+    final _data = FormData();
+    _data.files.addAll(files.map((i) => MapEntry('files.files', i)));
+    _data.fields.add(MapEntry(
+      'content',
+      content,
+    ));
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/CreatorEval/register',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

@@ -52,5 +52,16 @@ abstract class UploadRepository {
   Future<HttpResponse<dynamic>> reviewUploadImage({
     @Part(name: "files.files") required List<MultipartFile> files,
   });
+
+  @POST('/CreatorEval/register')
+  @MultiPart()
+  @Headers({
+    'accessToken': 'true',
+    'Content-Type': 'multipart/form-data'
+  })
+  Future<HttpResponse<dynamic>> creatorReviewUploadImage({
+    @Part(name: "files.files") required List<MultipartFile> files,
+    @Part(name: 'content') required String content,
+  });
 }
 

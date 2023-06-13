@@ -5,15 +5,19 @@ import 'package:intl/intl.dart';
 
 import '../../common/layout/default_layout.dart';
 import '../component/tournament_photo_card.dart';
+import '../provider/main_tournament_provider.dart';
+import 'main_tournament.dart';
+import 'past_tournament_screen.dart';
 
-class TournamentScreen extends ConsumerStatefulWidget {
-  const TournamentScreen({Key? key}) : super(key: key);
+class MainTournamentScreen extends ConsumerStatefulWidget {
+  const MainTournamentScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<TournamentScreen> createState() => _TournamentScreenState();
+  ConsumerState<MainTournamentScreen> createState() =>
+      _MainTournamentScreenState();
 }
 
-class _TournamentScreenState extends ConsumerState<TournamentScreen> {
+class _MainTournamentScreenState extends ConsumerState<MainTournamentScreen> {
   String getToday() {
     DateTime now = DateTime.now();
     DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -28,7 +32,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final resultData = ref.watch(mainTournamentResultProvider(getToday()));
+    final tournamentData = ref.watch(mainTournamentProvider(getToday()));
 
     return DefaultLayout(
       title: 'Tournament',
@@ -60,7 +64,10 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> {
                     ),
                     minimumSize: const Size(150, 40),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    await ref
+                        .read(mainTournamentProvider(getToday()).notifier)
+                        .getMainTournament();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const TournamentScreen(),
@@ -125,12 +132,16 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> {
                           const Text(
                             "현재 진행 중",
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700
-                            ),
+                                fontSize: 18, fontWeight: FontWeight.w700),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const PastTournamentScreen(),
+                                ),
+                              );
+                            },
                             child: const Text(
                               "과거 토너먼트 결과",
                               style: TextStyle(
@@ -139,13 +150,10 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> {
                           ),
                         ],
                       ),
-                      Container(
-                        color: Colors.white,
-                        child: Expanded(
-                          child:
-                              TournamentPhotoCard.fromModel(model: resultData),
-                        ),
+                      Expanded(
+                        child: TournamentPhotoCard.fromModel(model: tournamentData),
                       ),
+                      const SizedBox(height: 40),
                     ],
                   ),
                 ),

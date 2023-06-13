@@ -25,6 +25,7 @@ class TournamentPhotoCard extends StatefulWidget {
 class _TournamentPhotoCardState extends State<TournamentPhotoCard> {
   @override
   Widget build(BuildContext context) {
+    print(widget.resultData.length);
     return Swiper(
       itemBuilder: (BuildContext context, int index) {
         return ExtendedImage.network(

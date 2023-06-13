@@ -14,6 +14,8 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:flutter/services.dart';
 
+import 'review_upload_screen.dart';
+
 class UploadImageEditedScreen extends ConsumerStatefulWidget {
   const UploadImageEditedScreen({Key? key}) : super(key: key);
 
@@ -98,6 +100,7 @@ class _UploadImageEditedScreenState
                 context,
                 MaterialPageRoute(
                   builder: (context) => UploadSplashScreen(),
+                  // builder: (context) => ReviewUploadScreen(),
                 ),
               );
             }

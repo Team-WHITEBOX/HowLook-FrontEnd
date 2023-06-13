@@ -1,6 +1,7 @@
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,8 +12,10 @@ import 'package:dio/dio.dart' as dio;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../common/component/cust_textform_filed.dart';
 import '../../common/layout/default_layout.dart';
 import '../../common/view/root_tab.dart';
+import '../../payment/provider/payment_provider.dart';
 import '../Provider/loading_provider.dart';
 import '../Provider/select_photo_provider.dart';
 import '../model/upload_formdata_model.dart';
@@ -79,20 +82,22 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
   @override
   void initState() {
     super.initState();
+    FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    getPhoto();
-    FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override
   Widget build(BuildContext context) {
+    getPhoto();
+
     PageController controller = PageController();
     final newPostState = ref.watch(newPostInfoProvider);
     final selectedImage = ref.watch(selectedImageProvider);
+    final currRuby = ref.watch(paymentProvider);
 
     return Stack(
       children: [
@@ -116,35 +121,84 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
           actions: [
             GestureDetector(
               onTap: () async {
+                // 토글 돌리기
                 ref
                     .read(newPostInfoProvider.notifier)
                     .toggleLoadingIndicator(true);
 
-                final List<dio.MultipartFile> files = selectedImage
-                    .map((e) =>
-                        dio.MultipartFile.fromFileSync(e.afterDetectionInPath!))
-                    .toList();
+                // 일단 일반 평가인지 크리에이터 평가인지 구분하기
+                // 일반 평가면 한줄 소개가 없음
+                if (newPostState.uploadModel.content.isEmpty) {
+                  // 사진 불러오기
+                  final List<dio.MultipartFile> files = selectedImage
+                      .map((e) => dio.MultipartFile.fromFileSync(
+                          e.afterDetectionInPath!))
+                      .toList();
 
-                // API 전송
-                final resp = await ref
-                    .read(selectedImageProvider.notifier)
-                    .reviewUploadImage(newPostState.uploadModel, files);
+                  // API 전송
+                  final resp = await ref
+                      .read(selectedImageProvider.notifier)
+                      .reviewUploadImage(newPostState.uploadModel, files);
 
-                if (resp.response.statusCode == 200) {
-                  // 상태 초기화
-                  ref.read(selectedImageProvider.notifier).clearImage();
-                  // LoadingIndicator false로 초기화
-                  ref
-                      .read(newPostInfoProvider.notifier)
-                      .toggleLoadingIndicator(false);
+                  if (resp.response.statusCode == 200) {
+                    // 상태 초기화
+                    ref.read(selectedImageProvider.notifier).clearImage();
+                    // LoadingIndicator false로 초기화
+                    ref
+                        .read(newPostInfoProvider.notifier)
+                        .toggleLoadingIndicator(false);
 
-                  if (!mounted) return;
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (_) => const RootTab(),
-                    ),
-                    (route) => false,
-                  );
+                    if (!mounted) return;
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => const RootTab(),
+                      ),
+                      (route) => false,
+                    );
+                  }
+                }
+                // 크리에이터 평가면 한줄 소개가 있음
+                else {
+                  // 크리에이터 평가면 루비가 있는지 검사해야함
+                  // 이건 try - catch로 감싸서 오류생기면 제출 불가하게 만들기
+                  try {
+                    // 사진 불러오기
+                    final List<dio.MultipartFile> files = selectedImage
+                        .map((e) => dio.MultipartFile.fromFileSync(
+                            e.afterDetectionInPath!))
+                        .toList();
+
+                    // API 전송
+                    final resp = await ref
+                        .read(selectedImageProvider.notifier)
+                        .creatorReviewUploadImage(
+                            newPostState.uploadModel, files);
+
+                    if (resp.response.statusCode == 200) {
+                      // 상태 초기화
+                      ref.read(selectedImageProvider.notifier).clearImage();
+                      // LoadingIndicator false로 초기화
+                      ref
+                          .read(newPostInfoProvider.notifier)
+                          .toggleLoadingIndicator(false);
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (_) => const RootTab(),
+                        ),
+                        (route) => false,
+                      );
+                    }
+                  } catch (err) {
+                    ref
+                        .read(newPostInfoProvider.notifier)
+                        .toggleLoadingIndicator(false);
+
+                    showOkAlertDialog(
+                        context: context,
+                        title: "루비 부족",
+                        message: "크리에이터 평가 업로드에 필요한 루비가 부족합니다!");
+                  }
                 }
               },
               child: const Padding(
@@ -156,32 +210,99 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
               ),
             ),
           ],
-          child: SingleChildScrollView(
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PageView.builder(
-                controller: controller,
-                itemBuilder: (BuildContext context, int index) {
-                  if (selectedImage[0].afterDetectionOutPath == "") {
-                    return const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
+          child: Column(
+            children: [
+              AspectRatio(
+                aspectRatio: 1,
+                child: PageView.builder(
+                  controller: controller,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (selectedImage[0].afterDetectionOutPath == "") {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    }
+                    return ExtendedImage.network(
+                      selectedImage[index].afterDetectionOutPath!,
+                      fit: BoxFit.cover,
+                      cache: true,
+                    );
+                  },
+                  itemCount: ref.watch(selectedImageProvider).length,
+                ),
+              ),
+              const SizedBox(height: 13),
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          "* 평가를 받고 싶은 게시글을 업로드 해보세요!",
+                          style: TextStyle(color: Colors.grey),
                         ),
                       ),
-                    );
-                  }
-                  return ExtendedImage.network(
-                    selectedImage[index].afterDetectionOutPath!,
-                    fit: BoxFit.cover,
-                    cache: true,
-                  );
-                },
-                itemCount: ref.watch(selectedImageProvider).length,
+                      const SizedBox(height: 12),
+                      newPostState.uploadModel.content.isNotEmpty
+                          ? rubyInfo(currRuby.currRuby)
+                          : Container(),
+                      Row(
+                        children: [
+                          title("한줄 소개"),
+                          const Text(
+                            "(한줄 소개 작성 시 크리에이터 평가로 전환됩니다.)",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      line(),
+                      SizedBox(
+                        height: 180,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: CustomTextFormField(
+                            maxLines: 2,
+                            isBorder: false,
+                            hintText: "크리에이터가 판단할 수 있도록 설명을 짧게 남겨주세요 :)",
+                            onChanged: (String value) {
+                              ref
+                                  .read(newPostInfoProvider.notifier)
+                                  .addContent(value);
+                            },
+                            onSaved: (value) {},
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                print("Hl");
+                                return "내용을 입력해주세요";
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
         Offstage(
@@ -205,6 +326,69 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
           ),
         )
       ],
+    );
+  }
+
+  Widget rubyInfo(int ruby) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              title("루비 "),
+              const Text(
+                "(크리에이터 평가는 업로드시 20루비가 소모됩니다.)",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Row(
+            children: [
+              const SizedBox(width: 10),
+              Text(
+                "현재 보유 루비: $ruby",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget title(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+        textAlign: TextAlign.start,
+      ),
+    );
+  }
+
+  Widget line() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Container(
+        width: 0,
+        height: 1,
+        color: Colors.black26,
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:howlook/common/layout/default_layout.dart';
 import 'package:provider/provider.dart';
 import '../../common/const/data.dart';
 import '../../common/secure_storage/secure_storage.dart';
+import '../../payment/provider/payment_provider.dart';
 import '../../payment/view/main_payment_screen.dart';
 import '../feedback/view/normal_feedback_screen.dart';
 import '../model/isCreator_model.dart';
@@ -42,6 +43,7 @@ class _MainReviewScreenState extends ConsumerState<MainReviewScreen> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
+              ref.read(paymentProvider.notifier).getCurrRuby();
               if (!mounted) return;
               showModalBottomSheet(
                 context: context,

@@ -35,6 +35,7 @@ class _RootTabState extends ConsumerState<RootTab>
     controller = TabController(length: 5, vsync: this);
     controller.index = 4;
     controller.addListener(tabListener);
+    // ref.read(isReviewUpload.notifier).update((state) => false);
   }
 
   void tabListener() {
@@ -99,7 +100,7 @@ class _RootTabState extends ConsumerState<RootTab>
         children: <Widget>[
           const ChatHomeScreen(),
           MainReviewScreen(),
-          const TournamentScreen(),
+          const MainTournamentScreen(),
           MyProfileScreen(
             memberId: memberId,
           ),

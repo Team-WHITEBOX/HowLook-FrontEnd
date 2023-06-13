@@ -158,7 +158,6 @@ class SelectedImageStateNotifier
 
   Future<HttpResponse> feedUploadImage(
       UploadModel uploadModel, List<MultipartFile> files) async {
-
     print(uploadModel.content);
 
     final resp = await repository.feedUploadImage(
@@ -179,6 +178,14 @@ class SelectedImageStateNotifier
   Future<HttpResponse> reviewUploadImage(
       UploadModel uploadModel, List<MultipartFile> files) async {
     final resp = await repository.reviewUploadImage(files: files);
+    return resp;
+  }
+
+  // 크리에이터 리뷰
+  Future<HttpResponse> creatorReviewUploadImage(
+      UploadModel uploadModel, List<MultipartFile> files) async {
+    final resp = await repository.creatorReviewUploadImage(
+        files: files, content: uploadModel.content);
     return resp;
   }
 }

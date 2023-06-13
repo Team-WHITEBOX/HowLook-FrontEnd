@@ -47,9 +47,7 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
   void scrollListener() {
     // 현재 위치가 최대 길이보다 조금 덜 되는 위치까지 왔다면 새로운 데이터를 추가 요청
     if (controller.offset > controller.position.maxScrollExtent - 300) {
-      ref.read(nearfeedProvider.notifier).paginate(
-            fetchMore: true,
-          );
+      ref.read(nearfeedProvider.notifier).paginate(fetchMore: true);
     }
   }
 
@@ -59,76 +57,56 @@ class _NearFeedScreenState extends ConsumerState<NearFeedScreen> {
 
     // 완전 처음 로딩일 떄
     if (data is CursorPaginationLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
     // 에러
     if (data is CursorPaginationError) {
-      return Center(
-        child: Text(data.message),
-      );
+      return Center(child: Text(data.message));
     }
     final cp = data as CursorPagination;
 
     return RefreshIndicator(
       onRefresh: () async {
-        ref.read(nearfeedProvider.notifier).paginate(
-              forceRefetch: true,
-            );
+        ref.read(nearfeedProvider.notifier).paginate(forceRefetch: true);
       },
-      child: GridView.custom(
-        gridDelegate: SliverQuiltedGridDelegate(
-          crossAxisCount: 3,
+      child: GridView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
           mainAxisSpacing: 1,
           crossAxisSpacing: 1,
-          repeatPattern: QuiltedGridRepeatPattern.inverted,
-          pattern: const [
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(2, 2),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-          ],
         ),
         controller: controller,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        // itemCount: cp.data.content.length + 1,
-        childrenDelegate: SliverChildBuilderDelegate(
-          childCount: cp.data.content.length + 1,
-              (context, index) {
-            if (index == cp.data.content.length) {
-              return Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Center(
-                  child: data is CursorPaginationFetchingMore
-                      ? const CircularProgressIndicator()
-                      : const Text('마지막 데이터입니다. ㅠㅠ'),
-                ),
-              );
-            }
-            // 받아온 데이터 JSON 매핑하기
-            // 모델 사용
-            final pItem = cp.data.content[index];
-            return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => FeedDetailScreen(
-                        postId: pItem.postId,
-                      ),
+        itemCount: cp.data.content.length + 1,
+        itemBuilder: (BuildContext context, int index) {
+          if (index == cp.data.content.length) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Center(
+                child: data is CursorPaginationFetchingMore
+                    ? const CircularProgressIndicator()
+                    : const Text('마지막 데이터입니다. ㅠㅠ'),
+              ),
+            );
+          }
+          // 받아온 데이터 JSON 매핑하기
+          // 모델 사용
+          final pItem = cp.data.content[index];
+          return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => FeedDetailScreen(
+                      postId: pItem.postId,
                     ),
-                  );
-                },
-                child: FeedCard.fromModel(model: pItem));
-          },
-        ),
+                  ),
+                );
+              },
+              child: FeedCard.fromModel(model: pItem));
+        },
       ),
     );
   }

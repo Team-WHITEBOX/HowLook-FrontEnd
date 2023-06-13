@@ -14,6 +14,7 @@ MainTournamentResultModel _$MainTournamentResultModelFromJson(
       postDTOS: (json['postDTOS'] as List<dynamic>)
           .map((e) => MainTournamentModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      voteCount: json['voteCount'] as int,
     );
 
 Map<String, dynamic> _$MainTournamentResultModelToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$MainTournamentResultModelToJson(
       'tournamentHistoryId': instance.tournamentHistoryId,
       'date': instance.date,
       'postDTOS': instance.postDTOS,
+      'voteCount': instance.voteCount,
     };

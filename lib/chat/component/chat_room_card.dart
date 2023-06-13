@@ -4,6 +4,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:howlook/chat/model/chat_room/chat_room_model.dart';
+import 'package:howlook/chat/provider/chat_user_provider.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -112,6 +113,12 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    initStomp();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Future<String?> getUserId() async {
       final storage = ref.watch(secureStorageProvider);
@@ -214,16 +221,19 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () async {
-                        await initStomp();
-                        await enterMsgFunction(
+                        // await initStomp();
+                        enterMsgFunction(
                           roomId: widget.roomId,
                           userId: userId!,
                           message: "",
                         );
-                        delStomp();
                         ref
                             .read(chatMsgsProvider(widget.roomId).notifier)
                             .getChatMsgList();
+                        ref
+                            .read(chatUserProvider(widget.roomId).notifier)
+                            .getChatUserList(widget.roomId);
+                        await delStomp();
                         if (!mounted) return;
                         Navigator.pop(context);
                         Navigator.push(
@@ -258,7 +268,11 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
               },
             );
           } else {
+            await delStomp();
             ref.read(chatMsgsProvider(widget.roomId).notifier).getChatMsgList();
+            ref
+                .read(chatUserProvider(widget.roomId).notifier)
+                .getChatUserList(widget.roomId);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -331,7 +345,7 @@ class _ChatRoomCardState extends ConsumerState<ChatRoomCard> {
                                     fontFamily: 'NanumSquareNeo',
                                     fontWeight: FontWeight.w500,
                                     fontSize:
-                                    MediaQuery.of(context).size.width / 35,
+                                        MediaQuery.of(context).size.width / 35,
                                   ),
                                 ),
                                 const SizedBox(width: 16),

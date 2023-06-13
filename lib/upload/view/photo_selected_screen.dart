@@ -21,6 +21,7 @@ class _PhotoSelectScreenState extends ConsumerState<PhotoSelectScreen> {
     super.initState();
     ref.read(getImageProvider.notifier).checkPermission();
   }
+
   @override
   Widget build(BuildContext context) {
     final selectedStateRead = ref.read(selectedImageProvider.notifier);

@@ -69,12 +69,12 @@ class _TournamentRepository implements TournamentRepository {
 
   @override
   Future<HttpResponse<dynamic>> putTodayTournament(
-      {required mainTournamentModel}) async {
+      {required mainTournamentResultParams}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = mainTournamentModel.map((e) => e.toJson()).toList();
+    final _data = mainTournamentResultParams.map((e) => e.toJson()).toList();
     final _result =
         await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'PUT',

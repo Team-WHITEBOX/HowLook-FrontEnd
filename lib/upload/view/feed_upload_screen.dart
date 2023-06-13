@@ -17,7 +17,6 @@ import '../../common/layout/default_layout.dart';
 import '../../common/view/root_tab.dart';
 import '../Provider/loading_provider.dart';
 import '../Provider/select_photo_provider.dart';
-import '../model/upload_formdata_model.dart';
 
 class FeedUploadScreen extends ConsumerStatefulWidget {
   const FeedUploadScreen({Key? key}) : super(key: key);
