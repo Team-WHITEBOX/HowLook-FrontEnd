@@ -13,6 +13,7 @@ import 'package:howlook/review/view/normal_review_screen.dart';
 import '../model/creator_review_model_data.dart';
 import '../model/normal_review_model_data.dart';
 import '../repository/normal_review_repository.dart';
+import '../view/creator_review_screen.dart';
 import '../view/main_review_screen.dart';
 
 // class CreatorReviewCard extends ConsumerStatefulWidget {
@@ -575,7 +576,7 @@ class _CreatorDialogButtonState extends ConsumerState<_CreatorDialogButton> {
     );
 
     if (code.response.statusCode == 200) {
-      final data = await repo.reviewData();
+      final data = await repo.reviewCreatorData();
 
       if (data.message.toLowerCase().contains("실패")) {
         return "FAILURE";
@@ -583,21 +584,75 @@ class _CreatorDialogButtonState extends ConsumerState<_CreatorDialogButton> {
         return "SUCCESS";
       }
     }
-
     return "ERROR";
   }
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      // onPressed: () async {
+      //   final result = await postReviewReply();
+      //
+      //   if (result == "SUCCESS") {
+      //     print("object1");
+      //     Navigator.pop(context, "SUCCESS");
+      //     Navigator.of(context)
+      //         .pushReplacement(
+      //       MaterialPageRoute(
+      //         builder: (_) => CreaterReview(),
+      //       ),
+      //     )
+      //         .then((_) {
+      //       // 화면 전환 후 화면 새로고침
+      //       setState(() {});
+      //     });
+      //   } else if (result == "FAILURE") {
+      //     print("object2");
+      //     Navigator.pop(context, "FAILURE");
+      //     Navigator.pop(context);
+      //     // 화면 전환 후 화면 새로고침
+      //     setState(() {});
+      //   } else {
+      //     print("object3");
+      //     showDialog(
+      //       context: context,
+      //       builder: (_) => AlertDialog(
+      //         content: Text(
+      //           "오류발생😅",
+      //           style: TextStyle(color: Colors.white),
+      //         ),
+      //         actions: [
+      //           _DialogButton(text: "확인"),
+      //         ],
+      //         backgroundColor: Colors.black87,
+      //         shadowColor: Colors.grey,
+      //         shape: RoundedRectangleBorder(
+      //           borderRadius: BorderRadius.circular(10),
+      //         ),
+      //       ),
+      //     );
+      //   }
+      // },
       onPressed: () async {
         final result = await postReviewReply();
 
         if (result == "SUCCESS") {
+          print("object1");
           Navigator.pop(context, "SUCCESS");
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => CreaterReview(),
+            ),
+          ).then((_) {
+            // 화면 전환 후 화면 새로고침
+            setState(() {});
+          });
         } else if (result == "FAILURE") {
+          print("object2");
           Navigator.pop(context, "FAILURE");
+          Navigator.pop(context); // 두 번 pop하여 평가화면을 나갑니다.
         } else {
+          print("object3");
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
@@ -617,6 +672,7 @@ class _CreatorDialogButtonState extends ConsumerState<_CreatorDialogButton> {
           );
         }
       },
+
       child: Text(
         widget.text,
         style: TextStyle(color: Colors.white),

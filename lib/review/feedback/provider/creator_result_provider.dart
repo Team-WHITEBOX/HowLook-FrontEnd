@@ -30,17 +30,12 @@ class ResultStateNotifier extends StateNotifier<CreatorResultModel> {
 
   Future<List<CreatorResultData>> getCreatorResultData({required int postId}) async {
     final ResultData = await repository.creatorResultData(postId: postId);
-    print(ResultData);
-    print("object");
     print(ResultData.data);
     return ResultData.data;
   }
 
   Future<CreatorModel> getCreatorData({required int creatorEvalId}) async {
     final ResultData = await repository.creatorData(creatorEvalId: creatorEvalId);
-    print(ResultData);
-    print("object");
-    print(ResultData.data);
     return ResultData;
   }
 }
