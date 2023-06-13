@@ -41,8 +41,13 @@ class _ManagerHomeScreenState extends ConsumerState<ManagerHomeScreen> {
 
     final cp = data as ManagerPagination;
     return RefreshIndicator(
-      onRefresh: () async {},
+      onRefresh: () async {
+        ref
+            .read(managerFeedProvider.notifier)
+            .paginate(forceRefetch: true);
+      },
       child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: controller,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

@@ -148,6 +148,7 @@ flutter:
     - asset/img/weather/
     - asset/img/chat/
     - asset/img/ruby/ruby.png
+    - asset/img/rank/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

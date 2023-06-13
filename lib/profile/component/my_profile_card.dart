@@ -138,7 +138,7 @@ class MainProfileCard extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => SettingScreen(),
+                                  builder: (_) => SettingScreen(memberId: memberId),
                                 ),
                               );
                             }, //설정 화면 이동

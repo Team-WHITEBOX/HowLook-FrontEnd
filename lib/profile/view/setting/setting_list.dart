@@ -6,6 +6,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import '../../../common/const/data.dart';
 import '../../../common/layout/default_layout.dart';
 import '../../../common/secure_storage/secure_storage.dart';
+import '../../../manager/provider/manager_feed_provider.dart';
 import '../../../manager/view/manager_root_screen.dart';
 import '../../../user/model/token/token_model.dart';
 import '../../../user/view/signin/intro_screen.dart';
@@ -14,11 +15,24 @@ import '../payment/payment_screen.dart';
 import 'profile_change_screen.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
+  final String memberId;
+
+  const SettingScreen({
+    required this.memberId,
+    super.key,
+  });
+
   @override
   ConsumerState<SettingScreen> createState() => _SettingList();
 }
 
 class _SettingList extends ConsumerState<SettingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    print(widget.memberId);
+  }
+
   @override
   Widget build(BuildContext context) {
     final profileRepo = ref.watch(profileRepositoryProvider);
@@ -72,17 +86,22 @@ class _SettingList extends ConsumerState<SettingScreen> {
             title: const Text('알림설정'),
             onTap: () {},
           ),
-          ListTile(
-            leading: const Icon(Icons.info, color: Colors.black),
-            title: const Text('신고 기능'),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const ManagerRootScreen(),
-                ),
-              );
-            },
-          ),
+          widget.memberId == "admin"
+              ? ListTile(
+                  leading: const Icon(Icons.info, color: Colors.black),
+                  title: const Text('신고 기능'),
+                  onTap: () {
+                    ref
+                        .read(managerFeedProvider.notifier)
+                        .paginate(forceRefetch: true);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const ManagerRootScreen(),
+                      ),
+                    );
+                  },
+                )
+              : Container(),
           ListTile(
             leading: const Icon(
               MdiIcons.logout,

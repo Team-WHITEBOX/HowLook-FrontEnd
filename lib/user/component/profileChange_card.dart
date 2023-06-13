@@ -130,7 +130,6 @@ class _ProfileChangeCardState extends State<ProfileChangeCard> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          SettingScreen();
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,
@@ -161,7 +160,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       "회원정보 수정️",
       style: TextStyle(
         fontSize: 26,
