@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/common/const/data.dart';
+import 'package:howlook/common/secure_storage/secure_storage.dart';
 import 'package:howlook/manager/model/params/manager_pagination_params.dart';
 import 'package:howlook/manager/model/report_model.dart';
 import 'package:howlook/manager/model/report_post_model.dart';
@@ -86,8 +88,12 @@ class ReportCard extends ConsumerWidget {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    await ref.read(managerRepositoryProvider).delReject(postId: post!.postId);
-                    ref.read(managerFeedProvider.notifier).paginate(forceRefetch: true);
+                    await ref
+                        .read(managerRepositoryProvider)
+                        .delReject(postId: post!.postId);
+                    ref
+                        .read(managerFeedProvider.notifier)
+                        .paginate(forceRefetch: true);
                   },
                   child: const Text(
                     "반려",
@@ -96,7 +102,17 @@ class ReportCard extends ConsumerWidget {
                 ),
                 Container(height: 35, width: 0.5, color: Colors.black),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    final storage = ref.watch(secureStorageProvider);
+                    final token = await storage.read(key: ACCESS_TOKEN_KEY);
+
+                    await ref
+                        .read(managerRepositoryProvider)
+                        .delReport(accessToken: token!, postId: post!.postId);
+                    ref
+                        .read(managerFeedProvider.notifier)
+                        .paginate(forceRefetch: true);
+                  },
                   child: const Text(
                     "수락",
                     style: TextStyle(color: Colors.red, fontSize: 18),

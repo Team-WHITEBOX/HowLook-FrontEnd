@@ -37,6 +37,14 @@ class PastTournamentResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        height: 80,
+        width: 100,
+        color: Colors.red,
+        child: Text("hi"),
+      ),
+    );
   }
 }

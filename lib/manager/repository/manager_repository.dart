@@ -36,4 +36,11 @@ abstract class ManagerRepository {
   Future<HttpResponse<dynamic>> delReject({
     @Query('postId') required int postId,
   });
+
+  @DELETE('/reject')
+  @Headers({})
+  Future<HttpResponse<dynamic>> delReport({
+    @Query('postId') required int postId,
+    @Query('accessToken') required String accessToken,
+  });
 }

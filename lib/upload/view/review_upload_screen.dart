@@ -212,36 +212,36 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
               ),
             ),
           ],
-          child: Column(
-            children: [
-              AspectRatio(
-                aspectRatio: 1,
-                child: PageView.builder(
-                  controller: controller,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (selectedImage[0].afterDetectionOutPath == "") {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.black,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: PageView.builder(
+                    controller: controller,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (selectedImage[0].afterDetectionOutPath == "") {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
+                        );
+                      }
+                      return ExtendedImage.network(
+                        selectedImage[index].afterDetectionOutPath!,
+                        fit: BoxFit.cover,
+                        cache: true,
                       );
-                    }
-                    return ExtendedImage.network(
-                      selectedImage[index].afterDetectionOutPath!,
-                      fit: BoxFit.cover,
-                      cache: true,
-                    );
-                  },
-                  itemCount: ref.watch(selectedImageProvider).length,
+                    },
+                    itemCount: ref.watch(selectedImageProvider).length,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 13),
-              SingleChildScrollView(
-                child: Padding(
+                const SizedBox(height: 13),
+                Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 3,
@@ -303,8 +303,8 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
                     ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         Offstage(

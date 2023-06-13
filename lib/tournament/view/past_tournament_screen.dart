@@ -71,7 +71,7 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.7,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
@@ -96,8 +96,9 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
                           color: Colors.black,
                         ),
                       ),
+                      const SizedBox(height: 10),
                       Text(
-                        "총 ${resultData.voteCount} 명이 투표해주셨습니다.",
+                        "총 ${resultData.voteCount}명이 투표해주셨습니다.",
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

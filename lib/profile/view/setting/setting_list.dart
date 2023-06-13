@@ -6,6 +6,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import '../../../common/const/data.dart';
 import '../../../common/layout/default_layout.dart';
 import '../../../common/secure_storage/secure_storage.dart';
+import '../../../manager/view/manager_root_screen.dart';
 import '../../../user/model/token/token_model.dart';
 import '../../../user/view/signin/intro_screen.dart';
 import '../../repository/profile_repository.dart';
@@ -70,6 +71,17 @@ class _SettingList extends ConsumerState<SettingScreen> {
             ),
             title: const Text('알림설정'),
             onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.info, color: Colors.black),
+            title: const Text('신고 기능'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ManagerRootScreen(),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(

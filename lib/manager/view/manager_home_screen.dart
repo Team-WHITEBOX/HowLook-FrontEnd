@@ -55,17 +55,15 @@ class _ManagerHomeScreenState extends ConsumerState<ManagerHomeScreen> {
               child: Center(
                 child: data is ManagerPaginationFetchingMore
                     ? const CircularProgressIndicator()
-                    : const Text('마지막 데이터입니다. ㅠㅠ'),
+                    : const Text(''),
               ),
             );
           }
           final pItem = cp.content[index];
-
           if (pItem.post == null) {
             return Container();
           }
-
-            return GestureDetector(
+          return GestureDetector(
               onTap: () {
                 // Navigator.of(context).push(
                 //   MaterialPageRoute(
