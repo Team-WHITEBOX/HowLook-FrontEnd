@@ -61,19 +61,3 @@ class _CreaterReviewState extends ConsumerState<CreaterReview> {
   }
 }
 
-class _DialogButton extends StatelessWidget {
-  const _DialogButton({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.white),
-      ),
-    );
-  }
-}
