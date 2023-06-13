@@ -148,10 +148,12 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
                         .read(newPostInfoProvider.notifier)
                         .toggleLoadingIndicator(false);
 
+                    ref.read(newPostInfoProvider.notifier).clearState();
+
                     if (!mounted) return;
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (_) => const RootTab(),
+                        builder: (_) => RootTab(),
                       ),
                       (route) => false,
                     );
@@ -184,7 +186,7 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
 
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                          builder: (_) => const RootTab(),
+                          builder: (_) => RootTab(),
                         ),
                         (route) => false,
                       );
@@ -354,8 +356,31 @@ class _ReviewUploadScreenState extends ConsumerState<ReviewUploadScreen> {
               const SizedBox(width: 10),
               Text(
                 "현재 보유 루비: $ruby",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(width: 20),
+              TextButton(
+                onPressed: () {
+                  // 상태 초기화
+                  ref.read(selectedImageProvider.notifier).clearImage();
+                  // LoadingIndicator false로 초기화
+                  ref
+                      .read(newPostInfoProvider.notifier)
+                      .toggleLoadingIndicator(false);
+
+                  ref.read(newPostInfoProvider.notifier).clearState();
+
+                  if (!mounted) return;
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => RootTab(isCharge: true),
+                    ),
+                    (route) => false,
+                  );
+                },
+                child: const Text(
+                  "충전하러가기",
+                  style: TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),
             ],

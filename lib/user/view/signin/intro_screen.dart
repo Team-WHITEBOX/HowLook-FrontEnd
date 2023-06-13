@@ -47,7 +47,7 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => const RootTab(),
+          builder: (_) => RootTab(),
         ),
         (route) => false,
       );

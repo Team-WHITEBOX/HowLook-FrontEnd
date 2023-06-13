@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:howlook/tournament/component/past_tournament_result_card.dart';
 import 'package:intl/intl.dart';
 
 import '../../common/layout/default_layout.dart';
@@ -38,6 +39,7 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
                   onPressed: () {
@@ -107,10 +109,8 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
                         child: ListView.separated(
                           itemCount: resultData.postDTOS.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              color: Colors.red,
-                              child: Text(resultData.postDTOS[index].tournamentType),
-                            );
+                            return PastTournamentResultCard.fromModel(
+                                model: resultData.postDTOS[index]);
                           },
                           separatorBuilder: (_, index) {
                             return const SizedBox(height: 2.0);

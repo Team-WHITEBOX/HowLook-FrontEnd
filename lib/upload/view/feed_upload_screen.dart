@@ -181,7 +181,7 @@ class _FeedUploadScreenState extends ConsumerState<FeedUploadScreen> {
                     if (!mounted) return;
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (_) => const RootTab(),
+                        builder: (_) => RootTab(),
                       ),
                       (route) => false,
                     );

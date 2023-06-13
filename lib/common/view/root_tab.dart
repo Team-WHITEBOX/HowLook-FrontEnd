@@ -12,11 +12,17 @@ import 'package:howlook/upload/view/photo_selected_screen.dart';
 import 'package:howlook/review/view/main_review_screen.dart';
 import 'package:howlook/tournament/view/main_tournament_screen.dart';
 
+import '../../payment/view/main_payment_screen.dart';
 import '../const/data.dart';
 import '../secure_storage/secure_storage.dart';
 
 class RootTab extends ConsumerStatefulWidget {
-  const RootTab({Key? key}) : super(key: key);
+  bool? isCharge;
+
+  RootTab({
+    this.isCharge = false,
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<RootTab> createState() => _RootTabState();
@@ -25,7 +31,7 @@ class RootTab extends ConsumerStatefulWidget {
 class _RootTabState extends ConsumerState<RootTab>
     with SingleTickerProviderStateMixin {
   late TabController controller;
-  int _bottomNavIndex = 0;
+  int _bottomNavIndex = 4;
   bool check = false;
   String memberId = "";
 
@@ -35,7 +41,15 @@ class _RootTabState extends ConsumerState<RootTab>
     controller = TabController(length: 5, vsync: this);
     controller.index = 4;
     controller.addListener(tabListener);
-    // ref.read(isReviewUpload.notifier).update((state) => false);
+
+    if (widget.isCharge != null && widget.isCharge == true) {
+      controller.index = 1;
+      _bottomNavIndex = 1;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      show();
+    });
   }
 
   void tabListener() {
@@ -48,6 +62,26 @@ class _RootTabState extends ConsumerState<RootTab>
   void dispose() {
     controller.removeListener(tabListener);
     super.dispose();
+  }
+
+  show() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const MainPaymentScreen();
+      },
+      elevation: 50,
+      enableDrag: true,
+      isDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.7),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32),
+      ),
+      constraints: const BoxConstraints(
+        minHeight: 250,
+        maxHeight: 450,
+      ),
+    );
   }
 
   @override
