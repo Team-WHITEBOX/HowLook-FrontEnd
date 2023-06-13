@@ -576,12 +576,14 @@ class _CreatorDialogButtonState extends ConsumerState<_CreatorDialogButton> {
     );
 
     if (code.response.statusCode == 200) {
-      final data = await repo.reviewCreatorData();
+      try {
+        final data = await repo.reviewCreatorData();
 
-      if (data.message.toLowerCase().contains("실패")) {
+        if (data.message.toLowerCase().contains("성공")) {
+          return "SUCCESS";
+        }
+      } catch (err) {
         return "FAILURE";
-      } else if (data.message.toLowerCase().contains("성공")) {
-        return "SUCCESS";
       }
     }
     return "ERROR";
@@ -639,11 +641,13 @@ class _CreatorDialogButtonState extends ConsumerState<_CreatorDialogButton> {
         if (result == "SUCCESS") {
           print("object1");
           Navigator.pop(context, "SUCCESS");
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context)
+              .pushReplacement(
             MaterialPageRoute(
               builder: (_) => CreaterReview(),
             ),
-          ).then((_) {
+          )
+              .then((_) {
             // 화면 전환 후 화면 새로고침
             setState(() {});
           });

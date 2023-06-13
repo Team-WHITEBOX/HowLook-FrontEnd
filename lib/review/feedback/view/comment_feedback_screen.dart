@@ -33,51 +33,60 @@ class CommentFeedback extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     _fetchNormalResultModel(ref);
 
-    final Size size = MediaQuery.of(context).size;
     return DefaultLayout(
       child: FutureBuilder<List<CreatorResultData>>(
         future: _CreatorResultFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final itemList = snapshot.data!; // 데이터 리스트
-            return Scrollbar(
-              child: ListView.builder(
-                itemCount: itemList.length,
-                itemBuilder: (context, index) {
-                  final item = itemList[index];
-                  ListView(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    children: [
-                      for (int number = 1; number < index; number++)
-                        ListTile(
-                            leading: ExcludeSemantics(
-                              child: CircleAvatar(child: Text('$number')),
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: itemList.length,
+                    itemBuilder: (context, index) {
+                      final item = itemList[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: SizedBox(
+                          height: 70,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [CircleAvatar(child: Text(item.nickname))],
                             ),
-                            title: Text(
-                                item.nickname
-                            ),
-                            subtitle: Text(item.review)
+                          ),
                         ),
-                    ],
-                  );
-                },
-              )
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Container(height: 10);
+                    },
+                  ),
+                ),
+              ],
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
     );
   }
 }
+// ListView(
+// padding: const EdgeInsets.symmetric(vertical: 8),
+// children: [
+// for (int number = 1; number < index; number++)
+// ListTile(
+// leading: ExcludeSemantics(
+// child: CircleAvatar(child: Text('$number')),
+// ),
+// title: Text(item.nickname),
+// subtitle: Text(item.review)),
+// ],
+// );
