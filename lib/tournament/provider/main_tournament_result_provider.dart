@@ -36,7 +36,7 @@ class MainTournamentResultStateNotifier
     // final resp =
     //     await tournamentRepository.getTodayTournamentResult(date: date);
     final resp =
-        await tournamentRepository.getTodayTournamentResult(date: "2023-06-12");
+        await tournamentRepository.getTodayTournamentResult(date: date);
     state = resp.data;
   }
 }

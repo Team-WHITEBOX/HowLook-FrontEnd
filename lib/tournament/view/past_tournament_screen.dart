@@ -17,6 +17,7 @@ class PastTournamentScreen extends ConsumerStatefulWidget {
 
 class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
   String value = "";
+  bool set = false;
 
   String getToday() {
     DateTime now = DateTime.now();
@@ -53,6 +54,7 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
                       onConfirm: (date) {
                         setState(() {
                           value = DateFormat("yyyy-MM-dd").format(date);
+                          set = true;
                         });
                         ref
                             .read(mainTournamentResultProvider(value).notifier)
@@ -98,7 +100,7 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "총 ${resultData.voteCount}명이 투표해주셨습니다.",
+                        set ? "총 ${resultData.voteCount}명이 투표해주셨습니다." : "총 ? 명이 투표해주셨습니다.",
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -106,7 +108,7 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Expanded(
+                      set ? Expanded(
                         child: ListView.separated(
                           itemCount: resultData.postDTOS.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -117,7 +119,7 @@ class _PastTournamentScreenState extends ConsumerState<PastTournamentScreen> {
                             return const SizedBox(height: 2.0);
                           },
                         ),
-                      ),
+                      ) : Container(),
                     ],
                   ),
                 ),
